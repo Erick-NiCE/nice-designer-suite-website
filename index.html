@@ -9,6 +9,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="theme.css" />
   <link rel="stylesheet" href="nice-effects.css" />
+  <link rel="stylesheet" href="site-gate.css" />
+  <script src="site-gate.js" defer></script>
   <script src="nice-effects.js" defer></script>
   <style>
     /* ========== HERO ========== */
@@ -692,6 +694,30 @@
   </style>
 </head>
 <body>
+
+  <!-- SITE-WIDE ACCESS GATE (see site-gate.css / site-gate.js) -->
+  <div id="nice-site-gate">
+    <div class="sg-card">
+      <div class="sg-lock">🔒</div>
+      <div class="sg-title">Access Required</div>
+      <div class="sg-subtitle">This site is private. Enter the access code to continue.</div>
+      <div class="sg-input-wrap">
+        <input id="nice-site-gate-input" type="password" placeholder="Enter code" autocomplete="off" />
+      </div>
+      <div class="sg-error" id="nice-site-gate-error"></div>
+      <button id="nice-site-gate-btn" type="button">Unlock</button>
+      <div class="sg-divider"></div>
+      <div class="sg-cta">
+        Don't have the code?<br>
+        <strong>Reach out to Erick Mathews on Teams</strong> to request access.
+        <br>
+        <a class="sg-teams-btn" href="https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H8a2 2 0 00-2 2v2H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2h2a2 2 0 002-2V4a2 2 0 00-2-2zM4 20V8h12v12H4zm16-4h-2V8a2 2 0 00-2-2H8V4h12v12z" fill="currentColor"/></svg>
+          Message on Teams
+        </a>
+      </div>
+    </div>
+  </div>
 
   <!-- NAV -->
   <nav class="site-nav" id="site-nav">
