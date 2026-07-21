@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=5" />
+  <link rel="stylesheet" href="theme.css?v=7" />
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="site-gate.css" />
   <script src="site-gate.js" defer></script>
@@ -512,7 +512,7 @@
     <div class="tools-grid">
 
       <!-- Audit -->
-      <div class="tool-card reveal" style="--t-color:#3694FC; --t-gradient: linear-gradient(135deg,#3694FC,#025AFB); animation-delay:0.05s">
+      <div class="tool-card reveal" id="tool-audit" style="--t-color:#3694FC; --t-gradient: linear-gradient(135deg,#3694FC,#025AFB); animation-delay:0.05s">
         <div class="tool-card-glow"></div>
         <div class="tool-card-header">
           <div class="tool-icon-wrap">🔍</div>
@@ -545,7 +545,7 @@
       </div>
 
       <!-- Convert -->
-      <div class="tool-card reveal" style="--t-color:#00E2A0; --t-gradient: linear-gradient(135deg,#00E2A0,#36EAD0); animation-delay:0.1s">
+      <div class="tool-card reveal" id="tool-convert" style="--t-color:#00E2A0; --t-gradient: linear-gradient(135deg,#00E2A0,#36EAD0); animation-delay:0.1s">
         <div class="tool-card-glow"></div>
         <div class="tool-card-header">
           <div class="tool-icon-wrap">⚡</div>
@@ -577,7 +577,7 @@
       </div>
 
       <!-- Handoff -->
-      <div class="tool-card reveal" style="--t-color:#B98FFF; --t-gradient: linear-gradient(135deg,#6100FF,#B98FFF); animation-delay:0.15s">
+      <div class="tool-card reveal" id="tool-handoff" style="--t-color:#B98FFF; --t-gradient: linear-gradient(135deg,#6100FF,#B98FFF); animation-delay:0.15s">
         <div class="tool-card-glow"></div>
         <div class="tool-card-header">
           <div class="tool-icon-wrap">📐</div>
@@ -608,7 +608,7 @@
       </div>
 
       <!-- Parity -->
-      <div class="tool-card reveal" style="--t-color:#36EAD0; --t-gradient: linear-gradient(135deg,#36EAD0,#3694FC); animation-delay:0.2s">
+      <div class="tool-card reveal" id="tool-parity" style="--t-color:#36EAD0; --t-gradient: linear-gradient(135deg,#36EAD0,#3694FC); animation-delay:0.2s">
         <div class="tool-card-glow"></div>
         <div class="tool-card-header">
           <div class="tool-icon-wrap">⚖️</div>
@@ -637,7 +637,7 @@
       </div>
 
       <!-- QA -->
-      <div class="tool-card reveal" style="--t-color:#FF5B8A; --t-gradient: linear-gradient(135deg,#FF5B8A,#f59e0b); animation-delay:0.25s">
+      <div class="tool-card reveal" id="tool-qa" style="--t-color:#FF5B8A; --t-gradient: linear-gradient(135deg,#FF5B8A,#f59e0b); animation-delay:0.25s">
         <div class="tool-card-glow"></div>
         <div class="tool-card-header">
           <div class="tool-icon-wrap">🧪</div>
@@ -667,7 +667,7 @@
       </div>
 
       <!-- Tokens -->
-      <div class="tool-card reveal" style="--t-color:#ACF7F3; --t-gradient: linear-gradient(135deg,#36EAD0,#00E2A0); animation-delay:0.3s">
+      <div class="tool-card reveal" id="tool-tokens" style="--t-color:#ACF7F3; --t-gradient: linear-gradient(135deg,#36EAD0,#00E2A0); animation-delay:0.3s">
         <div class="tool-card-glow"></div>
         <div class="tool-card-header">
           <div class="tool-icon-wrap">🪙</div>
@@ -697,7 +697,7 @@
       </div>
 
       <!-- Editor -->
-      <div class="tool-card reveal" style="--t-color:#025AFB; --t-gradient: linear-gradient(135deg,#025AFB,#6100FF); animation-delay:0.35s">
+      <div class="tool-card reveal" id="tool-editor" style="--t-color:#025AFB; --t-gradient: linear-gradient(135deg,#025AFB,#6100FF); animation-delay:0.35s">
         <div class="tool-card-glow"></div>
         <div class="tool-card-header">
           <div class="tool-icon-wrap">🎨</div>
@@ -728,7 +728,7 @@
       </div>
 
       <!-- Magic -->
-      <div class="tool-card reveal" style="--t-color:#B98FFF; --t-gradient: linear-gradient(135deg,#6100FF,#FF5B8A); animation-delay:0.4s">
+      <div class="tool-card reveal" id="tool-magic" style="--t-color:#B98FFF; --t-gradient: linear-gradient(135deg,#6100FF,#FF5B8A); animation-delay:0.4s">
         <div class="tool-card-glow"></div>
         <div class="tool-card-header">
           <div class="tool-icon-wrap">✨</div>
@@ -1026,7 +1026,7 @@
 
   <!-- Reusable canvas effects (Matter.js is the physics engine for the liquid) -->
   <script src="https://cdn.jsdelivr.net/npm/matter-js@0.19.0/build/matter.min.js"></script>
-  <script src="nice-effects.js?v=5"></script>
+  <script src="nice-effects.js?v=7"></script>
   <script>
     // Liquid fill on each tool card, tinted with the card's accent color.
     document.querySelectorAll('.tool-card').forEach(function (card) {

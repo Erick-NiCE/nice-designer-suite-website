@@ -7,11 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=5" />
+  <link rel="stylesheet" href="theme.css?v=7" />
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="site-gate.css" />
   <script src="site-gate.js" defer></script>
-  <script src="nice-effects.js?v=5" defer></script>
+  <script src="nice-effects.js?v=7" defer></script>
   <style>
     body { line-height: 1.6; } /* page-specific */
 
@@ -495,7 +495,7 @@
     <div class="steps-list">
 
       <!-- STEP 1: Figma Plugin -->
-      <div class="step reveal">
+      <div class="step reveal" id="step-figma">
         <div class="step-sidebar">
           <div class="step-number-badge">1</div>
           <div class="step-line"></div>
@@ -527,7 +527,7 @@
       </div>
 
       <!-- STEP 2: Chrome Extension -->
-      <div class="step reveal">
+      <div class="step reveal" id="step-chrome">
         <div class="step-sidebar">
           <div class="step-number-badge">2</div>
           <div class="step-line"></div>
@@ -568,7 +568,7 @@
       </div>
 
       <!-- STEP 3: MCP Server -->
-      <div class="step reveal">
+      <div class="step reveal" id="step-mcp">
         <div class="step-sidebar">
           <div class="step-number-badge">3</div>
           <div class="step-line"></div>
@@ -616,7 +616,7 @@
       </div>
 
       <!-- STEP 4: Connect Claude (optional) -->
-      <div class="step reveal">
+      <div class="step reveal" id="step-claude">
         <div class="step-sidebar">
           <div class="step-number-badge">4</div>
           <div class="step-line"></div>
@@ -656,7 +656,7 @@
       </div>
 
       <!-- STEP 5: Verify -->
-      <div class="step reveal">
+      <div class="step reveal" id="step-verify">
         <div class="step-sidebar">
           <div class="step-number-badge">5</div>
           <!-- no line on last step -->
@@ -698,7 +698,7 @@
     <div class="section-divider reveal"></div>
 
     <!-- TROUBLESHOOTING -->
-    <section class="reveal">
+    <section class="reveal" id="step-issues">
       <div class="section-eyebrow">Troubleshooting</div>
       <h2 class="section-title">Common Issues</h2>
 

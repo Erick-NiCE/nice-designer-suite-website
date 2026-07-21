@@ -258,6 +258,30 @@ body {
   color: var(--text);
   background: rgba(54, 148, 252, 0.14);
 }
+.doc-rail-group-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  padding: 10px 10px 2px 20px;
+}
+.doc-rail-sublink {
+  --warmth: 0;
+  text-decoration: none;
+  color: rgba(255, 255, 255, calc(0.58 + var(--warmth) * 0.42));
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 10px 6px 20px;
+  border-radius: 8px;
+  background: rgba(54, 148, 252, calc(var(--warmth) * 0.16));
+  box-shadow: inset 2px 0 0 rgba(54, 148, 252, var(--warmth));
+  transition: color 0.15s linear, background 0.15s linear, box-shadow 0.15s linear;
+}
+.doc-rail-sublink:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+}
 .doc-rail-empty {
   font-size: 12px;
   color: var(--text-secondary);

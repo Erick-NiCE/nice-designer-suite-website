@@ -7,11 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=5" />
+  <link rel="stylesheet" href="theme.css?v=7" />
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="site-gate.css" />
   <script src="site-gate.js" defer></script>
-  <script src="nice-effects.js?v=5" defer></script>
+  <script src="nice-effects.js?v=7" defer></script>
   <style>
     body { line-height: 1.6; }
 
@@ -126,7 +126,7 @@
   <section class="faq-section" id="faq">
     <div class="faq-list">
 
-      <details class="faq-item reveal" open>
+      <details class="faq-item reveal" id="faq-design-system" open>
         <summary class="faq-q">How do the NiCE Designer tools understand the design system?</summary>
         <div class="faq-a">
           <p>The tools are built on three sources of truth:</p>
@@ -138,7 +138,7 @@
         </div>
       </details>
 
-      <details class="faq-item reveal">
+      <details class="faq-item reveal" id="faq-generate">
         <summary class="faq-q">Does NiCE Designer generate designs or pages?</summary>
         <div class="faq-a">
           <p>No. NiCE Designer works with pages and designs that already exist - it audits, converts, and annotates them rather than generating new ones from scratch.</p>
@@ -146,7 +146,7 @@
         </div>
       </details>
 
-      <details class="faq-item reveal">
+      <details class="faq-item reveal" id="faq-supercharge">
         <summary class="faq-q">What is Supercharge?</summary>
         <div class="faq-a">
           <p>Supercharge is what happens when NiCE Designer connects to Claude via the local MCP server. On their own, the Figma plugin and Chrome extension can audit and convert designs. With Supercharge connected, Claude can drive both tools simultaneously using natural language - running multi-step workflows, reasoning across Figma and the live page at the same time, and using the full library of MCP tools and Claude skills.</p>
@@ -154,35 +154,35 @@
         </div>
       </details>
 
-      <details class="faq-item reveal">
+      <details class="faq-item reveal" id="faq-sol-lyra">
         <summary class="faq-q">What's the difference between SOL and Lyra, and can NiCE Designer convert between them?</summary>
         <div class="faq-a">
           <p>SOL and Lyra are NiCE's two design systems, each with their own token sets, spacing scales, and component libraries. NiCE Designer's <code>convert_design_system</code> skill maps a frame from one system to the other, using semantic role (text, background, border, icon) so tokens that differ by role are handled correctly rather than mapped one-to-one by name.</p>
         </div>
       </details>
 
-      <details class="faq-item reveal">
+      <details class="faq-item reveal" id="faq-mcp-required">
         <summary class="faq-q">Do I need the MCP server running to use the Figma plugin or Chrome extension?</summary>
         <div class="faq-a">
           <p>No. The Figma plugin and Chrome extension both work standalone for auditing, converting, and applying fixes. The MCP server is only required for Supercharge - connecting Claude to drive both clients with natural language. See the <a href="./install-guide.html">Install Guide</a> for setup order.</p>
         </div>
       </details>
 
-      <details class="faq-item reveal">
+      <details class="faq-item reveal" id="faq-disagree-fix">
         <summary class="faq-q">What happens if I disagree with a suggested fix?</summary>
         <div class="faq-a">
           <p>Every fix is opt-in and reversible. You can snooze an individual flagged item, skip it entirely, or apply it and then revert - both clients keep a full edit history with undo/redo per step, including restoring prior variable bindings.</p>
         </div>
       </details>
 
-      <details class="faq-item reveal">
+      <details class="faq-item reveal" id="faq-any-figma-file">
         <summary class="faq-q">Does NiCE Designer work on any Figma file, or only CXone product files?</summary>
         <div class="faq-a">
           <p>It works on any Figma file, but its audit rules are built against the SOL and Lyra foundation files, so compliance scoring is most meaningful on CXone product work. Running it against a file outside those systems will still surface off-token colors, spacing, and type, but there won't be a matching token to suggest as a fix.</p>
         </div>
       </details>
 
-      <details class="faq-item reveal">
+      <details class="faq-item reveal" id="faq-access">
         <summary class="faq-q">How do I get access to NiCE Designer?</summary>
         <div class="faq-a">
           <p>This site is currently access-gated. If you don't have the code, reach out to <strong>Erick Mathews on Teams</strong> to request it - see the button on the access screen or the <a href="./install-guide.html">Install Guide</a> for what happens after you're in.</p>

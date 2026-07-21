@@ -7,11 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=5" />
+  <link rel="stylesheet" href="theme.css?v=7" />
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="site-gate.css" />
   <script src="site-gate.js" defer></script>
-  <script src="nice-effects.js?v=5" defer></script>
+  <script src="nice-effects.js?v=7" defer></script>
   <style>
     body { line-height: 1.6; } /* page-specific */
 
@@ -576,7 +576,7 @@
   <hr class="section-divider" />
 
   <!-- SKILLS GRID -->
-  <div class="section">
+  <div class="section" id="skills">
     <p class="section-label">All 9 skills</p>
     <h2 class="section-title">Skills reference</h2>
     <p class="section-body">Each skill below shows the trigger phrases that load it, the target client(s) it works with, and the key MCP tools it orchestrates.</p>
@@ -584,7 +584,7 @@
     <div class="skills-grid">
 
       <!-- 1: a11y-triage -->
-      <div class="skill-card reveal" style="--skill-color: var(--lyra);">
+      <div class="skill-card reveal" id="skill-a11y-triage" style="--skill-color: var(--lyra);">
         <div class="skill-header">
           <div class="skill-icon">&#127919;</div>
           <div>
@@ -610,7 +610,7 @@
       </div>
 
       <!-- 2: artboard-to-page -->
-      <div class="skill-card reveal" style="--skill-color: var(--blue);">
+      <div class="skill-card reveal" id="skill-artboard-page" style="--skill-color: var(--blue);">
         <div class="skill-header">
           <div class="skill-icon">&#128444;&#65039;</div>
           <div>
@@ -637,7 +637,7 @@
       </div>
 
       <!-- 3: browser-element-specs -->
-      <div class="skill-card reveal" style="--skill-color: var(--teal);">
+      <div class="skill-card reveal" id="skill-browser-specs" style="--skill-color: var(--teal);">
         <div class="skill-header">
           <div class="skill-icon">&#128269;</div>
           <div>
@@ -663,7 +663,7 @@
       </div>
 
       <!-- 4: dark-mode-parity -->
-      <div class="skill-card reveal" style="--skill-color: var(--indigo);">
+      <div class="skill-card reveal" id="skill-dark-mode" style="--skill-color: var(--indigo);">
         <div class="skill-header">
           <div class="skill-icon">&#127769;</div>
           <div>
@@ -690,7 +690,7 @@
       </div>
 
       <!-- 5: figma-chrome-parity -->
-      <div class="skill-card reveal" style="--skill-color: var(--coral);">
+      <div class="skill-card reveal" id="skill-figma-parity" style="--skill-color: var(--coral);">
         <div class="skill-header">
           <div class="skill-icon">&#9878;&#65039;</div>
           <div>
@@ -719,7 +719,7 @@
       </div>
 
       <!-- 6: figma-element-css -->
-      <div class="skill-card reveal" style="--skill-color: var(--blue);">
+      <div class="skill-card reveal" id="skill-figma-css" style="--skill-color: var(--blue);">
         <div class="skill-header">
           <div class="skill-icon">&#127912;</div>
           <div>
@@ -746,7 +746,7 @@
       </div>
 
       <!-- 7: lyra-visual-patterns -->
-      <div class="skill-card reveal" style="--skill-color: var(--lyra);">
+      <div class="skill-card reveal" id="skill-lyra-patterns" style="--skill-color: var(--lyra);">
         <div class="skill-header">
           <div class="skill-icon">&#10024;</div>
           <div>
@@ -772,7 +772,7 @@
       </div>
 
       <!-- 8: manual-fixes-checklist -->
-      <div class="skill-card reveal" style="--skill-color: var(--emerald);">
+      <div class="skill-card reveal" id="skill-manual-fixes" style="--skill-color: var(--emerald);">
         <div class="skill-header">
           <div class="skill-icon">&#128203;</div>
           <div>
@@ -799,7 +799,7 @@
       </div>
 
       <!-- 9: token-candidates -->
-      <div class="skill-card reveal" style="--skill-color: var(--teal);">
+      <div class="skill-card reveal" id="skill-token-candidates" style="--skill-color: var(--teal);">
         <div class="skill-header">
           <div class="skill-icon">&#127991;</div>
           <div>
@@ -831,13 +831,13 @@
 
   <!-- MCP TOOLS REFERENCE -->
   <div class="tools-section">
-    <div class="section reveal">
+    <div class="section reveal" id="mcp">
       <p class="section-label">MCP server</p>
       <h2 class="section-title">35 tools, 6 groups</h2>
       <p class="section-body">NiCE Designer exposes 35 MCP tools via the local WebSocket server at <code style="font-family:'SF Mono','Fira Code',monospace;font-size:.82rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:2px 6px;border-radius:4px">127.0.0.1:7331</code>. All tools accept <code style="font-family:'SF Mono','Fira Code',monospace;font-size:.82rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:2px 6px;border-radius:4px">target: "figma" | "chrome" | "auto"</code>. Audit tools are read-only and safe to run any time. Conversion tools are undoable via <code style="font-family:'SF Mono','Fira Code',monospace;font-size:.82rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:2px 6px;border-radius:4px">undo_last_conversion</code>.</p>
 
       <!-- AUDIT -->
-      <div class="mcp-group">
+      <div class="mcp-group" id="mcp-audit">
         <div class="mcp-group-header">
           <span class="mcp-group-name audit">Audit</span>
           <span class="mcp-group-note">Read-only — safe to run any time, on either client</span>
@@ -887,7 +887,7 @@
       </div>
 
       <!-- CONVERSION -->
-      <div class="mcp-group">
+      <div class="mcp-group" id="mcp-convert">
         <div class="mcp-group-header">
           <span class="mcp-group-name conversion">Conversion</span>
           <span class="mcp-group-note">Undoable — use undo_last_conversion to revert</span>
@@ -952,7 +952,7 @@
       </div>
 
       <!-- DEV HANDOFF -->
-      <div class="mcp-group">
+      <div class="mcp-group" id="mcp-handoff">
         <div class="mcp-group-header">
           <span class="mcp-group-name handoff">Dev Handoff</span>
           <span class="mcp-group-note">Read-only — extract specs and token CSS for engineering</span>
@@ -977,7 +977,7 @@
       </div>
 
       <!-- INTROSPECTION -->
-      <div class="mcp-group">
+      <div class="mcp-group" id="mcp-inspect">
         <div class="mcp-group-header">
           <span class="mcp-group-name introspect">Introspection</span>
           <span class="mcp-group-note">Status and metadata — always call list_targets first</span>
@@ -1012,7 +1012,7 @@
       </div>
 
       <!-- CHROME POLISH -->
-      <div class="mcp-group">
+      <div class="mcp-group" id="mcp-polish">
         <div class="mcp-group-header">
           <span class="mcp-group-name polish">Chrome Polish</span>
           <span class="mcp-group-note">Live page QA overlays and token injection</span>
@@ -1032,7 +1032,7 @@
       </div>
 
       <!-- ESCAPE HATCH -->
-      <div class="mcp-group">
+      <div class="mcp-group" id="mcp-escape">
         <div class="mcp-group-header">
           <span class="mcp-group-name escape">Escape Hatch</span>
           <span class="mcp-group-note">Direct message pass-through — for advanced use only</span>
@@ -1055,7 +1055,7 @@
   <hr class="section-divider" />
 
   <!-- TIPS -->
-  <div class="section">
+  <div class="section" id="tips">
     <p class="section-label">Tips</p>
     <h2 class="section-title">Before you run a skill</h2>
     <p class="section-body">A few things to know that will save you time and prevent silent failures.</p>

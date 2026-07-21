@@ -429,17 +429,139 @@
 
   /* ---------- doc rail (left nav for documentation pages) ---------- */
   // Every page except the homepage gets a floating left rail linking to
-  // every documentation page, with the current page marked active.
+  // every documentation page, with the current page marked active. A page
+  // can list its own in-page sections via `groups` — those only render
+  // (as an indented sub-list, jumping to `#id` on click) while you're
+  // actually on that page.
+  var SKILL_ITEMS = [
+    { id: 'skill-a11y-triage', label: 'A11y Triage' },
+    { id: 'skill-artboard-page', label: 'Artboard to Page' },
+    { id: 'skill-browser-specs', label: 'Browser Specs' },
+    { id: 'skill-dark-mode', label: 'Dark Mode Parity' },
+    { id: 'skill-figma-parity', label: 'Figma-Chrome Parity' },
+    { id: 'skill-figma-css', label: 'Figma Element CSS' },
+    { id: 'skill-lyra-patterns', label: 'Lyra Patterns' },
+    { id: 'skill-manual-fixes', label: 'Manual Fixes' },
+    { id: 'skill-token-candidates', label: 'Token Candidates' }
+  ];
+  var MCP_ITEMS = [
+    { id: 'mcp-audit', label: 'Audit' },
+    { id: 'mcp-convert', label: 'Conversion' },
+    { id: 'mcp-handoff', label: 'Dev Handoff' },
+    { id: 'mcp-inspect', label: 'Introspection' },
+    { id: 'mcp-polish', label: 'Chrome Polish' },
+    { id: 'mcp-escape', label: 'Escape Hatch' }
+  ];
+
   var DOC_PAGES = [
-    { href: 'install-guide.html', label: 'Install Guide' },
-    { href: 'claude-skills.html', label: 'Claude Skills' },
-    { href: 'the-suite.html', label: 'The Suite' },
-    { href: 'use-cases.html', label: 'Use Cases' },
-    { href: 'scoring.html', label: 'Scoring' },
+    {
+      href: 'install-guide.html', label: 'Install Guide',
+      groups: [
+        { label: 'Steps', items: [
+          { id: 'step-figma', label: 'Install the Figma Plugin' },
+          { id: 'step-chrome', label: 'Install the Chrome Extension' },
+          { id: 'step-mcp', label: 'Start the MCP Server' },
+          { id: 'step-claude', label: 'Connect Claude Desktop' },
+          { id: 'step-verify', label: 'Verify Everything Is Working' },
+          { id: 'step-issues', label: 'Common Issues' }
+        ] }
+      ]
+    },
+    {
+      href: 'claude-skills.html', label: 'Claude Skills',
+      groups: [
+        { label: 'Skills', items: [{ id: 'skills', label: 'All Skills' }].concat(SKILL_ITEMS) },
+        { label: 'MCP Server', items: [{ id: 'mcp', label: 'All MCP Tools' }].concat(MCP_ITEMS) },
+        { label: 'Tips', items: [{ id: 'tips', label: 'Before you run a skill' }] }
+      ]
+    },
+    {
+      href: 'the-suite.html', label: 'The Suite',
+      groups: [
+        { label: 'Tools', items: [
+          { id: 'tool-audit', label: 'Audit' },
+          { id: 'tool-convert', label: 'Convert' },
+          { id: 'tool-handoff', label: 'Handoff' },
+          { id: 'tool-parity', label: 'Parity' },
+          { id: 'tool-qa', label: 'QA' },
+          { id: 'tool-tokens', label: 'Tokens' },
+          { id: 'tool-editor', label: 'Editor' },
+          { id: 'tool-magic', label: 'Magic' }
+        ] }
+      ]
+    },
+    {
+      href: 'use-cases.html', label: 'Use Cases',
+      groups: [
+        { label: 'Categories', items: [
+          { id: 'cat-auditing', label: 'Auditing' },
+          { id: 'cat-converting', label: 'Converting' },
+          { id: 'cat-handoff', label: 'Design-to-Code Handoff' },
+          { id: 'cat-parity', label: 'Figma vs. Live Page Parity' },
+          { id: 'cat-qa', label: 'Chrome Page Polish and QA' },
+          { id: 'table-reference', label: 'Quick Reference Table' }
+        ] }
+      ]
+    },
+    {
+      href: 'scoring.html', label: 'Scoring',
+      groups: [
+        { label: 'Sections', items: [
+          { id: 'scores', label: 'Four Independent Scores' },
+          { id: 'calculation', label: 'How the Number Is Calculated' },
+          { id: 'categories', label: 'The Five Compliance Categories' },
+          { id: 'a11y-scores', label: 'The Two Accessibility Scores' },
+          { id: 'reading-dashboard', label: 'Reading the Compliance Dashboard' },
+          { id: 'what-counts', label: 'What Counts as a Fix' },
+          { id: 'snoozed', label: 'Snoozed Items and Score Calculation' },
+          { id: 'tips', label: 'Getting the Most from Scores' }
+        ] }
+      ]
+    },
     { href: 'roadmap.html', label: 'Roadmap' },
-    { href: 'release-notes.html', label: 'Release Notes' },
-    { href: 'faq.html', label: 'FAQ' },
-    { href: 'tools.html', label: 'Tools' }
+    {
+      href: 'release-notes.html', label: 'Release Notes',
+      groups: [
+        { label: 'Versions', items: [
+          { id: 'release-v10', label: 'v10 — June 2026' },
+          { id: 'release-v9', label: 'v9 — May 2026' },
+          { id: 'release-v8', label: 'v8 — April 2026' }
+        ] }
+      ]
+    },
+    {
+      href: 'faq.html', label: 'FAQ',
+      groups: [
+        { label: 'Questions', items: [
+          { id: 'faq-design-system', label: 'How the tools understand the design system' },
+          { id: 'faq-generate', label: 'Does it generate designs or pages?' },
+          { id: 'faq-supercharge', label: 'What is Supercharge?' },
+          { id: 'faq-sol-lyra', label: 'SOL vs. Lyra conversion' },
+          { id: 'faq-mcp-required', label: 'Is the MCP server required?' },
+          { id: 'faq-disagree-fix', label: 'Disagreeing with a suggested fix' },
+          { id: 'faq-any-figma-file', label: 'Does it work on any Figma file?' },
+          { id: 'faq-access', label: 'How to get access' }
+        ] }
+      ]
+    },
+    {
+      href: 'tools.html', label: 'Tools',
+      groups: [
+        { label: 'Suite Tools', items: [
+          { id: 'suite', label: 'All Suite Tools' },
+          { id: 'suite-audit', label: 'Audit' },
+          { id: 'suite-convert', label: 'Convert' },
+          { id: 'suite-handoff', label: 'Handoff' },
+          { id: 'suite-parity', label: 'Parity' },
+          { id: 'suite-qa', label: 'QA' },
+          { id: 'suite-tokens', label: 'Tokens' },
+          { id: 'suite-editor', label: 'Editor' },
+          { id: 'suite-magic', label: 'Magic' }
+        ] },
+        { label: 'MCP Tools', items: [{ id: 'mcp', label: 'All MCP Tools' }].concat(MCP_ITEMS) },
+        { label: 'Claude Skills', items: [{ id: 'skills', label: 'All Skills' }].concat(SKILL_ITEMS) }
+      ]
+    }
   ];
 
   // Homepage, dashboard, and roadmap don't get the doc rail.
@@ -463,8 +585,18 @@
       '</div>' +
       '<div class="doc-rail-links">';
     DOC_PAGES.forEach(function (p) {
-      var active = p.href === path ? ' active' : '';
+      var isCurrent = p.href === path;
+      var active = isCurrent ? ' active' : '';
       html += '<a class="doc-rail-link' + active + '" href="./' + p.href + '" data-label="' + p.label.toLowerCase() + '">' + p.label + '</a>';
+      // Sub-items only render for the page you're actually on.
+      if (isCurrent && p.groups) {
+        p.groups.forEach(function (group) {
+          html += '<div class="doc-rail-group-label">' + group.label + '</div>';
+          group.items.forEach(function (item) {
+            html += '<a class="doc-rail-sublink" href="#' + item.id + '" data-label="' + item.label.toLowerCase() + '">' + item.label + '</a>';
+          });
+        });
+      }
     });
     html += '</div><div class="doc-rail-empty" hidden>No matching pages</div>';
     rail.innerHTML = html;
@@ -484,14 +616,14 @@
       document.body.appendChild(expandTab);
     }
 
-    // tools.html has its own in-page sidebar at the left edge; shift the
-    // doc rail (and its collapsed-state expand tab) past it so they don't overlap.
-    var ownSidebar = document.querySelector('.sidebar');
-    if (ownSidebar) {
-      var offset = ownSidebar.getBoundingClientRect().width + 40;
-      rail.style.left = offset + 'px';
-      expandTab.style.left = offset + 'px';
-    }
+    // If a sub-item points at a closed <details> (e.g. an FAQ question),
+    // open it so the content is actually visible once we jump there.
+    rail.querySelectorAll('.doc-rail-sublink').forEach(function (link) {
+      link.addEventListener('click', function () {
+        var target = document.getElementById(link.getAttribute('href').slice(1));
+        if (target && target.tagName === 'DETAILS') target.open = true;
+      });
+    });
 
     var input = rail.querySelector('.doc-rail-search');
     var links = rail.querySelectorAll('.doc-rail-link');
@@ -535,7 +667,49 @@
       input.select();
     });
 
+    initAnchorWarmth(rail);
+
     return rail;
+  }
+
+  // As you scroll, each sub-item "warms up" toward the section it's
+  // nearest to (a continuous 0-1 glow via --warmth), rather than a single
+  // hard on/off active state.
+  function initAnchorWarmth(rail) {
+    var subs = Array.prototype.slice.call(rail.querySelectorAll('.doc-rail-sublink'))
+      .map(function (link) {
+        var target = document.getElementById(link.getAttribute('href').slice(1));
+        return target ? { link: link, target: target } : null;
+      })
+      .filter(Boolean);
+    if (!subs.length) return;
+
+    var ticking = false;
+    var REFERENCE = 0.3; // 30% down the viewport = "current" reading line
+    var SPREAD = 0.55;   // fraction of viewport height over which warmth fades to 0
+
+    function update() {
+      var refY = global.innerHeight * REFERENCE;
+      var maxDist = global.innerHeight * SPREAD;
+      subs.forEach(function (s) {
+        var rect = s.target.getBoundingClientRect();
+        var dist = Math.abs(rect.top - refY);
+        var warmth = Math.max(0, 1 - dist / maxDist);
+        s.link.style.setProperty('--warmth', warmth.toFixed(3));
+      });
+      ticking = false;
+    }
+
+    function schedule() {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    }
+
+    global.addEventListener('scroll', schedule, { passive: true, capture: true });
+    global.addEventListener('resize', schedule, { passive: true });
+    update();
   }
 
   /* ---------- auto-hide nav on scroll ---------- */

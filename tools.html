@@ -5,17 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NiCE Designer — Tool Catalog</title>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=5" />
+  <link rel="stylesheet" href="theme.css?v=7" />
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="site-gate.css" />
   <script src="site-gate.js" defer></script>
-  <script src="nice-effects.js?v=5" defer></script>
+  <script src="nice-effects.js?v=7" defer></script>
   <style>
     :root {
       /* page-specific tokens */
       --bg-card:   #2a2a36;
       --bg-card2:  #2f2f3d;
-      --sidebar-w: 240px;
     }
 
     /* ---- TOOL SEARCH BAR ---- */
@@ -49,49 +48,6 @@
     .layout {
       display: flex;
       min-height: 100vh;
-    }
-
-    /* ---- SIDEBAR ---- */
-    .sidebar {
-      width: var(--sidebar-w);
-      flex-shrink: 0;
-      position: sticky;
-      top: var(--nav-h);
-      height: calc(100vh - var(--nav-h));
-      overflow-y: auto;
-      border-right: 1px solid var(--border);
-      padding: 28px 0 40px;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(255,255,255,0.1) transparent;
-    }
-    .sidebar::-webkit-scrollbar { width: 4px; }
-    .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
-
-    .sidebar-group { margin-bottom: 8px; }
-    .sidebar-group-label {
-      font-size: 9px; font-weight: 700; letter-spacing: 2px;
-      text-transform: uppercase; color: rgba(255,255,255,0.25);
-      padding: 8px 20px 4px;
-    }
-    .sidebar-link {
-      display: flex; align-items: center; gap: 8px;
-      padding: 7px 20px; font-size: 13px; font-weight: 500;
-      color: rgba(255,255,255,0.5); text-decoration: none;
-      border-left: 2px solid transparent;
-      transition: all 0.15s; cursor: pointer;
-    }
-    .sidebar-link:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.04); }
-    .sidebar-link.active {
-      color: #fff; border-left-color: var(--blue);
-      background: rgba(54,148,252,0.07);
-    }
-    .sidebar-link .dot {
-      width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
-    }
-    .sidebar-count {
-      margin-left: auto; font-size: 10px; font-weight: 600;
-      color: rgba(255,255,255,0.2); padding: 1px 6px;
-      background: rgba(255,255,255,0.05); border-radius: 100px;
     }
 
     /* ---- CONTENT ---- */
@@ -271,7 +227,6 @@
     .tool-section.all-hidden { display: none; }
 
     @media (max-width: 900px) {
-      .sidebar { display: none; }
       .content { padding: 32px 24px 80px; }
       .tool-grid { grid-template-columns: 1fr; }
     }
@@ -321,105 +276,6 @@
 
   <div class="layout">
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
-
-      <div class="sidebar-group">
-        <div class="sidebar-group-label">Suite Tools</div>
-        <a class="sidebar-link" onclick="scrollTo('suite')">
-          <span class="dot" style="background:#3694FC"></span> All Suite Tools
-          <span class="sidebar-count">8</span>
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('suite-audit')">
-          <span class="dot" style="background:#3694FC"></span> Audit
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('suite-convert')">
-          <span class="dot" style="background:#00E2A0"></span> Convert
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('suite-handoff')">
-          <span class="dot" style="background:#36EAD0"></span> Handoff
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('suite-parity')">
-          <span class="dot" style="background:#B98FFF"></span> Parity
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('suite-qa')">
-          <span class="dot" style="background:#FF5B8A"></span> QA
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('suite-tokens')">
-          <span class="dot" style="background:#36EAD0"></span> Tokens
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('suite-editor')">
-          <span class="dot" style="background:#3694FC"></span> Editor
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('suite-magic')">
-          <span class="dot" style="background:#B98FFF"></span> Magic ⚡
-        </a>
-      </div>
-
-      <div class="sidebar-group">
-        <div class="sidebar-group-label">MCP Tools</div>
-        <a class="sidebar-link" onclick="scrollTo('mcp')">
-          <span class="dot" style="background:#3694FC"></span> All MCP Tools
-          <span class="sidebar-count">35</span>
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('mcp-audit')">
-          <span class="dot" style="background:#3694FC"></span> Audit
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('mcp-convert')">
-          <span class="dot" style="background:#00E2A0"></span> Conversion
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('mcp-handoff')">
-          <span class="dot" style="background:#36EAD0"></span> Dev Handoff
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('mcp-inspect')">
-          <span class="dot" style="background:#B98FFF"></span> Introspection
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('mcp-polish')">
-          <span class="dot" style="background:#FF5B8A"></span> Chrome Polish
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('mcp-escape')">
-          <span class="dot" style="background:rgba(255,255,255,0.3)"></span> Escape Hatch
-        </a>
-      </div>
-
-      <div class="sidebar-group">
-        <div class="sidebar-group-label">Claude Skills</div>
-        <a class="sidebar-link" onclick="scrollTo('skills')">
-          <span class="dot" style="background:#B98FFF"></span> All Skills
-          <span class="sidebar-count">9</span>
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('skill-a11y-triage')">
-          <span class="dot" style="background:#B98FFF"></span> A11y Triage
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('skill-artboard-page')">
-          <span class="dot" style="background:#B98FFF"></span> Artboard to Page
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('skill-browser-specs')">
-          <span class="dot" style="background:#B98FFF"></span> Browser Specs
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('skill-dark-mode')">
-          <span class="dot" style="background:#B98FFF"></span> Dark Mode Parity
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('skill-figma-parity')">
-          <span class="dot" style="background:#B98FFF"></span> Figma-Chrome Parity
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('skill-figma-css')">
-          <span class="dot" style="background:#B98FFF"></span> Figma Element CSS
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('skill-lyra-patterns')">
-          <span class="dot" style="background:#B98FFF"></span> Lyra Patterns
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('skill-manual-fixes')">
-          <span class="dot" style="background:#B98FFF"></span> Manual Fixes
-        </a>
-        <a class="sidebar-link" onclick="scrollTo('skill-token-candidates')">
-          <span class="dot" style="background:#B98FFF"></span> Token Candidates
-        </a>
-      </div>
-
-    </aside>
-
-    <!-- CONTENT -->
     <main class="content" id="content">
 
       <div class="no-results" id="no-results">No tools match your search.</div>
@@ -984,36 +840,6 @@
 
     noResults.classList.toggle('visible', totalVisible === 0 && q.length > 0);
   });
-
-  // ---- SMOOTH SCROLL ----
-  window.scrollTo = function(id) {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-
-  // ---- SCROLL SPY ----
-  const sidebarLinks = document.querySelectorAll('.sidebar-link');
-  const sections = [];
-  sidebarLinks.forEach(function(link) {
-    const fn = link.getAttribute('onclick');
-    if (!fn) return;
-    const m = fn.match(/scrollTo\('(.+?)'\)/);
-    if (!m) return;
-    const el = document.getElementById(m[1]);
-    if (el) sections.push({ link: link, el: el });
-  });
-
-  const spy = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        sidebarLinks.forEach(function(l) { l.classList.remove('active'); });
-        const found = sections.find(function(s) { return s.el === entry.target; });
-        if (found) found.link.classList.add('active');
-      }
-    });
-  }, { rootMargin: '-20% 0px -70% 0px' });
-
-  sections.forEach(function(s) { spy.observe(s.el); });
 
   // ---- CURSOR GLOW + TILT ----
   var glow = document.createElement('div');
