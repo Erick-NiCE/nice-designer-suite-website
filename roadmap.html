@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NiCE Designer - Product Roadmap</title>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="theme.css?v=4" />
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="site-gate.css" />
   <script src="site-gate.js" defer></script>
-  <script src="nice-effects.js" defer></script>
+  <script src="nice-effects.js?v=4" defer></script>
   <style>
     :root {
       /* page-specific tokens */
@@ -86,7 +86,7 @@
         #21212B 100%
       );
       background-size: 400% 400%;
-      animation: gradientShift 12s ease infinite;
+      animation: gradientShift 120s ease infinite;
       opacity: 0.85;
     }
     .hero-bg::after {
@@ -105,19 +105,19 @@
       width: 500px; height: 500px;
       background: radial-gradient(circle, rgba(54,148,252,0.5), transparent 70%);
       top: -100px; left: -100px;
-      animation: orb 15s ease-in-out infinite;
+      animation: orb 150s ease-in-out infinite;
     }
     .orb-2 {
       width: 400px; height: 400px;
       background: radial-gradient(circle, rgba(97,0,255,0.4), transparent 70%);
       bottom: -80px; right: -80px;
-      animation: orb 18s ease-in-out infinite reverse;
+      animation: orb 180s ease-in-out infinite reverse;
     }
     .orb-3 {
       width: 300px; height: 300px;
       background: radial-gradient(circle, rgba(0,226,160,0.3), transparent 70%);
       top: 40%; left: 60%;
-      animation: orb 20s ease-in-out infinite 5s;
+      animation: orb 200s ease-in-out infinite 5s;
     }
 
     .hero-content {
@@ -149,7 +149,7 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      animation: shimmer 4s linear infinite;
+      animation: shimmer 40s linear infinite;
     }
     .hero-title .designer {
       display: block;
@@ -231,7 +231,7 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      animation: shimmer 5s linear infinite;
+      animation: shimmer 50s linear infinite;
     }
     .section-desc {
       font-size: 16px;
@@ -493,7 +493,7 @@
     /* Cards grid */
     .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
       gap: 10px;
     }
 
@@ -650,7 +650,7 @@
 
     .stakeholders-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 10px;
       margin-top: 32px;
     }
@@ -717,8 +717,8 @@
   <div id="nice-site-gate">
     <div class="sg-card">
       <div class="sg-lock">🔒</div>
-      <div class="sg-title">Access Required</div>
-      <div class="sg-subtitle">This site is private. Enter the access code to continue.</div>
+      <div class="sg-title">NiCE Designer Site Login</div>
+      <div class="sg-subtitle">This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.</div>
       <div class="sg-input-wrap">
         <input id="nice-site-gate-input" type="password" placeholder="Enter code" autocomplete="off" />
       </div>
@@ -742,17 +742,7 @@
     <a href="./index.html" class="nav-logo">
       <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span>
     </a>
-    <div class="nav-links">
-      <a href="./index.html" class="nav-link">Overview</a>
-      <a href="./install-guide.html" class="nav-link">Install Guide</a>
-      <a href="./claude-skills.html" class="nav-link">Claude Skills</a>
-      <a href="./the-suite.html" class="nav-link">The Suite</a>
-      <a href="./use-cases.html" class="nav-link">Use Cases</a>
-      <a href="./scoring.html" class="nav-link">Scoring</a>
-      <a href="./dashboard.html" class="nav-link">Dashboard</a>
-      <a href="./roadmap.html" class="nav-link active">Roadmap</a>
-    </div>
-    <button class="nav-toggle" aria-label="Menu" id="nav-toggle">&#9776;</button>
+    <a href="./install-guide.html" class="nav-download">Download</a>
   </nav>
 
   <!-- ================================================================
@@ -1397,8 +1387,8 @@
   <div id="access-gate">
     <div class="gate-card">
       <div class="gate-lock">🔒</div>
-      <div class="gate-title">Access Required</div>
-      <div class="gate-subtitle">This page is restricted. Enter the access code to view the NiCE Designer product roadmap.</div>
+      <div class="gate-title">Roadmap Access Required</div>
+      <div class="gate-subtitle">This is a separate lock from the site-wide login - it's specifically for NiCE Designer stakeholders reviewing the product roadmap. Enter the roadmap access code to continue.</div>
       <div class="gate-input-wrap">
         <input id="gate-input" type="password" placeholder="Enter code" autocomplete="off" />
       </div>
@@ -1596,20 +1586,34 @@
   </script>
 
   <script>
-    // Mobile nav toggle
-    var navToggle = document.getElementById('nav-toggle');
-    var siteNav = document.getElementById('site-nav');
-    navToggle.addEventListener('click', function() {
-      siteNav.classList.toggle('open');
-    });
-
-    // Close nav on link click (mobile)
-    document.querySelectorAll('.nav-link').forEach(function(link) {
-      link.addEventListener('click', function() {
-        siteNav.classList.remove('open');
-      });
-    });
   </script>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></div>
+      </div>
+      <nav class="footer-nav">
+        <div class="footer-nav-col">
+          <a href="./index.html">Overview</a>
+          <a href="./install-guide.html">Install Guide</a>
+          <a href="./claude-skills.html">Claude Skills</a>
+          <a href="./the-suite.html">The Suite</a>
+        </div>
+        <div class="footer-nav-col">
+          <a href="./use-cases.html">Use Cases</a>
+          <a href="./scoring.html">Scoring</a>
+          <a href="./dashboard.html">Dashboard</a>
+          <a href="./roadmap.html" class="active">Roadmap</a>
+        </div>
+        <div class="footer-nav-col">
+          <a href="./release-notes.html">Release Notes</a>
+          <a href="./faq.html">FAQ</a>
+          <a href="./tools.html">Tools</a>
+        </div>
+      </nav>
+    </div>
+  </footer>
 
 </body>
 </html>

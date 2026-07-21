@@ -411,5 +411,156 @@
     if (document.body) document.body.classList.remove('nice-leaving');
   });
 
+  /* ---------- nav + doc rail: shared "ready" bootstrap ---------- */
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  // theme.css sets `body { overflow-x: hidden }`, which per spec forces
+  // overflow-y to compute as `auto` too — so on this site `body`, not the
+  // viewport, is the actual scroll container. Read whichever one moved.
+  function currentScrollY() {
+    return document.body.scrollTop || document.documentElement.scrollTop || global.scrollY || 0;
+  }
+
+  /* ---------- doc rail (left nav for documentation pages) ---------- */
+  // Every page except the homepage gets a floating left rail linking to
+  // every documentation page, with the current page marked active.
+  var DOC_PAGES = [
+    { href: 'install-guide.html', label: 'Install Guide' },
+    { href: 'claude-skills.html', label: 'Claude Skills' },
+    { href: 'the-suite.html', label: 'The Suite' },
+    { href: 'use-cases.html', label: 'Use Cases' },
+    { href: 'scoring.html', label: 'Scoring' },
+    { href: 'roadmap.html', label: 'Roadmap' },
+    { href: 'release-notes.html', label: 'Release Notes' },
+    { href: 'faq.html', label: 'FAQ' },
+    { href: 'tools.html', label: 'Tools' }
+  ];
+
+  // Homepage, dashboard, and roadmap don't get the doc rail.
+  var DOC_RAIL_SKIP = { '': true, 'index.html': true, 'dashboard.html': true, 'roadmap.html': true };
+
+  function buildDocRail() {
+    var path = global.location.pathname.split('/').pop() || 'index.html';
+    if (DOC_RAIL_SKIP[path]) return null;
+
+    var rail = document.createElement('nav');
+    rail.className = 'doc-rail';
+    rail.setAttribute('aria-label', 'Documentation pages');
+
+    var html =
+      '<div class="doc-rail-header">' +
+        '<div class="doc-rail-label">Documentation</div>' +
+        '<button type="button" class="doc-rail-collapse" aria-label="Collapse documentation menu">&#8249;</button>' +
+      '</div>' +
+      '<div class="doc-rail-search-wrap">' +
+        '<input type="text" class="doc-rail-search" placeholder="Search pages…" aria-label="Search documentation pages" />' +
+      '</div>' +
+      '<div class="doc-rail-links">';
+    DOC_PAGES.forEach(function (p) {
+      var active = p.href === path ? ' active' : '';
+      html += '<a class="doc-rail-link' + active + '" href="./' + p.href + '" data-label="' + p.label.toLowerCase() + '">' + p.label + '</a>';
+    });
+    html += '</div><div class="doc-rail-empty" hidden>No matching pages</div>';
+    rail.innerHTML = html;
+
+    var expandTab = document.createElement('button');
+    expandTab.type = 'button';
+    expandTab.className = 'doc-rail-expand';
+    expandTab.setAttribute('aria-label', 'Expand documentation menu');
+    expandTab.innerHTML = '&#8250;';
+
+    var nav = document.getElementById('site-nav');
+    if (nav && nav.nextSibling) {
+      nav.parentNode.insertBefore(rail, nav.nextSibling);
+      nav.parentNode.insertBefore(expandTab, rail.nextSibling);
+    } else {
+      document.body.appendChild(rail);
+      document.body.appendChild(expandTab);
+    }
+
+    // tools.html has its own in-page sidebar at the left edge; shift the
+    // doc rail (and its collapsed-state expand tab) past it so they don't overlap.
+    var ownSidebar = document.querySelector('.sidebar');
+    if (ownSidebar) {
+      var offset = ownSidebar.getBoundingClientRect().width + 40;
+      rail.style.left = offset + 'px';
+      expandTab.style.left = offset + 'px';
+    }
+
+    var input = rail.querySelector('.doc-rail-search');
+    var links = rail.querySelectorAll('.doc-rail-link');
+    var empty = rail.querySelector('.doc-rail-empty');
+    input.addEventListener('input', function () {
+      var q = input.value.trim().toLowerCase();
+      var anyVisible = false;
+      links.forEach(function (link) {
+        var match = !q || link.dataset.label.indexOf(q) !== -1;
+        link.hidden = !match;
+        if (match) anyVisible = true;
+      });
+      empty.hidden = anyVisible;
+    });
+
+    // Collapsed state persists across pages via localStorage.
+    var COLLAPSE_KEY = 'nice-doc-rail-collapsed';
+    var collapseBtn = rail.querySelector('.doc-rail-collapse');
+
+    function setCollapsed(collapsed) {
+      rail.classList.toggle('doc-rail-collapsed', collapsed);
+      expandTab.classList.toggle('visible', collapsed);
+      try { global.localStorage.setItem(COLLAPSE_KEY, collapsed ? '1' : '0'); } catch (e) {}
+    }
+
+    collapseBtn.addEventListener('click', function () { setCollapsed(true); });
+    expandTab.addEventListener('click', function () { setCollapsed(false); });
+
+    var storedCollapsed = false;
+    try { storedCollapsed = global.localStorage.getItem(COLLAPSE_KEY) === '1'; } catch (e) {}
+    setCollapsed(storedCollapsed);
+
+    return rail;
+  }
+
+  /* ---------- auto-hide nav on scroll ---------- */
+  // Nav slides away on scroll-down and reappears on scroll-up. Pages with a
+  // hero (index.html) additionally toggle `.nav-pre-hero` before this ever
+  // kicks in. The doc rail is a deliberate open/close drawer (see
+  // buildDocRail) so it's excluded from this ambient behavior.
+  function initScrollHide() {
+    var nav = document.getElementById('site-nav');
+    if (!nav) return;
+    var lastY = currentScrollY();
+    var ticking = false;
+
+    function onScroll() {
+      var y = currentScrollY();
+      var hide = y > lastY && y > 80;
+      nav.classList.toggle('nav-scroll-hidden', hide);
+      lastY = y;
+      ticking = false;
+    }
+
+    function schedule() {
+      if (!ticking) {
+        requestAnimationFrame(onScroll);
+        ticking = true;
+      }
+    }
+
+    global.addEventListener('scroll', schedule, { passive: true, capture: true });
+    document.addEventListener('scroll', schedule, { passive: true, capture: true });
+  }
+
+  ready(function () {
+    buildDocRail();
+    initScrollHide();
+  });
+
   global.NiceEffects = { liquidFill: liquidFill, lightning: lightning };
 })(window);

@@ -20,11 +20,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="theme.css?v=4" />
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="site-gate.css" />
   <script src="site-gate.js" defer></script>
-  <script src="nice-effects.js" defer></script>
+  <script src="nice-effects.js?v=4" defer></script>
   <style>
     .nf {
       position: relative;
@@ -95,8 +95,8 @@
   <div id="nice-site-gate">
     <div class="sg-card">
       <div class="sg-lock">🔒</div>
-      <div class="sg-title">Access Required</div>
-      <div class="sg-subtitle">This site is private. Enter the access code to continue.</div>
+      <div class="sg-title">NiCE Designer Site Login</div>
+      <div class="sg-subtitle">This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.</div>
       <div class="sg-input-wrap">
         <input id="nice-site-gate-input" type="password" placeholder="Enter code" autocomplete="off" />
       </div>
@@ -120,17 +120,7 @@
     <a href="./index.html" class="nav-logo">
       <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span>
     </a>
-    <div class="nav-links">
-      <a href="./index.html" class="nav-link">Overview</a>
-      <a href="./install-guide.html" class="nav-link">Install Guide</a>
-      <a href="./claude-skills.html" class="nav-link">Claude Skills</a>
-      <a href="./the-suite.html" class="nav-link">The Suite</a>
-      <a href="./use-cases.html" class="nav-link">Use Cases</a>
-      <a href="./scoring.html" class="nav-link">Scoring</a>
-      <a href="./dashboard.html" class="nav-link">Dashboard</a>
-      <a href="./roadmap.html" class="nav-link">Roadmap</a>
-    </div>
-    <button class="nav-toggle" aria-label="Menu" id="nav-toggle">&#9776;</button>
+    <a href="./install-guide.html" class="nav-download">Download</a>
   </nav>
 
   <section class="nf">
@@ -146,19 +136,6 @@
     </div>
   </section>
 
-  <script>
-    // Mobile nav toggle
-    var navToggle = document.getElementById('nav-toggle');
-    var siteNav = document.getElementById('site-nav');
-    navToggle.addEventListener('click', function () {
-      siteNav.classList.toggle('open');
-    });
-    document.querySelectorAll('.nav-link').forEach(function (link) {
-      link.addEventListener('click', function () {
-        siteNav.classList.remove('open');
-      });
-    });
-  </script>
 
 </body>
 </html>

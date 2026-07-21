@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Release Notes - NiCE Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="theme.css?v=4" />
+  <link rel="stylesheet" href="nice-effects.css" />
+  <link rel="stylesheet" href="site-gate.css" />
+  <script src="site-gate.js" defer></script>
+  <script src="nice-effects.js?v=4" defer></script>
+  <style>
+    body { line-height: 1.6; }
+
+    .hero {
+      background: linear-gradient(to bottom, #2a1a5e, #21212B);
+      padding: 96px 24px 80px;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--emerald);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    .hero-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .page-section {
+      padding: 64px 32px;
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+
+    /* ========== CHANGELOG (moved from index.html) ========== */
+    .changelog-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .changelog-card.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .changelog-main {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+    }
+    @media (max-width: 700px) {
+      .changelog-main { grid-template-columns: 1fr; }
+    }
+    .changelog-meta {
+      padding: 32px;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    @media (max-width: 700px) {
+      .changelog-meta {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 20px;
+      }
+    }
+    .version-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 20px;
+      font-weight: 800;
+    }
+    .version-latest {
+      display: inline-block;
+      background: rgba(0, 226, 160, 0.15);
+      color: var(--emerald);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 100px;
+      border: 1px solid rgba(0, 226, 160, 0.3);
+    }
+    .version-date {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .changelog-content { padding: 32px; }
+    @media (max-width: 700px) {
+      .changelog-content { padding: 20px; }
+    }
+    .changelog-group { margin-bottom: 24px; }
+    .changelog-group:last-child { margin-bottom: 0; }
+    .changelog-group-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+    .changelog-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .changelog-list li {
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.85);
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .changelog-list li::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--blue);
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+    .changelog-list.fixes li::before { background: var(--coral); }
+    .changelog-list.improvements li::before { background: var(--emerald); }
+
+    .changelog-toggle-row {
+      width: 100%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 32px;
+      color: var(--text);
+      font-family: 'Be Vietnam Pro', sans-serif;
+      text-align: left;
+    }
+    .changelog-toggle-row:hover { background: rgba(255, 255, 255, 0.03); }
+    .changelog-toggle-left { display: flex; align-items: center; gap: 16px; }
+    .changelog-toggle-version { font-size: 18px; font-weight: 800; }
+    .changelog-toggle-date { font-size: 13px; color: var(--text-secondary); }
+    .changelog-toggle-arrow {
+      font-size: 18px;
+      color: var(--text-secondary);
+      transition: transform 0.25s ease;
+    }
+    .changelog-toggle-arrow.open { transform: rotate(180deg); }
+    .changelog-collapsible {
+      border-top: 1px solid var(--border);
+      display: none;
+    }
+    .changelog-collapsible.open { display: block; }
+
+    @media (max-width: 768px) {
+      .page-section { padding: 48px 20px; }
+      .changelog-toggle-row { padding: 16px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SITE-WIDE ACCESS GATE (see site-gate.css / site-gate.js) -->
+  <div id="nice-site-gate">
+    <div class="sg-card">
+      <div class="sg-lock">🔒</div>
+      <div class="sg-title">NiCE Designer Site Login</div>
+      <div class="sg-subtitle">This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.</div>
+      <div class="sg-input-wrap">
+        <input id="nice-site-gate-input" type="password" placeholder="Enter code" autocomplete="off" />
+      </div>
+      <div class="sg-error" id="nice-site-gate-error"></div>
+      <button id="nice-site-gate-btn" type="button">Unlock</button>
+      <div class="sg-divider"></div>
+      <div class="sg-cta">
+        Don't have the code?<br>
+        <strong>Reach out to Erick Mathews on Teams</strong> to request access.
+        <br>
+        <a class="sg-teams-btn" href="https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H8a2 2 0 00-2 2v2H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2h2a2 2 0 002-2V4a2 2 0 00-2-2zM4 20V8h12v12H4zm16-4h-2V8a2 2 0 00-2-2H8V4h12v12z" fill="currentColor"/></svg>
+          Message on Teams
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="site-nav" id="site-nav">
+    <a href="./index.html" class="nav-logo">
+      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span>
+    </a>
+    <a href="./install-guide.html" class="nav-download">Download</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="reveal">
+      <span class="hero-eyebrow">CHANGELOG</span>
+      <h1 class="hero-title">Release Notes</h1>
+      <p class="hero-subtitle">What's shipped in each version of NiCE Designer - features, improvements, and fixes.</p>
+    </div>
+  </section>
+
+  <!-- CHANGELOG -->
+  <div class="page-section" id="changelog">
+
+    <!-- v10 - always shown -->
+    <div class="changelog-card stagger-1">
+      <div class="changelog-main">
+        <div class="changelog-meta">
+          <div class="version-badge">
+            v10 <span class="version-latest">LATEST</span>
+          </div>
+          <div class="version-date">June 2026</div>
+        </div>
+        <div class="changelog-content">
+          <div class="changelog-group">
+            <div class="changelog-group-label">New features</div>
+            <ul class="changelog-list">
+              <li>Complete redesign: new icons, UX, and micro-animations throughout the interface</li>
+              <li>Role-based onboarding: first-launch modal asks for your role; adjusts default panel, skill set, and suggested MCP tools. Re-selectable in settings.</li>
+              <li>Claude / MCP skills (9): apply_token_fix, apply_all_fixes, get_audit_results, get_selected_node, set_selected_node, export_css, get_history, undo_fix, convert_design_system. Callable from Claude chat or any MCP-compatible client.</li>
+              <li>Edit mode: click the pencil in the header to edit webpages with familiar design tools</li>
+              <li>Edit history (undo/redo): full history stack in Chrome extension; each fix is logged, undo/redo per step</li>
+              <li>Export fixes as CSS: Export CSS button outputs all applied fixes with rule count and token names</li>
+            </ul>
+          </div>
+          <div class="changelog-group">
+            <div class="changelog-group-label">Improvements</div>
+            <ul class="changelog-list improvements">
+              <li>Semantic color matching: context-aware token lookup considers role (text, background, border, icon)</li>
+              <li>SOL to Lyra conversion: token mapping is context-aware, correctly handles tokens that differ by semantic role</li>
+              <li>Serialized MCP messages: calls queued and processed in order, preventing race conditions</li>
+              <li>Auto-snooze after Apply All: fixed items automatically snoozed; toggleable in settings</li>
+            </ul>
+          </div>
+          <div class="changelog-group">
+            <div class="changelog-group-label">Fixes</div>
+            <ul class="changelog-list fixes">
+              <li>Custom hex values no longer revert on blur</li>
+              <li>Variable binding preserved when applying fix to a node with existing bound variable</li>
+              <li>Chrome extension detection no longer fails on pages that load in an iframe</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- v9 - collapsible -->
+    <div class="changelog-card stagger-2">
+      <button class="changelog-toggle-row" aria-expanded="false" data-target="v9-body">
+        <div class="changelog-toggle-left">
+          <span class="changelog-toggle-version">v9</span>
+          <span class="changelog-toggle-date">May 2026</span>
+        </div>
+        <span class="changelog-toggle-arrow" id="v9-arrow">&#8964;</span>
+      </button>
+      <div class="changelog-collapsible" id="v9-body">
+        <div class="changelog-main">
+          <div class="changelog-meta">
+            <div class="version-badge">v9</div>
+            <div class="version-date">May 2026</div>
+          </div>
+          <div class="changelog-content">
+            <div class="changelog-group">
+              <div class="changelog-group-label">New features</div>
+              <ul class="changelog-list">
+                <li>Vision/screenshot support for Claude: Claude can pull in a visual to make targeted changes</li>
+                <li>Per-row revert: Apply/Replace leaves a revert link on each row; one click restores prior state including variable bindings</li>
+                <li>Custom value live edit: hex input for colors, px input for font size, spacing, and radius on every row</li>
+                <li>Export applied fixes: returns a CSS document of every live edit in the session, including rule count</li>
+                <li>Per-category audit totals: every audit tile shows bad/total (e.g. 15/147 Colors); design score divides by per-category sum</li>
+                <li>Family-aware text matching: font family + size + weight all considered when flagging wrong-system text</li>
+                <li>10x faster library load: variable imports parallelized 16-wide with 10-second timeout fallback</li>
+              </ul>
+            </div>
+            <div class="changelog-group">
+              <div class="changelog-group-label">Fixes</div>
+              <ul class="changelog-list fixes">
+                <li>Radius variable binding now correctly binds all four corner properties</li>
+                <li>Open Sans SemiBold loads reliably across weight-naming variants</li>
+                <li>Audit ring stability fixed - no more race condition on pull refresh</li>
+                <li>MCP server v0.5.0 with four new revert_single_* tools and custom value fields on apply tools</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- v8 - collapsible -->
+    <div class="changelog-card stagger-3">
+      <button class="changelog-toggle-row" aria-expanded="false" data-target="v8-body">
+        <div class="changelog-toggle-left">
+          <span class="changelog-toggle-version">v8</span>
+          <span class="changelog-toggle-date">April 2026</span>
+        </div>
+        <span class="changelog-toggle-arrow" id="v8-arrow">&#8964;</span>
+      </button>
+      <div class="changelog-collapsible" id="v8-body">
+        <div class="changelog-main">
+          <div class="changelog-meta">
+            <div class="version-badge">v8</div>
+            <div class="version-date">April 2026</div>
+          </div>
+          <div class="changelog-content">
+            <div class="changelog-group">
+              <div class="changelog-group-label">New features</div>
+              <ul class="changelog-list">
+                <li>MCP connection with Claude: NiCE Designer now includes an MCP server; Figma and Chrome share context for complex AI-driven tasks</li>
+                <li>Standalone popup mode for Chrome: dock the extension on a second monitor via a toggle in settings</li>
+                <li>Chrome extension no longer needs to reset per window when switching pages</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></div>
+      </div>
+      <nav class="footer-nav">
+        <div class="footer-nav-col">
+          <a href="./index.html">Overview</a>
+          <a href="./install-guide.html">Install Guide</a>
+          <a href="./claude-skills.html">Claude Skills</a>
+          <a href="./the-suite.html">The Suite</a>
+        </div>
+        <div class="footer-nav-col">
+          <a href="./use-cases.html">Use Cases</a>
+          <a href="./scoring.html">Scoring</a>
+          <a href="./dashboard.html">Dashboard</a>
+          <a href="./roadmap.html">Roadmap</a>
+        </div>
+        <div class="footer-nav-col">
+          <a href="./release-notes.html" class="active">Release Notes</a>
+          <a href="./faq.html">FAQ</a>
+          <a href="./tools.html">Tools</a>
+        </div>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+
+    // Changelog collapsibles
+    document.querySelectorAll('.changelog-toggle-row').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var targetId = btn.getAttribute('data-target');
+        var body = document.getElementById(targetId);
+        var arrowId = targetId.replace('-body', '-arrow');
+        var arrow = document.getElementById(arrowId);
+        var isOpen = body.classList.contains('open');
+
+        if (isOpen) {
+          body.classList.remove('open');
+          arrow.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        } else {
+          body.classList.add('open');
+          arrow.classList.add('open');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    // Scroll reveal via IntersectionObserver
+    var revealTargets = document.querySelectorAll('.changelog-card, .reveal');
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.08,
+      rootMargin: '0px 0px -32px 0px'
+    });
+
+    revealTargets.forEach(function(el) {
+      observer.observe(el);
+    });
+  </script>
+
+  <!-- NICE POLISH EFFECTS -->
+  <style>
+    .tilt-ready {
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), box-shadow 0.4s ease;
+    }
+    .tilt-ready::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%),
+        rgba(255,255,255,0.09) 0%, transparent 70%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      z-index: 1;
+    }
+    .tilt-ready:hover::after { opacity: 1; }
+    .nav-cta, .btn-primary, .cta-btn, .roadmap-link {
+      transition: transform 0.15s ease, background 0.25s ease, box-shadow 0.25s ease !important;
+    }
+    #nice-cursor-glow {
+      position: fixed;
+      pointer-events: none;
+      width: 480px;
+      height: 480px;
+      border-radius: 50%;
+      background: radial-gradient(circle,
+        rgba(54,148,252,0.055) 0%,
+        rgba(97,0,255,0.025) 40%,
+        transparent 70%);
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      transition: left 0.08s linear, top 0.08s linear, opacity 0.5s ease;
+      opacity: 0;
+      mix-blend-mode: screen;
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.55s cubic-bezier(0.23,1,0.32,1),
+                  transform 0.55s cubic-bezier(0.23,1,0.32,1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+
+  <script>
+  (function() {
+    var glow = document.createElement('div');
+    glow.id = 'nice-cursor-glow';
+    document.body.appendChild(glow);
+    document.addEventListener('mousemove', function(e) {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+      glow.style.opacity = '1';
+    });
+    document.addEventListener('mouseleave', function() { glow.style.opacity = '0'; });
+
+    document.querySelectorAll('.changelog-card').forEach(function(card) {
+      card.classList.add('tilt-ready');
+    });
+  })();
+  </script>
+
+</body>
+</html>

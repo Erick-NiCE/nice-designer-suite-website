@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ - NiCE Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="theme.css?v=4" />
+  <link rel="stylesheet" href="nice-effects.css" />
+  <link rel="stylesheet" href="site-gate.css" />
+  <script src="site-gate.js" defer></script>
+  <script src="nice-effects.js?v=4" defer></script>
+  <style>
+    body { line-height: 1.6; }
+
+    .hero {
+      background: linear-gradient(to bottom, #2a1a5e, #21212B);
+      padding: 96px 24px 80px;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--emerald);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    .hero-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    /* ── FAQ ── */
+    .faq-section { max-width: 860px; margin: 0 auto; padding: 64px 48px 96px; }
+    .faq-list { display: flex; flex-direction: column; gap: 12px; }
+    .faq-item {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .faq-item[open] { border-color: rgba(54,148,252,0.3); }
+    .faq-q {
+      padding: 20px 24px; font-size: 16px; font-weight: 700;
+      color: var(--text); cursor: pointer; list-style: none;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 16px;
+    }
+    .faq-q::-webkit-details-marker { display: none; }
+    .faq-q::after {
+      content: '+'; font-size: 20px; font-weight: 300;
+      color: var(--blue); flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+    .faq-item[open] .faq-q::after { content: '+'; transform: rotate(45deg); }
+    .faq-a {
+      padding: 0 24px 20px; font-size: 14px;
+      color: var(--text-sec); line-height: 1.75;
+      border-top: 1px solid var(--border);
+    }
+    .faq-a p { margin-top: 14px; }
+    .faq-a p:first-child { margin-top: 14px; }
+    .faq-a ul { margin: 12px 0 0 20px; display: flex; flex-direction: column; gap: 8px; }
+    .faq-a a { color: var(--blue); text-decoration: none; }
+    .faq-a a:hover { text-decoration: underline; }
+
+    @media (max-width: 600px) { .faq-section { padding: 48px 24px 64px; } }
+  </style>
+</head>
+<body>
+
+  <!-- SITE-WIDE ACCESS GATE (see site-gate.css / site-gate.js) -->
+  <div id="nice-site-gate">
+    <div class="sg-card">
+      <div class="sg-lock">🔒</div>
+      <div class="sg-title">NiCE Designer Site Login</div>
+      <div class="sg-subtitle">This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.</div>
+      <div class="sg-input-wrap">
+        <input id="nice-site-gate-input" type="password" placeholder="Enter code" autocomplete="off" />
+      </div>
+      <div class="sg-error" id="nice-site-gate-error"></div>
+      <button id="nice-site-gate-btn" type="button">Unlock</button>
+      <div class="sg-divider"></div>
+      <div class="sg-cta">
+        Don't have the code?<br>
+        <strong>Reach out to Erick Mathews on Teams</strong> to request access.
+        <br>
+        <a class="sg-teams-btn" href="https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H8a2 2 0 00-2 2v2H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2h2a2 2 0 002-2V4a2 2 0 00-2-2zM4 20V8h12v12H4zm16-4h-2V8a2 2 0 00-2-2H8V4h12v12z" fill="currentColor"/></svg>
+          Message on Teams
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="site-nav" id="site-nav">
+    <a href="./index.html" class="nav-logo">
+      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span>
+    </a>
+    <a href="./install-guide.html" class="nav-download">Download</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="reveal">
+      <span class="hero-eyebrow">FAQ</span>
+      <h1 class="hero-title">Common questions</h1>
+      <p class="hero-subtitle">Answers on how NiCE Designer works, what it does and doesn't do, and how to get set up.</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section" id="faq">
+    <div class="faq-list">
+
+      <details class="faq-item reveal" open>
+        <summary class="faq-q">How do the NiCE Designer tools understand the design system?</summary>
+        <div class="faq-a">
+          <p>The tools are built on three sources of truth:</p>
+          <ul>
+            <li><strong>Storybook</strong> - the design team's live component library at <a href="https://na1.dev.nice-incontact.com/sol/?path=/story/react_internal-icon--examples" target="_blank" rel="noopener">na1.dev.nice-incontact.com/sol</a>, which provides live component definitions, variants, and usage examples.</li>
+            <li><strong>Figma foundation files</strong> - the Lyra and SOL Foundation Figma files, which define the canonical token sets, spacing scales, color palettes, and typography styles for both systems.</li>
+            <li><strong>Claude design system knowledge</strong> - AI context built from the same sources, enabling Claude to reason about tokens, patterns, and compliance in natural language.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="faq-item reveal">
+        <summary class="faq-q">Does NiCE Designer generate designs or pages?</summary>
+        <div class="faq-a">
+          <p>No. NiCE Designer works with pages and designs that already exist - it audits, converts, and annotates them rather than generating new ones from scratch.</p>
+          <p>The philosophy: generation is best left to tools like Claude Code for code and to UX designers for design. NiCE Designer's job is to ensure that what's already been built actually matches the design system.</p>
+        </div>
+      </details>
+
+      <details class="faq-item reveal">
+        <summary class="faq-q">What is Supercharge?</summary>
+        <div class="faq-a">
+          <p>Supercharge is what happens when NiCE Designer connects to Claude via the local MCP server. On their own, the Figma plugin and Chrome extension can audit and convert designs. With Supercharge connected, Claude can drive both tools simultaneously using natural language - running multi-step workflows, reasoning across Figma and the live page at the same time, and using the full library of MCP tools and Claude skills.</p>
+          <p>Think of the plugin and extension as the hands, and Supercharge as the brain.</p>
+        </div>
+      </details>
+
+      <details class="faq-item reveal">
+        <summary class="faq-q">What's the difference between SOL and Lyra, and can NiCE Designer convert between them?</summary>
+        <div class="faq-a">
+          <p>SOL and Lyra are NiCE's two design systems, each with their own token sets, spacing scales, and component libraries. NiCE Designer's <code>convert_design_system</code> skill maps a frame from one system to the other, using semantic role (text, background, border, icon) so tokens that differ by role are handled correctly rather than mapped one-to-one by name.</p>
+        </div>
+      </details>
+
+      <details class="faq-item reveal">
+        <summary class="faq-q">Do I need the MCP server running to use the Figma plugin or Chrome extension?</summary>
+        <div class="faq-a">
+          <p>No. The Figma plugin and Chrome extension both work standalone for auditing, converting, and applying fixes. The MCP server is only required for Supercharge - connecting Claude to drive both clients with natural language. See the <a href="./install-guide.html">Install Guide</a> for setup order.</p>
+        </div>
+      </details>
+
+      <details class="faq-item reveal">
+        <summary class="faq-q">What happens if I disagree with a suggested fix?</summary>
+        <div class="faq-a">
+          <p>Every fix is opt-in and reversible. You can snooze an individual flagged item, skip it entirely, or apply it and then revert - both clients keep a full edit history with undo/redo per step, including restoring prior variable bindings.</p>
+        </div>
+      </details>
+
+      <details class="faq-item reveal">
+        <summary class="faq-q">Does NiCE Designer work on any Figma file, or only CXone product files?</summary>
+        <div class="faq-a">
+          <p>It works on any Figma file, but its audit rules are built against the SOL and Lyra foundation files, so compliance scoring is most meaningful on CXone product work. Running it against a file outside those systems will still surface off-token colors, spacing, and type, but there won't be a matching token to suggest as a fix.</p>
+        </div>
+      </details>
+
+      <details class="faq-item reveal">
+        <summary class="faq-q">How do I get access to NiCE Designer?</summary>
+        <div class="faq-a">
+          <p>This site is currently access-gated. If you don't have the code, reach out to <strong>Erick Mathews on Teams</strong> to request it - see the button on the access screen or the <a href="./install-guide.html">Install Guide</a> for what happens after you're in.</p>
+        </div>
+      </details>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></div>
+      </div>
+      <nav class="footer-nav">
+        <div class="footer-nav-col">
+          <a href="./index.html">Overview</a>
+          <a href="./install-guide.html">Install Guide</a>
+          <a href="./claude-skills.html">Claude Skills</a>
+          <a href="./the-suite.html">The Suite</a>
+        </div>
+        <div class="footer-nav-col">
+          <a href="./use-cases.html">Use Cases</a>
+          <a href="./scoring.html">Scoring</a>
+          <a href="./dashboard.html">Dashboard</a>
+          <a href="./roadmap.html">Roadmap</a>
+        </div>
+        <div class="footer-nav-col">
+          <a href="./release-notes.html">Release Notes</a>
+          <a href="./faq.html" class="active">FAQ</a>
+          <a href="./tools.html">Tools</a>
+        </div>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+
+    // Scroll reveal via IntersectionObserver
+    var revealEls = document.querySelectorAll('.reveal');
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.08,
+      rootMargin: '0px 0px -40px 0px'
+    });
+    revealEls.forEach(function(el) { observer.observe(el); });
+  </script>
+
+  <!-- NICE POLISH EFFECTS -->
+  <style>
+    .tilt-ready {
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), box-shadow 0.4s ease;
+    }
+    .tilt-ready::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%),
+        rgba(255,255,255,0.09) 0%, transparent 70%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      z-index: 1;
+    }
+    .tilt-ready:hover::after { opacity: 1; }
+    .nav-cta, .btn-primary, .cta-btn, .roadmap-link {
+      transition: transform 0.15s ease, background 0.25s ease, box-shadow 0.25s ease !important;
+    }
+    #nice-cursor-glow {
+      position: fixed;
+      pointer-events: none;
+      width: 480px;
+      height: 480px;
+      border-radius: 50%;
+      background: radial-gradient(circle,
+        rgba(54,148,252,0.055) 0%,
+        rgba(97,0,255,0.025) 40%,
+        transparent 70%);
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      transition: left 0.08s linear, top 0.08s linear, opacity 0.5s ease;
+      opacity: 0;
+      mix-blend-mode: screen;
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.55s cubic-bezier(0.23,1,0.32,1),
+                  transform 0.55s cubic-bezier(0.23,1,0.32,1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+
+  <script>
+  (function() {
+    var glow = document.createElement('div');
+    glow.id = 'nice-cursor-glow';
+    document.body.appendChild(glow);
+    document.addEventListener('mousemove', function(e) {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+      glow.style.opacity = '1';
+    });
+    document.addEventListener('mouseleave', function() { glow.style.opacity = '0'; });
+
+    document.querySelectorAll('.faq-item').forEach(function(card) {
+      card.classList.add('tilt-ready');
+    });
+  })();
+  </script>
+
+</body>
+</html>
