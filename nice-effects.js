@@ -459,7 +459,7 @@
         '<button type="button" class="doc-rail-collapse" aria-label="Collapse documentation menu">&#8249;</button>' +
       '</div>' +
       '<div class="doc-rail-search-wrap">' +
-        '<input type="text" class="doc-rail-search" placeholder="Search pages…" aria-label="Search documentation pages" />' +
+        '<input type="text" class="doc-rail-search" placeholder="Search pages… (' + (/Mac|iPod|iPhone|iPad/.test(global.navigator.platform) ? '⌘' : 'Ctrl') + 'K)" aria-label="Search documentation pages" />' +
       '</div>' +
       '<div class="doc-rail-links">';
     DOC_PAGES.forEach(function (p) {
@@ -523,6 +523,17 @@
     var storedCollapsed = false;
     try { storedCollapsed = global.localStorage.getItem(COLLAPSE_KEY) === '1'; } catch (e) {}
     setCollapsed(storedCollapsed);
+
+    // Cmd+K (Mac) / Ctrl+K (Windows) opens the rail if collapsed and
+    // focuses the search box.
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'k' && e.key !== 'K') return;
+      if (!(e.metaKey || e.ctrlKey)) return;
+      e.preventDefault();
+      setCollapsed(false);
+      input.focus();
+      input.select();
+    });
 
     return rail;
   }

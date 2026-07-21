@@ -75,16 +75,21 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0 32px;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, max-height 0.3s ease;
 }
 /* Auto-hide while scrolling down; reappears on scroll up (see nice-effects.js) */
 .site-nav.nav-scroll-hidden {
   transform: translateY(-100%);
 }
-/* Fully hidden on the homepage until the hero scrolls out of view */
+/* Fully hidden on the homepage until the hero scrolls out of view. Collapsed
+   via max-height (not just opacity) so it doesn't reserve its 60px of flow
+   space and leave a gap above the hero. */
 .site-nav.nav-pre-hero {
+  max-height: 0;
   opacity: 0;
   pointer-events: none;
+  overflow: hidden;
+  border-bottom-color: transparent;
 }
 .nav-logo {
   text-decoration: none;
