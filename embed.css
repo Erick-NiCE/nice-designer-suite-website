@@ -1,0 +1,171 @@
+/*!
+ * NiCE Designer — embed mode layout
+ * -------------------------------------------------------------
+ * Reshapes any page on this site to read well inside the NiCE
+ * Designer app's docs pane (Chrome extension side panel, ~340-480px
+ * wide) instead of a full desktop browser tab.
+ *
+ * EVERY rule here is scoped under `html.nice-embed`, which embed.js
+ * only adds when the URL carries `?embed=1`. A normal browser visit
+ * never matches a single selector in this file.
+ *
+ * The pane supplies its own header, back button and "open in browser"
+ * control, so this file's job is to strip the site's competing chrome
+ * (top nav, footer, access gate), unclamp the desktop max-widths, and
+ * collapse multi-column layouts to a single column.
+ *
+ * `!important` is used liberally and deliberately: the widths and
+ * paddings being overridden live in each page's own inline <style>
+ * block, which loads after this file.
+ */
+
+/* ── Site chrome the pane replaces ───────────────────────────────────────── */
+html.nice-embed .site-nav,
+html.nice-embed .site-footer,
+html.nice-embed #nice-site-gate {
+  display: none !important;
+}
+
+html.nice-embed body {
+  /* No sticky 60px nav to sit under any more. */
+  --nav-h: 0px;
+  /* The pane frame owns the scrollbar gutter; let content use the full width. */
+  overflow-x: hidden;
+}
+
+/* ── Hero: desktop heroes reserve ~176px of vertical padding ─────────────── */
+html.nice-embed .hero,
+html.nice-embed .hero-section {
+  padding: 28px 16px 24px !important;
+}
+html.nice-embed .hero-content,
+html.nice-embed .hero-title,
+html.nice-embed .hero-subtitle,
+html.nice-embed .hero-sub {
+  max-width: none !important;
+}
+html.nice-embed .hero-title {
+  font-size: 1.75rem !important;
+  line-height: 1.15 !important;
+  margin-bottom: 12px !important;
+}
+html.nice-embed .hero-subtitle,
+html.nice-embed .hero-sub {
+  font-size: 0.9rem !important;
+}
+html.nice-embed .hero-eyebrow {
+  margin-bottom: 12px !important;
+}
+
+/* ── Content containers: unclamp and retighten ───────────────────────────── */
+/* These are the per-page wrappers that carry a desktop max-width (860-1300px)
+   plus 32-64px of side padding. See the max-width audit in each page's
+   inline <style> block. */
+html.nice-embed .container,
+html.nice-embed .content,
+html.nice-embed .main-content,
+html.nice-embed .section,
+html.nice-embed .section-body,
+html.nice-embed .page-section,
+html.nice-embed .faq-section,
+html.nice-embed .category-section,
+html.nice-embed .table-section,
+html.nice-embed .legend-section,
+html.nice-embed .superpowers-section,
+html.nice-embed .section-divider,
+html.nice-embed .nf-inner {
+  max-width: none !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+html.nice-embed .section-desc,
+html.nice-embed .section-subtitle,
+html.nice-embed .phase-desc,
+html.nice-embed .sp-sub {
+  max-width: none !important;
+}
+
+/* Trim the generous desktop vertical rhythm — a 400px-wide column needs far
+   less breathing room between sections than a 1200px one. */
+html.nice-embed section {
+  padding-top: 32px !important;
+  padding-bottom: 32px !important;
+}
+
+/* ── Multi-column → single column ────────────────────────────────────────── */
+/* Broad on purpose: at this width no two-up grid on the site reads well, and
+   enumerating every per-page grid class would drift out of sync. */
+html.nice-embed [class*="grid"] {
+  grid-template-columns: 1fr !important;
+  gap: 12px !important;
+}
+html.nice-embed [class*="-row"],
+html.nice-embed [class*="-cols"] {
+  flex-direction: column !important;
+}
+
+/* ── Tables scroll inside their own box, never the page ──────────────────── */
+html.nice-embed table {
+  display: block !important;
+  overflow-x: auto !important;
+  max-width: 100% !important;
+  white-space: nowrap;
+}
+
+/* ── Media never overflows ───────────────────────────────────────────────── */
+html.nice-embed img,
+html.nice-embed svg,
+html.nice-embed video,
+html.nice-embed pre {
+  max-width: 100% !important;
+}
+html.nice-embed pre {
+  overflow-x: auto !important;
+}
+
+/* ── Doc rail → bottom-anchored drawer ──────────────────────────────────── */
+/* On desktop the rail is a fixed 220px sidebar at left: 24px. That would eat
+   half the pane, so in embed mode it becomes a full-width overlay sheet,
+   default-collapsed (embed.js seeds the rail's own collapse key). The expand
+   tab and ⌘K/Ctrl+K still open it — see buildDocRail in nice-effects.js. */
+html.nice-embed .doc-rail {
+  top: auto !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: auto !important;
+  max-height: 70vh !important;
+  border-radius: 16px 16px 0 0 !important;
+  padding: 12px !important;
+  z-index: 200 !important;
+  box-shadow: 0 -12px 32px rgba(0, 0, 0, 0.45) !important;
+}
+/* The desktop collapsed state slides the rail sideways; here it slides down. */
+html.nice-embed .doc-rail.doc-rail-collapsed {
+  transform: translateY(100%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+/* Reposition the expand tab from the left edge to a bottom-right pill. */
+html.nice-embed .doc-rail-expand {
+  top: auto !important;
+  bottom: 16px !important;
+  left: auto !important;
+  right: 16px !important;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 100px !important;
+  transform: rotate(-90deg);
+  z-index: 201 !important;
+}
+
+/* ── Motion respect ──────────────────────────────────────────────────────── */
+/* nice-effects.js reveal animations are keyed off scroll position in the
+   frame's viewport, which is short. Keep them, but don't let anything start
+   fully transparent and stay that way if the observer misses. */
+@media (prefers-reduced-motion: reduce) {
+  html.nice-embed .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
