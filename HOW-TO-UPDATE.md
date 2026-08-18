@@ -132,10 +132,14 @@ two, then refresh the live site.
 - **The live site didn't update after pushing:** wait ~2 minutes (GitHub
   Pages build time), then hard-refresh the browser (Cmd+Shift+R) — browsers
   aggressively cache static sites.
-- **You updated the v10 build and need to replace the download:** copy the
-  new `.zip` into `downloads/`, overwriting the old one (keep the filename
-  `NiCE-Designer-V10.zip` so the download buttons keep working, or update the
-  `href` in `index.html` if you rename it), then commit and push as above.
+- **You built a new release and need to publish it:** add the new
+  `NiCE-Designer-Vx.y.zip` to `downloads/` and update `version.json`'s
+  `latest`, `notes`, and `downloadUrl` fields to match. That's the only file
+  the download buttons on `index.html` and `install-guide.html` actually
+  read (via `downloads.js`) — they pick up the new version and filename
+  automatically on next page load, no HTML edits needed. Old zips can stay
+  in `downloads/` or be deleted; nothing else references them once
+  `version.json` moves on.
 
 ## Renaming the repo
 
