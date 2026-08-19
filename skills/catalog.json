@@ -1,0 +1,188 @@
+[
+  {
+    "id": "a11y-triage",
+    "title": "Accessibility triage",
+    "question": "I have hundreds of a11y issues — where do I actually start?",
+    "what": "Ranks accessibility issues by severity × reach and returns a top-N action list.",
+    "benefit": "Converts an unreadable issue dump into three things to fix this afternoon.",
+    "clients": "both",
+    "tools": [
+      "audit_accessibility"
+    ],
+    "author": "NiCE Designer",
+    "thirdParty": false,
+    "files": []
+  },
+  {
+    "id": "manual-fixes-checklist",
+    "title": "Manual-fixes checklist",
+    "question": "What is left for a human after the auto-fixers have run?",
+    "what": "Audits, dry-runs every fixer, then reports only what survives — grouped and prioritised.",
+    "benefit": "An honest to-do list for the last mile to 100%, so nobody promises a score the tools cannot reach.",
+    "clients": "both",
+    "tools": [
+      "run_full_audit",
+      "convert_page_to_lyra",
+      "migrate_to_lyra"
+    ],
+    "author": "NiCE Designer",
+    "thirdParty": false,
+    "files": []
+  },
+  {
+    "id": "lyra-visual-patterns",
+    "title": "Lyra visual patterns",
+    "question": "What is a correctly-converted Lyra page supposed to look like?",
+    "what": "Reference for Lyra page chrome, surfaces, tables, panels, nav, chips and AI affordances in light and dark.",
+    "benefit": "Load it before any conversion and you know what you are going to get — no surprise redesigns.",
+    "clients": "both",
+    "tools": [
+      "convert_page_to_lyra",
+      "migrate_to_lyra",
+      "convert_mode"
+    ],
+    "author": "NiCE Designer",
+    "thirdParty": false,
+    "files": []
+  },
+  {
+    "id": "figma-element-css",
+    "title": "Figma element → CSS",
+    "question": "What is the CSS for this layer?",
+    "what": "Turns the selected Figma node into production CSS with Lyra tokens substituted where they match.",
+    "benefit": "Output that survives a theme change, instead of hard-coded hex and px.",
+    "clients": "figma",
+    "tools": [
+      "get_selection_info",
+      "extract_dev_details",
+      "extract_token_css"
+    ],
+    "author": "NiCE Designer",
+    "thirdParty": false,
+    "files": []
+  },
+  {
+    "id": "browser-element-specs",
+    "title": "Browser element → spec sheet",
+    "question": "What are the design specs of this element on the page?",
+    "what": "Pulls computed CSS for the inspected element and annotates every raw value with its nearest token.",
+    "benefit": "A spec a developer can act on, not just a description of what is there.",
+    "clients": "chrome",
+    "tools": [
+      "get_selection_info",
+      "extract_dev_details",
+      "audit_colors"
+    ],
+    "author": "NiCE Designer",
+    "thirdParty": false,
+    "files": []
+  },
+  {
+    "id": "figma-chrome-parity",
+    "title": "Figma ↔ Chrome parity",
+    "question": "Does the live site actually match the Figma?",
+    "what": "Aligns Figma layers to page elements by name and diffs colors, type, spacing, radius and shadows.",
+    "benefit": "Ends the \"it looks off but I cannot say why\" review with a per-property drift table.",
+    "clients": "both-required",
+    "tools": [
+      "extract_dev_details",
+      "get_selection_info"
+    ],
+    "author": "NiCE Designer",
+    "thirdParty": false,
+    "files": []
+  },
+  {
+    "id": "artboard-to-page",
+    "title": "Artboard → live page",
+    "question": "Can we make this real page look like this artboard?",
+    "what": "Maps artboard styling onto page selectors and applies it as CSS overrides after you confirm the mapping.",
+    "benefit": "Demo a redesign on the real product in minutes, with no branch and no build.",
+    "clients": "both-required",
+    "tools": [
+      "extract_dev_details",
+      "apply_css_overrides",
+      "clear_css_overrides"
+    ],
+    "author": "NiCE Designer",
+    "thirdParty": false,
+    "files": []
+  },
+  {
+    "id": "dark-mode-parity",
+    "title": "Dark-mode parity",
+    "question": "Does this page work in dark mode, or only in light?",
+    "what": "Audits colors in light, simulates dark, audits again, and always restores the baseline.",
+    "benefit": "Only the delta — what breaks in dark and what breaks in light. No re-reading the full audit.",
+    "clients": "chrome",
+    "tools": [
+      "audit_colors",
+      "polish_page"
+    ],
+    "author": "NiCE Designer",
+    "thirdParty": false,
+    "files": []
+  },
+  {
+    "id": "token-candidates",
+    "title": "Token candidates",
+    "question": "Which of these custom values should just become Lyra tokens?",
+    "what": "Groups recurring raw values across all four domains and ranks the ones worth promoting.",
+    "benefit": "Fixes the cause once upstream instead of the same symptom on thirty screens.",
+    "clients": "both",
+    "tools": [
+      "audit_colors",
+      "audit_text_styles",
+      "audit_spacing",
+      "audit_radius"
+    ],
+    "author": "NiCE Designer",
+    "thirdParty": false,
+    "files": []
+  },
+  {
+    "id": "ux-eval",
+    "title": "Ten-question UX eval",
+    "question": "Is this good enough to move to the next step, or to dev?",
+    "what": "Answers all ten prioritisation questions against real evidence, then states pass / pass-with-conditions / not-yet. For AI-surface designs, also layers in the North Star Fox tenet check.",
+    "benefit": "A defensible verdict with the reasoning attached — the thing you can actually take to a VP.",
+    "clients": "both",
+    "tools": [
+      "run_ux_eval",
+      "run_full_audit"
+    ],
+    "author": "Bill Bangs",
+    "thirdParty": true,
+    "files": []
+  },
+  {
+    "id": "north-star-fox",
+    "title": "North Star Fox",
+    "question": "Does this design or JIRA ticket actually hold up against our AI-first tenets?",
+    "what": "Scores a CXone AI design, screen, or JIRA ticket against the twelve NiCE AI design tenets, plus Lyra Foundations and NiCE Brand adherence, and returns a fixed-shape pass/fail verdict per section.",
+    "benefit": "A critical look at designs and JIRA tickets to ensure alignment with our Core Values around AI architecture at NiCE.",
+    "clients": "both",
+    "tools": [],
+    "author": "Janet Gonzales",
+    "thirdParty": true,
+    "files": []
+  },
+  {
+    "id": "nice-product-knowledge",
+    "title": "NiCE product knowledge",
+    "question": "What does this NICE product actually do, and who uses it?",
+    "what": "Sourced reference on NICE the company and its product lines (CXone Mpower, Enlighten AI, Actimize, Evidencentral) — compiled from public material with citations.",
+    "benefit": "Design decisions grounded in what the real product and its real users are, instead of generic SaaS assumptions.",
+    "clients": "both",
+    "tools": [],
+    "author": "NiCE Designer",
+    "thirdParty": false,
+    "files": [
+      "references/actimize-financial-crime.md",
+      "references/company-overview.md",
+      "references/cxone-mpower.md",
+      "references/enlighten-ai.md",
+      "references/public-safety-evidencentral.md"
+    ]
+  }
+]
