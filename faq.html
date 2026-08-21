@@ -112,7 +112,7 @@
     <a href="./index.html" class="nav-logo">
       <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span>
     </a>
-    <a href="./install-guide.html" class="nav-download">Download</a>
+    <span class="nav-download is-disabled" aria-disabled="true">Download<span class="coming-soon-tag">Coming soon!</span></span>
   </nav>
 
   <!-- HERO -->
@@ -151,7 +151,7 @@
       <details class="faq-item reveal" id="faq-supercharge">
         <summary class="faq-q">What is Supercharge?</summary>
         <div class="faq-a">
-          <p>Supercharge is what happens when NiCE Designer connects to Claude via the local MCP server. On their own, the Figma plugin and Chrome extension can audit and convert designs. With Supercharge connected, Claude can drive both tools simultaneously using natural language - running multi-step workflows, reasoning across Figma and the live page at the same time, and using the full library of MCP tools and Claude skills.</p>
+          <p>Supercharge is what happens when NiCE Designer connects to Claude via the local MCP server. On their own, the Figma plugin and Chrome extension can audit designs. With Supercharge connected, Claude can drive both tools simultaneously using natural language - running multi-step workflows like SOL &rarr; Lyra conversion, reasoning across Figma and the live page at the same time, and using the full library of MCP tools and Claude skills.</p>
           <p>Think of the plugin and extension as the hands, and Supercharge as the brain.</p>
         </div>
       </details>
@@ -159,14 +159,14 @@
       <details class="faq-item reveal" id="faq-sol-lyra">
         <summary class="faq-q">What's the difference between SOL and Lyra, and can NiCE Designer convert between them?</summary>
         <div class="faq-a">
-          <p>SOL and Lyra are NiCE's two design systems, each with their own token sets, spacing scales, and component libraries. NiCE Designer's <code>convert_design_system</code> skill maps a frame from one system to the other, using semantic role (text, background, border, icon) so tokens that differ by role are handled correctly rather than mapped one-to-one by name.</p>
+          <p>SOL and Lyra are NiCE's two design systems, each with their own token sets, spacing scales, and component libraries. There's no dedicated in-app Convert tool anymore - instead, we recommend <a href="https://claude.ai/design/p/019dda40-58d9-795b-92eb-5ee83bf676e4" target="_blank" rel="noopener">Claude Design</a> alongside the <a href="https://ndlr.netlify.app/#/erick-mathews/uncategorized" target="_blank" rel="noopener">official Lyra design system reference</a> for mapping a frame from one system to the other, using semantic role (text, background, border, icon) so tokens that differ by role are handled correctly rather than mapped one-to-one by name.</p>
         </div>
       </details>
 
       <details class="faq-item reveal" id="faq-mcp-required">
         <summary class="faq-q">Do I need the MCP server running to use the Figma plugin or Chrome extension?</summary>
         <div class="faq-a">
-          <p>No. The Figma plugin and Chrome extension both work standalone for auditing, converting, and applying fixes. The MCP server is only required for Supercharge - connecting Claude to drive both clients with natural language. See the <a href="./install-guide.html">Install Guide</a> for setup order.</p>
+          <p>No. The Figma plugin and Chrome extension both work standalone for auditing and applying fixes. Design-system conversion work requires Supercharge, since it's done by asking Claude directly rather than through a dedicated in-app tool. The MCP server is only required for Supercharge - connecting Claude to drive both clients with natural language. See the <a href="./install-guide.html">Install Guide</a> for setup order.</p>
         </div>
       </details>
 
@@ -174,6 +174,21 @@
         <summary class="faq-q">What happens if I disagree with a suggested fix?</summary>
         <div class="faq-a">
           <p>Every fix is opt-in and reversible. You can snooze an individual flagged item, skip it entirely, or apply it and then revert - both clients keep a full edit history with undo/redo per step, including restoring prior variable bindings.</p>
+        </div>
+      </details>
+
+      <details class="faq-item reveal" id="faq-update">
+        <summary class="faq-q">How do I know when there's a new version, and how do I update?</summary>
+        <div class="faq-a">
+          <p>In Chrome, click the refresh icon next to the version number in Settings - it checks the latest published release and shows "You're up to date" or an "Update available" link straight to the download, with a "last checked" timestamp. After updating, a "What's new" popup summarizes the changes automatically (also reachable anytime from the version number).</p>
+          <p>Since the extension is a manually loaded unpacked build (not from the Chrome Web Store), updating means downloading the new <code>.zip</code> from the <a href="./install-guide.html">Install Guide</a>, unzipping it, and clicking the reload icon for NiCE Designer on <code>chrome://extensions</code>.</p>
+        </div>
+      </details>
+
+      <details class="faq-item reveal" id="faq-lite-mode">
+        <summary class="faq-q">What is Lite mode?</summary>
+        <div class="faq-a">
+          <p>Lite mode is a simpler view that shows just Frontend Audit and Design System, hiding Spec Mode, Supercharge, Documentation, and (in Chrome) the Frontend Editor. Brand-new installs start here by default - a first-launch Welcome screen lets you pick Lite mode or the Full toolkit, then walks through a short guided tour. Toggle it anytime in Settings; nothing is lost when you switch, it just changes what's shown.</p>
         </div>
       </details>
 

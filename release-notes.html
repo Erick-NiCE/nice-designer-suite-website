@@ -220,7 +220,7 @@
     <a href="./index.html" class="nav-logo">
       <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span>
     </a>
-    <a href="./install-guide.html" class="nav-download">Download</a>
+    <span class="nav-download is-disabled" aria-disabled="true">Download<span class="coming-soon-tag">Coming soon!</span></span>
   </nav>
 
   <!-- HERO -->
@@ -235,50 +235,92 @@
   <!-- CHANGELOG -->
   <div class="page-section" id="changelog">
 
-    <!-- v10 - always shown -->
-    <div class="changelog-card stagger-1" id="release-v10">
+    <!-- v11.1 - always shown -->
+    <div class="changelog-card stagger-1" id="release-v11-1">
       <div class="changelog-main">
         <div class="changelog-meta">
           <div class="version-badge">
-            v10 <span class="version-latest">LATEST</span>
+            v11.1 <span class="version-latest">LATEST</span>
           </div>
-          <div class="version-date">June 2026</div>
+          <div class="version-date">August 2026</div>
         </div>
         <div class="changelog-content">
           <div class="changelog-group">
             <div class="changelog-group-label">New features</div>
             <ul class="changelog-list">
-              <li>Complete redesign: new icons, UX, and micro-animations throughout the interface</li>
-              <li>Role-based onboarding: first-launch modal asks for your role; adjusts default panel, skill set, and suggested MCP tools. Re-selectable in settings.</li>
-              <li>Claude / MCP skills (9): apply_token_fix, apply_all_fixes, get_audit_results, get_selected_node, set_selected_node, export_css, get_history, undo_fix, convert_design_system. Callable from Claude chat or any MCP-compatible client.</li>
-              <li>Edit mode: click the pencil in the header to edit webpages with familiar design tools</li>
-              <li>Edit history (undo/redo): full history stack in Chrome extension; each fix is logged, undo/redo per step</li>
-              <li>Export fixes as CSS: Export CSS button outputs all applied fixes with rule count and token names</li>
+              <li>Rebranded to <strong>NiCE Designer Suite</strong>, with a new Supercharge tool/skill catalog and per-domain audit scoring</li>
+              <li>First-launch onboarding: a Welcome screen lets you pick <strong>Simple (Lite mode)</strong> or the <strong>Full toolkit</strong>, with live previews for Reduce Animations and Hide Card Descriptions, then a guided spotlight tour of Home, Audit, and Settings</li>
+              <li>Lite mode: a simpler view showing just Frontend Audit and Design System; brand-new installs start here by default. Toggle it anytime in Settings, and replay the welcome tour or any per-tool mini tour (graduation-cap icon on each Home card) whenever you like</li>
+              <li>In-app update check (Chrome): a refresh icon next to the version number in Settings checks for a newer build and links straight to the download, with a "last checked" timestamp</li>
+              <li>"What's New" popup: appears automatically after an update, or open it anytime from the version number in Settings</li>
+              <li>One-click Claude Desktop install: a "Click to install Claude Connector.mcpb" file now ships in the download - double-click it instead of hand-editing <code>claude_desktop_config.json</code></li>
             </ul>
           </div>
           <div class="changelog-group">
             <div class="changelog-group-label">Improvements</div>
             <ul class="changelog-list improvements">
-              <li>Semantic color matching: context-aware token lookup considers role (text, background, border, icon)</li>
-              <li>SOL to Lyra conversion: token mapping is context-aware, correctly handles tokens that differ by semantic role</li>
-              <li>Serialized MCP messages: calls queued and processed in order, preventing race conditions</li>
-              <li>Auto-snooze after Apply All: fixed items automatically snoozed; toggleable in settings</li>
-            </ul>
-          </div>
-          <div class="changelog-group">
-            <div class="changelog-group-label">Fixes</div>
-            <ul class="changelog-list fixes">
-              <li>Custom hex values no longer revert on blur</li>
-              <li>Variable binding preserved when applying fix to a node with existing bound variable</li>
-              <li>Chrome extension detection no longer fails on pages that load in an iframe</li>
+              <li>Docs now load in an in-app pane instead of opening a new browser tab (Chrome)</li>
+              <li>Design System and Accessibility audits merged into one pass, plus Storybook component sync</li>
+              <li>New Magic trigger modes, an animated gradient layer, and scrubbable-input detection</li>
+              <li>QA tab redesigned with a gauge/breakdown layout to match Audit</li>
+              <li>Flattened Chrome build and a refreshed Supercharge panel</li>
             </ul>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- v10 - collapsible -->
+    <div class="changelog-card stagger-2" id="release-v10">
+      <button class="changelog-toggle-row" aria-expanded="false" data-target="v10-body">
+        <div class="changelog-toggle-left">
+          <span class="changelog-toggle-version">v10</span>
+          <span class="changelog-toggle-date">June 2026</span>
+        </div>
+        <span class="changelog-toggle-arrow" id="v10-arrow">&#8964;</span>
+      </button>
+      <div class="changelog-collapsible" id="v10-body">
+        <div class="changelog-main">
+          <div class="changelog-meta">
+            <div class="version-badge">v10</div>
+            <div class="version-date">June 2026</div>
+          </div>
+          <div class="changelog-content">
+            <div class="changelog-group">
+              <div class="changelog-group-label">New features</div>
+              <ul class="changelog-list">
+                <li>Complete redesign: new icons, UX, and micro-animations throughout the interface</li>
+                <li>Role-based onboarding: first-launch modal asks for your role; adjusts default panel, skill set, and suggested MCP tools. Re-selectable in settings.</li>
+                <li>Claude / MCP skills (9): apply_token_fix, apply_all_fixes, get_audit_results, get_selected_node, set_selected_node, export_css, get_history, undo_fix, convert_design_system. Callable from Claude chat or any MCP-compatible client.</li>
+                <li>Edit mode: click the pencil in the header to edit webpages with familiar design tools</li>
+                <li>Edit history (undo/redo): full history stack in Chrome extension; each fix is logged, undo/redo per step</li>
+                <li>Export fixes as CSS: Export CSS button outputs all applied fixes with rule count and token names</li>
+              </ul>
+            </div>
+            <div class="changelog-group">
+              <div class="changelog-group-label">Improvements</div>
+              <ul class="changelog-list improvements">
+                <li>Semantic color matching: context-aware token lookup considers role (text, background, border, icon)</li>
+                <li>SOL to Lyra conversion: token mapping is context-aware, correctly handles tokens that differ by semantic role</li>
+                <li>Serialized MCP messages: calls queued and processed in order, preventing race conditions</li>
+                <li>Auto-snooze after Apply All: fixed items automatically snoozed; toggleable in settings</li>
+              </ul>
+            </div>
+            <div class="changelog-group">
+              <div class="changelog-group-label">Fixes</div>
+              <ul class="changelog-list fixes">
+                <li>Custom hex values no longer revert on blur</li>
+                <li>Variable binding preserved when applying fix to a node with existing bound variable</li>
+                <li>Chrome extension detection no longer fails on pages that load in an iframe</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- v9 - collapsible -->
-    <div class="changelog-card stagger-2" id="release-v9">
+    <div class="changelog-card stagger-3" id="release-v9">
       <button class="changelog-toggle-row" aria-expanded="false" data-target="v9-body">
         <div class="changelog-toggle-left">
           <span class="changelog-toggle-version">v9</span>
@@ -320,7 +362,7 @@
     </div>
 
     <!-- v8 - collapsible -->
-    <div class="changelog-card stagger-3" id="release-v8">
+    <div class="changelog-card stagger-4" id="release-v8">
       <button class="changelog-toggle-row" aria-expanded="false" data-target="v8-body">
         <div class="changelog-toggle-left">
           <span class="changelog-toggle-version">v8</span>

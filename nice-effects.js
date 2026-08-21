@@ -435,21 +435,29 @@
   // actually on that page.
   var SKILL_ITEMS = [
     { id: 'skill-a11y-triage', label: 'A11y Triage' },
-    { id: 'skill-artboard-page', label: 'Artboard to Page' },
-    { id: 'skill-browser-specs', label: 'Browser Specs' },
-    { id: 'skill-dark-mode', label: 'Dark Mode Parity' },
-    { id: 'skill-figma-parity', label: 'Figma-Chrome Parity' },
-    { id: 'skill-figma-css', label: 'Figma Element CSS' },
-    { id: 'skill-lyra-patterns', label: 'Lyra Patterns' },
-    { id: 'skill-manual-fixes', label: 'Manual Fixes' },
-    { id: 'skill-token-candidates', label: 'Token Candidates' }
+    { id: 'skill-manual-fixes-checklist', label: 'Manual Fixes Checklist' },
+    { id: 'skill-lyra-visual-patterns', label: 'Lyra Visual Patterns' },
+    { id: 'skill-figma-element-css', label: 'Figma Element CSS' },
+    { id: 'skill-browser-element-specs', label: 'Browser Element Specs' },
+    { id: 'skill-figma-chrome-parity', label: 'Figma-Chrome Parity' },
+    { id: 'skill-artboard-to-page', label: 'Artboard to Page' },
+    { id: 'skill-dark-mode-parity', label: 'Dark Mode Parity' },
+    { id: 'skill-token-candidates', label: 'Token Candidates' },
+    { id: 'skill-ux-eval', label: 'Ten-Question UX Eval' },
+    { id: 'skill-north-star-fox', label: 'North Star Fox' },
+    { id: 'skill-nice-product-knowledge', label: 'NiCE Product Knowledge' }
   ];
   var MCP_ITEMS = [
-    { id: 'mcp-audit', label: 'Audit' },
-    { id: 'mcp-convert', label: 'Conversion' },
-    { id: 'mcp-handoff', label: 'Dev Handoff' },
-    { id: 'mcp-inspect', label: 'Introspection' },
-    { id: 'mcp-polish', label: 'Chrome Polish' },
+    { id: 'mcp-connect', label: 'Connect & Diagnose' },
+    { id: 'mcp-scope', label: 'Choose What to Work On' },
+    { id: 'mcp-measure', label: 'Score & Measure' },
+    { id: 'mcp-fix-bulk', label: 'Fix Everything at Once' },
+    { id: 'mcp-fix-one', label: 'Fix One Thing at a Time' },
+    { id: 'mcp-undo', label: 'Undo & History' },
+    { id: 'mcp-restyle', label: 'Restyle the Live Page' },
+    { id: 'mcp-handoff', label: 'Spec Mode' },
+    { id: 'mcp-decide', label: 'Decide & Review' },
+    { id: 'mcp-maintain', label: 'Keep the Server Current' },
     { id: 'mcp-escape', label: 'Escape Hatch' }
   ];
 
@@ -460,7 +468,7 @@
         { label: 'Steps', items: [
           { id: 'step-figma', label: 'Install the Figma Plugin' },
           { id: 'step-chrome', label: 'Install the Chrome Extension' },
-          { id: 'step-mcp', label: 'Start the MCP Server' },
+          { id: 'step-node', label: 'Install Node.js' },
           { id: 'step-claude', label: 'Connect Claude Desktop' },
           { id: 'step-verify', label: 'Verify Everything Is Working' },
           { id: 'step-issues', label: 'Common Issues' }
@@ -471,7 +479,7 @@
       href: 'claude-skills.html', label: 'Claude Skills',
       groups: [
         { label: 'Skills', items: [{ id: 'skills', label: 'All Skills' }].concat(SKILL_ITEMS) },
-        { label: 'MCP Server', items: [{ id: 'mcp', label: 'All MCP Tools' }].concat(MCP_ITEMS) },
+        { label: 'MCP Server', items: [{ id: 'mcp', label: 'Full tool catalog →' }] },
         { label: 'Tips', items: [{ id: 'tips', label: 'Before you run a skill' }] }
       ]
     },
@@ -479,14 +487,10 @@
       href: 'the-suite.html', label: 'The Suite',
       groups: [
         { label: 'Tools', items: [
-          { id: 'tool-audit', label: 'Audit' },
-          { id: 'tool-convert', label: 'Convert' },
-          { id: 'tool-handoff', label: 'Handoff' },
-          { id: 'tool-parity', label: 'Parity' },
-          { id: 'tool-qa', label: 'QA' },
-          { id: 'tool-tokens', label: 'Tokens' },
-          { id: 'tool-editor', label: 'Editor' },
-          { id: 'tool-magic', label: 'Magic' }
+          { id: 'tool-audit', label: 'Frontend Audit' },
+          { id: 'tool-editor', label: 'Frontend Editor' },
+          { id: 'tool-handoff', label: 'Spec Mode' },
+          { id: 'tool-designSystem', label: 'Design System' }
         ] }
       ]
     },
@@ -523,6 +527,7 @@
       href: 'release-notes.html', label: 'Release Notes',
       groups: [
         { label: 'Versions', items: [
+          { id: 'release-v11-1', label: 'v11.1 — August 2026' },
           { id: 'release-v10', label: 'v10 — June 2026' },
           { id: 'release-v9', label: 'v9 — May 2026' },
           { id: 'release-v8', label: 'v8 — April 2026' }
@@ -539,6 +544,8 @@
           { id: 'faq-sol-lyra', label: 'SOL vs. Lyra conversion' },
           { id: 'faq-mcp-required', label: 'Is the MCP server required?' },
           { id: 'faq-disagree-fix', label: 'Disagreeing with a suggested fix' },
+          { id: 'faq-update', label: 'Checking for updates' },
+          { id: 'faq-lite-mode', label: 'What is Lite mode?' },
           { id: 'faq-any-figma-file', label: 'Does it work on any Figma file?' },
           { id: 'faq-access', label: 'How to get access' }
         ] }
@@ -549,14 +556,10 @@
       groups: [
         { label: 'Suite Tools', items: [
           { id: 'suite', label: 'All Suite Tools' },
-          { id: 'suite-audit', label: 'Audit' },
-          { id: 'suite-convert', label: 'Convert' },
-          { id: 'suite-handoff', label: 'Handoff' },
-          { id: 'suite-parity', label: 'Parity' },
-          { id: 'suite-qa', label: 'QA' },
-          { id: 'suite-tokens', label: 'Tokens' },
-          { id: 'suite-editor', label: 'Editor' },
-          { id: 'suite-magic', label: 'Magic' }
+          { id: 'suite-audit', label: 'Frontend Audit' },
+          { id: 'suite-editor', label: 'Frontend Editor' },
+          { id: 'suite-handoff', label: 'Spec Mode' },
+          { id: 'suite-designSystem', label: 'Design System' }
         ] },
         { label: 'MCP Tools', items: [{ id: 'mcp', label: 'All MCP Tools' }].concat(MCP_ITEMS) },
         { label: 'Claude Skills', items: [{ id: 'skills', label: 'All Skills' }].concat(SKILL_ITEMS) }

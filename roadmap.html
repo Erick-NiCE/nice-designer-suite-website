@@ -464,6 +464,10 @@
       background: rgba(255,255,255,0.15);
       border-color: rgba(255,255,255,0.1);
     }
+    .phase-dot.shipped {
+      background: var(--emerald);
+      border-color: rgba(0,226,160,0.4);
+    }
 
     .phase-body { flex: 1; min-width: 0; }
 
@@ -551,6 +555,7 @@
     .badge.next    { background: rgba(0,226,160,0.12);   color: #00E2A0; }
     .badge.planned { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); }
     .badge.new     { background: rgba(97,0,255,0.2);     color: #b98fff; }
+    .badge.dropped { background: rgba(255,91,138,0.15);  color: #ff8ab0; }
 
     /* Callouts */
     .callout {
@@ -744,7 +749,7 @@
     <a href="./index.html" class="nav-logo">
       <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span>
     </a>
-    <a href="./install-guide.html" class="nav-download">Download</a>
+    <span class="nav-download is-disabled" aria-disabled="true">Download<span class="coming-soon-tag">Coming soon!</span></span>
   </nav>
 
   <!-- ================================================================
@@ -765,7 +770,7 @@
         A suite of focused design-system tools. Each serves one goal. Together they cover the full design and code lifecycle for SOL and Lyra.
       </p>
       <div class="hero-pills">
-        <span class="hero-pill">8 Tools</span>
+        <span class="hero-pill">One Suite</span>
         <span class="hero-pill">Figma + Chrome</span>
         <span class="hero-pill">SOL &amp; Lyra</span>
         <span class="hero-pill">MCP Powered</span>
@@ -787,10 +792,12 @@
 
     <div class="legend reveal">
       <span class="legend-label">Status</span>
+      <div class="legend-item"><div class="legend-dot" style="background:#00E2A0"></div> Shipped</div>
       <div class="legend-item"><div class="legend-dot" style="background:#3694FC"></div> Active</div>
       <div class="legend-item"><div class="legend-dot" style="background:#00E2A0"></div> Up Next</div>
       <div class="legend-item"><div class="legend-dot" style="background:#B98FFF"></div> New</div>
       <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.2)"></div> Planned</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#FF5B8A"></div> Dropped</div>
     </div>
 
     <div class="timeline">
@@ -896,21 +903,21 @@
 
       <!-- Phase 1 -->
       <div class="phase reveal">
-        <div class="phase-dot next"></div>
+        <div class="phase-dot shipped"></div>
         <div class="phase-body">
           <div class="phase-header">
             <div class="phase-title">Phase 1 &ndash; Audit and Storybook</div>
             <div class="phase-period">Q3 2026</div>
           </div>
           <div class="phase-dep">Phase 0 complete</div>
-          <p class="phase-desc">Ship Audit as the first standalone tool with an MCP server running live against Storybook. The Compliance Dashboard gains auto-submit so every audit result posts publicly without manual steps.</p>
+          <p class="phase-desc">Shipped Audit as the first standalone tool with an MCP server running live against Storybook. The Compliance Dashboard gained auto-submit so every audit result posts publicly without manual steps.</p>
           <div class="cards">
 
             <div class="card audit highlight reveal">
               <div class="card-body">
                 <div class="card-top">
                   <div class="card-name"><span>🔍</span> Audit</div>
-                  <span class="badge next">Up Next</span>
+                  <span class="badge shipped">Shipped</span>
                 </div>
                 <div class="card-desc">Scans a Figma frame or live page for compliance. Read-only, surfaces issues by dimension and severity.</div>
                 <div class="callout blue"><strong>🎯 Launch goal</strong>Compliance visible alongside component docs in Storybook. The definitive reference for how SOL and Lyra are applied.</div>
@@ -941,7 +948,7 @@
               <div class="card-body">
                 <div class="card-top">
                   <div class="card-name"><span>🔌</span> MCP Storybook</div>
-                  <span class="badge next">Up Next</span>
+                  <span class="badge shipped">Shipped</span>
                 </div>
                 <div class="card-desc">Extends the MCP server to connect to a live Storybook instance. Runs compliance checks against rendered stories in real time.</div>
                 <div class="callout green"><strong>How it works</strong>Watches the Storybook dev server, instruments each story via content script, and streams audit results back to Audit and Convert.</div>
@@ -970,11 +977,11 @@
               <div class="card-body">
                 <div class="card-top">
                   <div class="card-name"><span>📊</span> Compliance Dashboard</div>
-                  <span class="badge next">Up Next</span>
+                  <span class="badge shipped">Shipped</span>
                 </div>
-                <div class="card-desc">The existing dashboard that aggregates audit results and posts them live. This phase automates the pipeline end to end.</div>
+                <div class="card-desc">The existing dashboard that aggregates audit results and posts them live. This phase automated the pipeline end to end.</div>
                 <div class="callout purple"><strong>Auto-submit pipeline</strong>Audit results automatically submitted on every run. The GitHub HTML is updated and committed without any manual steps.</div>
-                <div class="callout amber"><strong>Blocked by</strong>Audit shipped and MCP Storybook integration live.</div>
+                <div class="callout amber"><strong>Unblocked</strong>Audit shipped and MCP Storybook integration live.</div>
                 <div class="card-footer">
                   <div class="card-tags"><span class="tag">Existing</span><span class="tag">Auto-submit</span><span class="tag">GitHub HTML</span></div>
                 </div>
@@ -987,42 +994,25 @@
 
       <!-- Phase 2 -->
       <div class="phase reveal">
-        <div class="phase-dot future"></div>
+        <div class="phase-dot active"></div>
         <div class="phase-body">
           <div class="phase-header">
             <div class="phase-title">Phase 2 &ndash; Core Tools</div>
             <div class="phase-period">Q3 &ndash; Q4 2026</div>
           </div>
           <div class="phase-dep">Phase 1 shipped</div>
-          <p class="phase-desc">Ship Convert, Handoff, and Tokens. Dev-centric tools get a review with Colton and Richard. DS-touching tools are reviewed with Scott, Randy, and Ashadeepa before release.</p>
+          <p class="phase-desc">Shipped Spec Mode (formerly Handoff) and Design System (formerly Tokens, now with live Storybook component browsing folded in). Convert shipped as a beta, then was dropped entirely - see its card below for what replaced it. Dev-centric tools got a review with Colton and Richard. DS-touching tools were reviewed with Scott, Randy, and Ashadeepa before release.</p>
           <div class="cards">
 
             <div class="card convert reveal">
               <div class="card-body">
                 <div class="card-top">
-                  <div class="card-name"><span>⚡</span> Convert</div>
-                  <span class="badge planned">Planned</span>
+                  <div class="card-name"><span>⚡</span> Convert <span style="font-weight:400;opacity:.5;">(dropped)</span></div>
+                  <span class="badge dropped">Dropped</span>
                 </div>
-                <div class="card-desc">Converts non-compliant work to Lyra or SOL. Token swaps, full migrations, mode switches. Dry-run by default, fully undoable.</div>
-                <div class="callout green"><strong>Code component awareness</strong>Goes beyond token swaps. Suggests and swaps the wrong component for the correct compliant one using actual code components.</div>
+                <div class="card-desc">Retired rather than shipped to GA. For SOL &rarr; Lyra conversion work, we now recommend <a href="https://claude.ai/design/p/019dda40-58d9-795b-92eb-5ee83bf676e4" target="_blank" rel="noopener">Claude Design</a> alongside the <a href="https://ndlr.netlify.app/#/erick-mathews/uncategorized" target="_blank" rel="noopener">official Lyra design system reference</a>, instead of a dedicated in-app tool.</div>
                 <div class="card-footer">
-                  <div class="card-tags"><span class="tag">Figma</span><span class="tag">Chrome</span><span class="tag">Storybook</span></div>
-                </div>
-              </div>
-              <div class="gates">
-                <div class="gates-label">Required before ship</div>
-                <div class="gates-rows">
-                  <div class="gates-row">
-                    <div class="gate"><span class="gate-icon">📄</span> Docs<div class="gate-avatars"><div class="gate-av">Li</div><div class="gate-av">Si</div></div></div>
-                    <div class="gate"><span class="gate-icon">🎬</span> Video<div class="gate-avatars"><div class="gate-av">An</div></div></div>
-                    <div class="gate"><span class="gate-icon">🧪</span> Testing</div>
-                  </div>
-                  <div class="gates-row">
-                    <div class="gate"><span class="gate-icon">👁</span> UX Review<div class="gate-avatars"><div class="gate-av">Me</div><div class="gate-av">Rh</div></div></div>
-                    <div class="gate"><span class="gate-icon">🔧</span> Dev Review<div class="gate-avatars"><div class="gate-av">Co</div><div class="gate-av">Ri</div></div></div>
-                    <div class="gate"><span class="gate-icon">🏗</span> DS Align<div class="gate-avatars"><div class="gate-av">Sc</div><div class="gate-av">Ra</div><div class="gate-av">As</div></div></div>
-                  </div>
-                  <div class="gates-row"><div class="gate"><span class="gate-icon">📊</span> Dashboard</div></div>
+                  <div class="card-tags"><span class="tag">Recommend Claude Design instead</span><span class="tag">Official Lyra reference</span></div>
                 </div>
               </div>
             </div>
@@ -1030,8 +1020,8 @@
             <div class="card handoff reveal">
               <div class="card-body">
                 <div class="card-top">
-                  <div class="card-name"><span>📐</span> Handoff</div>
-                  <span class="badge planned">Planned</span>
+                  <div class="card-name"><span>📐</span> Spec Mode <span style="font-weight:400;opacity:.5;">(was Handoff)</span></div>
+                  <span class="badge shipped">Shipped</span>
                 </div>
                 <div class="card-desc">Extracts production CSS, developer spec sheets, and full token exports from any selected Figma node or inspected browser element.</div>
                 <div class="card-footer">
@@ -1058,12 +1048,12 @@
             <div class="card tokens reveal">
               <div class="card-body">
                 <div class="card-top">
-                  <div class="card-name"><span>🪙</span> Tokens</div>
-                  <span class="badge planned">Planned</span>
+                  <div class="card-name"><span>🪙</span> Design System <span style="font-weight:400;opacity:.5;">(was Tokens)</span></div>
+                  <span class="badge shipped">Shipped</span>
                 </div>
-                <div class="card-desc">Surfaces recurring off-system values worth promoting to tokens and tracks what needs manual attention after auto-fixers run.</div>
+                <div class="card-desc">Grew beyond token promotion: browse every SOL &amp; Lyra token plus live component previews synced straight from Storybook, with Angular &amp; React props, variants, and states.</div>
                 <div class="card-footer">
-                  <div class="card-tags"><span class="tag">Figma</span><span class="tag">Chrome</span><span class="tag">DS team</span></div>
+                  <div class="card-tags"><span class="tag">Figma</span><span class="tag">Chrome</span><span class="tag">Storybook</span><span class="tag">DS team</span></div>
                 </div>
               </div>
               <div class="gates">
@@ -1096,32 +1086,18 @@
             <div class="phase-period">Q4 2026 &ndash; Q1 2027</div>
           </div>
           <div class="phase-dep">Phase 2 shipped</div>
-          <p class="phase-desc">Net-new capabilities requiring a stable Chrome extension foundation. Editor's component panel makes swapping to compliant components as easy as a click.</p>
+          <p class="phase-desc">Editor and its Magic effects shipped; QA's checks and Parity's cross-client comparison both landed inside Frontend Audit rather than as standalone tools - see the notes on each card below. What's left in this phase: Editor's component-swap panel.</p>
           <div class="cards">
 
             <div class="card parity reveal">
               <div class="card-body">
                 <div class="card-top">
-                  <div class="card-name"><span>⚖️</span> Parity</div>
-                  <span class="badge planned">Planned</span>
+                  <div class="card-name"><span>⚖️</span> Parity <span style="font-weight:400;opacity:.5;">(merged, not standalone)</span></div>
+                  <span class="badge shipped">Shipped</span>
                 </div>
-                <div class="card-desc">Diffs a Figma artboard against the live implementing page. Can push artboard styles onto the page as CSS overrides. Requires both clients connected.</div>
+                <div class="card-desc">Didn't ship as its own tool - the cross-client comparison (diff a Figma artboard against the live implementing page, push artboard styles as CSS overrides) is now a feature inside Frontend Audit instead, reached via Supercharge.</div>
                 <div class="card-footer">
-                  <div class="card-tags"><span class="tag">Figma + Chrome</span><span class="tag">QA / Sync</span></div>
-                </div>
-              </div>
-              <div class="gates">
-                <div class="gates-label">Required before ship</div>
-                <div class="gates-rows">
-                  <div class="gates-row">
-                    <div class="gate"><span class="gate-icon">📄</span> Docs<div class="gate-avatars"><div class="gate-av">Li</div><div class="gate-av">Si</div></div></div>
-                    <div class="gate"><span class="gate-icon">🎬</span> Video<div class="gate-avatars"><div class="gate-av">An</div></div></div>
-                    <div class="gate"><span class="gate-icon">🧪</span> Testing</div>
-                  </div>
-                  <div class="gates-row">
-                    <div class="gate"><span class="gate-icon">👁</span> UX Review<div class="gate-avatars"><div class="gate-av">Me</div><div class="gate-av">Rh</div></div></div>
-                    <div class="gate"><span class="gate-icon">🔧</span> Dev Review<div class="gate-avatars"><div class="gate-av">Co</div><div class="gate-av">Ri</div></div></div>
-                  </div>
+                  <div class="card-tags"><span class="tag">Figma + Chrome</span><span class="tag">Merged into Audit</span></div>
                 </div>
               </div>
             </div>
@@ -1129,25 +1105,12 @@
             <div class="card qa reveal">
               <div class="card-body">
                 <div class="card-top">
-                  <div class="card-name"><span>🧪</span> QA</div>
-                  <span class="badge planned">Planned</span>
+                  <div class="card-name"><span>🧪</span> QA <span style="font-weight:400;opacity:.5;">(merged, not standalone)</span></div>
+                  <span class="badge shipped">Shipped</span>
                 </div>
-                <div class="card-desc">Runs the live page through edge cases: dark mode, colorblind simulation, a11y overlays, tap-target highlighting, scrollbar states.</div>
+                <div class="card-desc">Didn't ship as its own tool - split into two homes instead. Colorblind simulation and tap-target highlighting became part of Frontend Audit's accessibility pass; dark mode, scrollbar styling, and hover/focus overlays became part of Frontend Editor's Magic effects.</div>
                 <div class="card-footer">
-                  <div class="card-tags"><span class="tag">Chrome only</span><span class="tag">QA</span></div>
-                </div>
-              </div>
-              <div class="gates">
-                <div class="gates-label">Required before ship</div>
-                <div class="gates-rows">
-                  <div class="gates-row">
-                    <div class="gate"><span class="gate-icon">📄</span> Docs<div class="gate-avatars"><div class="gate-av">Li</div><div class="gate-av">Si</div></div></div>
-                    <div class="gate"><span class="gate-icon">🎬</span> Video<div class="gate-avatars"><div class="gate-av">An</div></div></div>
-                    <div class="gate"><span class="gate-icon">🧪</span> Testing</div>
-                  </div>
-                  <div class="gates-row">
-                    <div class="gate"><span class="gate-icon">👁</span> UX Review<div class="gate-avatars"><div class="gate-av">Me</div><div class="gate-av">Rh</div></div></div>
-                  </div>
+                  <div class="card-tags"><span class="tag">Chrome only</span><span class="tag">Merged into Audit + Editor</span></div>
                 </div>
               </div>
             </div>
@@ -1156,26 +1119,12 @@
               <div class="card-body">
                 <div class="card-top">
                   <div class="card-name"><span>🎨</span> Editor</div>
-                  <span class="badge new">New</span>
+                  <span class="badge shipped">Shipped</span>
                 </div>
-                <div class="card-desc">Visual editor for live pages in Chrome. Figma-like layer panel, edit history, and real-time style overrides.</div>
-                <div class="callout orange"><strong>Component panel</strong>Draggable panel of insertable code components from the design system. Click any element to replace it with a compliant one. Instant, visual, and reversible.</div>
+                <div class="card-desc">Visual editor for live pages in Chrome. Figma-like layer panel, edit history, and real-time style overrides. Now includes Magic effects (below) built in.</div>
+                <div class="callout orange"><strong>Component panel (in progress)</strong>Draggable panel of insertable code components from the design system. Click any element to replace it with a compliant one. Instant, visual, and reversible.</div>
                 <div class="card-footer">
                   <div class="card-tags"><span class="tag">Chrome only</span><span class="tag">Layer panel</span><span class="tag">History</span></div>
-                </div>
-              </div>
-              <div class="gates">
-                <div class="gates-label">Required before ship</div>
-                <div class="gates-rows">
-                  <div class="gates-row">
-                    <div class="gate"><span class="gate-icon">📄</span> Docs<div class="gate-avatars"><div class="gate-av">Li</div><div class="gate-av">Si</div></div></div>
-                    <div class="gate"><span class="gate-icon">🎬</span> Video<div class="gate-avatars"><div class="gate-av">An</div></div></div>
-                    <div class="gate"><span class="gate-icon">🧪</span> Testing</div>
-                  </div>
-                  <div class="gates-row">
-                    <div class="gate"><span class="gate-icon">👁</span> UX Review<div class="gate-avatars"><div class="gate-av">Me</div><div class="gate-av">Rh</div></div></div>
-                    <div class="gate"><span class="gate-icon">🏗</span> DS Align<div class="gate-avatars"><div class="gate-av">Sc</div><div class="gate-av">Ra</div><div class="gate-av">As</div></div></div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -1183,25 +1132,25 @@
             <div class="card magic reveal">
               <div class="card-body">
                 <div class="card-top">
-                  <div class="card-name"><span>✨</span> Magic</div>
-                  <span class="badge new">New</span>
+                  <div class="card-name"><span>✨</span> Magic <span style="font-weight:400;opacity:.5;">(part of Editor, not standalone)</span></div>
+                  <span class="badge shipped">Shipped</span>
                 </div>
-                <div class="card-desc">One-click magic functions for fast tweaks and demos. Quick actions outside any longer workflow with instant results and no setup.</div>
+                <div class="card-desc">Shipped as a feature inside Frontend Editor rather than its own tool: one-click dark mode, hover glow, liquid/plasma effects, and other instant visual tweaks - no setup, no separate workflow.</div>
                 <div class="card-footer">
-                  <div class="card-tags"><span class="tag">Figma</span><span class="tag">Chrome</span><span class="tag">Demos</span></div>
+                  <div class="card-tags"><span class="tag">Figma</span><span class="tag">Chrome</span><span class="tag">Part of Editor</span></div>
                 </div>
               </div>
-              <div class="gates">
-                <div class="gates-label">Required before ship</div>
-                <div class="gates-rows">
-                  <div class="gates-row">
-                    <div class="gate"><span class="gate-icon">📄</span> Docs<div class="gate-avatars"><div class="gate-av">Li</div><div class="gate-av">Si</div></div></div>
-                    <div class="gate"><span class="gate-icon">🎬</span> Video<div class="gate-avatars"><div class="gate-av">An</div></div></div>
-                    <div class="gate"><span class="gate-icon">🧪</span> Testing</div>
-                  </div>
-                  <div class="gates-row">
-                    <div class="gate"><span class="gate-icon">👁</span> UX Review<div class="gate-avatars"><div class="gate-av">Me</div><div class="gate-av">Rh</div></div></div>
-                  </div>
+            </div>
+
+            <div class="card reveal" style="--card-color:#64748b;">
+              <div class="card-body">
+                <div class="card-top">
+                  <div class="card-name"><span>🔗</span> NDLR <span style="font-weight:400;opacity:.5;">(Nice Designer Link Repo)</span></div>
+                  <span class="badge active">Beta</span>
+                </div>
+                <div class="card-desc">A shared home for every designer's project file links, organized by project. Lives as an external link on Home next to Documentation, gated behind Settings &rarr; Enable beta features.</div>
+                <div class="card-footer">
+                  <div class="card-tags"><span class="tag">Figma</span><span class="tag">Chrome</span><span class="tag">External link</span><span class="tag">Beta</span></div>
                 </div>
               </div>
             </div>
@@ -1212,24 +1161,24 @@
 
       <!-- Phase 4 -->
       <div class="phase reveal">
-        <div class="phase-dot future"></div>
+        <div class="phase-dot shipped"></div>
         <div class="phase-body">
           <div class="phase-header">
             <div class="phase-title">Phase 4 &ndash; NiCE Designer Suite</div>
-            <div class="phase-period">Q1 2027</div>
+            <div class="phase-period">Shipped Aug 2026 &mdash; ahead of schedule</div>
           </div>
-          <div class="phase-dep">All 8 tools shipped</div>
-          <p class="phase-desc">Package all tools under one install with a unified entry point, shared MCP server, and suite-level branding. Each tool remains independently usable.</p>
+          <div class="phase-dep">Shipped early - didn't wait on Editor's component panel</div>
+          <p class="phase-desc">Packaged every shipped tool under one install with a unified entry point, shared MCP server, and suite-level branding. Each tool remains independently usable. Convert was dropped and Parity folded into Audit before this shipped, so the final lineup is leaner than originally planned: four tools, not six.</p>
           <div class="cards">
-            <div class="card reveal" style="--card-color: #3694FC; border-style: dashed; border-color: rgba(54,148,252,0.2);">
+            <div class="card reveal" style="--card-color: #3694FC;">
               <div class="card-body">
                 <div class="card-top">
                   <div class="card-name"><span>📦</span> NiCE Designer Bundle</div>
-                  <span class="badge planned">Planned</span>
+                  <span class="badge shipped">Shipped</span>
                 </div>
-                <div class="card-desc">All 8 tools under one install. Shared MCP server on <code>127.0.0.1:7331</code>, unified branding, single plugin entry point. Install once, use any tool.</div>
+                <div class="card-desc">Audit, Editor, Spec Mode, and Design System install under one entry point. Shared MCP server on <code>127.0.0.1:7331</code>, unified branding, single plugin entry point. Install once, use any tool.</div>
                 <div class="card-footer">
-                  <div class="card-tags"><span class="tag">All tools</span><span class="tag">Shared MCP</span><span class="tag">One install</span></div>
+                  <div class="card-tags"><span class="tag">4 tools</span><span class="tag">Shared MCP</span><span class="tag">One install</span></div>
                 </div>
               </div>
             </div>

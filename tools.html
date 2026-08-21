@@ -265,7 +265,7 @@
     <a href="./index.html" class="nav-logo">
       <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span>
     </a>
-    <a href="./install-guide.html" class="nav-download">Download</a>
+    <span class="nav-download is-disabled" aria-disabled="true">Download<span class="coming-soon-tag">Coming soon!</span></span>
   </nav>
 
   <!-- TOOL SEARCH -->
@@ -287,136 +287,27 @@
       ============================================================ -->
       <section class="tool-section" id="suite">
         <p class="section-eyebrow">The Suite</p>
-        <h2 class="section-title">8 product tools</h2>
-        <p class="section-desc">The high-level tools that make up NiCE Designer. Each one is available in the Figma plugin, Chrome extension, or both — and some unlock additional capabilities when connected via Supercharge.</p>
+        <h2 class="section-title">4 product tools</h2>
+        <p class="section-desc">The high-level tools that make up NiCE Designer. Each one is available in the Figma plugin, Chrome extension, or both — and some unlock additional capabilities when connected via Supercharge. Parity's cross-client comparison is now a feature inside Frontend Audit rather than its own tool. Convert has been dropped entirely — for SOL &rarr; Lyra conversion work, use <a href="https://claude.ai/design/p/019dda40-58d9-795b-92eb-5ee83bf676e4" target="_blank" rel="noopener">Claude Design</a> alongside the <a href="https://ndlr.netlify.app/#/erick-mathews/uncategorized" target="_blank" rel="noopener">official Lyra design system reference</a> instead.</p>
 
         <div class="subsection" id="suite-audit">
           <div class="subsection-label">
             <span class="sub-dot" style="background:#3694FC"></span>
-            <span style="color:#3694FC">Audit</span>
+            <span style="color:#3694FC">Frontend Audit</span>
             <span class="subsection-note">Read-only — Figma + Chrome</span>
           </div>
           <div class="tool-grid">
-            <div class="suite-card" data-search="audit compliance score lyra sol colors text spacing radius components accessibility">
-              <div class="suite-card-accent" style="background:linear-gradient(90deg,#3694FC,#6100FF)"></div>
+            <div class="suite-card" data-search="audit compliance score lyra sol colors text spacing radius components accessibility a11y wcag parity">
+              <div class="suite-card-accent" style="background:linear-gradient(90deg,#3694FC,#025AFB)"></div>
               <div class="suite-card-icon">🔍</div>
-              <div class="suite-card-name">Audit Tool</div>
-              <div class="suite-card-desc">Runs a full Lyra compliance check on any selected Figma frame or live Chrome page. Scores colors, text styles, spacing, radius, components, and accessibility in one pass and returns a percentage score.</div>
+              <div class="suite-card-name">Frontend Audit</div>
+              <div class="suite-card-desc">One score for design-system compliance and accessibility. Audits color, typography, spacing, radius, components, and WCAG issues in a single pass, with colorblind simulation and tap-target overlays on Chrome, plus a cross-client parity check that diffs a Figma artboard against the live page via Supercharge — filtered and ranked by severity so you know what to fix first.</div>
               <div class="suite-card-tags">
                 <span class="suite-tag">Figma</span>
                 <span class="suite-tag">Chrome</span>
+                <span class="suite-tag">Storybook</span>
+                <span class="suite-tag">Parity</span>
                 <span class="suite-tag">Read-only</span>
-                <span class="suite-tag">Dashboard score</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="subsection" id="suite-convert">
-          <div class="subsection-label">
-            <span class="sub-dot" style="background:#00E2A0"></span>
-            <span style="color:#00E2A0">Convert</span>
-            <span class="subsection-note">Undoable — Figma + Chrome</span>
-          </div>
-          <div class="tool-grid">
-            <div class="suite-card" data-search="convert tokens lyra sol colors text spacing radius components migration">
-              <div class="suite-card-accent" style="background:linear-gradient(90deg,#00E2A0,#36EAD0)"></div>
-              <div class="suite-card-icon">⚙️</div>
-              <div class="suite-card-name">Convert Tool</div>
-              <div class="suite-card-desc">Replaces non-token values with the nearest Lyra design token. Works on colors, text styles, spacing, and radius — surgically or across an entire frame. All conversions are undoable in one step.</div>
-              <div class="suite-card-tags">
-                <span class="suite-tag">Figma</span>
-                <span class="suite-tag">Chrome</span>
-                <span class="suite-tag">Undoable</span>
-                <span class="suite-tag">Dry-run mode</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="subsection" id="suite-handoff">
-          <div class="subsection-label">
-            <span class="sub-dot" style="background:#36EAD0"></span>
-            <span style="color:#36EAD0">Handoff</span>
-            <span class="subsection-note">Read-only — Figma primary</span>
-          </div>
-          <div class="tool-grid">
-            <div class="suite-card" data-search="handoff developer css tokens spec export figma">
-              <div class="suite-card-accent" style="background:linear-gradient(90deg,#36EAD0,#3694FC)"></div>
-              <div class="suite-card-icon">📋</div>
-              <div class="suite-card-name">Handoff Tool</div>
-              <div class="suite-card-desc">Generates a full developer spec from the selected Figma node: dimensions, fills, typography, spacing, component props — all with Lyra token names substituted in. Also exports production-ready CSS.</div>
-              <div class="suite-card-tags">
-                <span class="suite-tag">Figma</span>
-                <span class="suite-tag">CSS export</span>
-                <span class="suite-tag">Token CSS</span>
-                <span class="suite-tag">Dev spec</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="subsection" id="suite-parity">
-          <div class="subsection-label">
-            <span class="sub-dot" style="background:#B98FFF"></span>
-            <span style="color:#B98FFF">Parity</span>
-            <span class="subsection-note">Requires Supercharge — both clients</span>
-          </div>
-          <div class="tool-grid">
-            <div class="suite-card" data-search="parity diff figma chrome live page compare artboard supercharge">
-              <div class="suite-card-accent" style="background:linear-gradient(90deg,#6100FF,#B98FFF)"></div>
-              <div class="suite-card-icon">⚖️</div>
-              <div class="suite-card-name">Parity Tool</div>
-              <div class="suite-card-desc">Diffs a Figma artboard against the live implementing page in Chrome. Flags visual gaps: color drift, spacing mismatches, font differences, and missing components. Requires both clients connected.</div>
-              <div class="suite-card-tags">
-                <span class="suite-tag">Figma</span>
-                <span class="suite-tag">Chrome</span>
-                <span class="sp-required">⚡ Supercharge</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="subsection" id="suite-qa">
-          <div class="subsection-label">
-            <span class="sub-dot" style="background:#FF5B8A"></span>
-            <span style="color:#FF5B8A">QA</span>
-            <span class="subsection-note">Chrome only</span>
-          </div>
-          <div class="tool-grid">
-            <div class="suite-card" data-search="qa quality chrome dark mode colorblind a11y overlay touch targets">
-              <div class="suite-card-accent" style="background:linear-gradient(90deg,#FF5B8A,#FF8A5B)"></div>
-              <div class="suite-card-icon">🧪</div>
-              <div class="suite-card-name">QA Tool</div>
-              <div class="suite-card-desc">Live page quality checks in Chrome. Toggle dark mode, run colorblind simulation, highlight touch targets, show a11y overlays with contrast ratios and ARIA labels, and polish the page with Lyra tokens.</div>
-              <div class="suite-card-tags">
-                <span class="suite-tag">Chrome only</span>
-                <span class="suite-tag">Dark mode</span>
-                <span class="suite-tag">A11y overlay</span>
-                <span class="suite-tag">Colorblind sim</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="subsection" id="suite-tokens">
-          <div class="subsection-label">
-            <span class="sub-dot" style="background:#36EAD0"></span>
-            <span style="color:#36EAD0">Tokens</span>
-            <span class="subsection-note">Read-only — Figma + Chrome</span>
-          </div>
-          <div class="tool-grid">
-            <div class="suite-card" data-search="tokens export json css lyra sol design system candidates promote">
-              <div class="suite-card-accent" style="background:linear-gradient(90deg,#36EAD0,#00E2A0)"></div>
-              <div class="suite-card-icon">🪙</div>
-              <div class="suite-card-name">Token Tool</div>
-              <div class="suite-card-desc">Exports the full Lyra or SOL token set as JSON or CSS custom properties. Also surfaces custom values that appear frequently enough to be worth promoting to a token — saving future audit cycles.</div>
-              <div class="suite-card-tags">
-                <span class="suite-tag">Figma</span>
-                <span class="suite-tag">Chrome</span>
-                <span class="suite-tag">JSON export</span>
-                <span class="suite-tag">CSS export</span>
-                <span class="suite-tag">Token candidates</span>
               </div>
             </div>
           </div>
@@ -425,45 +316,67 @@
         <div class="subsection" id="suite-editor">
           <div class="subsection-label">
             <span class="sub-dot" style="background:#3694FC"></span>
-            <span style="color:#3694FC">Editor</span>
-            <span class="subsection-note">In-context — Figma primary</span>
+            <span style="color:#3694FC">Frontend Editor</span>
+            <span class="subsection-note">In-context — Chrome only</span>
           </div>
           <div class="tool-grid">
-            <div class="suite-card" data-search="editor in-context token swap light dark mode variables figma">
+            <div class="suite-card" data-search="editor browser layer panel magic effects dark mode liquid plasma undo redo history chrome">
               <div class="suite-card-accent" style="background:linear-gradient(90deg,#3694FC,#025AFB)"></div>
-              <div class="suite-card-icon">✏️</div>
-              <div class="suite-card-name">Editor</div>
-              <div class="suite-card-desc">In-context token editor built into the plugin UI. Browse all Lyra tokens, swap individual values on the selected node, and preview light-dark mode switching without leaving Figma.</div>
+              <div class="suite-card-icon">🎨</div>
+              <div class="suite-card-name">Frontend Editor</div>
+              <div class="suite-card-desc">Design directly in the browser: a familiar layer panel for any live page, real-time style overrides with no code, Magic effects (dark mode, hover glow, liquid/plasma & more), and full edit history with undo &amp; redo.</div>
               <div class="suite-card-tags">
-                <span class="suite-tag">Figma</span>
-                <span class="suite-tag">Token browser</span>
-                <span class="suite-tag">Mode preview</span>
+                <span class="suite-tag">Chrome only</span>
+                <span class="suite-tag">Layer panel</span>
+                <span class="suite-tag">Magic effects</span>
+                <span class="suite-tag">History</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="subsection" id="suite-magic">
+        <div class="subsection" id="suite-handoff">
           <div class="subsection-label">
             <span class="sub-dot" style="background:#B98FFF"></span>
-            <span style="color:#B98FFF">Magic</span>
-            <span class="subsection-note">Requires Supercharge — multi-step AI workflows</span>
+            <span style="color:#B98FFF">Spec Mode</span>
+            <span class="subsection-note">Read-only — Figma + Chrome</span>
           </div>
           <div class="tool-grid">
-            <div class="suite-card" data-search="magic ai supercharge claude multi-step workflow multi-system sol lyra storybook">
-              <div class="suite-card-accent" style="background:linear-gradient(90deg,#B98FFF,#6100FF)"></div>
-              <div class="suite-card-icon">✨</div>
-              <div class="suite-card-name">Magic</div>
-              <div class="suite-card-desc">AI-powered workflows that orchestrate multiple tools in sequence. Generate SOL and Lyra variants side-by-side, run cross-client parity checks, chain audits with auto-fixes, and validate against Storybook — all from a single Claude prompt.</div>
+            <div class="suite-card" data-search="spec mode handoff developer css tokens export figma chrome dev-facing">
+              <div class="suite-card-accent" style="background:linear-gradient(90deg,#6100FF,#B98FFF)"></div>
+              <div class="suite-card-icon">📐</div>
+              <div class="suite-card-name">Spec Mode</div>
+              <div class="suite-card-desc">Select and inspect any element, in Figma or on a live page, and get production CSS with Lyra tokens substituted in automatically — spacing, type, color, and radius in one copy-ready view.</div>
               <div class="suite-card-tags">
                 <span class="suite-tag">Figma</span>
                 <span class="suite-tag">Chrome</span>
-                <span class="sp-required">⚡ Supercharge</span>
-                <span class="suite-tag">Multi-step</span>
+                <span class="suite-tag">Dev-facing</span>
               </div>
             </div>
           </div>
         </div>
+
+        <div class="subsection" id="suite-designSystem">
+          <div class="subsection-label">
+            <span class="sub-dot" style="background:#36EAD0"></span>
+            <span style="color:#36EAD0">Design System</span>
+            <span class="subsection-note">Read-only — Figma + Chrome</span>
+          </div>
+          <div class="tool-grid">
+            <div class="suite-card" data-search="design system tokens components storybook lyra sol export json css candidates promote">
+              <div class="suite-card-accent" style="background:linear-gradient(90deg,#36EAD0,#00E2A0)"></div>
+              <div class="suite-card-icon">🪙</div>
+              <div class="suite-card-name">Design System</div>
+              <div class="suite-card-desc">Browse every SOL and Lyra token — color, type, spacing, and radius — plus live component previews pulled straight from Storybook on Chrome, with Angular and React props, variants, and states. One-click sync pulls the whole library.</div>
+              <div class="suite-card-tags">
+                <span class="suite-tag">Figma</span>
+                <span class="suite-tag">Chrome</span>
+                <span class="suite-tag">Storybook</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
 
       </section>
 
@@ -474,205 +387,385 @@
       ============================================================ -->
       <section class="tool-section" id="mcp">
         <p class="section-eyebrow">MCP Server</p>
-        <h2 class="section-title">35 MCP tools</h2>
+        <h2 class="section-title">55 MCP tools</h2>
         <p class="section-desc">Called directly by Claude when Supercharge is connected. All tools accept <code>target: "figma" | "chrome" | "auto"</code>. Start the server with <code>cd packages/mcp-server && node src/index.js</code> (default port 7331).</p>
 
-        <!-- AUDIT -->
-        <div class="subsection" id="mcp-audit">
+        <!-- CONNECT & DIAGNOSE -->
+        <div class="subsection" id="mcp-connect">
+          <div class="subsection-label">
+            <span class="sub-dot" style="background:#64748b"></span>
+            <span style="color:#64748b">Connect &amp; diagnose</span>
+            <span class="subsection-note">Confirm Claude can actually see Figma and Chrome before anything else runs.</span>
+          </div>
+          <div class="tool-grid">
+            <div class="mcp-card" data-search="list_targets see what is connected connect">
+              <div class="mcp-card-top"><code class="mcp-name">list_targets</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Lists which clients — Figma, Chrome, or both — are live on the MCP hub right now.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Stops you from waiting on a tool that was never going to reach anything. Always the cheapest first call.</p>
+            </div>
+            <div class="mcp-card" data-search="get_diagnostics troubleshoot the connection connect">
+              <div class="mcp-card-top"><code class="mcp-name">get_diagnostics</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Full health report on the bridge: this process, the hub, connected sessions, recent drop-outs, and a plain-English next step.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Turns "it just does not work" into a specific thing to click. Run it the moment a tool says nothing is connected.</p>
+            </div>
+            <div class="mcp-card" data-search="check_libraries check the design library is linked connect">
+              <div class="mcp-card-top"><code class="mcp-name">check_libraries</code><span class="target-badge target-figma">Figma only</span></div>
+              <p class="mcp-desc">Verifies the SOL or Lyra library is actually linked to the open Figma file.</p>
+              <p class="mcp-returns"><strong>Why:</strong> A missing library silently makes every conversion fall back to bundled values. This catches that before you convert anything.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHOOSE WHAT TO WORK ON -->
+        <div class="subsection" id="mcp-scope">
           <div class="subsection-label">
             <span class="sub-dot" style="background:#3694FC"></span>
-            <span style="color:#3694FC">Audit</span>
-            <span class="subsection-note">Read-only — safe any time</span>
+            <span style="color:#3694FC">Choose what to work on</span>
+            <span class="subsection-note">Set the scope — a whole page, one artboard, or a single inspected element.</span>
           </div>
           <div class="tool-grid">
-            <div class="mcp-card" data-search="run_full_audit audit full compliance score">
-              <div class="mcp-card-top"><code class="mcp-name">run_full_audit</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Runs all audit checks at once and returns a combined compliance score with a full issue list across colors, text, spacing, radius, components, and accessibility.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> overall score, per-category scores, issue count by severity</p>
+            <div class="mcp-card" data-search="get_selection_info what is selected right now scope">
+              <div class="mcp-card-top"><code class="mcp-name">get_selection_info</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Reports the selected Figma layer or the inspected Chrome element, so scope is explicit rather than assumed.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Guarantees the audit or fix lands on the thing you meant. No silent whole-page conversions when you wanted one button.</p>
             </div>
-            <div class="mcp-card" data-search="audit_colors colors hex rgba token palette">
-              <div class="mcp-card-top"><code class="mcp-name">audit_colors</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Checks every color value against Lyra and SOL token palettes. Flags hardcoded hex and rgba values and suggests the nearest token for each.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> non-token colors with suggested replacements</p>
+            <div class="mcp-card" data-search="select_page reset scope to the whole page scope">
+              <div class="mcp-card-top"><code class="mcp-name">select_page</code><span class="target-badge target-chrome">Chrome only</span></div>
+              <p class="mcp-desc">Clears the inspected element so audits and fixes cover the entire page again.</p>
+              <p class="mcp-returns"><strong>Why:</strong> One call to zoom back out after drilling into a component.</p>
             </div>
-            <div class="mcp-card" data-search="audit_text_styles text typography font style linked">
-              <div class="mcp-card-top"><code class="mcp-name">audit_text_styles</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Identifies text nodes that don't use a named text style, and verifies that existing styles map to Lyra typography tokens.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> unlinked text nodes, mismatched styles, token suggestions</p>
+            <div class="mcp-card" data-search="start_inspect start element picking scope">
+              <div class="mcp-card-top"><code class="mcp-name">start_inspect</code><span class="target-badge target-chrome">Chrome only</span></div>
+              <p class="mcp-desc">Turns on the extension's inspect mode so the next element you click becomes the scope.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Point at the thing you care about instead of describing it in words.</p>
             </div>
-            <div class="mcp-card" data-search="audit_spacing spacing padding gap margin 4pt grid">
-              <div class="mcp-card-top"><code class="mcp-name">audit_spacing</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Audits padding, gap, and margin values against the 4pt spacing scale. Flags values that don't land on a defined token.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> off-grid spacing values with nearest token options</p>
+            <div class="mcp-card" data-search="stop_inspect stop element picking scope">
+              <div class="mcp-card-top"><code class="mcp-name">stop_inspect</code><span class="target-badge target-chrome">Chrome only</span></div>
+              <p class="mcp-desc">Leaves inspect mode without changing the current selection.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Gets the picking cursor out of your way so you can use the page normally.</p>
             </div>
-            <div class="mcp-card" data-search="audit_radius border radius corner rounded">
-              <div class="mcp-card-top"><code class="mcp-name">audit_radius</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Checks border-radius values against the Lyra radius token set. Flags custom values and suggests the closest token (none / sm / md / lg / full).</p>
-              <p class="mcp-returns"><strong>Returns:</strong> non-token radius values with suggested replacements</p>
+            <div class="mcp-card" data-search="focus_node jump to a layer in figma scope">
+              <div class="mcp-card-top"><code class="mcp-name">focus_node</code><span class="target-badge target-figma">Figma only</span></div>
+              <p class="mcp-desc">Scrolls to and selects a specific node id on the Figma canvas.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Every audit row becomes clickable — go straight from "issue #14" to the actual layer.</p>
             </div>
-            <div class="mcp-card" data-search="audit_components components variants library drift">
-              <div class="mcp-card-top"><code class="mcp-name">audit_components</code><span class="target-badge target-figma">Figma only</span></div>
-              <p class="mcp-desc">Finds component instances and variants that don't match the linked Lyra library. Shows version drift and detached overrides.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> mismatched components, detached instances, version diff</p>
-            </div>
-            <div class="mcp-card" data-search="audit_accessibility a11y wcag contrast focus label">
-              <div class="mcp-card-top"><code class="mcp-name">audit_accessibility</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Runs WCAG 2.1 AA checks: color contrast ratios, touch target minimums (44×44px), missing ARIA labels, focus order, and alt text coverage.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> a11y issues grouped by type with WCAG criterion references</p>
-            </div>
-            <div class="mcp-card" data-search="lyra_compliance_report compliance report dashboard score percentage">
-              <div class="mcp-card-top"><code class="mcp-name">lyra_compliance_report</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Combines all audit results into the single Lyra compliance percentage shown on the dashboard, with a per-category breakdown and prioritized top fixes.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> overall % score, category breakdown, priority fix list</p>
+            <div class="mcp-card" data-search="screenshot_page screenshot what you are looking at scope">
+              <div class="mcp-card-top"><code class="mcp-name">screenshot_page</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Captures the current page or artboard as an image Claude can look at directly.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Lets Claude judge things a token audit cannot see — visual hierarchy, crowding, whether it simply looks wrong.</p>
             </div>
           </div>
         </div>
 
-        <!-- CONVERSION -->
-        <div class="subsection" id="mcp-convert">
-          <div class="subsection-label">
-            <span class="sub-dot" style="background:#00E2A0"></span>
-            <span style="color:#00E2A0">Conversion</span>
-            <span class="subsection-note">Undoable — use undo_last_conversion to revert</span>
-          </div>
-          <div class="tool-grid">
-            <div class="mcp-card" data-search="convert_colors colors tokens replace lyra dry run">
-              <div class="mcp-card-top"><code class="mcp-name">convert_colors</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Replaces hardcoded color values with the nearest Lyra token. Dry-run by default — pass <code>dryRun: false</code> to apply.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> preview of changes, count converted</p>
-            </div>
-            <div class="mcp-card" data-search="convert_text_styles text styles typography token apply">
-              <div class="mcp-card-top"><code class="mcp-name">convert_text_styles</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Applies the matching Lyra text style to every unlinked or mismatched text node, matching on font size + weight + line-height.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> nodes updated, styles applied, skipped count</p>
-            </div>
-            <div class="mcp-card" data-search="fix_spacing spacing snap token 4pt nearest">
-              <div class="mcp-card-top"><code class="mcp-name">fix_spacing</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Snaps padding and gap values to the nearest step on the 4pt spacing scale. Accepts rounding mode: nearest, floor, or ceil.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> values changed, new token for each</p>
-            </div>
-            <div class="mcp-card" data-search="fix_radius radius corner token replace nearest">
-              <div class="mcp-card-top"><code class="mcp-name">fix_radius</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Replaces custom border-radius values with the nearest Lyra token. Preserves intentional zero-radius (sharp) corners.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> values updated, token applied to each</p>
-            </div>
-            <div class="mcp-card" data-search="convert_component component swap lyra library instance">
-              <div class="mcp-card-top"><code class="mcp-name">convert_component</code><span class="target-badge target-figma">Figma only</span></div>
-              <p class="mcp-desc">Swaps a selected component instance to its Lyra library equivalent, preserving text and image overrides where the API allows.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> old/new component names, overrides preserved or lost</p>
-            </div>
-            <div class="mcp-card" data-search="fix_accessibility a11y labels contrast focus ring fix">
-              <div class="mcp-card-top"><code class="mcp-name">fix_accessibility</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Auto-fixes common a11y issues: adds missing ARIA labels to icon-only buttons, adjusts text color for failing contrast where possible, and sets focus ring visibility.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> fixes applied, issues requiring manual intervention</p>
-            </div>
-            <div class="mcp-card" data-search="convert_mode light dark mode toggle variable">
-              <div class="mcp-card-top"><code class="mcp-name">convert_mode</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Switches a frame or page between Lyra light and dark mode. In Figma, sets the variable mode. In Chrome, injects the token override stylesheet.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> previous mode, new mode, variables updated</p>
-            </div>
-            <div class="mcp-card" data-search="convert_page_to_lyra chrome page live lyra css inject">
-              <div class="mcp-card-top"><code class="mcp-name">convert_page_to_lyra</code><span class="target-badge target-chrome">Chrome only</span></div>
-              <p class="mcp-desc">Applies Lyra CSS token overrides to the live web page via a non-destructive injected stylesheet that can be toggled off without touching source.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> properties overridden, before/after snapshot</p>
-            </div>
-            <div class="mcp-card" data-search="migrate_to_lyra migrate figma sol lyra full frame">
-              <div class="mcp-card-top"><code class="mcp-name">migrate_to_lyra</code><span class="target-badge target-figma">Figma only</span></div>
-              <p class="mcp-desc">Full SOL-to-Lyra migration on a selected frame: converts colors, text styles, spacing, radius, and components in a single pass. Large frames may take 10-30 seconds.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> per-category change counts, items needing manual review</p>
-            </div>
-            <div class="mcp-card" data-search="generate_multi_system multi system sol lyra side by side">
-              <div class="mcp-card-top"><code class="mcp-name">generate_multi_system</code><span class="target-badge target-figma">Figma only</span></div>
-              <p class="mcp-desc">Duplicates a frame and generates two side-by-side versions: one in SOL and one in Lyra. Useful for stakeholder comparisons or compliance reviews.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> node IDs of both frames, differences summary</p>
-            </div>
-            <div class="mcp-card" data-search="undo_last_conversion undo revert conversion last">
-              <div class="mcp-card-top"><code class="mcp-name">undo_last_conversion</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Reverts the most recent conversion operation. One undo level is stored — run immediately after a conversion if the result isn't right.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> operation reverted, properties restored</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- DEV HANDOFF -->
-        <div class="subsection" id="mcp-handoff">
-          <div class="subsection-label">
-            <span class="sub-dot" style="background:#36EAD0"></span>
-            <span style="color:#36EAD0">Dev Handoff</span>
-            <span class="subsection-note">Read-only — extract specs and CSS</span>
-          </div>
-          <div class="tool-grid">
-            <div class="mcp-card" data-search="extract_dev_details dev spec dimensions fills typography component props">
-              <div class="mcp-card-top"><code class="mcp-name">extract_dev_details</code><span class="target-badge target-figma">Figma only</span></div>
-              <p class="mcp-desc">Returns a full developer spec for the selected node: dimensions, color fills, text styles, auto-layout properties, component props, and spacing — formatted for handoff.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> structured spec with all properties, token names where matched</p>
-            </div>
-            <div class="mcp-card" data-search="extract_all_css css production token variables">
-              <div class="mcp-card-top"><code class="mcp-name">extract_all_css</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Generates production CSS for the selected node. Hardcoded values are replaced with Lyra CSS custom property references where a token match exists.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> CSS block with token variables, unresolved properties flagged</p>
-            </div>
-            <div class="mcp-card" data-search="extract_token_css token css custom properties root export">
-              <div class="mcp-card-top"><code class="mcp-name">extract_token_css</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Exports the full Lyra or SOL token set as CSS custom properties in a <code>:root {}</code> block, ready to drop into a stylesheet or design token pipeline.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> complete CSS variables file for the specified system</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- INTROSPECTION -->
-        <div class="subsection" id="mcp-inspect">
+        <!-- SCORE & MEASURE -->
+        <div class="subsection" id="mcp-measure">
           <div class="subsection-label">
             <span class="sub-dot" style="background:#B98FFF"></span>
-            <span style="color:#B98FFF">Introspection</span>
-            <span class="subsection-note">Status and metadata — call list_targets first</span>
+            <span style="color:#B98FFF">Score &amp; measure</span>
+            <span class="subsection-note">Read your current state. The audits return a gauge plus the issue list behind it.</span>
           </div>
           <div class="tool-grid">
-            <div class="mcp-card" data-search="list_targets connected clients figma chrome status">
-              <div class="mcp-card-top"><code class="mcp-name">list_targets</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Shows which clients are currently connected to the MCP server. Always run this first to confirm both clients are live before multi-client tools.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> connected clients list with version and status</p>
+            <div class="mcp-card" data-search="run_full_audit full compliance score measure">
+              <div class="mcp-card-top"><code class="mcp-name">run_full_audit</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Audits colors, typography, spacing, radius, components and accessibility in one pass and returns an overall 0–100 score with per-domain issue counts.</p>
+              <p class="mcp-returns"><strong>Why:</strong> One number you can put in front of a stakeholder, plus the exact list of what is dragging it down.</p>
             </div>
-            <div class="mcp-card" data-search="get_selection_info selection node element metadata bounds">
-              <div class="mcp-card-top"><code class="mcp-name">get_selection_info</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Returns metadata about the current Figma selection or Chrome element: node type, name, bounding box, applied styles, and component membership.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> node metadata, current style values, component info</p>
+            <div class="mcp-card" data-search="lyra_compliance_report lyra readiness report measure">
+              <div class="mcp-card-top"><code class="mcp-name">lyra_compliance_report</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">A full audit plus the accessibility pass, pinned to Lyra, formatted as a report rather than a raw issue dump.</p>
+              <p class="mcp-returns"><strong>Why:</strong> The artifact to paste into a design review or a ticket — score, gauge, and the top offenders, already prose.</p>
             </div>
-            <div class="mcp-card" data-search="check_libraries libraries figma linked version outdated">
-              <div class="mcp-card-top"><code class="mcp-name">check_libraries</code><span class="target-badge target-figma">Figma only</span></div>
-              <p class="mcp-desc">Verifies that the correct Lyra and SOL Figma libraries are linked in the current file and checks for outdated library versions.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> linked libraries, version status, missing or outdated flags</p>
+            <div class="mcp-card" data-search="audit_colors score the colors measure">
+              <div class="mcp-card-top"><code class="mcp-name">audit_colors</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Classifies every fill and stroke as on-token, bound to the wrong design system, or a raw value with no binding.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Tells you not just how many colors are off but how many are one click from being right — so you know whether this is ten minutes of work or a week.</p>
             </div>
-            <div class="mcp-card" data-search="export_design_tokens design tokens json w3c export">
-              <div class="mcp-card-top"><code class="mcp-name">export_design_tokens</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Exports all design tokens from the current Figma file or the bundled Lyra / SOL token set as JSON following the W3C design token format.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> token JSON with name, value, type, and group</p>
+            <div class="mcp-card" data-search="audit_text_styles score the typography measure">
+              <div class="mcp-card-top"><code class="mcp-name">audit_text_styles</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Matches every text node on family, size and weight together, and names the role-equivalent token it should be using.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Catches the sneaky case — right size, wrong family — that eyeballing a design never finds.</p>
             </div>
-            <div class="mcp-card" data-search="get_diagnostics diagnostics version health error log">
-              <div class="mcp-card-top"><code class="mcp-name">get_diagnostics</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Returns connection health, plugin and extension versions, the current token hash (to verify freshness), and any runtime errors logged by either client.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> connection status, version strings, token hash, error log</p>
+            <div class="mcp-card" data-search="audit_spacing score the spacing measure">
+              <div class="mcp-card-top"><code class="mcp-name">audit_spacing</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Finds padding, gap and margin values that are off-scale, or on-scale but not bound to a variable.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Surfaces the "looks fine, breaks on theme change" class of problem, which is most of what fails in handoff.</p>
+            </div>
+            <div class="mcp-card" data-search="audit_radius score the corner radii measure">
+              <div class="mcp-card-top"><code class="mcp-name">audit_radius</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Finds corner radii that are off-scale or unbound, reading the real per-corner binding slots.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Radius drift is the fastest way a page stops looking like the system. This is the cheapest audit to act on.</p>
+            </div>
+            <div class="mcp-card" data-search="audit_components score the components measure">
+              <div class="mcp-card-top"><code class="mcp-name">audit_components</code><span class="target-badge target-figma">Figma only</span></div>
+              <p class="mcp-desc">Finds instances from the wrong library or from no library, and names a 1:1 replacement where one exists.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Detached and off-system components are what make a file un-maintainable. This is the list to fix first.</p>
+            </div>
+            <div class="mcp-card" data-search="audit_accessibility score accessibility measure">
+              <div class="mcp-card-top"><code class="mcp-name">audit_accessibility</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">WCAG-oriented scan: contrast, tap targets, small text, ARIA, alt text, labels, focus outlines, heading order, landmarks.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Errors and warnings split out separately, so you can see what is a genuine blocker versus what is polish.</p>
+            </div>
+            <div class="mcp-card" data-search="scan_variables list the variables in use measure">
+              <div class="mcp-card-top"><code class="mcp-name">scan_variables</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Enumerates every variable currently bound in the scope, and every property that should be bound but is not.</p>
+              <p class="mcp-returns"><strong>Why:</strong> The raw data behind the spacing and radius scores, if you want to reason about bindings yourself.</p>
+            </div>
+            <div class="mcp-card" data-search="get_audit_filters see what the score ignores measure">
+              <div class="mcp-card-top"><code class="mcp-name">get_audit_filters</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Returns the user's active audit filters — which issue classes are currently excluded from the score.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Keeps the score honest. A 96 with contrast checks switched off is not a 96, and this is how you find out.</p>
+            </div>
+            <div class="mcp-card" data-search="set_audit_filters change what the score ignores measure">
+              <div class="mcp-card-top"><code class="mcp-name">set_audit_filters</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Turns individual issue classes in or out of scope for the score.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Lets you park issues that are genuinely out of scope for this project without them nagging in every audit.</p>
             </div>
           </div>
         </div>
 
-        <!-- CHROME POLISH -->
-        <div class="subsection" id="mcp-polish">
+        <!-- FIX EVERYTHING AT ONCE -->
+        <div class="subsection" id="mcp-fix-bulk">
           <div class="subsection-label">
-            <span class="sub-dot" style="background:#FF5B8A"></span>
-            <span style="color:#FF5B8A">Chrome Polish</span>
-            <span class="subsection-note">Live page QA overlays and token injection</span>
+            <span class="sub-dot" style="background:#00E2A0"></span>
+            <span style="color:#00E2A0">Fix everything at once</span>
+            <span class="subsection-note">Whole-page and whole-frame conversions. Dry-run by default, and they report the score they moved.</span>
           </div>
           <div class="tool-grid">
-            <div class="mcp-card" data-search="polish_page polish chrome lyra css inject token stylesheet">
-              <div class="mcp-card-top"><code class="mcp-name">polish_page</code><span class="target-badge target-chrome">Chrome only</span></div>
-              <p class="mcp-desc">Applies Lyra token overrides to the live page: correct color variables, Be Vietnam Pro font, and spacing tokens as a non-destructive CSS layer. Toggle off to restore originals.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> properties overridden, overlay toggle state</p>
+            <div class="mcp-card" data-search="convert_page_to_lyra convert the whole page to lyra fix-bulk">
+              <div class="mcp-card-top"><code class="mcp-name">convert_page_to_lyra</code><span class="target-badge target-chrome">Chrome only</span></div>
+              <p class="mcp-desc">Runs every applicable fixer across a live page and returns a before/after score delta.</p>
+              <p class="mcp-returns"><strong>Why:</strong> The single biggest jump in score you can get in one call — and you see exactly how many points it bought.</p>
             </div>
-            <div class="mcp-card" data-search="a11y_overlay a11y overlay contrast touch targets focus aria labels">
+            <div class="mcp-card" data-search="migrate_to_lyra convert the whole frame to lyra fix-bulk">
+              <div class="mcp-card-top"><code class="mcp-name">migrate_to_lyra</code><span class="target-badge target-figma">Figma only</span></div>
+              <p class="mcp-desc">The Figma equivalent: applies the selected fixer families across a frame and reports the score delta.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Migrates a whole artboard without hand-picking rows, with a before/after gauge to show your team.</p>
+            </div>
+            <div class="mcp-card" data-search="convert_colors apply color tokens fix-bulk">
+              <div class="mcp-card-top"><code class="mcp-name">convert_colors</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Binds the chosen color tokens to the listed fills and strokes.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Reports how many of the original color issues it actually resolved, so a partial fix never gets reported as a win.</p>
+            </div>
+            <div class="mcp-card" data-search="convert_text_styles apply typography tokens fix-bulk">
+              <div class="mcp-card-top"><code class="mcp-name">convert_text_styles</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Applies the matching type token to the given text nodes, or to every eligible one.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Type is the most visible domain — this is the change people notice, and it comes with a resolved-count.</p>
+            </div>
+            <div class="mcp-card" data-search="fix_spacing bind spacing tokens fix-bulk">
+              <div class="mcp-card-top"><code class="mcp-name">fix_spacing</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Binds spacing variables to off-scale or unbound padding, gap and margin values.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Usually the highest-yield, lowest-risk fix in the set — values barely move, but the score does.</p>
+            </div>
+            <div class="mcp-card" data-search="fix_radius bind radius tokens fix-bulk">
+              <div class="mcp-card-top"><code class="mcp-name">fix_radius</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Binds radius variables to off-scale or unbound corner radii.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Small visual change, large consistency gain, and it takes one call.</p>
+            </div>
+            <div class="mcp-card" data-search="fix_accessibility apply accessibility fixes fix-bulk">
+              <div class="mcp-card-top"><code class="mcp-name">fix_accessibility</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Applies the automated remediation for a specific accessibility issue type on a node.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Clears the mechanical a11y failures — labels, alt text, tap targets — so human attention goes to the judgement calls.</p>
+            </div>
+            <div class="mcp-card" data-search="convert_component swap a component for its system twin fix-bulk">
+              <div class="mcp-card-top"><code class="mcp-name">convert_component</code><span class="target-badge target-figma">Figma only</span></div>
+              <p class="mcp-desc">Replaces one instance with the equivalent component from the target design system.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Gets you a real library instance — inheriting future updates — instead of a look-alike that drifts.</p>
+            </div>
+            <div class="mcp-card" data-search="convert_mode switch light / dark mode fix-bulk">
+              <div class="mcp-card-top"><code class="mcp-name">convert_mode</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Re-binds the scope to the light or dark tokens of the given system.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Produces a genuine dark variant built from tokens, not an inverted screenshot.</p>
+            </div>
+            <div class="mcp-card" data-search="generate_multi_system duplicate into the other system fix-bulk">
+              <div class="mcp-card-top"><code class="mcp-name">generate_multi_system</code><span class="target-badge target-figma">Figma only</span></div>
+              <p class="mcp-desc">Copies the selection and converts the copy to the other design system, leaving the original untouched.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Side-by-side SOL and Lyra versions for a migration pitch, with zero risk to the original.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- FIX ONE THING AT A TIME -->
+        <div class="subsection" id="mcp-fix-one">
+          <div class="subsection-label">
+            <span class="sub-dot" style="background:#36EAD0"></span>
+            <span style="color:#36EAD0">Fix one thing at a time</span>
+            <span class="subsection-note">Surgical, per-property edits with a clean one-click revert for each.</span>
+          </div>
+          <div class="tool-grid">
+            <div class="mcp-card" data-search="apply_single_color set one color fix-one">
+              <div class="mcp-card-top"><code class="mcp-name">apply_single_color</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Applies one color token — or a raw hex via customHex — to a single fill or stroke.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Try a value in one call and undo it in one call. This is the lane for "just make this blue".</p>
+            </div>
+            <div class="mcp-card" data-search="apply_single_text set one text style fix-one">
+              <div class="mcp-card-top"><code class="mcp-name">apply_single_text</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Applies one type token — or a raw size via customFontSize — to a single text node.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Iterate on one heading without touching the other forty.</p>
+            </div>
+            <div class="mcp-card" data-search="apply_single_spacing set one spacing value fix-one">
+              <div class="mcp-card-top"><code class="mcp-name">apply_single_spacing</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Applies one spacing token — or a raw number via customValue — to a single property.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Nudge one gap by hand when the token scale genuinely does not have the right step.</p>
+            </div>
+            <div class="mcp-card" data-search="apply_single_radius set one corner radius fix-one">
+              <div class="mcp-card-top"><code class="mcp-name">apply_single_radius</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Applies one radius token — or a raw number via customValue — to a single corner or all four.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Fix the one card whose corners are wrong, without a page-wide pass.</p>
+            </div>
+            <div class="mcp-card" data-search="revert_single_color undo that one color fix-one">
+              <div class="mcp-card-top"><code class="mcp-name">revert_single_color</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Restores the snapshot captured when that exact fill or stroke was changed.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Per-row undo that survives other edits — no losing four good changes to walk back a fifth.</p>
+            </div>
+            <div class="mcp-card" data-search="revert_single_text undo that one text style fix-one">
+              <div class="mcp-card-top"><code class="mcp-name">revert_single_text</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Restores the snapshot captured when that text node was changed.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Try a type token, dislike it, put it back exactly as it was.</p>
+            </div>
+            <div class="mcp-card" data-search="revert_single_spacing undo that one spacing value fix-one">
+              <div class="mcp-card-top"><code class="mcp-name">revert_single_spacing</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Restores the snapshot captured when that spacing property was changed.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Reverses a single nudge without disturbing the rest of the layout.</p>
+            </div>
+            <div class="mcp-card" data-search="revert_single_radius undo that one corner radius fix-one">
+              <div class="mcp-card-top"><code class="mcp-name">revert_single_radius</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Restores the snapshot captured when that radius was changed.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Reverses a single radius edit cleanly.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- UNDO & HISTORY -->
+        <div class="subsection" id="mcp-undo">
+          <div class="subsection-label">
+            <span class="sub-dot" style="background:#f59e0b"></span>
+            <span style="color:#f59e0b">Undo &amp; history</span>
+            <span class="subsection-note">Step back out of any bulk change without leaving the conversation.</span>
+          </div>
+          <div class="tool-grid">
+            <div class="mcp-card" data-search="undo_last_conversion undo the last bulk change undo">
+              <div class="mcp-card-top"><code class="mcp-name">undo_last_conversion</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Rolls back the most recent bulk conversion in one call.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Lets you run a big conversion to see what it does, knowing the exit is one sentence away.</p>
+            </div>
+            <div class="mcp-card" data-search="get_conversion_history list every change made undo">
+              <div class="mcp-card-top"><code class="mcp-name">get_conversion_history</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Returns the ordered history of applied changes with the current position in it.</p>
+              <p class="mcp-returns"><strong>Why:</strong> A written record of what this session actually touched — useful for a changelog or a handoff note.</p>
+            </div>
+            <div class="mcp-card" data-search="revert_to_history_index rewind to an earlier point undo">
+              <div class="mcp-card-top"><code class="mcp-name">revert_to_history_index</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Steps the design back to a chosen entry in the history.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Explore aggressively, then land on whichever version was best — not just the last one.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- RESTYLE THE LIVE PAGE -->
+        <div class="subsection" id="mcp-restyle">
+          <div class="subsection-label">
+            <span class="sub-dot" style="background:#FF5B8A"></span>
+            <span style="color:#FF5B8A">Restyle the live page</span>
+            <span class="subsection-note">Chrome only. Inject CSS, flip dark mode, and switch on accessibility overlays.</span>
+          </div>
+          <div class="tool-grid">
+            <div class="mcp-card" data-search="apply_css_overrides inject css rules restyle">
+              <div class="mcp-card-top"><code class="mcp-name">apply_css_overrides</code><span class="target-badge target-chrome">Chrome only</span></div>
+              <p class="mcp-desc">Injects selector-scoped CSS declarations into the live page.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Restyle anything on a page you do not own, and see the result immediately. Pass clear:true so re-runs replace rather than stack.</p>
+            </div>
+            <div class="mcp-card" data-search="clear_css_overrides remove injected css restyle">
+              <div class="mcp-card-top"><code class="mcp-name">clear_css_overrides</code><span class="target-badge target-chrome">Chrome only</span></div>
+              <p class="mcp-desc">Strips every override this session injected, returning the page to its shipped styling.</p>
+              <p class="mcp-returns"><strong>Why:</strong> A clean baseline in one call, so an experiment never contaminates the next audit.</p>
+            </div>
+            <div class="mcp-card" data-search="polish_page page view toggles restyle">
+              <div class="mcp-card-top"><code class="mcp-name">polish_page</code><span class="target-badge target-chrome">Chrome only</span></div>
+              <p class="mcp-desc">Toggles dark-mode simulation, token-styled scrollbars, and positional hover overlays.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Dark mode without a build, on any page — the fastest way to find out what breaks.</p>
+            </div>
+            <div class="mcp-card" data-search="a11y_overlay accessibility overlays restyle">
               <div class="mcp-card-top"><code class="mcp-name">a11y_overlay</code><span class="target-badge target-chrome">Chrome only</span></div>
-              <p class="mcp-desc">Draws visual indicators on the live page: contrast ratios on text nodes, touch target outlines, focus ring visibility, and ARIA role labels. Useful during QA walkthroughs.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> overlay toggled on/off, element count annotated</p>
+              <p class="mcp-desc">Toggles small-tap-target highlighting, non-token color flagging, and colorblind simulation.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Makes accessibility problems visible on screen, which is far more persuasive in a review than a list of counts.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SPEC MODE -->
+        <div class="subsection" id="mcp-handoff">
+          <div class="subsection-label">
+            <span class="sub-dot" style="background:#6100FF"></span>
+            <span style="color:#6100FF">Spec Mode</span>
+            <span class="subsection-note">Turn a design into CSS, tokens, and specs a developer can paste in.</span>
+          </div>
+          <div class="tool-grid">
+            <div class="mcp-card" data-search="extract_dev_details spec sheet for one element handoff">
+              <div class="mcp-card-top"><code class="mcp-name">extract_dev_details</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Size, fills, strokes, typography, auto-layout and CSS for the current selection.</p>
+              <p class="mcp-returns"><strong>Why:</strong> The handoff spec a developer asks for, without a screenshot-and-annotate round trip.</p>
+            </div>
+            <div class="mcp-card" data-search="extract_all_css export the whole thing as css handoff">
+              <div class="mcp-card-top"><code class="mcp-name">extract_all_css</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Emits a CSS document covering every node in scope.</p>
+              <p class="mcp-returns"><strong>Why:</strong> A real starting point for implementation rather than a pile of values to retype.</p>
+            </div>
+            <div class="mcp-card" data-search="extract_token_css export css custom properties handoff">
+              <div class="mcp-card-top"><code class="mcp-name">extract_token_css</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Emits the design system's tokens as CSS custom properties.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Drop it into a stylesheet and the rest of the exported CSS resolves against real tokens.</p>
+            </div>
+            <div class="mcp-card" data-search="export_design_tokens export the token palettes handoff">
+              <div class="mcp-card-top"><code class="mcp-name">export_design_tokens</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Returns the color, type, spacing and radius palettes for SOL or Lyra in either mode.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Lets Claude propose real token names instead of guessing at them from memory.</p>
+            </div>
+            <div class="mcp-card" data-search="sync_storybook_components sync components from storybook handoff">
+              <div class="mcp-card-top"><code class="mcp-name">sync_storybook_components</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Pulls the live component inventory from a Storybook instance into the plugin.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Component audits start matching what engineering actually shipped, not last quarter's library.</p>
+            </div>
+            <div class="mcp-card" data-search="get_storybook_sync_status storybook sync status handoff">
+              <div class="mcp-card-top"><code class="mcp-name">get_storybook_sync_status</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Reports when the last sync ran and how many components it brought in.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Tells you whether a component audit is trustworthy or built on stale data.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- DECIDE & REVIEW -->
+        <div class="subsection" id="mcp-decide">
+          <div class="subsection-label">
+            <span class="sub-dot" style="background:#14b8a6"></span>
+            <span style="color:#14b8a6">Decide &amp; review</span>
+            <span class="subsection-note">Judgement calls — is this good enough to move to the next step?</span>
+          </div>
+          <div class="tool-grid">
+            <div class="mcp-card" data-search="run_ux_eval ten-question ux eval decide">
+              <div class="mcp-card-top"><code class="mcp-name">run_ux_eval</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Assembles a live audit, the design and ticket links, and the 10-question prioritisation framework — then hands the judgement to Claude.</p>
+              <p class="mcp-returns"><strong>Why:</strong> The answer to "is this ready for dev?" argued on reach, real pain and opportunity cost — not just on whether the tokens are clean.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- KEEP THE SERVER CURRENT -->
+        <div class="subsection" id="mcp-maintain">
+          <div class="subsection-label">
+            <span class="sub-dot" style="background:#f43f5e"></span>
+            <span style="color:#f43f5e">Keep the server current</span>
+            <span class="subsection-note">Check whether a newer MCP server build is available, and pull it in.</span>
+          </div>
+          <div class="tool-grid">
+            <div class="mcp-card" data-search="check_for_updates check for a newer server build maintain">
+              <div class="mcp-card-top"><code class="mcp-name">check_for_updates</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Fetches origin and reports whether the local MCP server checkout is behind, with the commit list and version numbers.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Know there is an update before running it, instead of finding out a feature is missing after the fact.</p>
+            </div>
+            <div class="mcp-card" data-search="install_update pull and install the latest build maintain">
+              <div class="mcp-card-top"><code class="mcp-name">install_update</code><span class="target-badge target-both">Figma + Chrome</span></div>
+              <p class="mcp-desc">Fast-forwards the local checkout to origin and runs npm install for whatever changed. Only works from a git checkout, and only when the working tree is clean.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Gets new tools and fixes onto disk in one call — though the running process still needs a restart to actually load them, which the response always states.</p>
             </div>
           </div>
         </div>
@@ -680,18 +773,19 @@
         <!-- ESCAPE HATCH -->
         <div class="subsection" id="mcp-escape">
           <div class="subsection-label">
-            <span class="sub-dot" style="background:rgba(255,255,255,0.3)"></span>
-            <span style="color:rgba(255,255,255,0.4)">Escape Hatch</span>
-            <span class="subsection-note">Advanced — direct message pass-through</span>
+            <span class="sub-dot" style="background:rgba(255,255,255,0.4)"></span>
+            <span style="color:rgba(255,255,255,0.4)">Escape hatch</span>
+            <span class="subsection-note">Raw access for anything the tools above do not cover yet.</span>
           </div>
           <div class="tool-grid">
-            <div class="mcp-card" data-search="call_plugin raw message plugin extension UIMessage advanced">
+            <div class="mcp-card" data-search="call_plugin send a raw plugin message escape">
               <div class="mcp-card-top"><code class="mcp-name">call_plugin</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Sends any raw <code>UIMessage</code> directly to the plugin or extension, bypassing higher-level wrappers. Use when no existing tool covers the needed message type.</p>
-              <p class="mcp-returns"><strong>Returns:</strong> raw response from the plugin as-is</p>
+              <p class="mcp-desc">Forwards any raw UIMessage straight to the plugin, bypassing the typed tools.</p>
+              <p class="mcp-returns"><strong>Why:</strong> Reaches plugin capability that has no tool yet. Powerful, unvalidated — use it when nothing else fits.</p>
             </div>
           </div>
         </div>
+
 
       </section>
 
@@ -702,111 +796,196 @@
       ============================================================ -->
       <section class="tool-section" id="skills">
         <p class="section-eyebrow">Claude Skills</p>
-        <h2 class="section-title">9 skills</h2>
+        <h2 class="section-title">11 skills</h2>
         <p class="section-desc">Skills are context files (SKILL.md) that give Claude a playbook for a specific workflow. Load a skill by saying "load the [skill-name] skill" in Claude chat — then Claude uses the right MCP tools in the right sequence. All skills require Supercharge.</p>
 
-        <div class="tool-grid" id="skills-grid">
-
-          <div class="skill-card" id="skill-a11y-triage" data-search="a11y-triage accessibility triage prioritize wcag issues severity">
-            <div class="skill-card-top">
-              <div class="skill-name">a11y-triage</div>
-              <div class="skill-targets">
-                <span class="target-badge target-both">Figma + Chrome</span>
-              </div>
-            </div>
-            <p class="skill-desc">Groups accessibility issues from <code>audit_accessibility</code> by severity times reach, then produces a top-N action list. Instead of a raw issue dump, you get a prioritized list of what to fix first for the most user impact.</p>
-            <p class="skill-triggers"><strong>Trigger:</strong> "triage a11y issues", "which a11y issues matter most", "where do I start with accessibility"</p>
+        <!-- SCORE & TRIAGE -->
+        <div class="subsection" id="skills-measure">
+          <div class="subsection-label">
+            <span class="sub-dot" style="background:#B98FFF"></span>
+            <span style="color:#B98FFF">Score &amp; triage</span>
+            <span class="subsection-note">Turn a pile of issues into a ranked list of what to do first.</span>
           </div>
-
-          <div class="skill-card" id="skill-artboard-page" data-search="artboard-to-page artboard figma push chrome live page css override">
-            <div class="skill-card-top">
-              <div class="skill-name">artboard-to-page</div>
-              <div class="skill-targets">
-                <span class="target-badge target-both">Figma + Chrome</span>
+          <div class="tool-grid">
+            <div class="skill-card" id="skill-a11y-triage" data-search="a11y-triage accessibility triage measure">
+              <div class="skill-card-top">
+                <div class="skill-name">a11y-triage</div>
+                <div class="skill-targets"><span class="target-badge target-both">Figma + Chrome</span></div>
               </div>
+              <p class="skill-desc">Ranks accessibility issues by severity × reach and returns a top-N action list. Converts an unreadable issue dump into three things to fix this afternoon.</p>
+              <p class="skill-triggers"><strong>Answers:</strong> "I have hundreds of a11y issues — where do I actually start?"</p>
             </div>
-            <p class="skill-desc">Takes a selected Figma artboard and pushes its styling onto the live Chrome page as CSS overrides. Both clients must be connected. Use this to preview a design direction on real content without rebuilding anything.</p>
-            <p class="skill-triggers"><strong>Trigger:</strong> "apply this artboard to the live page", "push Figma styles to Chrome"</p>
-          </div>
 
-          <div class="skill-card" id="skill-browser-specs" data-search="browser-element-specs browser element inspect spec figma chrome">
-            <div class="skill-card-top">
-              <div class="skill-name">browser-element-specs</div>
-              <div class="skill-targets">
-                <span class="target-badge target-chrome">Chrome only</span>
+            <div class="skill-card" id="skill-manual-fixes-checklist" data-search="manual-fixes-checklist manual-fixes checklist measure">
+              <div class="skill-card-top">
+                <div class="skill-name">manual-fixes-checklist</div>
+                <div class="skill-targets"><span class="target-badge target-both">Figma + Chrome</span></div>
               </div>
+              <p class="skill-desc">Audits, dry-runs every fixer, then reports only what survives — grouped and prioritised. An honest to-do list for the last mile to 100%, so nobody promises a score the tools cannot reach.</p>
+              <p class="skill-triggers"><strong>Answers:</strong> "What is left for a human after the auto-fixers have run?"</p>
             </div>
-            <p class="skill-desc">Inspects a Chrome element and returns a Figma-ready design spec: dimensions, colors mapped to Lyra tokens, typography, spacing, and radius. Useful when reverse-engineering a page into a design system component.</p>
-            <p class="skill-triggers"><strong>Trigger:</strong> "give me the specs for this element", "what are the design values on this component"</p>
-          </div>
 
-          <div class="skill-card" id="skill-dark-mode" data-search="dark-mode-parity dark mode check chrome page light">
-            <div class="skill-card-top">
-              <div class="skill-name">dark-mode-parity</div>
-              <div class="skill-targets">
-                <span class="target-badge target-chrome">Chrome only</span>
-              </div>
-            </div>
-            <p class="skill-desc">Toggles the live page between light and dark mode and audits for visual issues: color contrast failures, hardcoded light-mode values that don't adapt, and missing dark-mode token bindings.</p>
-            <p class="skill-triggers"><strong>Trigger:</strong> "check dark mode", "does this page work in dark mode", "dark mode parity check"</p>
           </div>
-
-          <div class="skill-card" id="skill-figma-parity" data-search="figma-chrome-parity parity diff compare figma chrome live page">
-            <div class="skill-card-top">
-              <div class="skill-name">figma-chrome-parity</div>
-              <div class="skill-targets">
-                <span class="target-badge target-both">Figma + Chrome</span>
-              </div>
-            </div>
-            <p class="skill-desc">Diffs the selected Figma artboard against the live Chrome page. Flags color drift, spacing mismatches, font differences, and missing or substituted components. Requires both clients connected.</p>
-            <p class="skill-triggers"><strong>Trigger:</strong> "diff Figma against the live page", "how close is the implementation to the design"</p>
-          </div>
-
-          <div class="skill-card" id="skill-figma-css" data-search="figma-element-css figma css export token node production">
-            <div class="skill-card-top">
-              <div class="skill-name">figma-element-css</div>
-              <div class="skill-targets">
-                <span class="target-badge target-figma">Figma only</span>
-              </div>
-            </div>
-            <p class="skill-desc">Exports production CSS for the selected Figma node with Lyra token variable names substituted in. Goes further than Figma's native inspect panel — includes auto-layout as flexbox and maps every value to its token.</p>
-            <p class="skill-triggers"><strong>Trigger:</strong> "get CSS for this node", "export Figma CSS with tokens"</p>
-          </div>
-
-          <div class="skill-card" id="skill-lyra-patterns" data-search="lyra-visual-patterns lyra patterns context design system before convert">
-            <div class="skill-card-top">
-              <div class="skill-name">lyra-visual-patterns</div>
-              <div class="skill-targets">
-                <span class="target-badge target-both">Figma + Chrome</span>
-              </div>
-            </div>
-            <p class="skill-desc">Loads Lyra's visual pattern expectations into Claude's context: how tokens should be applied, common layout patterns, component usage rules, and what a compliant frame looks like. Load this before any Lyra conversion for better results.</p>
-            <p class="skill-triggers"><strong>Trigger:</strong> load automatically before convert or migrate operations</p>
-          </div>
-
-          <div class="skill-card" id="skill-manual-fixes" data-search="manual-fixes-checklist manual fixes checklist what cant be auto fixed">
-            <div class="skill-card-top">
-              <div class="skill-name">manual-fixes-checklist</div>
-              <div class="skill-targets">
-                <span class="target-badge target-both">Figma + Chrome</span>
-              </div>
-            </div>
-            <p class="skill-desc">After all auto-fixers have run, identifies what still needs human attention: complex component mismatches, custom illustrations, nuanced a11y decisions, and anything the automation can't safely change. Returns a prioritized manual checklist.</p>
-            <p class="skill-triggers"><strong>Trigger:</strong> "what's left to fix manually", "what can't be auto-fixed", "show me the manual checklist"</p>
-          </div>
-
-          <div class="skill-card" id="skill-token-candidates" data-search="token-candidates token candidates custom values promote recurring">
-            <div class="skill-card-top">
-              <div class="skill-name">token-candidates</div>
-              <div class="skill-targets">
-                <span class="target-badge target-both">Figma + Chrome</span>
-              </div>
-            </div>
-            <p class="skill-desc">Finds custom values (colors, spacing, radius, type) that appear frequently enough across the file or page to be worth promoting to a Lyra token. Returns a shortlist with usage counts and suggested token names.</p>
-            <p class="skill-triggers"><strong>Trigger:</strong> "what custom values should be tokens", "find token candidates", "which values repeat most"</p>
-          </div>
-
         </div>
+
+        <!-- CONVERT TO LYRA -->
+        <div class="subsection" id="skills-convert">
+          <div class="subsection-label">
+            <span class="sub-dot" style="background:#00E2A0"></span>
+            <span style="color:#00E2A0">Convert to Lyra</span>
+            <span class="subsection-note">Set expectations and scope before anything gets rewritten.</span>
+          </div>
+          <div class="tool-grid">
+            <div class="skill-card" id="skill-lyra-visual-patterns" data-search="lyra-visual-patterns lyra visual patterns convert">
+              <div class="skill-card-top">
+                <div class="skill-name">lyra-visual-patterns</div>
+                <div class="skill-targets"><span class="target-badge target-both">Figma + Chrome</span></div>
+              </div>
+              <p class="skill-desc">Reference for Lyra page chrome, surfaces, tables, panels, nav, chips and AI affordances in light and dark. Load it before any conversion and you know what you are going to get — no surprise redesigns.</p>
+              <p class="skill-triggers"><strong>Answers:</strong> "What is a correctly-converted Lyra page supposed to look like?"</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- SPEC MODE -->
+        <div class="subsection" id="skills-handoff">
+          <div class="subsection-label">
+            <span class="sub-dot" style="background:#6100FF"></span>
+            <span style="color:#6100FF">Spec Mode</span>
+            <span class="subsection-note">Produce the spec or the CSS a developer can build from.</span>
+          </div>
+          <div class="tool-grid">
+            <div class="skill-card" id="skill-figma-element-css" data-search="figma-element-css figma element → css handoff">
+              <div class="skill-card-top">
+                <div class="skill-name">figma-element-css</div>
+                <div class="skill-targets"><span class="target-badge target-figma">Figma only</span></div>
+              </div>
+              <p class="skill-desc">Turns the selected Figma node into production CSS with Lyra tokens substituted where they match. Output that survives a theme change, instead of hard-coded hex and px.</p>
+              <p class="skill-triggers"><strong>Answers:</strong> "What is the CSS for this layer?"</p>
+            </div>
+
+            <div class="skill-card" id="skill-browser-element-specs" data-search="browser-element-specs browser element → spec sheet handoff">
+              <div class="skill-card-top">
+                <div class="skill-name">browser-element-specs</div>
+                <div class="skill-targets"><span class="target-badge target-chrome">Chrome only</span></div>
+              </div>
+              <p class="skill-desc">Pulls computed CSS for the inspected element and annotates every raw value with its nearest token. A spec a developer can act on, not just a description of what is there.</p>
+              <p class="skill-triggers"><strong>Answers:</strong> "What are the design specs of this element on the page?"</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- DESIGN ↔ BUILD PARITY -->
+        <div class="subsection" id="skills-parity">
+          <div class="subsection-label">
+            <span class="sub-dot" style="background:#36EAD0"></span>
+            <span style="color:#36EAD0">Design ↔ build parity</span>
+            <span class="subsection-note">Compare what was designed against what actually shipped.</span>
+          </div>
+          <div class="tool-grid">
+            <div class="skill-card" id="skill-figma-chrome-parity" data-search="figma-chrome-parity figma ↔ chrome parity parity">
+              <div class="skill-card-top">
+                <div class="skill-name">figma-chrome-parity</div>
+                <div class="skill-targets"><span class="target-badge target-both">Both required</span></div>
+              </div>
+              <p class="skill-desc">Aligns Figma layers to page elements by name and diffs colors, type, spacing, radius and shadows. Ends the "it looks off but I cannot say why" review with a per-property drift table.</p>
+              <p class="skill-triggers"><strong>Answers:</strong> "Does the live site actually match the Figma?"</p>
+            </div>
+
+            <div class="skill-card" id="skill-artboard-to-page" data-search="artboard-to-page artboard → live page parity">
+              <div class="skill-card-top">
+                <div class="skill-name">artboard-to-page</div>
+                <div class="skill-targets"><span class="target-badge target-both">Both required</span></div>
+              </div>
+              <p class="skill-desc">Maps artboard styling onto page selectors and applies it as CSS overrides after you confirm the mapping. Demo a redesign on the real product in minutes, with no branch and no build.</p>
+              <p class="skill-triggers"><strong>Answers:</strong> "Can we make this real page look like this artboard?"</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- LIVE-PAGE QA -->
+        <div class="subsection" id="skills-qa">
+          <div class="subsection-label">
+            <span class="sub-dot" style="background:#FF5B8A"></span>
+            <span style="color:#FF5B8A">Live-page QA</span>
+            <span class="subsection-note">Catch what only breaks in the real browser.</span>
+          </div>
+          <div class="tool-grid">
+            <div class="skill-card" id="skill-dark-mode-parity" data-search="dark-mode-parity dark-mode parity qa">
+              <div class="skill-card-top">
+                <div class="skill-name">dark-mode-parity</div>
+                <div class="skill-targets"><span class="target-badge target-chrome">Chrome only</span></div>
+              </div>
+              <p class="skill-desc">Audits colors in light, simulates dark, audits again, and always restores the baseline. Only the delta — what breaks in dark and what breaks in light. No re-reading the full audit.</p>
+              <p class="skill-triggers"><strong>Answers:</strong> "Does this page work in dark mode, or only in light?"</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- DESIGN-SYSTEM MAINTENANCE -->
+        <div class="subsection" id="skills-system">
+          <div class="subsection-label">
+            <span class="sub-dot" style="background:#3694FC"></span>
+            <span style="color:#3694FC">Design-system maintenance</span>
+            <span class="subsection-note">Feed what you learn back into the system itself.</span>
+          </div>
+          <div class="tool-grid">
+            <div class="skill-card" id="skill-token-candidates" data-search="token-candidates token candidates system">
+              <div class="skill-card-top">
+                <div class="skill-name">token-candidates</div>
+                <div class="skill-targets"><span class="target-badge target-both">Figma + Chrome</span></div>
+              </div>
+              <p class="skill-desc">Groups recurring raw values across all four domains and ranks the ones worth promoting. Fixes the cause once upstream instead of the same symptom on thirty screens.</p>
+              <p class="skill-triggers"><strong>Answers:</strong> "Which of these custom values should just become Lyra tokens?"</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- DECIDE & REVIEW -->
+        <div class="subsection" id="skills-decide">
+          <div class="subsection-label">
+            <span class="sub-dot" style="background:#14b8a6"></span>
+            <span style="color:#14b8a6">Decide &amp; review</span>
+            <span class="subsection-note">Pass, fail, or not-yet — with the reasoning written down.</span>
+          </div>
+          <div class="tool-grid">
+            <div class="skill-card" id="skill-ux-eval" data-search="ux-eval ten-question ux eval decide">
+              <div class="skill-card-top">
+                <div class="skill-name">ux-eval</div>
+                <div class="skill-targets"><span class="target-badge target-both">Figma + Chrome</span></div>
+              </div>
+              <p class="skill-desc">Answers all ten prioritisation questions against real evidence, then states pass / pass-with-conditions / not-yet. A defensible verdict with the reasoning attached — the thing you can actually take to a VP.</p>
+              <p class="skill-triggers"><strong>Answers:</strong> "Is this good enough to move to the next step, or to dev?" <span style="color:rgba(255,255,255,0.35);font-style:normal;">— by Bill Bangs</span></p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- NICE PRODUCT KNOWLEDGE -->
+        <div class="subsection" id="skills-knowledge">
+          <div class="subsection-label">
+            <span class="sub-dot" style="background:#f59e0b"></span>
+            <span style="color:#f59e0b">NICE product knowledge</span>
+            <span class="subsection-note">Real context on NICE and its products, so design work is grounded instead of generic.</span>
+          </div>
+          <div class="tool-grid">
+            <div class="skill-card" id="skill-nice-product-knowledge" data-search="nice-product-knowledge nice product knowledge knowledge">
+              <div class="skill-card-top">
+                <div class="skill-name">nice-product-knowledge</div>
+                <div class="skill-targets"><span class="target-badge target-both">Figma + Chrome</span></div>
+              </div>
+              <p class="skill-desc">Sourced reference on NICE the company and its product lines (CXone Mpower, Enlighten AI, Actimize, Evidencentral) — compiled from public material with citations. Design decisions grounded in what the real product and its real users are, instead of generic SaaS assumptions.</p>
+              <p class="skill-triggers"><strong>Answers:</strong> "What does this NICE product actually do, and who uses it?"</p>
+            </div>
+
+          </div>
+        </div>
+
       </section>
 
     </main>
