@@ -169,6 +169,18 @@
       box-shadow: 0 8px 28px rgba(54, 148, 252, 0.5);
     }
 
+    .btn-primary.is-disabled {
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.4);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .btn-primary.is-disabled:hover {
+      background: rgba(255,255,255,0.08);
+      transform: none;
+      box-shadow: none;
+    }
+
     .btn-ghost {
       display: inline-flex;
       align-items: center;
@@ -440,7 +452,7 @@
     <a href="./index.html" class="nav-logo">
       <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span>
     </a>
-    <a href="./install-guide.html" class="nav-download">Download</a>
+    <span class="nav-download is-disabled" aria-disabled="true">Download<span class="coming-soon-tag">Coming soon!</span></span>
   </nav>
 
   <!-- HERO -->
@@ -459,9 +471,10 @@
         A Figma plugin and Chrome extension that audits design system compliance, applies token fixes, and connects to Claude via MCP for AI-assisted design work. Built for SOL and Lyra.
       </p>
       <div class="hero-ctas">
-        <a href="./install-guide.html" id="hero-download" class="btn-primary" data-latest-label>Download v10</a>
+        <span id="hero-download" class="btn-primary is-disabled" aria-disabled="true" data-latest-label>Download v11.1</span>
+        <span class="coming-soon-tag">Coming soon!</span>
       </div>
-      <span class="hero-badge" data-latest-when>v10 &middot; June 2026</span>
+      <span class="hero-badge" data-latest-when>v11.1 &middot; August 2026</span>
     </div>
   </div>
 
@@ -512,7 +525,7 @@
           <div class="doc-icon-box" style="background: rgba(185,143,255,0.15);">&#129302;</div>
           <div class="doc-category">AI skills</div>
           <div class="doc-title">Claude Skills</div>
-          <div class="doc-desc">Reference for all 9 Claude skills. Which to load, when to trigger them, and what MCP tools each drives.</div>
+          <div class="doc-desc">Reference for all 11 Claude skills. Which to load, when to trigger them, and what MCP tools each drives.</div>
           <div class="doc-arrow" style="color: #B98FFF;">Read guide <span>&#8594;</span></div>
         </div>
       </a>
@@ -556,7 +569,7 @@
           <div class="doc-icon-box" style="background: rgba(97,0,255,0.15);">&#128506;</div>
           <div class="doc-category">Planning</div>
           <div class="doc-title">Product Roadmap</div>
-          <div class="doc-desc">8-tool suite roadmap with phases, stakeholders, and ship gates.</div>
+          <div class="doc-desc">Suite roadmap with phases, stakeholders, and ship gates.</div>
           <div class="doc-arrow" style="color: #B98FFF;">View roadmap <span>&#8594;</span></div>
         </div>
       </a>
@@ -578,7 +591,7 @@
           <div class="doc-icon-box" style="background: rgba(255,91,138,0.15);">&#128220;</div>
           <div class="doc-category">Changelog</div>
           <div class="doc-title">Release Notes</div>
-          <div class="doc-desc">What shipped in v10, v9, and v8 - new features, improvements, and fixes.</div>
+          <div class="doc-desc">What shipped in v11.1, v10, v9, and v8 - new features, improvements, and fixes.</div>
           <div class="doc-arrow" style="color: #FF5B8A;">View notes <span>&#8594;</span></div>
         </div>
       </a>

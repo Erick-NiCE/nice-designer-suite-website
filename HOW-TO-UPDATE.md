@@ -23,8 +23,8 @@ below.
 | ---------------------- | ------------- | ------------------------------------------------------ |
 | `index.html`           | Overview      | Landing page / site home                                |
 | `install-guide.html`   | Install Guide | Setup steps for the plugin, extension, and MCP server    |
-| `claude-skills.html`   | Claude Skills | The 9 Claude skills that ship with the suite             |
-| `the-suite.html`       | The Suite     | The 8 product tools + the Supercharge panel              |
+| `claude-skills.html`   | Claude Skills | The 11 Claude skills that ship with the suite            |
+| `the-suite.html`       | The Suite     | The 4 product tools + the Supercharge panel              |
 | `use-cases.html`       | Use Cases     | Scenarios organized by job-to-be-done                    |
 | `scoring.html`         | Scoring       | How the compliance scores are calculated                 |
 | `dashboard.html`       | Dashboard     | CXone accessibility audit dashboard                      |
@@ -42,7 +42,8 @@ below.
 - **`site-gate.css` / `site-gate.js`** — the password screen that covers the
   whole site.
 - **`downloads/`** — the actual `.zip` file people download from the
-  "Download v10" button on the Overview page.
+  "Download vX.Y" button on the Overview page (label and link stay in sync
+  with `version.json` automatically via `downloads.js` — see below).
 
 ### Access codes
 

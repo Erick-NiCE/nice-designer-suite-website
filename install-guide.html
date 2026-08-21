@@ -174,6 +174,16 @@
       border-color: #fff;
     }
 
+    .step-link.is-disabled {
+      color: var(--muted);
+      border-bottom-color: transparent;
+      cursor: not-allowed;
+    }
+    .step-link.is-disabled:hover {
+      color: var(--muted);
+      border-bottom-color: transparent;
+    }
+
     .numbered-list {
       list-style: none;
       counter-reset: ol-counter;
@@ -480,7 +490,7 @@
     <a href="./index.html" class="nav-logo">
       <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span>
     </a>
-    <a href="./install-guide.html" class="nav-download">Download</a>
+    <span class="nav-download is-disabled" aria-disabled="true">Download<span class="coming-soon-tag">Coming soon!</span></span>
   </nav>
 
   <!-- HERO -->
@@ -548,7 +558,7 @@
             <div class="step-section">
               <div class="step-section-label">How to install</div>
               <ol class="numbered-list">
-                <li>Download the latest release: <a href="./downloads/NiCE-Designer-V11.1.zip" download class="step-link" data-latest-download>NiCE-Designer-V11.1.zip</a></li>
+                <li>Download the latest release: <span class="step-link is-disabled" aria-disabled="true">NiCE-Designer-V11.1.zip</span> <span class="coming-soon-tag">Coming soon!</span></li>
                 <li>Unzip the downloaded package to a location you'll keep it</li>
                 <li>Go to <code>chrome://extensions</code> and enable <strong>Developer Mode</strong> (toggle in the top-right corner)</li>
                 <li>Click <strong>"Load unpacked"</strong> and select the <code>chrome/</code> folder from the unzipped package</li>
@@ -565,53 +575,51 @@
               <span class="note-box-icon">ℹ️</span>
               <p>The extension persists per window. No reset is needed when switching tabs or navigating to a different page.</p>
             </div>
+
+            <div class="tip-box">
+              <span class="note-box-icon">💡</span>
+              <p><strong>First launch:</strong> a Welcome screen offers <strong>Simple</strong> (Lite mode - just Frontend Audit and Design System) or the <strong>Full toolkit</strong>, followed by a short guided tour. Switch modes or replay the tour anytime from Settings.</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- STEP 3: MCP Server -->
-      <div class="step reveal" id="step-mcp">
+      <!-- STEP 3: Install Node.js -->
+      <div class="step reveal" id="step-node">
         <div class="step-sidebar">
           <div class="step-number-badge">3</div>
           <div class="step-line"></div>
         </div>
         <div class="step-body">
           <div class="step-header">
-            <span class="step-icon">🤖</span>
-            <h2 class="step-title">Start the MCP Server</h2>
+            <span class="step-icon">🟢</span>
+            <h2 class="step-title">Install Node.js</h2>
           </div>
           <div class="step-card">
             <div class="step-section">
               <div class="step-section-label">What it does</div>
-              <p>The MCP server is a local WebSocket hub running on port <code>7331</code> that connects Claude to both the Figma plugin and Chrome extension. Without it, Claude skills and MCP tools won't work. The Figma plugin and Chrome extension still function fully as standalone tools without the server.</p>
+              <p>Claude Desktop needs Node.js on your machine to run the local MCP server that connects Claude to the Figma plugin and Chrome extension. The Figma plugin and Chrome extension still work fully as standalone tools without it - this step only unlocks Supercharge.</p>
             </div>
 
             <div class="step-section">
-              <div class="step-section-label">Prerequisites</div>
-              <p>Node.js 18 or higher installed on your machine.</p>
+              <div class="step-section-label">Option A - Download the installer (recommended, no terminal)</div>
+              <p>Go to <a href="https://nodejs.org" class="step-link" target="_blank" rel="noopener">nodejs.org</a>, download the installer for your OS (the big green button - it's the LTS version), and double-click it like any other app installer. That's it - no terminal, no typing commands.</p>
             </div>
 
             <div class="step-section">
-              <div class="step-section-label">How to start</div>
-              <ol class="numbered-list">
-                <li>The MCP server is included in the same downloaded package as the Chrome extension</li>
-                <li>Navigate to the <code>packages/mcp-server/</code> folder</li>
-                <li>On first run, install dependencies: <code>npm install</code></li>
-                <li>Start the server: <code>node src/index.js</code></li>
-                <li>The server starts on <code>ws://127.0.0.1:7331</code></li>
-                <li>Open Claude Desktop or any MCP-compatible client and connect to <code>ws://127.0.0.1:7331</code></li>
-              </ol>
+              <div class="step-section-label">Option B - Install via npm/a package manager (for developers)</div>
+              <p>If you're comfortable with a terminal and already use a package manager, that works too:</p>
+              <div class="code-block"><span class="code-comment"># macOS (Homebrew)</span>
+brew install node
+
+<span class="code-comment"># Windows (winget)</span>
+winget install OpenJS.NodeJS.LTS</div>
+              <p style="margin-top:12px;">Either option gives you the same thing: a working <code>node</code> command that Claude Desktop can call. You only need to do this once per machine.</p>
             </div>
 
-            <div class="step-section">
-              <div class="step-section-label">Custom port</div>
-              <p>Set the <code>NICE_MCP_WS_PORT</code> environment variable before starting to use a different port:</p>
-              <div class="code-block">NICE_MCP_WS_PORT=8080 node src/index.js</div>
-            </div>
-
-            <div class="tip-box">
-              <span class="note-box-icon">💡</span>
-              <p>Run <code>npm install</code> first on a fresh install to pull in <code>ws</code> and other dependencies.</p>
+            <div class="note-box">
+              <span class="note-box-icon">ℹ️</span>
+              <p>You do <strong>not</strong> need to run <code>npm install</code> or start the server yourself - the downloaded package already includes its dependencies, and Claude Desktop starts the server automatically in the next step.</p>
             </div>
           </div>
         </div>
@@ -630,8 +638,13 @@
           </div>
           <div class="step-card">
             <div class="step-section">
-              <div class="step-section-label">Add to Claude Desktop config</div>
-              <p>Add the MCP server entry to your Claude Desktop configuration file at <code>claude_desktop_config.json</code>:</p>
+              <div class="step-section-label">One-click install (recommended)</div>
+              <p>The downloaded package includes <strong>"Click to install Claude Connector.mcpb"</strong> at the top of the <code>chrome/</code> folder. Double-click it - Claude Desktop opens and prompts you to install the connector. Confirm, and <strong>"nice-designer"</strong> appears as a connected MCP server automatically, already running. No file paths, no JSON, no terminal.</p>
+            </div>
+
+            <div class="step-section">
+              <div class="step-section-label">Manual config (advanced / no .mcpb support / running from source)</div>
+              <p>If you're on a Claude Desktop version that doesn't support <code>.mcpb</code> connector files yet, add the server entry to <code>claude_desktop_config.json</code> by hand instead - Claude Desktop will still start the server itself, same as the one-click path:</p>
               <div class="code-block"><span class="code-comment">// claude_desktop_config.json</span>
 {
   <span class="code-key">"mcpServers"</span>: {
@@ -641,12 +654,19 @@
     }
   }
 }</div>
-              <p style="margin-top:12px;">Use an <strong>absolute path</strong> to the <code>index.js</code> file. Relative paths will not work.</p>
+              <p style="margin-top:12px;">Use an <strong>absolute path</strong> to the <code>index.js</code> file. Relative paths will not work. Restart Claude Desktop after saving.</p>
             </div>
 
             <div class="step-section">
-              <div class="step-section-label">After saving</div>
-              <p>Restart Claude Desktop. You should see <strong>"nice-designer"</strong> appear as a connected MCP server in the interface.</p>
+              <div class="step-section-label">Running it yourself in a terminal (developers / non-Claude-Desktop MCP clients)</div>
+              <p>Neither option above is needed if you just want to run the server standalone - for example to connect a different MCP client, or if you're working from a git clone instead of the downloaded package:</p>
+              <div class="code-block"><span class="code-comment"># only needed from a fresh git clone - the downloaded package</span>
+<span class="code-comment"># already includes node_modules</span>
+cd packages/mcp-server
+npm install
+node src/index.js</div>
+              <p style="margin-top:12px;">The server starts on <code>ws://127.0.0.1:7331</code>. Set <code>NICE_MCP_WS_PORT</code> before starting to use a different port:</p>
+              <div class="code-block">NICE_MCP_WS_PORT=8080 node src/index.js</div>
             </div>
 
             <div class="step-section">
@@ -682,11 +702,15 @@
                 </div>
                 <div class="checklist-item">
                   <div class="check-circle"></div>
-                  <span>Start the MCP server, open Claude Desktop, and check the MCP server indicator shows "nice-designer" as connected</span>
+                  <span>Open Claude Desktop and check the MCP server indicator shows "nice-designer" as connected - Claude Desktop starts the server itself, so there's nothing to run manually</span>
                 </div>
                 <div class="checklist-item">
                   <div class="check-circle"></div>
                   <span>Ask Claude: <em>"Call list_targets"</em> - it should respond listing which clients are currently connected (Figma, Chrome, or both)</span>
+                </div>
+                <div class="checklist-item">
+                  <div class="check-circle"></div>
+                  <span>In Chrome, click the refresh icon next to the version number in Settings to confirm the update checker reaches the latest release - see <a href="./release-notes.html">Release Notes</a> for what's new.</span>
                 </div>
               </div>
             </div>
