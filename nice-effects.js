@@ -463,6 +463,28 @@
 
   var DOC_PAGES = [
     {
+      href: 'lynn.html', label: 'Lynn',
+      groups: [
+        { label: 'Tokens', items: [
+          { id: 'lynn-colors', label: 'Color' },
+          { id: 'lynn-type', label: 'Typography' },
+          { id: 'lynn-space', label: 'Spacing & Radius' },
+          { id: 'lynn-motion', label: 'Motion Tokens' }
+        ] },
+        { label: 'Compare', items: [
+          { id: 'lynn-compare', label: 'SOL vs. Lyra vs. Lynn' }
+        ] },
+        { label: 'Magic Effects', items: [
+          { id: 'fx-shimmer', label: 'Shimmer & Gradient Drift' },
+          { id: 'fx-orbs', label: 'Floating Orbs' },
+          { id: 'fx-tilt', label: '3D Tilt & Spotlight' },
+          { id: 'fx-magnetic', label: 'Magnetic Buttons' },
+          { id: 'fx-plasma', label: 'Plasma & Motes' },
+          { id: 'fx-liquid', label: 'Liquid Fill' }
+        ] }
+      ]
+    },
+    {
       href: 'install-guide.html', label: 'Install Guide',
       groups: [
         { label: 'Steps', items: [
@@ -548,6 +570,22 @@
           { id: 'faq-lite-mode', label: 'What is Lite mode?' },
           { id: 'faq-any-figma-file', label: 'Does it work on any Figma file?' },
           { id: 'faq-access', label: 'How to get access' }
+        ] }
+      ]
+    },
+    {
+      href: 'marketplace.html', label: 'Marketplace',
+      groups: [
+        { label: 'Overview', items: [
+          { id: 'about', label: 'What it is' }
+        ] },
+        { label: 'Available Skills', items: [
+          { id: 'current', label: 'In the Marketplace today' },
+          { id: 'mk-ux-eval', label: 'ux-eval' },
+          { id: 'mk-north-star-fox', label: 'north-star-fox' }
+        ] },
+        { label: 'Contributing', items: [
+          { id: 'submit', label: 'How to submit a skill' }
         ] }
       ]
     },

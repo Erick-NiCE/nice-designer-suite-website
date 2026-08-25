@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lynn — NiCE Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="theme.css?v=8" />
+  <link rel="stylesheet" href="nice-effects.css" />
+  <link rel="stylesheet" href="embed.css" />
+  <script src="embed.js"></script>
+  <link rel="stylesheet" href="site-gate.css" />
+  <script src="site-gate.js" defer></script>
+  <style>
+    :root { --bg-card: #2f2f3d; }
+
+    /* ---- HERO ---- */
+    .hero {
+      position: relative;
+      min-height: 62vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 100px 24px 64px;
+      text-align: center;
+    }
+    .hero-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #21212B 0%, #170d40 18%, #0d1f6b 38%, #3694FC 55%, #6100FF 72%, #00E2A0 87%, #21212B 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 13s ease infinite;
+      opacity: 0.85;
+    }
+    .hero-gradient::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 25%, var(--bg) 78%);
+    }
+    @keyframes gradientShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .hero-orb { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; }
+    .hero-orb-1 { width: 460px; height: 460px; top: -100px; left: -100px; background: radial-gradient(circle, rgba(54,148,252,0.5), transparent 70%); }
+    .hero-orb-2 { width: 380px; height: 380px; bottom: -80px; right: -60px; background: radial-gradient(circle, rgba(97,0,255,0.4), transparent 70%); }
+    .hero-content { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; }
+    .hero-eyebrow {
+      font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--emerald); margin-bottom: 20px;
+    }
+    .hero-title { font-size: clamp(56px, 9vw, 110px); font-weight: 900; letter-spacing: -3px; line-height: 0.95; margin-bottom: 20px; }
+    .hero-title .gradient-word {
+      background: linear-gradient(90deg, #fff 0%, var(--blue) 30%, var(--lyra) 60%, var(--emerald) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      animation: shimmer 4s linear infinite;
+    }
+    @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+    .hero-sub { font-size: 17px; color: rgba(255,255,255,0.68); line-height: 1.7; margin: 0 auto; }
+    .hero-sub code { white-space: nowrap; }
+
+    /* ---- SECTION SHELL ---- */
+    .lynn-section { max-width: 1160px; margin: 0 auto; padding: 72px 48px; }
+    .lynn-section + .lynn-section { border-top: 1px solid var(--border); }
+    .lynn-label { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--blue); margin-bottom: 12px; }
+    .lynn-title { font-size: clamp(28px, 4vw, 42px); font-weight: 800; letter-spacing: -0.8px; margin-bottom: 14px; }
+    .lynn-title span {
+      background: linear-gradient(90deg, var(--blue), var(--lyra));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .lynn-desc { font-size: 15px; color: var(--text-secondary); line-height: 1.7; max-width: 680px; margin-bottom: 40px; }
+
+    /* ---- COLOR TOKENS ---- */
+    .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
+    .swatch { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--bg-card); }
+    .swatch-fill { height: 64px; }
+    .swatch-meta { padding: 10px 12px; }
+    .swatch-name { font-size: 12px; font-weight: 700; margin-bottom: 2px; }
+    .swatch-hex { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11px; color: var(--text-secondary); }
+
+    /* ---- TYPE SCALE ---- */
+    .type-row { display: flex; align-items: baseline; gap: 24px; padding: 16px 0; border-bottom: 1px solid var(--border); }
+    .type-row:last-child { border-bottom: none; }
+    .type-tag { flex: 0 0 190px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-secondary); }
+    .type-sample { flex: 1; color: #fff; }
+
+    /* ---- SPACING / RADIUS ---- */
+    .scale-block { display: flex; align-items: flex-end; gap: 18px; flex-wrap: wrap; margin-bottom: 44px; }
+    .scale-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .scale-bar { background: linear-gradient(180deg, var(--blue), var(--indigo)); border-radius: 3px; width: 24px; }
+    .scale-swatch { background: var(--card); border: 1px solid var(--border-md); }
+    .scale-num { font-size: 11px; color: var(--text-secondary); font-family: 'SF Mono', monospace; }
+
+    /* ---- COMPARE TOGGLE ---- */
+    .compare-toggle { display: inline-flex; gap: 4px; padding: 4px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 100px; margin-bottom: 28px; }
+    .compare-btn {
+      font-family: var(--font); font-size: 13px; font-weight: 700; padding: 9px 20px; border-radius: 100px;
+      border: none; background: none; color: var(--text-secondary); cursor: pointer; transition: background 0.2s, color 0.2s;
+    }
+    .compare-btn.active { background: #fff; color: #14141c; }
+    .compare-stage {
+      border-radius: 20px; padding: 44px; transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+      border: 1px solid transparent;
+    }
+    .compare-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; transition: color 0.4s ease; }
+    .compare-heading { font-size: 26px; font-weight: 700; margin-bottom: 10px; transition: color 0.4s ease, font-family 0.2s, font-weight 0.2s; }
+    .compare-body { font-size: 14px; line-height: 1.7; max-width: 480px; margin-bottom: 22px; transition: color 0.4s ease, font-family 0.2s; }
+    .compare-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .compare-cta {
+      font-family: inherit; font-size: 14px; font-weight: 700; padding: 11px 24px; border: none; cursor: pointer;
+      color: #fff; transition: background 0.4s ease, border-radius 0.4s ease;
+    }
+    .compare-card {
+      margin-top: 24px; padding: 20px; font-size: 13px; line-height: 1.6; max-width: 320px;
+      transition: background 0.4s ease, border-color 0.4s ease, border-radius 0.4s ease, color 0.4s ease;
+    }
+    .compare-meta { margin-top: 20px; font-size: 12px; color: var(--text-secondary); font-family: 'SF Mono', monospace; }
+
+    /* Token values per system, applied via [data-system] on .compare-stage */
+    .compare-stage[data-system="sol"] {
+      background: #F5F8FA; border-color: #D2D8DB;
+      --cp-heading: #191919; --cp-body: #767676; --cp-primary: #007AB8; --cp-primary-hover: #005F8F;
+      --cp-card-bg: #FFFFFF; --cp-card-border: #D2D8DB; --cp-radius: 8px; --cp-font: 'Open Sans', sans-serif;
+    }
+    .compare-stage[data-system="lyra"] {
+      background: #F5F7F9; border-color: #D6D6D6;
+      --cp-heading: #333333; --cp-body: #666666; --cp-primary: #166CCA; --cp-primary-hover: #185BA4;
+      --cp-card-bg: #FFFFFF; --cp-card-border: #D6D6D6; --cp-radius: 12px; --cp-font: 'Inter', sans-serif;
+    }
+    .compare-stage[data-system="lynn"] {
+      background: #21212B; border-color: rgba(255,255,255,0.1);
+      --cp-heading: #ffffff; --cp-body: rgba(255,255,255,0.58); --cp-primary: #3694FC; --cp-primary-hover: #4fa3ff;
+      --cp-card-bg: #2f2f3d; --cp-card-border: rgba(255,255,255,0.1); --cp-radius: 16px; --cp-font: 'Be Vietnam Pro', sans-serif;
+    }
+    .compare-eyebrow { color: var(--cp-primary); }
+    .compare-heading { color: var(--cp-heading); font-family: var(--cp-font); }
+    .compare-body { color: var(--cp-body); font-family: var(--cp-font); }
+    .compare-cta { background: var(--cp-primary); border-radius: var(--cp-radius); font-family: var(--cp-font); }
+    .compare-cta:hover { background: var(--cp-primary-hover); }
+    .compare-badge {
+      font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: var(--cp-radius);
+      background: color-mix(in srgb, var(--cp-primary) 15%, transparent); color: var(--cp-primary); font-family: var(--cp-font);
+    }
+    .compare-card { background: var(--cp-card-bg); border: 1px solid var(--cp-card-border); border-radius: var(--cp-radius); color: var(--cp-body); font-family: var(--cp-font); }
+
+    /* ---- MOTION TOKEN GRID ---- */
+    .motion-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+    .motion-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
+    .motion-card-name { font-family: 'SF Mono', monospace; font-size: 12px; color: var(--lyra); margin-bottom: 8px; }
+    .motion-card-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+    /* ---- FX DEMOS ---- */
+    .fx-block { margin-bottom: 64px; }
+    .fx-block:last-child { margin-bottom: 0; }
+    .fx-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; }
+    .fx-name { font-size: 18px; font-weight: 700; }
+    .fx-token { font-family: 'SF Mono', monospace; font-size: 12px; color: var(--text-secondary); }
+    .fx-stage {
+      position: relative; border: 1px solid var(--border); border-radius: 18px; overflow: hidden;
+      min-height: 220px; display: flex; align-items: center; justify-content: center; background: var(--bg-card);
+    }
+
+    /* Shimmer demo */
+    .fx-shimmer-text {
+      font-size: clamp(30px, 5vw, 48px); font-weight: 800; letter-spacing: -1px;
+      background: linear-gradient(90deg, #fff 0%, var(--blue) 30%, var(--lyra) 60%, var(--emerald) 100%);
+      background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      animation: shimmer 4s linear infinite;
+    }
+
+    /* Orbs demo */
+    .fx-orb-stage { background: #1b1b24; }
+    .fx-orb { position: absolute; border-radius: 50%; filter: blur(60px); }
+    .fx-orb-a { width: 220px; height: 220px; top: -40px; left: 10%; background: radial-gradient(circle, rgba(54,148,252,0.55), transparent 70%); animation: fxOrb 15s ease-in-out infinite; }
+    .fx-orb-b { width: 190px; height: 190px; bottom: -50px; right: 12%; background: radial-gradient(circle, rgba(97,0,255,0.45), transparent 70%); animation: fxOrb 18s ease-in-out infinite reverse; }
+    .fx-orb-c { width: 150px; height: 150px; top: 45%; left: 55%; background: radial-gradient(circle, rgba(0,226,160,0.35), transparent 70%); animation: fxOrb 20s ease-in-out infinite 4s; }
+    @keyframes fxOrb {
+      0%   { transform: translate(0,0) scale(1); }
+      33%  { transform: translate(40px,-30px) scale(1.1); }
+      66%  { transform: translate(-30px,20px) scale(0.95); }
+      100% { transform: translate(0,0) scale(1); }
+    }
+    .fx-orb-label { position: relative; z-index: 1; font-size: 13px; color: rgba(255,255,255,0.55); }
+
+    /* Tilt demo cards */
+    .fx-tilt-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; width: 100%; padding: 28px; }
+    .tilt-demo-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 22px;
+      transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), box-shadow 0.4s ease;
+    }
+    .tilt-demo-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .tilt-demo-card p { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+
+    /* Magnetic demo */
+    .fx-magnetic-stage { gap: 20px; }
+    .magnetic-btn {
+      font-family: var(--font); font-size: 14px; font-weight: 700; color: #fff; background: var(--blue);
+      padding: 14px 30px; border-radius: 100px; border: none; cursor: pointer;
+      box-shadow: 0 4px 20px rgba(54,148,252,0.35);
+    }
+
+    /* Plasma + liquid stages */
+    .fx-plasma-stage, .fx-liquid-stage { background: #1b1b24; }
+    .fx-caption { position: relative; z-index: 1; font-size: 13px; color: rgba(255,255,255,0.55); text-align: center; padding: 0 24px; }
+    .fx-liquid-stage { cursor: default; }
+
+    @media (max-width: 768px) {
+      .lynn-section { padding: 52px 24px; }
+      .type-row { flex-direction: column; gap: 6px; }
+      .type-tag { flex-basis: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SITE-WIDE ACCESS GATE (see site-gate.css / site-gate.js) -->
+  <div id="nice-site-gate">
+    <div class="sg-card">
+      <div class="sg-lock">🔒</div>
+      <div class="sg-title">NiCE Designer Site Login</div>
+      <div class="sg-subtitle">This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.</div>
+      <div class="sg-input-wrap">
+        <input id="nice-site-gate-input" type="password" placeholder="Enter code" autocomplete="off" />
+      </div>
+      <div class="sg-error" id="nice-site-gate-error"></div>
+      <button id="nice-site-gate-btn" type="button">Unlock</button>
+      <div class="sg-divider"></div>
+      <div class="sg-cta">
+        Don't have the code?<br>
+        <strong>Reach out to Erick Mathews on Teams</strong> to request access.
+        <br>
+        <a class="sg-teams-btn" href="https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H8a2 2 0 00-2 2v2H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2h2a2 2 0 002-2V4a2 2 0 00-2-2zM4 20V8h12v12H4zm16-4h-2V8a2 2 0 00-2-2H8V4h12v12z" fill="currentColor"/></svg>
+          Message on Teams
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="site-nav" id="site-nav">
+    <a href="./index.html" class="nav-logo">
+      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span>
+    </a>
+    <span class="nav-download is-disabled" aria-disabled="true">Download<span class="coming-soon-tag">Coming soon!</span></span>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-gradient"></div>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-content reveal">
+      <p class="hero-eyebrow">Design System Reference &amp; Live Demo</p>
+      <h1 class="hero-title">Meet <span class="gradient-word">Lynn</span></h1>
+      <p class="hero-sub">
+        Lynn is NiCE Designer Suite's own visual identity — the dark, gradient-driven,
+        motion-rich language you're looking at right now. It isn't a system the Suite audits
+        or converts other work against; SOL and Lyra still are. Lynn is the tool's own skin,
+        documented here in the same token shape.
+      </p>
+    </div>
+  </div>
+
+  <!-- COLOR TOKENS -->
+  <section class="lynn-section reveal" id="lynn-colors">
+    <p class="lynn-label">Tokens</p>
+    <h2 class="lynn-title">Color <span>palette</span></h2>
+    <p class="lynn-desc">Six accents on a dark charcoal base. Text always uses <code>rgba(255,255,255,N)</code> — never a gray hex.</p>
+    <div class="swatch-grid">
+      <div class="swatch"><div class="swatch-fill" style="background:#21212B"></div><div class="swatch-meta"><div class="swatch-name">bg</div><div class="swatch-hex">#21212B</div></div></div>
+      <div class="swatch"><div class="swatch-fill" style="background:#2a2a36"></div><div class="swatch-meta"><div class="swatch-name">surface</div><div class="swatch-hex">#2A2A36</div></div></div>
+      <div class="swatch"><div class="swatch-fill" style="background:#2f2f3d"></div><div class="swatch-meta"><div class="swatch-name">card</div><div class="swatch-hex">#2F2F3D</div></div></div>
+      <div class="swatch"><div class="swatch-fill" style="background:#3694FC"></div><div class="swatch-meta"><div class="swatch-name">blue</div><div class="swatch-hex">#3694FC</div></div></div>
+      <div class="swatch"><div class="swatch-fill" style="background:#6100FF"></div><div class="swatch-meta"><div class="swatch-name">indigo</div><div class="swatch-hex">#6100FF</div></div></div>
+      <div class="swatch"><div class="swatch-fill" style="background:#00E2A0"></div><div class="swatch-meta"><div class="swatch-name">emerald</div><div class="swatch-hex">#00E2A0</div></div></div>
+      <div class="swatch"><div class="swatch-fill" style="background:#36EAD0"></div><div class="swatch-meta"><div class="swatch-name">teal</div><div class="swatch-hex">#36EAD0</div></div></div>
+      <div class="swatch"><div class="swatch-fill" style="background:#FF5B8A"></div><div class="swatch-meta"><div class="swatch-name">coral</div><div class="swatch-hex">#FF5B8A</div></div></div>
+      <div class="swatch"><div class="swatch-fill" style="background:#B98FFF"></div><div class="swatch-meta"><div class="swatch-name">lynn</div><div class="swatch-hex">#B98FFF</div></div></div>
+    </div>
+  </section>
+
+  <!-- TYPOGRAPHY -->
+  <section class="lynn-section reveal" id="lynn-type">
+    <p class="lynn-label">Tokens</p>
+    <h2 class="lynn-title">Typography <span>scale</span></h2>
+    <p class="lynn-desc">Be Vietnam Pro, weights 300–900. Headings never go below weight 700.</p>
+    <div class="type-row">
+      <span class="type-tag">hero-title / 900</span>
+      <span class="type-sample" style="font-size:40px;font-weight:900;letter-spacing:-1.5px;">Aa Gg 123</span>
+    </div>
+    <div class="type-row">
+      <span class="type-tag">section-title / 800</span>
+      <span class="type-sample" style="font-size:30px;font-weight:800;letter-spacing:-0.8px;">Aa Gg 123</span>
+    </div>
+    <div class="type-row">
+      <span class="type-tag">card-title / 700</span>
+      <span class="type-sample" style="font-size:17px;font-weight:700;letter-spacing:-0.2px;">Aa Gg 123</span>
+    </div>
+    <div class="type-row">
+      <span class="type-tag">body / 400–500</span>
+      <span class="type-sample" style="font-size:15px;font-weight:400;color:var(--text-secondary);">The quick brown fox jumps over the lazy dog</span>
+    </div>
+    <div class="type-row">
+      <span class="type-tag">section-label / 700, caps</span>
+      <span class="type-sample" style="font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--blue);">Section label</span>
+    </div>
+    <div class="type-row">
+      <span class="type-tag">code / mono</span>
+      <span class="type-sample" style="font-family:'SF Mono','Fira Code',monospace;font-size:13px;color:var(--text-secondary);">lynn/color/accent/blue</span>
+    </div>
+  </section>
+
+  <!-- SPACING & RADIUS -->
+  <section class="lynn-section reveal" id="lynn-space">
+    <p class="lynn-label">Tokens</p>
+    <h2 class="lynn-title">Spacing &amp; <span>radius</span></h2>
+    <p class="lynn-desc">Card padding sits at lg–xl, grid gaps at md–lg, section padding at 4xl–5xl vertical.</p>
+    <div class="scale-block" aria-label="Spacing scale">
+      <div class="scale-item"><div class="scale-bar" style="height:4px"></div><span class="scale-num">4</span></div>
+      <div class="scale-item"><div class="scale-bar" style="height:8px"></div><span class="scale-num">8</span></div>
+      <div class="scale-item"><div class="scale-bar" style="height:12px"></div><span class="scale-num">12</span></div>
+      <div class="scale-item"><div class="scale-bar" style="height:16px"></div><span class="scale-num">16</span></div>
+      <div class="scale-item"><div class="scale-bar" style="height:24px"></div><span class="scale-num">24</span></div>
+      <div class="scale-item"><div class="scale-bar" style="height:32px"></div><span class="scale-num">32</span></div>
+      <div class="scale-item"><div class="scale-bar" style="height:48px"></div><span class="scale-num">48</span></div>
+      <div class="scale-item"><div class="scale-bar" style="height:64px"></div><span class="scale-num">64</span></div>
+      <div class="scale-item"><div class="scale-bar" style="height:80px"></div><span class="scale-num">80</span></div>
+      <div class="scale-item"><div class="scale-bar" style="height:96px"></div><span class="scale-num">96</span></div>
+    </div>
+    <div class="scale-block" aria-label="Radius scale">
+      <div class="scale-item"><div class="scale-swatch" style="width:56px;height:56px;border-radius:4px"></div><span class="scale-num">xs · 4</span></div>
+      <div class="scale-item"><div class="scale-swatch" style="width:56px;height:56px;border-radius:8px"></div><span class="scale-num">sm · 8</span></div>
+      <div class="scale-item"><div class="scale-swatch" style="width:56px;height:56px;border-radius:12px"></div><span class="scale-num">md · 12</span></div>
+      <div class="scale-item"><div class="scale-swatch" style="width:56px;height:56px;border-radius:16px"></div><span class="scale-num">lg · 16</span></div>
+      <div class="scale-item"><div class="scale-swatch" style="width:56px;height:56px;border-radius:24px"></div><span class="scale-num">xl · 24</span></div>
+      <div class="scale-item"><div class="scale-swatch" style="width:56px;height:56px;border-radius:100px"></div><span class="scale-num">pill · 100</span></div>
+    </div>
+  </section>
+
+  <!-- COMPARE -->
+  <section class="lynn-section reveal" id="lynn-compare">
+    <p class="lynn-label">Compare</p>
+    <h2 class="lynn-title">SOL vs. Lyra vs. <span>Lynn</span></h2>
+    <p class="lynn-desc">Same sample heading, body copy, button, badge, and card — re-skinned live with each system's real tokens. Toggle to see the difference.</p>
+    <div class="compare-toggle" role="tablist" aria-label="Design system">
+      <button type="button" class="compare-btn" data-system="sol" role="tab">SOL</button>
+      <button type="button" class="compare-btn" data-system="lyra" role="tab">Lyra</button>
+      <button type="button" class="compare-btn active" data-system="lynn" role="tab" aria-selected="true">Lynn</button>
+    </div>
+    <div class="compare-stage" data-system="lynn" id="compare-stage">
+      <p class="compare-eyebrow">Sample panel</p>
+      <h3 class="compare-heading">Design that just works</h3>
+      <p class="compare-body">This heading, body copy, button, and card are all rendered with the selected system's real font, color, and radius tokens — nothing here is a mockup.</p>
+      <div class="compare-row">
+        <button type="button" class="compare-cta">Primary action</button>
+        <span class="compare-badge">Badge</span>
+      </div>
+      <div class="compare-card">A card surface using this system's card background, border, and radius tokens.</div>
+      <p class="compare-meta" id="compare-meta">font: Be Vietnam Pro · primary: #3694FC · radius: 16px</p>
+    </div>
+  </section>
+
+  <!-- MOTION TOKENS -->
+  <section class="lynn-section reveal" id="lynn-motion">
+    <p class="lynn-label">Tokens</p>
+    <h2 class="lynn-title">Motion <span>tokens</span></h2>
+    <p class="lynn-desc">The category SOL and Lyra don't have. Every one of these is demoed live below.</p>
+    <div class="motion-grid">
+      <div class="motion-card"><div class="motion-card-name">lynn/motion/gradient-shift</div><div class="motion-card-desc">13s diagonal drift across a multi-stop hero gradient.</div></div>
+      <div class="motion-card"><div class="motion-card-name">lynn/motion/shimmer</div><div class="motion-card-desc">4s linear gradient-text sweep on one or two key words.</div></div>
+      <div class="motion-card"><div class="motion-card-name">lynn/motion/orb</div><div class="motion-card-desc">Large blurred color blobs drifting behind hero content.</div></div>
+      <div class="motion-card"><div class="motion-card-name">lynn/motion/card-tilt-spotlight</div><div class="motion-card-desc">3D tilt (≤7°) plus a radial spotlight that follows the cursor.</div></div>
+      <div class="motion-card"><div class="motion-card-name">lynn/motion/magnetic-button</div><div class="motion-card-desc">Primary buttons drift toward the cursor, then spring back.</div></div>
+      <div class="motion-card"><div class="motion-card-name">lynn/motion/plasma-lightning</div><div class="motion-card-desc">Canvas plasma-ball filaments that bend toward the cursor, with drifting motes.</div></div>
+      <div class="motion-card"><div class="motion-card-name">lynn/motion/liquid-fill</div><div class="motion-card-desc">Matter.js particle pool that sloshes and fills a container on hover.</div></div>
+      <div class="motion-card"><div class="motion-card-name">lynn/motion/scroll-reveal</div><div class="motion-card-desc">translateY + opacity on enter, cubic-bezier(0.23,1,0.32,1).</div></div>
+    </div>
+  </section>
+
+  <!-- MAGIC EFFECTS SHOWCASE -->
+  <section class="lynn-section reveal">
+    <p class="lynn-label">Live demo</p>
+    <h2 class="lynn-title">The magic <span>effects</span></h2>
+    <p class="lynn-desc">Hover, move your cursor across, or just watch each stage below.</p>
+
+    <div class="fx-block" id="fx-shimmer">
+      <div class="fx-head"><span class="fx-name">Shimmer &amp; gradient drift</span><span class="fx-token">lynn/motion/shimmer · gradient-shift</span></div>
+      <div class="fx-stage">
+        <span class="fx-shimmer-text">Shine like this</span>
+      </div>
+    </div>
+
+    <div class="fx-block" id="fx-orbs">
+      <div class="fx-head"><span class="fx-name">Floating orbs</span><span class="fx-token">lynn/motion/orb</span></div>
+      <div class="fx-stage fx-orb-stage">
+        <div class="fx-orb fx-orb-a"></div>
+        <div class="fx-orb fx-orb-b"></div>
+        <div class="fx-orb fx-orb-c"></div>
+        <span class="fx-orb-label">Three blurred blobs, each on its own drift cycle</span>
+      </div>
+    </div>
+
+    <div class="fx-block" id="fx-tilt">
+      <div class="fx-head"><span class="fx-name">3D tilt &amp; spotlight</span><span class="fx-token">lynn/motion/card-tilt-spotlight</span></div>
+      <div class="fx-stage">
+        <div class="fx-tilt-grid">
+          <div class="tilt-demo-card"><h4>Move your cursor</h4><p>The card tilts toward it, up to 7°.</p></div>
+          <div class="tilt-demo-card"><h4>A spotlight follows</h4><p>A soft radial glow tracks the pointer position.</p></div>
+          <div class="tilt-demo-card"><h4>Springs back</h4><p>Release and it eases back with cubic-bezier(0.23,1,0.32,1).</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fx-block" id="fx-magnetic">
+      <div class="fx-head"><span class="fx-name">Magnetic buttons</span><span class="fx-token">lynn/motion/magnetic-button</span></div>
+      <div class="fx-stage fx-magnetic-stage">
+        <button type="button" class="magnetic-btn">Hover near me</button>
+      </div>
+    </div>
+
+    <div class="fx-block" id="fx-plasma">
+      <div class="fx-head"><span class="fx-name">Plasma &amp; motes</span><span class="fx-token">lynn/motion/plasma-lightning</span></div>
+      <div class="fx-stage fx-plasma-stage" id="fx-plasma-stage">
+        <span class="fx-caption">Filaments radiate from the center and bend toward your cursor</span>
+      </div>
+    </div>
+
+    <div class="fx-block" id="fx-liquid">
+      <div class="fx-head"><span class="fx-name">Liquid fill</span><span class="fx-token">lynn/motion/liquid-fill</span></div>
+      <div class="fx-stage fx-liquid-stage" id="fx-liquid-stage">
+        <span class="fx-caption">Hover to fill this container with a sloshing particle pool (Matter.js)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></div>
+      </div>
+      <nav class="footer-nav">
+        <div class="footer-nav-col">
+          <a href="./index.html">Overview</a>
+          <a href="./install-guide.html">Install Guide</a>
+          <a href="./claude-skills.html">Claude Skills</a>
+          <a href="./the-suite.html">The Suite</a>
+        </div>
+        <div class="footer-nav-col">
+          <a href="./use-cases.html">Use Cases</a>
+          <a href="./scoring.html">Scoring</a>
+          <a href="./dashboard.html">Dashboard</a>
+          <a href="./roadmap.html">Roadmap</a>
+        </div>
+        <div class="footer-nav-col">
+          <a href="./release-notes.html">Release Notes</a>
+          <a href="./faq.html">FAQ</a>
+          <a href="./tools.html">Tools</a>
+          <a href="./marketplace.html">Marketplace</a>
+          <a href="./lynn.html" class="active">Lynn</a>
+        </div>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal via IntersectionObserver
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -24px 0px' });
+    revealEls.forEach(el => observer.observe(el));
+  </script>
+
+  <!-- NICE POLISH EFFECTS -->
+  <script>
+  (function() {
+    // Cursor ambient glow
+    var glow = document.createElement('div');
+    glow.id = 'nice-cursor-glow';
+    document.body.appendChild(glow);
+    document.addEventListener('mousemove', function(e) {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+      glow.style.opacity = '1';
+    });
+    document.addEventListener('mouseleave', function() { glow.style.opacity = '0'; });
+
+    // Tilt + spotlight on demo cards
+    document.querySelectorAll('.tilt-demo-card, .swatch, .motion-card').forEach(function(card) {
+      card.style.position = 'relative';
+      card.addEventListener('mousemove', function(e) {
+        var r = card.getBoundingClientRect();
+        var x = (e.clientX - r.left) / r.width;
+        var y = (e.clientY - r.top) / r.height;
+        var tx = (y - 0.5) * -8, ty = (x - 0.5) * 8;
+        card.style.transform = 'perspective(900px) rotateX(' + tx + 'deg) rotateY(' + ty + 'deg) translateZ(3px)';
+        card.style.transition = 'transform 0.07s ease';
+        card.style.boxShadow = '0 8px 32px rgba(0,0,0,0.35), 0 0 0 1px rgba(54,148,252,0.18)';
+      });
+      card.addEventListener('mouseleave', function() {
+        card.style.transform = '';
+        card.style.transition = 'transform 0.45s cubic-bezier(0.23,1,0.32,1)';
+        card.style.boxShadow = '';
+      });
+    });
+
+    // Magnetic effect on primary buttons
+    document.querySelectorAll('.magnetic-btn, .compare-cta').forEach(function(btn) {
+      btn.addEventListener('mousemove', function(e) {
+        var r = btn.getBoundingClientRect();
+        var dx = (e.clientX - r.left - r.width / 2) * 0.28;
+        var dy = (e.clientY - r.top - r.height / 2) * 0.28;
+        btn.style.transform = 'translate(' + dx + 'px, ' + dy + 'px) scale(1.04)';
+        btn.style.transition = 'transform 0.12s ease';
+      });
+      btn.addEventListener('mouseleave', function() {
+        btn.style.transform = '';
+        btn.style.transition = 'transform 0.5s cubic-bezier(0.34,1.56,0.64,1)';
+      });
+    });
+  })();
+  </script>
+
+  <!-- Reusable canvas effects (Matter.js is the physics engine for the liquid demo) -->
+  <script src="https://cdn.jsdelivr.net/npm/matter-js@0.19.0/build/matter.min.js"></script>
+  <script src="nice-effects.js?v=9"></script>
+  <script>
+    var plasmaStage = document.getElementById('fx-plasma-stage');
+    if (plasmaStage) {
+      NiceEffects.lightning(plasmaStage, { color: '#B98FFF', glow: '#6100FF', opacity: 0.55, motes: 48 });
+    }
+    var liquidStage = document.getElementById('fx-liquid-stage');
+    if (liquidStage) {
+      NiceEffects.liquidFill(liquidStage, { color: '#3694FC' });
+    }
+  </script>
+
+  <!-- Compare toggle -->
+  <script>
+    (function () {
+      var TOKENS = {
+        sol:  { font: 'Open Sans, sans-serif',    primary: '#007AB8', radius: '8px' },
+        lyra: { font: 'Inter, sans-serif',         primary: '#166CCA', radius: '12px' },
+        lynn: { font: 'Be Vietnam Pro, sans-serif',primary: '#3694FC', radius: '16px' }
+      };
+      var stage = document.getElementById('compare-stage');
+      var meta = document.getElementById('compare-meta');
+      document.querySelectorAll('.compare-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var sys = btn.dataset.system;
+          document.querySelectorAll('.compare-btn').forEach(function (b) {
+            b.classList.toggle('active', b === btn);
+            b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
+          });
+          stage.setAttribute('data-system', sys);
+          var t = TOKENS[sys];
+          meta.textContent = 'font: ' + t.font.split(',')[0] + ' · primary: ' + t.primary + ' · radius: ' + t.radius;
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

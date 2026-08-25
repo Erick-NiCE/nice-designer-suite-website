@@ -130,6 +130,9 @@ body {
 }
 .coming-soon-tag {
   display: inline-block;
+  /* Keeps the pill at its own height when it sits in a flex row next to a
+     taller button, which would otherwise stretch it and strand the text. */
+  align-self: center;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.06em;
