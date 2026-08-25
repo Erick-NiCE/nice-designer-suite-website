@@ -574,6 +574,22 @@
       ]
     },
     {
+      href: 'marketplace.html', label: 'Marketplace',
+      groups: [
+        { label: 'Overview', items: [
+          { id: 'about', label: 'What it is' }
+        ] },
+        { label: 'Available Skills', items: [
+          { id: 'current', label: 'In the Marketplace today' },
+          { id: 'mk-ux-eval', label: 'ux-eval' },
+          { id: 'mk-north-star-fox', label: 'north-star-fox' }
+        ] },
+        { label: 'Contributing', items: [
+          { id: 'submit', label: 'How to submit a skill' }
+        ] }
+      ]
+    },
+    {
       href: 'tools.html', label: 'Tools',
       groups: [
         { label: 'Suite Tools', items: [
