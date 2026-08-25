@@ -463,6 +463,28 @@
 
   var DOC_PAGES = [
     {
+      href: 'lynn.html', label: 'Lynn',
+      groups: [
+        { label: 'Tokens', items: [
+          { id: 'lynn-colors', label: 'Color' },
+          { id: 'lynn-type', label: 'Typography' },
+          { id: 'lynn-space', label: 'Spacing & Radius' },
+          { id: 'lynn-motion', label: 'Motion Tokens' }
+        ] },
+        { label: 'Compare', items: [
+          { id: 'lynn-compare', label: 'SOL vs. Lyra vs. Lynn' }
+        ] },
+        { label: 'Magic Effects', items: [
+          { id: 'fx-shimmer', label: 'Shimmer & Gradient Drift' },
+          { id: 'fx-orbs', label: 'Floating Orbs' },
+          { id: 'fx-tilt', label: '3D Tilt & Spotlight' },
+          { id: 'fx-magnetic', label: 'Magnetic Buttons' },
+          { id: 'fx-plasma', label: 'Plasma & Motes' },
+          { id: 'fx-liquid', label: 'Liquid Fill' }
+        ] }
+      ]
+    },
+    {
       href: 'install-guide.html', label: 'Install Guide',
       groups: [
         { label: 'Steps', items: [
