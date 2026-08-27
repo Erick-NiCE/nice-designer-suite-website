@@ -111,14 +111,8 @@
     .step-header {
       display: flex;
       align-items: center;
-      gap: 14px;
       margin-bottom: 20px;
       padding-top: 10px;
-    }
-
-    .step-icon {
-      font-size: 1.5rem;
-      line-height: 1;
     }
 
     .step-title {
@@ -145,6 +139,40 @@
 
     .step-section {
       margin-bottom: 24px;
+    }
+
+    /* ---- SCREENSHOT FIGURES ---- */
+    .step-figure {
+      margin: 16px 0 0;
+    }
+
+    .step-figure + .step-figure {
+      margin-top: 20px;
+    }
+
+    .step-figure.is-narrow img {
+      max-width: 420px;
+    }
+
+    .step-figure.is-narrow figcaption {
+      max-width: 420px;
+    }
+
+    .step-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #1a1a22;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+    }
+
+    .step-figure figcaption {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.5;
     }
 
     .step-section:last-child {
@@ -307,6 +335,11 @@
     .pill-optional {
       background: rgba(185,143,255,0.14);
       color: var(--lyra);
+    }
+
+    .pill-recommended {
+      background: rgba(0,214,143,0.14);
+      color: var(--emerald);
     }
 
     /* ---- VERIFY CHECKLIST ---- */
@@ -498,7 +531,7 @@
     <div class="reveal">
       <span class="hero-eyebrow">GETTING STARTED</span>
       <h1 class="hero-title">Install Guide</h1>
-      <p class="hero-subtitle">Get NiCE Designer running in three steps: the Figma plugin, the Chrome extension, and the local MCP server.</p>
+      <p class="hero-subtitle">Start with the Chrome extension, then connect Claude Desktop to supercharge it. The Figma plugin is a separate install at the bottom - grab it whenever you need it.</p>
     </div>
   </section>
 
@@ -506,47 +539,14 @@
   <main class="main-content">
     <div class="steps-list">
 
-      <!-- STEP 1: Figma Plugin -->
-      <div class="step reveal" id="step-figma">
+      <!-- STEP 1: Chrome Extension -->
+      <div class="step reveal" id="step-chrome">
         <div class="step-sidebar">
           <div class="step-number-badge">1</div>
           <div class="step-line"></div>
         </div>
         <div class="step-body">
           <div class="step-header">
-            <span class="step-icon">🎨</span>
-            <h2 class="step-title">Install the Figma Plugin</h2>
-          </div>
-          <div class="step-card">
-            <div class="step-section">
-              <div class="step-section-label">How to install</div>
-              <p>Open Figma, right-click the canvas (or open the main menu) and go to <strong>Plugins</strong>. Search for <strong>"NiCE Designer"</strong> and click Install.</p>
-              <p>Or open the plugin directly on the Figma Community page:</p>
-              <p><a href="https://www.figma.com/community/plugin/1623361730572479462" class="step-link" target="_blank" rel="noopener">figma.com/community/plugin/1623361730572479462</a></p>
-            </div>
-
-            <div class="step-section">
-              <div class="step-section-label">How to use it</div>
-              <p>With a frame or layer selected, right-click and go to <strong>Plugins &gt; NiCE Designer</strong>. Alternatively, open the Resources panel in Figma (<code>Shift+I</code>), switch to the Plugins tab, and search for NiCE Designer.</p>
-            </div>
-
-            <div class="step-section">
-              <div class="step-section-label">Notes</div>
-              <p>The plugin runs entirely inside Figma. No backend or server is required for standalone audit and convert workflows. Connect to the MCP server to enable Claude integration and cross-client features.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- STEP 2: Chrome Extension -->
-      <div class="step reveal" id="step-chrome">
-        <div class="step-sidebar">
-          <div class="step-number-badge">2</div>
-          <div class="step-line"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-header">
-            <span class="step-icon">🌐</span>
             <h2 class="step-title">Install the Chrome Extension</h2>
           </div>
           <div class="step-card">
@@ -560,10 +560,18 @@
               <ol class="numbered-list">
                 <li>Download the latest release: <span class="step-link is-disabled" aria-disabled="true">NiCE-Designer-V11.1.zip</span> <span class="coming-soon-tag">Coming soon!</span></li>
                 <li>Unzip the downloaded package to a location you'll keep it</li>
-                <li>Go to <code>chrome://extensions</code> and enable <strong>Developer Mode</strong> (toggle in the top-right corner)</li>
+                <li>Go to <code>chrome://extensions</code> (or <code>edge://extensions</code>) and enable <strong>Developer Mode</strong> - the toggle is in the top-right corner in Chrome, and at the bottom of the left sidebar in Edge</li>
                 <li>Click <strong>"Load unpacked"</strong> and select the <code>chrome/</code> folder from the unzipped package</li>
                 <li>The NiCE Designer icon appears in your Chrome toolbar</li>
               </ol>
+              <figure class="step-figure">
+                <img src="./images/install-chrome-extensions.png" alt="The top of the chrome://extensions page. A red box highlights the Load unpacked button on the left of the toolbar, and another highlights the Developer mode toggle switched on at the far right." loading="lazy" width="1400" height="171" />
+                <figcaption><strong>Chrome</strong> - <strong>Developer mode</strong> is the toggle at the top right. Switch it on and the toolbar row appears, with <strong>Load unpacked</strong> at the top left.</figcaption>
+              </figure>
+              <figure class="step-figure">
+                <img src="./images/install-edge-extensions.png" alt="The edge://extensions page in Microsoft Edge. The Load Unpacked button sits at the top of the Installed extensions list, and the Developer mode toggle is switched on in the bottom-left sidebar." loading="lazy" width="1400" height="859" />
+                <figcaption><strong>Edge</strong> - same two controls, different places: <strong>Developer mode</strong> is at the bottom of the left sidebar, and <strong>Load Unpacked</strong> is at the top of the installed list.</figcaption>
+              </figure>
             </div>
 
             <div class="step-section">
@@ -584,15 +592,14 @@
         </div>
       </div>
 
-      <!-- STEP 3: Install Node.js -->
+      <!-- STEP 2: Install Node.js -->
       <div class="step reveal" id="step-node">
         <div class="step-sidebar">
-          <div class="step-number-badge">3</div>
+          <div class="step-number-badge">2</div>
           <div class="step-line"></div>
         </div>
         <div class="step-body">
           <div class="step-header">
-            <span class="step-icon">🟢</span>
             <h2 class="step-title">Install Node.js</h2>
           </div>
           <div class="step-card">
@@ -625,21 +632,55 @@ winget install OpenJS.NodeJS.LTS</div>
         </div>
       </div>
 
-      <!-- STEP 4: Connect Claude (optional) -->
+      <!-- STEP 3: Connect Claude -->
       <div class="step reveal" id="step-claude">
         <div class="step-sidebar">
-          <div class="step-number-badge">4</div>
+          <div class="step-number-badge">3</div>
           <div class="step-line"></div>
         </div>
         <div class="step-body">
           <div class="step-header">
-            <span class="step-icon">🔌</span>
-            <h2 class="step-title">Connect Claude Desktop <span class="pill-tag pill-optional">Optional</span></h2>
+            <h2 class="step-title">Connect Claude Desktop <span class="pill-tag pill-recommended">Supercharge</span></h2>
           </div>
           <div class="step-card">
             <div class="step-section">
               <div class="step-section-label">One-click install (recommended)</div>
-              <p>The downloaded package includes <strong>"Click to install Claude Connector.mcpb"</strong> at the top of the <code>chrome/</code> folder. Double-click it - Claude Desktop opens and prompts you to install the connector. Confirm, and <strong>"nice-designer"</strong> appears as a connected MCP server automatically, already running. No file paths, no JSON, no terminal.</p>
+              <p>The downloaded package includes <strong>"Click to install Claude Connector.mcpb"</strong> at the top of the <code>chrome/</code> folder. Double-click it, confirm the two prompts, and <strong>"nice-designer-mcp"</strong> appears as an installed extension - already running. No file paths, no JSON, no terminal.</p>
+
+              <figure class="step-figure">
+                <img src="./images/install-mcpb-finder.png" alt="Finder window showing the NiCE Designer Chrome folder. The file named &quot;Click to install Claude Connector.mcpb&quot; sits in the top row between background.js and content.js." loading="lazy" width="1400" height="671" />
+                <figcaption><strong>1.</strong> Open the <code>chrome/</code> folder and look for <strong>"Click to install Claude Connector.mcpb"</strong> in the top row - it's the one with the blank white document icon. Double-click it.</figcaption>
+              </figure>
+
+              <figure class="step-figure">
+                <img src="./images/install-connector-preview.png" alt="Claude Desktop showing a preview of the nice-designer-mcp extension, with a red warning about granting computer access, an Install button at the top right, and a Details section listing Version 11.2." loading="lazy" width="985" height="1000" />
+                <figcaption><strong>2.</strong> Claude Desktop opens a preview of the connector. <strong>Check the version under Details matches the plugin and extension you installed</strong>, then click <strong>Install</strong>.</figcaption>
+              </figure>
+
+              <figure class="step-figure is-narrow">
+                <img src="./images/install-connector-confirm.png" alt="A system dialog reading &quot;Do you want to install nice-designer-mcp? This desktop extension will be installed on your computer and made available to Claude.&quot; with Cancel and Install buttons." loading="lazy" width="536" height="388" />
+                <figcaption><strong>3.</strong> Confirm the system prompt by clicking <strong>Install</strong> again.</figcaption>
+              </figure>
+
+              <figure class="step-figure">
+                <img src="./images/install-connector-installed.png" alt="The Extensions page in Claude Desktop settings, showing nice-designer-mcp listed under &quot;Installed on your computer&quot; with a Configure button and a three-dot menu." loading="lazy" width="1400" height="508" />
+                <figcaption><strong>4.</strong> Done. <strong>nice-designer-mcp</strong> now shows under <em>Installed on your computer</em> in <strong>Settings &gt; Extensions</strong>. The <strong>...</strong> menu next to it opens Details, where you can re-check the version - and it's also where you uninstall.</figcaption>
+              </figure>
+
+              <div class="note-box">
+                <span class="note-box-icon">🔄</span>
+                <p><strong>Updating the connector:</strong> there's no in-place upgrade. When a new version ships, uninstall the existing connector from <strong>Settings &gt; Extensions</strong> first, then double-click the new <code>.mcpb</code> file to install it.</p>
+              </div>
+            </div>
+
+            <div class="step-section">
+              <div class="step-section-label">Turn on Supercharge</div>
+              <p>Last step, and the one that actually switches everything on. Open the NiCE Designer extension, go to the <strong>Supercharge</strong> panel, and flip the toggle to <strong>On</strong>. The header should show a green dot and <strong>Live at <code>ws://127.0.0.1:7331</code></strong> - that's your confirmation the extension and Claude are talking to each other.</p>
+              <figure class="step-figure">
+                <img src="./images/install-supercharge-on.png" alt="The Supercharge panel in the NiCE Designer extension. A green dot sits next to the Supercharge heading, the header reads &quot;Live at ws://127.0.0.1:7331&quot;, and the toggle at the right is switched On." loading="lazy" width="736" height="300" />
+                <figcaption><strong>5.</strong> Toggle <strong>Supercharge</strong> on. Green dot plus <strong>Live at <code>ws://127.0.0.1:7331</code></strong> means you're connected. If it stays off or shows no address, check that Claude Desktop is running - it starts the server.</figcaption>
+              </figure>
+              <p style="margin-top:12px;">If a tool or skill you expect is missing after an update, use the <strong>"Not seeing a new tool or skill?"</strong> link in that same panel - it points you back at the <code>.mcpb</code> file to reinstall the connector.</p>
             </div>
 
             <div class="step-section">
@@ -677,15 +718,14 @@ node src/index.js</div>
         </div>
       </div>
 
-      <!-- STEP 5: Verify -->
+      <!-- STEP 4: Verify -->
       <div class="step reveal" id="step-verify">
         <div class="step-sidebar">
-          <div class="step-number-badge">5</div>
-          <!-- no line on last step -->
+          <div class="step-number-badge">4</div>
+          <div class="step-line"></div>
         </div>
         <div class="step-body">
           <div class="step-header">
-            <span class="step-icon">✅</span>
             <h2 class="step-title">Verify Everything Is Working</h2>
           </div>
           <div class="step-card">
@@ -694,15 +734,11 @@ node src/index.js</div>
               <div class="checklist">
                 <div class="checklist-item">
                   <div class="check-circle"></div>
-                  <span>Open the Figma plugin on a frame - the audit panel should appear with color, type, and spacing scores</span>
-                </div>
-                <div class="checklist-item">
-                  <div class="check-circle"></div>
                   <span>Open the Chrome extension on a web page - the toolbar should appear with inspection controls</span>
                 </div>
                 <div class="checklist-item">
                   <div class="check-circle"></div>
-                  <span>Open Claude Desktop and check the MCP server indicator shows "nice-designer" as connected - Claude Desktop starts the server itself, so there's nothing to run manually</span>
+                  <span>In the extension's <strong>Supercharge</strong> panel, the toggle is <strong>On</strong> and the header reads <em>Live at ws://127.0.0.1:7331</em> with a green dot - Claude Desktop starts the server itself, so there's nothing to run manually</span>
                 </div>
                 <div class="checklist-item">
                   <div class="check-circle"></div>
@@ -710,9 +746,45 @@ node src/index.js</div>
                 </div>
                 <div class="checklist-item">
                   <div class="check-circle"></div>
-                  <span>In Chrome, click the refresh icon next to the version number in Settings to confirm the update checker reaches the latest release - see <a href="./release-notes.html">Release Notes</a> for what's new.</span>
+                  <span>In Chrome, click the refresh icon next to the version number in Settings to confirm the update checker reaches the latest release - see <a href="./release-notes.html" class="step-link">Release Notes</a> for what's new.</span>
+                </div>
+                <div class="checklist-item">
+                  <div class="check-circle"></div>
+                  <span>Open the Figma plugin on a frame - if you installed it, the audit panel should appear with color, type, and spacing scores</span>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 5: Figma Plugin -->
+      <div class="step reveal" id="step-figma">
+        <div class="step-sidebar">
+          <div class="step-number-badge">5</div>
+          <!-- no line on last step -->
+        </div>
+        <div class="step-body">
+          <div class="step-header">
+            <h2 class="step-title">Install the Figma Plugin <span class="pill-tag pill-optional">Separate install</span></h2>
+          </div>
+          <div class="step-card">
+            <div class="step-section">
+              <div class="step-section-label">How to install</div>
+              <p>Independent of everything above - the plugin installs straight from the Figma Community and needs none of the steps 1-4. Do it whenever you want to audit designs on the Figma canvas as well as in the browser.</p>
+              <p>Open Figma, right-click the canvas (or open the main menu) and go to <strong>Plugins</strong>. Search for <strong>"NiCE Designer"</strong> and click Install.</p>
+              <p>Or open the plugin directly on the Figma Community page:</p>
+              <p><a href="https://www.figma.com/community/plugin/1623361730572479462" class="step-link" target="_blank" rel="noopener">figma.com/community/plugin/1623361730572479462</a></p>
+            </div>
+
+            <div class="step-section">
+              <div class="step-section-label">How to use it</div>
+              <p>With a frame or layer selected, right-click and go to <strong>Plugins &gt; NiCE Designer</strong>. Alternatively, open the Resources panel in Figma (<code>Shift+I</code>), switch to the Plugins tab, and search for NiCE Designer.</p>
+            </div>
+
+            <div class="step-section">
+              <div class="step-section-label">Notes</div>
+              <p>The plugin runs entirely inside Figma. No backend or server is required for standalone audit and convert workflows. Connect to the MCP server to enable Claude integration and cross-client features.</p>
             </div>
           </div>
         </div>
@@ -732,21 +804,11 @@ node src/index.js</div>
 
         <div class="trouble-card">
           <div class="trouble-card-title">
-            <span class="trouble-icon">🎨</span>
-            Plugin won't open
-          </div>
-          <div class="trouble-card-body">
-            Make sure you installed from the Figma Community (not a local unpacked version). Check that the plugin isn't in your organization's blocked plugin list - contact your Figma admin if unsure.
-          </div>
-        </div>
-
-        <div class="trouble-card">
-          <div class="trouble-card-title">
             <span class="trouble-icon">🌐</span>
             Chrome extension not loading
           </div>
           <div class="trouble-card-body">
-            Verify that Developer Mode is enabled in <code>chrome://extensions</code>. If the extension still won't load, try removing it and re-loading the unpacked folder. Make sure you're selecting the <code>chrome/</code> subfolder, not the root of the zip.
+            Verify that Developer Mode is enabled in <code>chrome://extensions</code> (top-right in Chrome, bottom of the left sidebar in Edge). If the extension still won't load, try removing it and re-loading the unpacked folder. Make sure you're selecting the <code>chrome/</code> subfolder, not the root of the zip.
           </div>
         </div>
 
@@ -766,7 +828,17 @@ node src/index.js</div>
             Claude can't see any targets
           </div>
           <div class="trouble-card-body">
-            Both the Figma plugin and Chrome extension must be open and connected to the MCP server at the same time. Call <code>list_targets</code> first - it will tell you exactly which clients are currently registered. If the list is empty, check the connections in each client.
+            At least one client - the Chrome extension or the Figma plugin - must be open and connected to the MCP server. Call <code>list_targets</code> first - it will tell you exactly which clients are currently registered. If the list is empty, check the connections in each client.
+          </div>
+        </div>
+
+        <div class="trouble-card">
+          <div class="trouble-card-title">
+            <span class="trouble-icon">🎨</span>
+            Plugin won't open
+          </div>
+          <div class="trouble-card-body">
+            Make sure you installed from the Figma Community (not a local unpacked version). Check that the plugin isn't in your organization's blocked plugin list - contact your Figma admin if unsure.
           </div>
         </div>
 

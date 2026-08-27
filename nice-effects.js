@@ -488,11 +488,11 @@
       href: 'install-guide.html', label: 'Install Guide',
       groups: [
         { label: 'Steps', items: [
-          { id: 'step-figma', label: 'Install the Figma Plugin' },
           { id: 'step-chrome', label: 'Install the Chrome Extension' },
           { id: 'step-node', label: 'Install Node.js' },
           { id: 'step-claude', label: 'Connect Claude Desktop' },
           { id: 'step-verify', label: 'Verify Everything Is Working' },
+          { id: 'step-figma', label: 'Install the Figma Plugin' },
           { id: 'step-issues', label: 'Common Issues' }
         ] }
       ]
