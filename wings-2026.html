@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NiCE Wings 2026 — NiCE Designer</title>
+  <meta name="description" content="Class content and contacts for the NiCE Wings 2026 session." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="theme.css?v=8" />
+  <link rel="stylesheet" href="nice-effects.css" />
+  <!--
+    NOTE: this page is intentionally PUBLIC - no site-gate.css / site-gate.js
+    and no #nice-site-gate markup. It is the link handed out to the whole
+    NiCE Wings 2026 class, so it must open without a password.
+  -->
+  <style>
+    /* ---- HERO ---- */
+    .hero {
+      position: relative;
+      min-height: 58vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 96px 24px 64px;
+      text-align: center;
+    }
+    .hero-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #21212B 0%, #170d40 18%, #0d1f6b 38%, #3694FC 55%, #6100FF 72%, #00E2A0 87%, #21212B 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 13s ease infinite;
+      opacity: 0.85;
+    }
+    .hero-gradient::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 25%, var(--bg) 78%);
+    }
+    @keyframes gradientShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .hero-orb { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; }
+    .hero-orb-1 { width: 460px; height: 460px; top: -110px; left: -100px; background: radial-gradient(circle, rgba(54,148,252,0.5), transparent 70%); animation: orbDrift 16s ease-in-out infinite; }
+    .hero-orb-2 { width: 380px; height: 380px; bottom: -90px; right: -60px; background: radial-gradient(circle, rgba(97,0,255,0.42), transparent 70%); animation: orbDrift 19s ease-in-out infinite reverse; }
+    .hero-orb-3 { width: 300px; height: 300px; top: 40%; left: 58%; background: radial-gradient(circle, rgba(0,226,160,0.3), transparent 70%); animation: orbDrift 22s ease-in-out infinite 3s; }
+    @keyframes orbDrift {
+      0%   { transform: translate(0, 0) scale(1); }
+      33%  { transform: translate(44px, -34px) scale(1.1); }
+      66%  { transform: translate(-32px, 22px) scale(0.94); }
+      100% { transform: translate(0, 0) scale(1); }
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; }
+    .hero-eyebrow {
+      font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--emerald); margin-bottom: 20px;
+    }
+    .hero-title { font-size: clamp(52px, 8.5vw, 100px); font-weight: 900; letter-spacing: -3px; line-height: 0.95; margin-bottom: 20px; }
+    .hero-title .gradient-word {
+      background: linear-gradient(90deg, #fff 0%, var(--blue) 30%, var(--lyra) 60%, var(--emerald) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      animation: shimmer 4s linear infinite;
+    }
+    @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+    .hero-sub { font-size: 17px; color: rgba(255,255,255,0.68); line-height: 1.7; margin: 0 auto; max-width: 620px; }
+
+    /* ---- SECTION SHELL ---- */
+    .wings-section { max-width: 1080px; margin: 0 auto; padding: 72px 48px; }
+    .wings-section + .wings-section { border-top: 1px solid var(--border); }
+    .wings-label { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--blue); margin-bottom: 12px; }
+    .wings-title { font-size: clamp(28px, 4vw, 42px); font-weight: 800; letter-spacing: -0.8px; margin-bottom: 14px; }
+    .wings-title span {
+      background: linear-gradient(90deg, var(--blue), var(--lyra));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .wings-desc { font-size: 15px; color: var(--text-secondary); line-height: 1.7; max-width: 680px; margin-bottom: 36px; }
+
+    /* ---- REVEAL ---- */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s cubic-bezier(0.23,1,0.32,1), transform 0.7s cubic-bezier(0.23,1,0.32,1); }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ---- WALKTHROUGH PANEL ---- */
+    .walk-panel {
+      position: relative;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(97,0,255,0.20), transparent 55%),
+        radial-gradient(circle at 92% 100%, rgba(0,226,160,0.16), transparent 55%),
+        var(--card);
+      padding: 40px;
+      overflow: hidden;
+      transition: border-color 0.4s cubic-bezier(0.23,1,0.32,1), transform 0.4s cubic-bezier(0.23,1,0.32,1);
+    }
+    .walk-panel::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--blue), var(--indigo), var(--emerald));
+    }
+    .walk-panel:hover { border-color: rgba(255,255,255,0.13); transform: translateY(-1px); }
+    .walk-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--lyra); background: rgba(185,143,255,0.13); border-radius: 100px;
+      padding: 6px 14px; margin-bottom: 18px;
+    }
+    .walk-heading { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; }
+    .walk-body { font-size: 15px; color: var(--text-secondary); line-height: 1.7; max-width: 620px; margin-bottom: 26px; }
+    .walk-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+
+    /* ---- BUTTONS ---- */
+    .btn-primary, .btn-secondary {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--font); font-size: 14px; font-weight: 700;
+      padding: 13px 26px; border-radius: 12px; border: 1px solid transparent;
+      text-decoration: none; cursor: pointer;
+      transition: background 0.4s cubic-bezier(0.23,1,0.32,1), transform 0.4s cubic-bezier(0.23,1,0.32,1), box-shadow 0.4s cubic-bezier(0.23,1,0.32,1), border-color 0.4s cubic-bezier(0.23,1,0.32,1);
+    }
+    .btn-primary { background: var(--blue); color: #fff; box-shadow: 0 8px 24px rgba(54,148,252,0.32); }
+    .btn-primary:hover { background: #4fa3ff; box-shadow: 0 12px 30px rgba(54,148,252,0.42); }
+    .btn-secondary { background: rgba(255,255,255,0.06); color: #fff; border-color: var(--border); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.10); border-color: rgba(255,255,255,0.13); }
+    .btn-primary.is-placeholder {
+      background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.42); box-shadow: none;
+      border-color: var(--border); cursor: not-allowed;
+    }
+    .placeholder-note {
+      font-size: 12px; font-weight: 500; color: var(--coral);
+      background: rgba(255,91,138,0.12); border-radius: 100px; padding: 6px 14px;
+    }
+
+    /* ---- CONTACT CARDS ---- */
+    .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .contact-card {
+      position: relative;
+      display: flex; flex-direction: column;
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      padding: 24px; overflow: hidden; text-decoration: none; color: inherit;
+      transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), border-color 0.4s cubic-bezier(0.23,1,0.32,1), box-shadow 0.4s cubic-bezier(0.23,1,0.32,1);
+    }
+    .contact-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--accent, var(--blue));
+      opacity: 0.85;
+    }
+    .contact-card:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.13); box-shadow: 0 12px 28px rgba(0,0,0,0.32); }
+    .contact-icon {
+      width: 40px; height: 40px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      background: color-mix(in srgb, var(--accent, var(--blue)) 15%, transparent);
+      color: var(--accent, var(--blue));
+      margin-bottom: 16px;
+    }
+    .contact-role { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent, var(--blue)); margin-bottom: 8px; }
+    .contact-name { font-size: 17px; font-weight: 700; letter-spacing: -0.2px; margin-bottom: 8px; }
+    .contact-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.65; margin-bottom: 20px; flex: 1; }
+    .contact-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 700; color: var(--accent, var(--blue));
+      transition: gap 0.4s cubic-bezier(0.23,1,0.32,1);
+    }
+    .contact-card:hover .contact-link { gap: 12px; }
+
+    /* ---- FOOTER NOTE ---- */
+    .wings-note {
+      font-size: 13px; color: var(--text-muted); line-height: 1.7;
+      border-left: 2px solid var(--border); padding-left: 16px; max-width: 640px;
+    }
+
+    @media (max-width: 720px) {
+      .wings-section { padding: 56px 24px; }
+      .walk-panel { padding: 28px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-gradient, .hero-orb, .hero-title .gradient-word { animation: none; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      * { transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV (no gate - this page is public) -->
+  <nav class="site-nav" id="site-nav">
+    <a href="./index.html" class="nav-logo">
+      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span>
+    </a>
+    <span class="nav-download is-disabled" aria-disabled="true">Download<span class="coming-soon-tag">Coming soon!</span></span>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-gradient"></div>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">NiCE Wings 2026</div>
+      <h1 class="hero-title">Designing with <span class="gradient-word">Claude</span></h1>
+      <p class="hero-sub">
+        Everything from the session in one place: the full class walkthrough, plus the people
+        to reach out to when you want a second pair of eyes or another session.
+      </p>
+    </div>
+  </header>
+
+  <!-- CLASS CONTENT -->
+  <section class="wings-section" id="walkthrough">
+    <div class="reveal">
+      <div class="wings-label">Class Content</div>
+      <h2 class="wings-title">The full <span>walkthrough</span></h2>
+      <p class="wings-desc">
+        The walkthrough covers everything demonstrated live in the session, step by step,
+        so you can work through it again at your own pace. Nothing here is gated - open the
+        link, follow along, and reuse it as often as you need.
+      </p>
+    </div>
+
+    <div class="walk-panel reveal">
+      <div class="walk-badge">Claude Design</div>
+      <h3 class="walk-heading">NiCE Wings 2026 walkthrough</h3>
+      <p class="walk-body">
+        The interactive Claude Design walkthrough used in class. Open it in a browser -
+        no install, no plugin, and no password required.
+      </p>
+      <div class="walk-actions">
+        <!-- TODO: replace href with the real Claude Design walkthrough URL, and
+             remove the `is-placeholder` class + `.placeholder-note` span below. -->
+        <a class="btn-primary is-placeholder" href="#" aria-disabled="true" onclick="return false;">
+          Open the walkthrough
+        </a>
+        <span class="placeholder-note">Link coming - to be added before the session</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTS -->
+  <section class="wings-section" id="contacts">
+    <div class="reveal">
+      <div class="wings-label">Reach Out</div>
+      <h2 class="wings-title">Questions after <span>class</span></h2>
+      <p class="wings-desc">
+        Three different doors, depending on what you need. All of them open in Microsoft Teams.
+      </p>
+    </div>
+
+    <div class="contact-grid reveal">
+
+      <!-- Megan - instructor -->
+      <a class="contact-card" style="--accent: var(--blue);"
+         href="https://teams.microsoft.com/l/chat/0/0?users=Megan.Fisher@nice.com"
+         target="_blank" rel="noopener">
+        <div class="contact-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-4 0-8 2-8 5v1h16v-1c0-3-4-5-8-5z" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="contact-role">Instructor</div>
+        <div class="contact-name">Megan Fisher</div>
+        <p class="contact-desc">
+          Questions about the class itself - what was covered, something that did not click,
+          or a step you want to walk through again.
+        </p>
+        <span class="contact-link">Message Megan on Teams &rarr;</span>
+      </a>
+
+      <!-- Design system team -->
+      <a class="contact-card" style="--accent: var(--lyra);"
+         href="https://teams.microsoft.com/l/channel/19%3A719be06edac04712a605aca8a6d6f936%40thread.tacv2/Lyra%20Design%20Support%20and%20Help%20Desk?groupId=c9888e36-654f-414f-9d1c-d335be5a5b13&amp;tenantId=7123dabd-0e87-4da9-9cb9-b7ec82011aad"
+         target="_blank" rel="noopener">
+        <div class="contact-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="contact-role">Design System</div>
+        <div class="contact-name">Lyra Design Support and Help Desk</div>
+        <p class="contact-desc">
+          Questions about Lyra itself - tokens, components, patterns, or whether something
+          you are building lines up with the design system.
+        </p>
+        <span class="contact-link">Open the Teams channel &rarr;</span>
+      </a>
+
+      <!-- Erick - future sessions -->
+      <a class="contact-card" style="--accent: var(--emerald);"
+         href="https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com"
+         target="_blank" rel="noopener">
+        <div class="contact-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2zm5 4a1 1 0 00-1 1v3H8a1 1 0 100 2h3v3a1 1 0 102 0v-3h3a1 1 0 100-2h-3V8a1 1 0 00-1-1z" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="contact-role">Future Sessions</div>
+        <div class="contact-name">Erick Mathews</div>
+        <p class="contact-desc">
+          Want this session run for your team, or a deeper follow-up on any part of it?
+          Reach out and we will get one on the calendar.
+        </p>
+        <span class="contact-link">Message Erick on Teams &rarr;</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- NOTE -->
+  <section class="wings-section" id="about">
+    <div class="reveal">
+      <div class="wings-label">About This Page</div>
+      <h2 class="wings-title">Share it <span>freely</span></h2>
+      <p class="wings-note">
+        This page is deliberately open - no access code, no login. Send the link to anyone
+        who attended NiCE Wings 2026, or anyone who missed it and wants to catch up. The rest
+        of the NiCE Designer site does sit behind a site-wide access code; message Erick on
+        Teams if you want in.
+      </p>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></div>
+      </div>
+      <nav class="footer-nav">
+        <div class="footer-nav-col">
+          <a href="./index.html">Overview</a>
+          <a href="./wings-2026.html" class="active">NiCE Wings 2026</a>
+        </div>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="nice-effects.js"></script>
+  <script>
+    // Scroll reveal - lynn/motion/scroll-reveal
+    (function () {
+      var els = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)) {
+        els.forEach(function (el) { el.classList.add('visible'); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      els.forEach(function (el) { io.observe(el); });
+    })();
+
+    // Magnetic primary button - lynn/motion/magnetic-button
+    (function () {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      document.querySelectorAll('.btn-primary:not(.is-placeholder)').forEach(function (btn) {
+        btn.addEventListener('mousemove', function (e) {
+          var r = btn.getBoundingClientRect();
+          var x = (e.clientX - r.left - r.width / 2) * 0.28;
+          var y = (e.clientY - r.top - r.height / 2) * 0.28;
+          btn.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+        });
+        btn.addEventListener('mouseleave', function () { btn.style.transform = ''; });
+      });
+    })();
+
+    // Card tilt + spotlight - lynn/motion/card-tilt-spotlight
+    (function () {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      document.querySelectorAll('.contact-card').forEach(function (card) {
+        card.addEventListener('mousemove', function (e) {
+          var r = card.getBoundingClientRect();
+          var px = (e.clientX - r.left) / r.width;
+          var py = (e.clientY - r.top) / r.height;
+          card.style.transform =
+            'perspective(900px) rotateX(' + ((0.5 - py) * 7).toFixed(2) + 'deg) ' +
+            'rotateY(' + ((px - 0.5) * 7).toFixed(2) + 'deg) translateY(-1px)';
+        });
+        card.addEventListener('mouseleave', function () { card.style.transform = ''; });
+      });
+    })();
+  </script>
+</body>
+</html>

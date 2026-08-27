@@ -605,8 +605,13 @@
     }
   ];
 
-  // Homepage, dashboard, and roadmap don't get the doc rail.
-  var DOC_RAIL_SKIP = { '': true, 'index.html': true, 'dashboard.html': true, 'roadmap.html': true };
+  // Homepage, dashboard, and roadmap don't get the doc rail. Nor does
+  // wings-2026.html: it's the one public, ungated page, so it must not
+  // surface a rail full of links into the access-code-protected site.
+  var DOC_RAIL_SKIP = {
+    '': true, 'index.html': true, 'dashboard.html': true, 'roadmap.html': true,
+    'wings-2026.html': true
+  };
 
   function buildDocRail() {
     var path = global.location.pathname.split('/').pop() || 'index.html';
