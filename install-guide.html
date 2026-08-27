@@ -222,9 +222,8 @@
 
     .numbered-list li {
       counter-increment: ol-counter;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
+      position: relative;
+      padding-left: 36px;
       color: var(--secondary);
       font-size: 0.9375rem;
       line-height: 1.6;
@@ -232,18 +231,19 @@
 
     .numbered-list li::before {
       content: counter(ol-counter);
+      position: absolute;
+      left: 0;
+      top: 1px;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-width: 24px;
+      width: 24px;
       height: 24px;
       border-radius: 50%;
       background: rgba(54,148,252,0.15);
       color: var(--blue);
       font-size: 0.75rem;
       font-weight: 700;
-      flex-shrink: 0;
-      margin-top: 1px;
     }
 
     code, .inline-code {
@@ -560,10 +560,14 @@
               <ol class="numbered-list">
                 <li>Download the latest release: <span class="step-link is-disabled" aria-disabled="true">NiCE-Designer-V11.1.zip</span> <span class="coming-soon-tag">Coming soon!</span></li>
                 <li>Unzip the downloaded package to a location you'll keep it</li>
-                <li>Go to <code>chrome://extensions</code> (or <code>edge://extensions</code>) and enable <strong>Developer Mode</strong> - the toggle is in the top-right corner in Chrome, and at the bottom of the left sidebar in Edge</li>
-                <li>Click <strong>"Load unpacked"</strong> and select the <code>chrome/</code> folder from the unzipped package</li>
+                <li>Go to <code>chrome://extensions</code> (or <code>edge://extensions</code>) and enable <strong>Developer Mode</strong></li>
+                <li>Click <strong>"Load unpacked"</strong> and select the <code>NiCE Designer Chrome</code> folder from the unzipped package</li>
                 <li>The NiCE Designer icon appears in your Chrome toolbar</li>
               </ol>
+              <div class="note-box">
+                <span class="note-box-icon">📍</span>
+                <p><strong>Where is Developer Mode?</strong> Top-right in Chrome, bottom of the left sidebar in Edge - and <strong>Load unpacked</strong> only appears once it's on. Both are marked up below.</p>
+              </div>
               <figure class="step-figure">
                 <img src="./images/install-chrome-extensions.png" alt="The top of the chrome://extensions page. A red box highlights the Load unpacked button on the left of the toolbar, and another highlights the Developer mode toggle switched on at the far right." loading="lazy" width="1400" height="171" />
                 <figcaption><strong>Chrome</strong> - <strong>Developer mode</strong> is the toggle at the top right. Switch it on and the toolbar row appears, with <strong>Load unpacked</strong> at the top left.</figcaption>
@@ -645,11 +649,11 @@ winget install OpenJS.NodeJS.LTS</div>
           <div class="step-card">
             <div class="step-section">
               <div class="step-section-label">One-click install (recommended)</div>
-              <p>The downloaded package includes <strong>"Click to install Claude Connector.mcpb"</strong> at the top of the <code>chrome/</code> folder. Double-click it, confirm the two prompts, and <strong>"nice-designer-mcp"</strong> appears as an installed extension - already running. No file paths, no JSON, no terminal.</p>
+              <p>The <code>NiCE Designer Chrome</code> folder - the same one you loaded in step 1 - has <strong>"Click to install Claude Connector.mcpb"</strong> sitting directly inside it. Double-click it, confirm the two prompts, and <strong>"nice-designer-mcp"</strong> appears as an installed extension - already running. No file paths, no JSON, no terminal.</p>
 
               <figure class="step-figure">
                 <img src="./images/install-mcpb-finder.png" alt="Finder window showing the NiCE Designer Chrome folder. The file named &quot;Click to install Claude Connector.mcpb&quot; sits in the top row between background.js and content.js." loading="lazy" width="1400" height="671" />
-                <figcaption><strong>1.</strong> Open the <code>chrome/</code> folder and look for <strong>"Click to install Claude Connector.mcpb"</strong> in the top row - it's the one with the blank white document icon. Double-click it.</figcaption>
+                <figcaption><strong>1.</strong> Open the <code>NiCE Designer Chrome</code> folder and look for <strong>"Click to install Claude Connector.mcpb"</strong> in the top row - it's the one with the blank white document icon. Double-click it.</figcaption>
               </figure>
 
               <figure class="step-figure">
@@ -808,7 +812,7 @@ node src/index.js</div>
             Chrome extension not loading
           </div>
           <div class="trouble-card-body">
-            Verify that Developer Mode is enabled in <code>chrome://extensions</code> (top-right in Chrome, bottom of the left sidebar in Edge). If the extension still won't load, try removing it and re-loading the unpacked folder. Make sure you're selecting the <code>chrome/</code> subfolder, not the root of the zip.
+            Verify that Developer Mode is enabled in <code>chrome://extensions</code> (top-right in Chrome, bottom of the left sidebar in Edge). If the extension still won't load, try removing it and re-loading the unpacked folder. Make sure you're selecting the <code>NiCE Designer Chrome</code> folder itself - the one containing <code>manifest.json</code> - not the folder above it.
           </div>
         </div>
 
