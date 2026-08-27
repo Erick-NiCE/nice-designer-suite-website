@@ -184,5 +184,37 @@
       "references/enlighten-ai.md",
       "references/public-safety-evidencentral.md"
     ]
+  },
+  {
+    "id": "team-strengths",
+    "title": "Team strengths",
+    "question": "Who should I put on this, and what will this group get wrong?",
+    "what": "The design team's CliftonStrengths grid (45 people, top 10 themes each) plus the analysis: lookup, group composition, find-the-person matching, and 1:1 coaching prep.",
+    "benefit": "Staffing and 1:1 decisions grounded in how people actually work, instead of who was free.",
+    "clients": "both",
+    "tools": [],
+    "author": "NiCE Designer",
+    "thirdParty": false,
+    "files": [
+      "references/playbooks.md",
+      "references/roster.md",
+      "references/theme-index.md",
+      "references/themes.md"
+    ]
+  },
+  {
+    "id": "eac-framework-guide",
+    "title": "EAC Framework Guide",
+    "question": "Which tenet does this fall under, and what do I actually show my manager?",
+    "what": "The eight Personal behaviors cards from the Engagement Orchestration PM framework: purpose, capabilities, and the verbatim 'show your manager' column, plus routing, calibration prep, self-assessment and manager-side calibration.",
+    "benefit": "Turns a framework you skim once into the specific instance you bring to your next 1:1.",
+    "clients": "both",
+    "tools": [],
+    "author": "EAC Team",
+    "thirdParty": true,
+    "files": [
+      "references/playbooks.md",
+      "references/tenets.md"
+    ]
   }
 ]
