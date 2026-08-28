@@ -138,18 +138,18 @@
       font-size: 14px;
       line-height: 1.6;
       color: rgba(255, 255, 255, 0.85);
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
+      position: relative;
+      padding-left: 15px;
     }
     .changelog-list li::before {
       content: '';
+      position: absolute;
+      left: 0;
+      top: 9px;
       width: 5px;
       height: 5px;
       border-radius: 50%;
       background: var(--blue);
-      margin-top: 8px;
-      flex-shrink: 0;
     }
     .changelog-list.fixes li::before { background: var(--coral); }
     .changelog-list.improvements li::before { background: var(--emerald); }
@@ -235,13 +235,51 @@
   <!-- CHANGELOG -->
   <div class="page-section" id="changelog">
 
-    <!-- v11.1 - always shown -->
-    <div class="changelog-card stagger-1" id="release-v11-1">
+    <!-- v11.2 - always shown -->
+    <div class="changelog-card stagger-1" id="release-v11-2">
       <div class="changelog-main">
         <div class="changelog-meta">
           <div class="version-badge">
-            v11.1 <span class="version-latest">LATEST</span>
+            v11.2 <span class="version-latest">LATEST</span>
           </div>
+          <div class="version-date">August 2026</div>
+        </div>
+        <div class="changelog-content">
+          <div class="changelog-group">
+            <div class="changelog-group-label">New features</div>
+            <ul class="changelog-list">
+              <li>Components browser now matches Storybook 1:1 - every synced component shows its description, guidelines, variant names, use cases, and Do's and Don'ts, pulled live, with SOL branding normalized to our own naming (e.g. "Tabs", not "SOL Tabs")</li>
+              <li>Skills are now found and loaded through <code>list_skills</code> / <code>get_skill</code>, which check a small hosted catalog first - so a skill fix or a brand-new skill reaches every installed connector with <strong>no reinstall</strong></li>
+              <li>New skill - <strong>North Star Fox</strong> (by Janet Gonzales): scores a CXone AI design or JIRA ticket against the 12 NiCE AI design tenets plus Lyra/NiCE Brand adherence</li>
+              <li>New skill - <strong>Team Strengths</strong>: look up a teammate's CliftonStrengths, staff a piece of work, check whether a group is balanced, or prep a strengths-based 1:1</li>
+              <li>New skill - <strong>EAC Framework Guide</strong>: the EAC Team's PM behavior framework, for calibrations, 1:1 prep, and working out which tenet a situation falls under</li>
+              <li>Anonymous, opt-out usage analytics (Settings - "Share anonymous usage") so we can see which tools and skills actually get used. No node names, file names, page contents, or URLs ever leave your machine</li>
+            </ul>
+          </div>
+          <div class="changelog-group">
+            <div class="changelog-group-label">Improvements</div>
+            <ul class="changelog-list improvements">
+              <li>Self-update script for unpacked Chrome installs - one command grabs and applies the latest build</li>
+              <li>Audit tab now tracks replaced rows, so a re-run shows what actually changed</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- v11.1 - collapsible -->
+    <div class="changelog-card stagger-2" id="release-v11-1">
+      <button class="changelog-toggle-row" aria-expanded="false" data-target="v11-1-body">
+        <div class="changelog-toggle-left">
+          <span class="changelog-toggle-version">v11.1</span>
+          <span class="changelog-toggle-date">August 2026</span>
+        </div>
+        <span class="changelog-toggle-arrow" id="v11-1-arrow">&#8964;</span>
+      </button>
+      <div class="changelog-collapsible" id="v11-1-body">
+      <div class="changelog-main">
+        <div class="changelog-meta">
+          <div class="version-badge">v11.1</div>
           <div class="version-date">August 2026</div>
         </div>
         <div class="changelog-content">
@@ -268,10 +306,11 @@
           </div>
         </div>
       </div>
+      </div>
     </div>
 
     <!-- v10 - collapsible -->
-    <div class="changelog-card stagger-2" id="release-v10">
+    <div class="changelog-card stagger-3" id="release-v10">
       <button class="changelog-toggle-row" aria-expanded="false" data-target="v10-body">
         <div class="changelog-toggle-left">
           <span class="changelog-toggle-version">v10</span>
@@ -320,7 +359,7 @@
     </div>
 
     <!-- v9 - collapsible -->
-    <div class="changelog-card stagger-3" id="release-v9">
+    <div class="changelog-card stagger-4" id="release-v9">
       <button class="changelog-toggle-row" aria-expanded="false" data-target="v9-body">
         <div class="changelog-toggle-left">
           <span class="changelog-toggle-version">v9</span>
@@ -362,7 +401,7 @@
     </div>
 
     <!-- v8 - collapsible -->
-    <div class="changelog-card stagger-4" id="release-v8">
+    <div class="changelog-card stagger-5" id="release-v8">
       <button class="changelog-toggle-row" aria-expanded="false" data-target="v8-body">
         <div class="changelog-toggle-left">
           <span class="changelog-toggle-version">v8</span>

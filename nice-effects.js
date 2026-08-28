@@ -549,6 +549,7 @@
       href: 'release-notes.html', label: 'Release Notes',
       groups: [
         { label: 'Versions', items: [
+          { id: 'release-v11-2', label: 'v11.2 — August 2026' },
           { id: 'release-v11-1', label: 'v11.1 — August 2026' },
           { id: 'release-v10', label: 'v10 — June 2026' },
           { id: 'release-v9', label: 'v9 — May 2026' },
