@@ -216,5 +216,377 @@
       "references/playbooks.md",
       "references/tenets.md"
     ]
+  },
+  {
+    "id": "ux-research-planning",
+    "title": "Research planning",
+    "question": "What method answers this question, and what do I actually ask?",
+    "what": "Matches a research question to a method, then writes the brief, discussion guide, or screener it needs. Carries the JTBD switching-interview structure and survey/SUS design as reference files.",
+    "benefit": "A study someone else could run, anchored to the decision it informs instead of to what was easy to schedule.",
+    "clients": "both",
+    "tools": [],
+    "author": "Serena Yang",
+    "thirdParty": true,
+    "files": [
+      "references/jtbd-timeline.md",
+      "references/survey-design.md"
+    ]
+  },
+  {
+    "id": "ux-research-synthesis",
+    "title": "Research synthesis",
+    "question": "I have the sessions back. What does this actually say?",
+    "what": "Thematic analysis, affinity mapping, personas and journey maps from submitted data, split into convergent patterns, contradictions, and thin signals rather than one flat list.",
+    "benefit": "Findings traceable to the data behind them, with the contradictions named instead of averaged into a \"mixed reception\" theme.",
+    "clients": "both",
+    "tools": [],
+    "author": "Serena Yang",
+    "thirdParty": true,
+    "files": [
+      "references/dovetail-retrieval.md"
+    ]
+  },
+  {
+    "id": "ux-research-readouts",
+    "title": "Research readouts",
+    "question": "How do I get this in front of stakeholders without it getting waved off?",
+    "what": "Readouts, exec summaries, decks, HTML deliverables and flow diagrams, plus audience tailoring and the writing standards that apply to every research artifact.",
+    "benefit": "A readout that leads with the conclusion and preempts the three objections every research review gets.",
+    "clients": "both",
+    "tools": [],
+    "author": "Serena Yang",
+    "thirdParty": true,
+    "files": []
+  },
+  {
+    "id": "defuddle",
+    "title": "Clean web page extraction",
+    "question": "Can you just give me the article, not the whole page?",
+    "what": "Uses the Defuddle CLI to strip navigation, ads, and clutter from a web page and return clean markdown.",
+    "benefit": "Cuts token usage on any URL fetch that is not already markdown, without losing the actual content.",
+    "clients": "both",
+    "tools": [],
+    "author": "NiCE Designer",
+    "thirdParty": false,
+    "files": []
+  },
+  {
+    "id": "prompt-guru",
+    "title": "Prompt guru",
+    "question": "Is this prompt actually going to get me what I want?",
+    "what": "Reviews a vague or under-specified prompt, rewrites it, explains the improvement, and runs the better version.",
+    "benefit": "Catches ambiguity before it burns a turn on the wrong answer.",
+    "clients": "both",
+    "tools": [],
+    "author": "NiCE Designer",
+    "thirdParty": false,
+    "files": []
+  },
+  {
+    "id": "ui-bug-hunter",
+    "title": "UI bug hunter",
+    "question": "What is wrong with this screenshot?",
+    "what": "Runs a structured 9-layer visual QA pass over a screenshot, image, or recording and produces Jira-style tickets for every real issue.",
+    "benefit": "A bug list ready to file, not a paragraph of impressions.",
+    "clients": "both",
+    "tools": [],
+    "author": "NiCE Designer",
+    "thirdParty": false,
+    "files": [
+      "references/jira-integration.md",
+      "references/performance-thresholds.md"
+    ]
+  },
+  {
+    "id": "obsidian-power-user",
+    "title": "Obsidian power user",
+    "question": "Can you just build this directly in my Obsidian vault?",
+    "what": "Produces the actual Obsidian artifact — notes, canvases, bases, Dataview queries, Templater templates, vault structures, CSS snippets — for any vault request.",
+    "benefit": "One skill for the whole vault, so a request does not have to be pre-sorted into canvas vs. base vs. note.",
+    "clients": "both",
+    "tools": [],
+    "author": "NiCE Designer",
+    "thirdParty": false,
+    "files": [
+      "references/core-plugins.md",
+      "references/import.md",
+      "references/publish-and-webclipper.md",
+      "references/ui-and-extending.md"
+    ]
+  },
+  {
+    "id": "obsidian-markdown",
+    "title": "Obsidian-flavored markdown",
+    "question": "How do I write this note so Obsidian's extensions actually work?",
+    "what": "Wikilinks, embeds, callouts, properties, and the other Obsidian-specific Markdown extensions beyond standard CommonMark.",
+    "benefit": "Notes that render correctly in Obsidian the first time, not after a round of fixing broken syntax.",
+    "clients": "both",
+    "tools": [],
+    "author": "NiCE Designer",
+    "thirdParty": false,
+    "files": [
+      "references/CALLOUTS.md",
+      "references/EMBEDS.md",
+      "references/PROPERTIES.md"
+    ]
+  },
+  {
+    "id": "obsidian-bases",
+    "title": "Obsidian Bases",
+    "question": "Can I get a database-style view of these notes?",
+    "what": "Creates and edits .base files — filters, formulas, table/card/list/map views.",
+    "benefit": "A working Base on the first try, since Base YAML fails silently on quoting mistakes.",
+    "clients": "both",
+    "tools": [],
+    "author": "NiCE Designer",
+    "thirdParty": false,
+    "files": [
+      "references/FUNCTIONS_REFERENCE.md"
+    ]
+  },
+  {
+    "id": "obsidian-cli",
+    "title": "Obsidian CLI",
+    "question": "Can you drive my actual running Obsidian instance?",
+    "what": "Reads, creates, and searches vault notes via the Obsidian CLI, plus plugin/theme development commands (reload, run JS, screenshot, inspect DOM). Requires Obsidian to be open.",
+    "benefit": "Vault operations that touch the live app, not just files on disk.",
+    "clients": "both",
+    "tools": [],
+    "author": "NiCE Designer",
+    "thirdParty": false,
+    "files": []
+  },
+  {
+    "id": "json-canvas",
+    "title": "JSON Canvas",
+    "question": "Can you lay this out as an Obsidian canvas / mind map?",
+    "what": "Creates and edits .canvas files per the JSON Canvas 1.0 spec — nodes, edges, groups, connections.",
+    "benefit": "A canvas file that opens correctly in Obsidian, not just visually-plausible JSON.",
+    "clients": "both",
+    "tools": [],
+    "author": "NiCE Designer",
+    "thirdParty": false,
+    "files": [
+      "references/EXAMPLES.md"
+    ]
+  },
+  {
+    "id": "meeting-distiller",
+    "title": "Meeting → design brief",
+    "question": "I have raw discovery notes — can you turn this into something I can actually design from?",
+    "what": "Layer 1 of the ideation pipeline: transforms raw meeting notes or transcripts into a structured Design Brief.",
+    "benefit": "A brief the next three pipeline stages can consume, instead of a wall of meeting notes.",
+    "clients": "both",
+    "tools": [],
+    "author": "Yaara Bar",
+    "thirdParty": true,
+    "files": []
+  },
+  {
+    "id": "fast-research-pack",
+    "title": "Fast research pack",
+    "question": "What has already been tried here, and what patterns should this borrow from?",
+    "what": "Layer 2 of the ideation pipeline: generates analogous solutions, design patterns, competitive landscape, UX heuristics, and anti-patterns from a Design Brief.",
+    "benefit": "Replaces a day or two of secondary research with a few minutes, grounded in the actual brief.",
+    "clients": "both",
+    "tools": [],
+    "author": "Yaara Bar",
+    "thirdParty": true,
+    "files": []
+  },
+  {
+    "id": "proposal-generator",
+    "title": "Proposal generator",
+    "question": "Can you give me a few genuinely different directions, not just one idea?",
+    "what": "Layer 3 of the ideation pipeline: generates Conservative / Progressive / Disruptive proposals from a Design Brief and Research Pack, each with concept, journey, screen inventory, and a scoring matrix.",
+    "benefit": "A real choice between directions with trade-offs spelled out, instead of one idea to react to.",
+    "clients": "both",
+    "tools": [],
+    "author": "Yaara Bar",
+    "thirdParty": true,
+    "files": []
+  },
+  {
+    "id": "wireframe-generator",
+    "title": "Wireframe generator",
+    "question": "Can I get a clickable prototype out of this proposal?",
+    "what": "Layer 4a of the ideation pipeline: generates a self-contained, annotated, responsive HTML wireframe prototype from a design proposal.",
+    "benefit": "Something to click through and react to, not just a static description of the screens.",
+    "clients": "both",
+    "tools": [],
+    "author": "Yaara Bar",
+    "thirdParty": true,
+    "files": []
+  },
+  {
+    "id": "figma-push",
+    "title": "Push proposal to Figma",
+    "question": "Can you get this proposal into Figma as real frames?",
+    "what": "Layer 4b of the ideation pipeline: pushes proposal screens into Figma via the Figma MCP as named, auto-laid-out frames bound to design tokens.",
+    "benefit": "A structured proposal page in the actual design file, ready for a designer to refine instead of rebuild.",
+    "clients": "figma",
+    "tools": [],
+    "author": "Yaara Bar",
+    "thirdParty": true,
+    "files": []
+  },
+  {
+    "id": "design-ops",
+    "title": "Design ops",
+    "question": "How should my whole team run this, not just how do I do it once?",
+    "what": "Builds reusable team process for design leads: critique frameworks, sprint planning, handoff process, onboarding plans, working agreements, program reviews.",
+    "benefit": "A process the team runs every sprint, not a one-off answer that has to be re-derived next time.",
+    "clients": "both",
+    "tools": [],
+    "author": "Yaara Bar",
+    "thirdParty": true,
+    "files": []
+  },
+  {
+    "id": "design-research",
+    "title": "Design research",
+    "question": "What research method fits this question, and how do I run it end to end?",
+    "what": "Research planning, interview guides, usability test plans, synthesis, personas, journey maps, card sorting, tree testing, and survey analysis, plus method selection.",
+    "benefit": "One answer for \"how do I find out\" across the whole research lifecycle, not just the write-up stage.",
+    "clients": "both",
+    "tools": [],
+    "author": "Yaara Bar",
+    "thirdParty": true,
+    "files": []
+  },
+  {
+    "id": "ux-strategy",
+    "title": "UX strategy",
+    "question": "What is our north star, and how does it tie to the business?",
+    "what": "Design principles, UX vision documents, experience maps, and problem framing that connect user needs to business outcomes.",
+    "benefit": "A strategic artifact that aligns a team for months, not a single decision for one project.",
+    "clients": "both",
+    "tools": [],
+    "author": "Yaara Bar",
+    "thirdParty": true,
+    "files": []
+  },
+  {
+    "id": "product-thinking-partner",
+    "title": "Product thinking partner",
+    "question": "Can you push back on this instead of just agreeing with me?",
+    "what": "A dialogue protocol for product/research/UX work that pressure-tests claims, separates evidence from hypothesis, and challenges framing before it goes in a document.",
+    "benefit": "Catches the bias and the unexamined assumption before it ships in a deck, not after.",
+    "clients": "both",
+    "tools": [],
+    "author": "Yaara Bar",
+    "thirdParty": true,
+    "files": []
+  },
+  {
+    "id": "prism",
+    "title": "Prism",
+    "question": "I have messy notes and a blank page — help me think this through.",
+    "what": "Turns raw product inputs into decision-quality thinking and writing: synthesis, positioning, competitive analysis, prioritization, PRDs, stakeholder updates, and strategy briefs.",
+    "benefit": "Structured product thinking before structured product writing, so the document is not built on an unexamined claim.",
+    "clients": "both",
+    "tools": [],
+    "author": "Yaara Bar",
+    "thirdParty": true,
+    "files": [
+      "references/positioning-messaging-storytelling.md",
+      "references/prioritization-competitive-validation.md",
+      "references/research-and-jtbd.md"
+    ]
+  },
+  {
+    "id": "figma-a11y-instructions",
+    "title": "Figma → developer a11y instructions",
+    "question": "Can you write the accessibility spec for this screen so a developer can just build it?",
+    "what": "Produces a fixed-style HTML accessibility spec from a Figma screen URL: semantic structure, tab order, keyboard patterns, screen-reader text, and a color/contrast table with WCAG-passing recommendations.",
+    "benefit": "A polished, consistent a11y handoff doc per screen instead of a one-off markdown list that looks different every time.",
+    "clients": "both",
+    "tools": [],
+    "author": "Yaara Bar",
+    "thirdParty": true,
+    "files": [
+      "references/color-system.md",
+      "references/lyra-doc-pattern.md",
+      "references/sections.md"
+    ]
+  },
+  {
+    "id": "hero-flows-research-os",
+    "title": "Research lead operating system",
+    "question": "How do I run a small research team without the process becoming a second job?",
+    "what": "A minimum-viable-rigor operating system for a one-person research lead: three effort-scaled modes, an evidence chain, a decision brief, and a shared knowledge base.",
+    "benefit": "The lightest process that still produces a traceable, falsifiable decision — scaled to the size of the question, not a fixed heavyweight ritual.",
+    "clients": "both",
+    "tools": [],
+    "author": "Yaara Bar",
+    "thirdParty": true,
+    "files": [
+      "references/governance.md",
+      "references/knowledge-base.md",
+      "references/tools.md"
+    ]
+  },
+  {
+    "id": "nice-present",
+    "title": "NiCE Present",
+    "question": "Can you build me a deck for this, right here in the chat?",
+    "what": "Creates a polished, NiCE-branded internal presentation as a self-contained interactive HTML slide deck rendered inline — pitches, exec updates, project briefs, roadmap and team updates.",
+    "benefit": "A presentable deck in the conversation itself, with no separate slide tool round-trip.",
+    "clients": "both",
+    "tools": [],
+    "author": "Yaara Bar",
+    "thirdParty": true,
+    "files": []
+  },
+  {
+    "id": "pm-brain",
+    "title": "PM Brain",
+    "question": "Can you set me up a second brain for this product, not just answer one question about it?",
+    "what": "Scaffolds a markdown-native second brain for a product operator: detects greenfield vs. migration, runs an interview, populates a deterministic folder structure, and self-tests.",
+    "benefit": "A durable, searchable home for judgment-heavy product work instead of scattered docs and chat history.",
+    "clients": "both",
+    "tools": [],
+    "author": "Yaara Bar",
+    "thirdParty": true,
+    "files": [
+      "prompts/interview.md",
+      "prompts/migration.md",
+      "prompts/mode-detection.md",
+      "prompts/post-scaffold.md",
+      "scaffold/CLAUDE.md",
+      "scaffold/INDEX.md",
+      "scaffold/README.md",
+      "scaffold/decisions/INDEX.md",
+      "scaffold/decisions/_SCHEMA.md",
+      "scaffold/docs/overview.md",
+      "scaffold/docs/schemas.md",
+      "scaffold/docs/system-evolution.md",
+      "scaffold/docs/workflows.md",
+      "scaffold/hypotheses/INDEX.md",
+      "scaffold/hypotheses/_SCHEMA.md",
+      "scaffold/ingestion/INDEX.md",
+      "scaffold/knowledge/market/landscape.md",
+      "scaffold/knowledge/market/trends.md",
+      "scaffold/knowledge/org/rituals.md",
+      "scaffold/knowledge/org/team.md",
+      "scaffold/knowledge/org/tools.md",
+      "scaffold/knowledge/product/features/_SCHEMA.md",
+      "scaffold/knowledge/product/metrics.md",
+      "scaffold/knowledge/product/roadmap.md",
+      "scaffold/knowledge/strategy.md",
+      "scaffold/knowledge/users/insights.md",
+      "scaffold/knowledge/users/personas.md",
+      "scaffold/knowledge/users/segments.md",
+      "scaffold/maintenance/INDEX.md",
+      "scaffold/rules/INDEX.md",
+      "scaffold/rules/data.md",
+      "scaffold/rules/discovery.md",
+      "scaffold/rules/prioritization.md",
+      "scaffold/rules/shipping.md",
+      "scaffold/rules/writing.md",
+      "scaffold/source/INDEX.md",
+      "scaffold/stakeholders/INDEX.md",
+      "scaffold/stakeholders/_SCHEMA.md"
+    ]
   }
 ]

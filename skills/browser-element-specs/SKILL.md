@@ -25,6 +25,13 @@ If the user says "specs for this layer" without specifying Chrome, check `list_t
 2. Call `get_selection_info` with `target: "chrome"`.
    - If `hasSelection` is false or `nodeId === "body"`, ask the user to click **🔍 Inspect** in the extension and pick an element, then stop. (Don't start inspect automatically — the user should be in control of which element they pick.)
    - Record `nodeName` for the spec heading.
+   - **If `figmaComPage` is set**, the user is browsing Figma in the browser. Figma renders its canvas
+     in WebGL, so that tab has no design DOM and there is no way to read the design from it. Do NOT ask
+     them to click Inspect, and do not treat anything the page returns as design content (it would be
+     Figma's own app shell). `extract_dev_details`, `extract_all_css` and the `audit_*` tools all fail
+     there by design. Do not suggest Figma's REST API as a workaround: it rate-limits file reads by seat,
+     and a view-only seat gets only about 20 per month on every plan including Enterprise. Tell the user
+     to open the file in the Figma desktop app and run the NiCE Designer Figma plugin, then stop.
 
 ## Extract
 
