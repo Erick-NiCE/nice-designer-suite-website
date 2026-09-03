@@ -235,13 +235,85 @@
   <!-- CHANGELOG -->
   <div class="page-section" id="changelog">
 
-    <!-- v11.2 - always shown -->
-    <div class="changelog-card stagger-1" id="release-v11-2">
+    <!-- v11.4 - always shown -->
+    <div class="changelog-card stagger-1" id="release-v11-4">
       <div class="changelog-main">
         <div class="changelog-meta">
           <div class="version-badge">
-            v11.2 <span class="version-latest">LATEST</span>
+            v11.4 <span class="version-latest">LATEST</span>
           </div>
+          <div class="version-date">September 2026</div>
+        </div>
+        <div class="changelog-content">
+          <div class="changelog-group">
+            <div class="changelog-group-label">New features</div>
+            <ul class="changelog-list">
+              <li>New skill - <strong>Emotional Intelligence</strong> (by Megan Fisher): a voice-and-tone guide for leadership writing, feedback, performance reviews, and difficult conversations like layoffs, PIPs, and conflict mediation</li>
+            </ul>
+          </div>
+          <div class="changelog-group">
+            <div class="changelog-group-label">Fixes</div>
+            <ul class="changelog-list improvements">
+              <li>Fixed the compliance gauge on both Figma and Chrome: the score used to be a single ratio pooled across all instance counts, which let one huge category (Colors, often tens of thousands of paints) fully mask another sitting at 0% compliance but small (e.g. Components). The score is now the average of each audited category's own compliance rate, weighted equally regardless of instance count</li>
+              <li>Removed the "use Figma content as default on figma.com" Settings toggle - the panel already blocks figma.com outright, so Chrome's view of that domain was never a real option to pick</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- v11.3 - collapsible -->
+    <div class="changelog-card stagger-2" id="release-v11-3">
+      <button class="changelog-toggle-row" aria-expanded="false" data-target="v11-3-body">
+        <div class="changelog-toggle-left">
+          <span class="changelog-toggle-version">v11.3</span>
+          <span class="changelog-toggle-date">September 2026</span>
+        </div>
+        <span class="changelog-toggle-arrow" id="v11-3-arrow">&#8964;</span>
+      </button>
+      <div class="changelog-collapsible" id="v11-3-body">
+      <div class="changelog-main">
+        <div class="changelog-meta">
+          <div class="version-badge">v11.3</div>
+          <div class="version-date">September 2026</div>
+        </div>
+        <div class="changelog-content">
+          <div class="changelog-group">
+            <div class="changelog-group-label">New features</div>
+            <ul class="changelog-list">
+              <li>Browsing a Figma file in Chrome no longer reports on Figma's own interface - Figma draws its canvas in WebGL, so a Figma tab has no design content to read. The panel now says so and offers a one-click deep link that opens the exact file and layer in the Figma desktop app, where the Figma plugin reads the real document</li>
+              <li>New Settings toggle: "Use Figma content as default on figma.com" - with both the plugin and extension connected to Claude, tools that would previously have to ask which one you meant now default to the real Figma file</li>
+              <li>Spec Mode now reads SVG - selecting a chart, gauge, or icon used to return an empty CSS document and a single flat colour. It now reports every painted fill and stroke in the graphic with its stroke width, the geometry attributes for each shape, and the SVG markup itself</li>
+            </ul>
+          </div>
+          <div class="changelog-group">
+            <div class="changelog-group-label">Improvements</div>
+            <ul class="changelog-list improvements">
+              <li>The CSS section follows your selection: click a frame and it shows and copies that frame's CSS, not the last thing you looked at</li>
+              <li>One clear copy button in the CSS section instead of three that each copied something slightly different</li>
+              <li>Spec Mode reordered so what you have selected reads top-down: the selection and its details lead, with the eyedropper and saved palettes moved below them</li>
+              <li>Fixed inline links rendering in the browser default blue instead of the design system accent colour, and added a shared text input style so pasted-value fields match the rest of the app</li>
+              <li>Retired the Figma accessibility guide skill - it depended on Figma REST file reads, which are rate limited to roughly 20 per month on a view-only seat</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <!-- v11.2 - collapsible -->
+    <div class="changelog-card stagger-3" id="release-v11-2">
+      <button class="changelog-toggle-row" aria-expanded="false" data-target="v11-2-body">
+        <div class="changelog-toggle-left">
+          <span class="changelog-toggle-version">v11.2</span>
+          <span class="changelog-toggle-date">August 2026</span>
+        </div>
+        <span class="changelog-toggle-arrow" id="v11-2-arrow">&#8964;</span>
+      </button>
+      <div class="changelog-collapsible" id="v11-2-body">
+      <div class="changelog-main">
+        <div class="changelog-meta">
+          <div class="version-badge">v11.2</div>
           <div class="version-date">August 2026</div>
         </div>
         <div class="changelog-content">
@@ -265,10 +337,11 @@
           </div>
         </div>
       </div>
+      </div>
     </div>
 
     <!-- v11.1 - collapsible -->
-    <div class="changelog-card stagger-2" id="release-v11-1">
+    <div class="changelog-card stagger-4" id="release-v11-1">
       <button class="changelog-toggle-row" aria-expanded="false" data-target="v11-1-body">
         <div class="changelog-toggle-left">
           <span class="changelog-toggle-version">v11.1</span>
@@ -310,7 +383,7 @@
     </div>
 
     <!-- v10 - collapsible -->
-    <div class="changelog-card stagger-3" id="release-v10">
+    <div class="changelog-card stagger-5" id="release-v10">
       <button class="changelog-toggle-row" aria-expanded="false" data-target="v10-body">
         <div class="changelog-toggle-left">
           <span class="changelog-toggle-version">v10</span>
@@ -359,7 +432,7 @@
     </div>
 
     <!-- v9 - collapsible -->
-    <div class="changelog-card stagger-4" id="release-v9">
+    <div class="changelog-card stagger-6" id="release-v9">
       <button class="changelog-toggle-row" aria-expanded="false" data-target="v9-body">
         <div class="changelog-toggle-left">
           <span class="changelog-toggle-version">v9</span>
@@ -401,7 +474,7 @@
     </div>
 
     <!-- v8 - collapsible -->
-    <div class="changelog-card stagger-5" id="release-v8">
+    <div class="changelog-card stagger-7" id="release-v8">
       <button class="changelog-toggle-row" aria-expanded="false" data-target="v8-body">
         <div class="changelog-toggle-left">
           <span class="changelog-toggle-version">v8</span>
