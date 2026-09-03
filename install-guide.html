@@ -409,6 +409,80 @@
       margin: 64px 0;
     }
 
+    /* ---- UPDATING THE APP ---- */
+    .update-eyebrow {
+      color: var(--teal);
+    }
+
+    .update-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .update-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 26px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .update-card:hover {
+      border-color: rgba(54, 234, 208, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .update-card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .update-card-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: none;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(54, 234, 208, 0.12);
+      border: 1px solid rgba(54, 234, 208, 0.35);
+      color: var(--teal);
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .update-best {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .update-best strong {
+      color: var(--teal);
+      font-weight: 600;
+    }
+
+    .update-card .note-box,
+    .update-card .warn-box {
+      margin-top: 16px;
+    }
+
+    .update-intro {
+      color: var(--secondary);
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      max-width: 74ch;
+      margin-bottom: 32px;
+    }
+
     /* ---- TROUBLESHOOTING ---- */
     .section-eyebrow {
       font-size: 0.75rem;
@@ -436,6 +510,10 @@
       .trouble-grid {
         grid-template-columns: 1fr;
       }
+    }
+
+    .trouble-card-full {
+      grid-column: 1 / -1;
     }
 
     .trouble-card {
@@ -871,12 +949,104 @@ node src/index.js</div>
     <!-- DIVIDER -->
     <div class="section-divider reveal"></div>
 
+    <!-- UPDATING THE APP -->
+    <section class="reveal" id="updating">
+      <div class="section-eyebrow update-eyebrow">Staying current</div>
+      <h2 class="section-title">Updating the App</h2>
+
+      <p class="update-intro">The Chrome extension is a <strong>Load unpacked</strong> install, so Chrome never updates it for you - that is a browser restriction on sideloaded extensions, not a setting we can switch on. <strong>Settings &gt; Version</strong> has a refresh button that tells you when a newer build is out; below are the three ways to actually take it. The Figma plugin is different - it updates through Figma itself, so there is nothing to do there.</p>
+
+      <div class="update-grid">
+
+        <div class="update-card" id="update-manual">
+          <div class="update-card-title">
+            <span class="update-card-num">1</span>
+            Download from the website
+          </div>
+          <p class="update-best"><strong>Best for</strong> your first install, or updating by hand while keeping your settings, Supercharge connection, welcome-tour state, and anything else stored in the extension.</p>
+          <ol class="numbered-list">
+            <li>Download the latest release: <span class="step-link is-disabled" aria-disabled="true" data-latest-download>NiCE-Designer-V11.3.zip</span> <span class="coming-soon-tag">Coming soon!</span></li>
+            <li>Unzip it - this gives you a new <code>NiCE Designer Chrome</code> folder</li>
+            <li><strong>Drag the files out of that new folder and into your existing, already-installed folder</strong> - the same one you originally pointed <strong>Load unpacked</strong> at - overwriting everything when your file manager asks</li>
+            <li>Go to <code>chrome://extensions</code> and click <strong>Reload</strong> on NiCE Designer Suite</li>
+          </ol>
+          <div class="note-box">
+            <span class="note-box-icon">🔑</span>
+            <p><strong>Why the same folder matters.</strong> Chrome generates the extension's storage identity from the folder's path, since a <strong>Load unpacked</strong> install has no fixed ID of its own. Overwrite files <em>inside</em> the folder you already loaded and everything tied to that identity survives untouched - your settings, theme, Supercharge toggle and connection, welcome-tour progress, all of it. Unzip to a <em>new</em> folder and load that instead, and Chrome treats it as a completely different extension: fresh storage, every setting back to default, and you would need to remove the old entry in <code>chrome://extensions</code> yourself to avoid running two copies side by side.</p>
+          </div>
+        </div>
+
+        <div class="update-card">
+          <div class="update-card-title">
+            <span class="update-card-num">2</span>
+            Check for updates in Settings
+          </div>
+          <p class="update-best"><strong>Best for</strong> finding out you are behind, then updating on your own terms.</p>
+          <ol class="numbered-list">
+            <li>Open the side panel and go to <strong>Settings</strong></li>
+            <li>Click the refresh icon next to <strong>Version</strong>. It reads the published version and tells you either <em>"You're up to date"</em> or <em>"Update available"</em></li>
+            <li>Click the download link it gives you - it grabs the zip and brings you straight to the <a href="#update-manual" class="step-link">manual walkthrough above</a>, so you land on the same "same folder, drag files in" steps instead of having to find them yourself</li>
+          </ol>
+          <div class="note-box">
+            <span class="note-box-icon">ℹ️</span>
+            <p>This button <strong>checks and links</strong> - it cannot install anything itself. See <em>Why there is no one-click update</em> below.</p>
+          </div>
+        </div>
+
+        <div class="update-card">
+          <div class="update-card-title">
+            <span class="update-card-num">3</span>
+            Ask Claude to do it
+          </div>
+          <p class="update-best"><strong>Best for</strong> the fastest route, if you already use Claude Code on this machine.</p>
+          <ol class="numbered-list">
+            <li>In Claude Code, ask it to update NiCE Designer and point it at your installed extension folder</li>
+            <li>Claude runs <code>self-update.sh</code> from inside that folder. The script compares your installed version against the published one, downloads the new build, and copies it over your folder in place - no unzipping, no dragging files around</li>
+            <li>Go to <code>chrome://extensions</code> and click <strong>Reload</strong>. This last click is always yours - Chrome does not let a script do it</li>
+          </ol>
+          <div class="warn-box">
+            <span class="warn-box-icon">⚠️</span>
+            <p>This needs a Claude that can run shell commands, which means <strong>Claude Code</strong>. Supercharge on its own is not enough: the MCP server's <code>install_update</code> tool is a separate thing that updates <em>the MCP server</em> from a git clone, not the Chrome extension.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="warn-box">
+        <span class="warn-box-icon">🔒</span>
+        <p><strong>Why there is no one-click update.</strong> Chrome deliberately blocks a sideloaded extension from replacing its own files or reloading itself, and extensions get no shell access and no write access to their own install folder. So no button inside the app can ever install a build for you. <code>self-update.sh</code> collapses download, unzip and copy into a single command, but the final <strong>Reload</strong> in <code>chrome://extensions</code> is always a manual click.</p>
+      </div>
+    </section>
+
+    <!-- DIVIDER -->
+    <div class="section-divider reveal"></div>
+
     <!-- TROUBLESHOOTING -->
     <section class="reveal" id="step-issues">
       <div class="section-eyebrow">Troubleshooting</div>
       <h2 class="section-title">Common Issues</h2>
 
       <div class="trouble-grid">
+
+        <div class="trouble-card trouble-card-full">
+          <div class="trouble-card-title">
+            <span class="trouble-icon">🪄</span>
+            Reading a Figma design that is open in Claude Design
+          </div>
+          <div class="trouble-card-body">
+            <p>Claude Design renders a real page, unlike figma.com, whose canvas is one WebGL element with no readable markup. That means the Chrome extension works there normally: click <strong>Pick</strong>, select any element, and Spec Mode reads it, with the same data available to Claude through the MCP tools. This is the shortest route from a Figma design to code, and it is available on a view-only Figma seat.</p>
+
+            <figure class="step-figure">
+              <img src="./images/claude-design-select-element.png" alt="A dashboard open in Claude Design with the NiCE Designer Suite side panel beside it. A div is selected and Spec Mode lists its layout, fills, strokes, typography and auto layout values, with Copy CSS at the bottom." loading="lazy" width="2000" height="1260" />
+              <figcaption><strong>Option 1 - select elements in place.</strong> Pick any element and Spec Mode gives you its measurements, colours, typography and CSS, exactly as it would on a live web page. Charts and gauges work too: an SVG reports every painted fill and stroke plus its markup. Use this when you want to work element by element, or drive it from Claude over MCP.</figcaption>
+            </figure>
+
+            <figure class="step-figure">
+              <img src="./images/claude-design-export-claude-code.png" alt="The Claude Design export menu, listing Claude Code with a Send action, PDF, Project HTML as a zip or standalone, PowerPoint, and More formats and apps." loading="lazy" width="836" height="608" />
+              <figcaption><strong>Option 2 - send the whole thing to Claude Code.</strong> Use <strong>Share &gt; Export &gt; Claude Code</strong> to hand the entire design over in one step. Best when you want all of the design files at once and do not need what Claude Design itself provides: a shareable link, comments, and a designer or PM editing the design in place.</figcaption>
+            </figure>
+          </div>
+        </div>
 
         <div class="trouble-card">
           <div class="trouble-card-title">

@@ -283,6 +283,18 @@
     "files": []
   },
   {
+    "id": "emotional-intelligence",
+    "title": "Emotional intelligence voice & tone",
+    "question": "Does this read as clear and human, or defensive and corporate?",
+    "what": "A voice-and-tone guide for leadership writing, feedback, reviews, and difficult conversations — clarity, reasoning over assertion, and named reactions before responses.",
+    "benefit": "Writing that lands as thoughtful and credible instead of performative or tone-deaf.",
+    "clients": "both",
+    "tools": [],
+    "author": "Megan Fisher",
+    "thirdParty": true,
+    "files": []
+  },
+  {
     "id": "ui-bug-hunter",
     "title": "UI bug hunter",
     "question": "What is wrong with this screenshot?",
