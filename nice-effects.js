@@ -603,48 +603,98 @@
         { label: 'MCP Tools', items: [{ id: 'mcp', label: 'All MCP Tools' }].concat(MCP_ITEMS) },
         { label: 'Claude Skills', items: [{ id: 'skills', label: 'All Skills' }].concat(SKILL_ITEMS) }
       ]
+    },
+    {
+      // Public, ungated page - `standalone: true` keeps this entry out of
+      // the cross-page switcher/search (see buildDocRail) so its rail can
+      // never surface a link into the access-code-protected site. It still
+      // gets the same doc-rail component, scoped to its own sections.
+      href: 'wings-2026.html', label: 'NiCE Wings 2026', standalone: true,
+      groups: [
+        { label: 'Overview', items: [
+          { id: 'decisions', label: 'Two Decisions' }
+        ] },
+        { label: 'Claude Design + Claude Code', items: [
+          { id: 'part-1', label: '1. Start in Claude Design' },
+          { id: 'part-2', label: '2. Make a Product Change' },
+          { id: 'part-3', label: '3. Compare Your Solution' },
+          { id: 'part-4', label: '4. Create a Tweak' },
+          { id: 'part-5', label: '5. Collaborate' },
+          { id: 'part-6', label: '6. New Questions' },
+          { id: 'part-7', label: '7. Move to Implementation' },
+          { id: 'part-8', label: '8. Explore the Implementation' },
+          { id: 'next', label: 'What Happens Next' }
+        ] },
+        { label: 'Reach Out', items: [
+          { id: 'contacts', label: 'Reach Out' }
+        ] },
+        { label: 'About', items: [
+          { id: 'about', label: 'About This Page' }
+        ] }
+      ]
     }
   ];
 
-  // Homepage, dashboard, and roadmap don't get the doc rail. Nor does
-  // wings-2026.html: it's the one public, ungated page, so it must not
-  // surface a rail full of links into the access-code-protected site.
+  // Homepage, dashboard, and roadmap don't get the doc rail at all.
   var DOC_RAIL_SKIP = {
-    '': true, 'index.html': true, 'dashboard.html': true, 'roadmap.html': true,
-    'wings-2026.html': true
+    '': true, 'index.html': true, 'dashboard.html': true, 'roadmap.html': true
   };
 
   function buildDocRail() {
     var path = global.location.pathname.split('/').pop() || 'index.html';
     if (DOC_RAIL_SKIP[path]) return null;
 
+    var current = null;
+    for (var i = 0; i < DOC_PAGES.length; i++) {
+      if (DOC_PAGES[i].href === path) { current = DOC_PAGES[i]; break; }
+    }
+    var standalone = !!(current && current.standalone);
+
     var rail = document.createElement('nav');
     rail.className = 'doc-rail';
-    rail.setAttribute('aria-label', 'Documentation pages');
+    rail.setAttribute('aria-label', standalone ? 'Page navigation' : 'Documentation pages');
 
     var html =
       '<div class="doc-rail-header">' +
-        '<div class="doc-rail-label">Documentation</div>' +
-        '<button type="button" class="doc-rail-collapse" aria-label="Collapse documentation menu">&#8249;</button>' +
-      '</div>' +
-      '<div class="doc-rail-search-wrap">' +
-        '<input type="text" class="doc-rail-search" placeholder="Search pages… (' + (/Mac|iPod|iPhone|iPad/.test(global.navigator.platform) ? '⌘' : 'Ctrl') + 'K)" aria-label="Search documentation pages" />' +
-      '</div>' +
-      '<div class="doc-rail-links">';
-    DOC_PAGES.forEach(function (p) {
-      var isCurrent = p.href === path;
-      var active = isCurrent ? ' active' : '';
-      html += '<a class="doc-rail-link' + active + '" href="./' + p.href + '" data-label="' + p.label.toLowerCase() + '">' + p.label + '</a>';
-      // Sub-items only render for the page you're actually on.
-      if (isCurrent && p.groups) {
-        p.groups.forEach(function (group) {
-          html += '<div class="doc-rail-group-label">' + group.label + '</div>';
-          group.items.forEach(function (item) {
-            html += '<a class="doc-rail-sublink" href="#' + item.id + '" data-label="' + item.label.toLowerCase() + '">' + item.label + '</a>';
-          });
+        '<div class="doc-rail-label">' + (standalone ? 'On This Page' : 'Documentation') + '</div>' +
+        '<button type="button" class="doc-rail-collapse" aria-label="Collapse navigation menu">&#8249;</button>' +
+      '</div>';
+
+    // Standalone pages (currently just the public wings-2026.html) skip the
+    // page switcher and search entirely - they only ever list their own
+    // on-page sections, so this rail can't leak a link into the
+    // access-code-protected site. Every other page keeps the full
+    // cross-page switcher + search, unchanged.
+    if (!standalone) {
+      html += '<div class="doc-rail-search-wrap">' +
+          '<input type="text" class="doc-rail-search" placeholder="Search pages… (' + (/Mac|iPod|iPhone|iPad/.test(global.navigator.platform) ? '⌘' : 'Ctrl') + 'K)" aria-label="Search documentation pages" />' +
+        '</div>';
+    }
+
+    html += '<div class="doc-rail-links">';
+    if (standalone) {
+      (current.groups || []).forEach(function (group) {
+        html += '<div class="doc-rail-group-label">' + group.label + '</div>';
+        group.items.forEach(function (item) {
+          html += '<a class="doc-rail-sublink" href="#' + item.id + '" data-label="' + item.label.toLowerCase() + '">' + item.label + '</a>';
         });
-      }
-    });
+      });
+    } else {
+      DOC_PAGES.forEach(function (p) {
+        var isCurrent = p.href === path;
+        var active = isCurrent ? ' active' : '';
+        html += '<a class="doc-rail-link' + active + '" href="./' + p.href + '" data-label="' + p.label.toLowerCase() + '">' + p.label + '</a>';
+        // Sub-items only render for the page you're actually on.
+        if (isCurrent && p.groups) {
+          p.groups.forEach(function (group) {
+            html += '<div class="doc-rail-group-label">' + group.label + '</div>';
+            group.items.forEach(function (item) {
+              html += '<a class="doc-rail-sublink" href="#' + item.id + '" data-label="' + item.label.toLowerCase() + '">' + item.label + '</a>';
+            });
+          });
+        }
+      });
+    }
     html += '</div><div class="doc-rail-empty" hidden>No matching pages</div>';
     rail.innerHTML = html;
 
@@ -673,18 +723,20 @@
     });
 
     var input = rail.querySelector('.doc-rail-search');
-    var links = rail.querySelectorAll('.doc-rail-link');
     var empty = rail.querySelector('.doc-rail-empty');
-    input.addEventListener('input', function () {
-      var q = input.value.trim().toLowerCase();
-      var anyVisible = false;
-      links.forEach(function (link) {
-        var match = !q || link.dataset.label.indexOf(q) !== -1;
-        link.hidden = !match;
-        if (match) anyVisible = true;
+    if (input) {
+      var links = rail.querySelectorAll('.doc-rail-link');
+      input.addEventListener('input', function () {
+        var q = input.value.trim().toLowerCase();
+        var anyVisible = false;
+        links.forEach(function (link) {
+          var match = !q || link.dataset.label.indexOf(q) !== -1;
+          link.hidden = !match;
+          if (match) anyVisible = true;
+        });
+        empty.hidden = anyVisible;
       });
-      empty.hidden = anyVisible;
-    });
+    }
 
     // Collapsed state persists across pages via localStorage.
     var COLLAPSE_KEY = 'nice-doc-rail-collapsed';
@@ -704,14 +756,16 @@
     setCollapsed(storedCollapsed);
 
     // Cmd+K (Mac) / Ctrl+K (Windows) opens the rail if collapsed and
-    // focuses the search box.
+    // focuses the search box (pages with no search box just expand).
     document.addEventListener('keydown', function (e) {
       if (e.key !== 'k' && e.key !== 'K') return;
       if (!(e.metaKey || e.ctrlKey)) return;
       e.preventDefault();
       setCollapsed(false);
-      input.focus();
-      input.select();
+      if (input) {
+        input.focus();
+        input.select();
+      }
     });
 
     initAnchorWarmth(rail);

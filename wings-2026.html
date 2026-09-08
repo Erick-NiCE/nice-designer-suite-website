@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=8" />
+  <link rel="stylesheet" href="theme.css?v=10" />
   <link rel="stylesheet" href="nice-effects.css" />
   <!--
     NOTE: this page is intentionally PUBLIC - no site-gate.css / site-gate.js
@@ -57,9 +57,10 @@
       100% { transform: translate(0, 0) scale(1); }
     }
     .hero-content { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; }
-    .hero-eyebrow {
-      font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
-      color: var(--emerald); margin-bottom: 20px;
+    .hero-logo-video {
+      display: block; width: min(1920px, 90vw); height: auto;
+      position: relative; left: 50%; transform: translateX(-50%);
+      margin: 0 0 -24px;
     }
     .hero-title { font-size: clamp(52px, 8.5vw, 100px); font-weight: 900; letter-spacing: -3px; line-height: 0.95; margin-bottom: 20px; }
     .hero-title .gradient-word {
@@ -72,7 +73,10 @@
     .hero-sub { font-size: 17px; color: rgba(255,255,255,0.68); line-height: 1.7; margin: 0 auto; max-width: 620px; }
 
     /* ---- SECTION SHELL ---- */
-    .wings-section { max-width: 1080px; margin: 0 auto; padding: 72px 48px; }
+    .wings-section {
+      max-width: 1080px; margin: 0 auto; padding: 72px 48px;
+      scroll-margin-top: calc(var(--nav-h, 64px) + 24px);
+    }
     .wings-section + .wings-section { border-top: 1px solid var(--border); }
     .wings-label { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--blue); margin-bottom: 12px; }
     .wings-title { font-size: clamp(28px, 4vw, 42px); font-weight: 800; letter-spacing: -0.8px; margin-bottom: 14px; }
@@ -97,6 +101,7 @@
         var(--card);
       padding: 40px;
       overflow: hidden;
+      scroll-margin-top: calc(var(--nav-h, 64px) + 24px);
       transition: border-color 0.4s cubic-bezier(0.23,1,0.32,1), transform 0.4s cubic-bezier(0.23,1,0.32,1);
     }
     .walk-panel::before {
@@ -242,6 +247,9 @@
     }
     .flow-line .flow-arrow { color: var(--text-muted); font-weight: 700; font-size: 14px; }
 
+    /* ---- FOOTER (sitemap hidden on this public page) ---- */
+    .site-footer .footer-nav { display: none; }
+
     @media (max-width: 720px) {
       .wings-section { padding: 56px 24px; }
       .walk-panel { padding: 28px; }
@@ -259,7 +267,7 @@
   <!-- NAV (no gate - this page is public) -->
   <nav class="site-nav" id="site-nav">
     <a href="./index.html" class="nav-logo">
-      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span>
+      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span><span class="logo-suite"> Suite</span>
     </a>
     <span class="nav-download is-disabled" aria-disabled="true">Download<span class="coming-soon-tag">Coming soon!</span></span>
   </nav>
@@ -271,7 +279,7 @@
     <div class="hero-orb hero-orb-2"></div>
     <div class="hero-orb hero-orb-3"></div>
     <div class="hero-content">
-      <div class="hero-eyebrow">NiCE Wings 2026</div>
+      <video class="hero-logo-video" src="./videos/nice-wings-2026.webm" autoplay muted loop playsinline aria-label="NiCE Wings 2026"></video>
       <h1 class="hero-title">Designing with <span class="gradient-word">Claude</span></h1>
       <p class="hero-sub">
         Everything from the session in one place: the full class walkthrough, plus the people
@@ -355,7 +363,7 @@
     </div>
 
     <!-- PART 1 -->
-    <div class="walk-panel reveal" style="--accent: var(--blue);">
+    <div class="walk-panel reveal" id="part-1" style="--accent: var(--blue);">
       <div class="walk-badge">Part 1 &middot; Start in Claude Design</div>
       <h3 class="walk-heading">Open Claude Design and set up your workspace</h3>
       <ol class="step-list">
@@ -378,7 +386,7 @@
       </div>
       <div class="walk-actions">
         <a class="btn-primary"
-           href="https://claude.ai/design/p/9b037e74-c7bc-4f4a-9923-6447b3c2f862?file=Dashboard-Duplicate+Me.html&via=share"
+           href="https://claude.ai/design/p/9b037e74-c7bc-4f4a-9923-6447b3c2f862?file=Dashboard.html&via=share"
            target="_blank" rel="noopener">
           Open the practice dashboard
         </a>
@@ -386,7 +394,7 @@
     </div>
 
     <!-- PART 2 -->
-    <div class="walk-panel reveal" style="--accent: var(--lyra);">
+    <div class="walk-panel reveal" id="part-2" style="--accent: var(--lyra);">
       <div class="walk-badge">Part 2 &middot; Make a Product Change</div>
       <h3 class="walk-heading">Add the ability to favorite a dashboard</h3>
       <p class="walk-body">
@@ -433,7 +441,7 @@
     </div>
 
     <!-- PART 3 -->
-    <div class="walk-panel reveal" style="--accent: var(--emerald);">
+    <div class="walk-panel reveal" id="part-3" style="--accent: var(--emerald);">
       <div class="walk-badge">Part 3 &middot; Compare Your Solution</div>
       <h3 class="walk-heading">Two people, one requirement, different results</h3>
       <p class="walk-body">
@@ -456,7 +464,7 @@
     </div>
 
     <!-- PART 4 -->
-    <div class="walk-panel reveal" style="--accent: var(--coral);">
+    <div class="walk-panel reveal" id="part-4" style="--accent: var(--coral);">
       <div class="walk-badge">Part 4 &middot; Create a Tweak</div>
       <h3 class="walk-heading">Show today's experience next to Favorites</h3>
       <p class="walk-body">
@@ -477,10 +485,17 @@
           releases.
         </span>
       </div>
+      <div class="walk-actions">
+        <a class="btn-primary"
+           href="https://claude.ai/design/p/bb2ce6ab-3083-4b1c-8d0c-4a775752f4f0?file=Release+Timeline+Example.html&via=share"
+           target="_blank" rel="noopener">
+          Open the Release Timeline Tweaks example
+        </a>
+      </div>
     </div>
 
     <!-- PART 5 -->
-    <div class="walk-panel reveal" style="--accent: var(--indigo);">
+    <div class="walk-panel reveal" id="part-5" style="--accent: var(--indigo);">
       <div class="walk-badge">Part 5 &middot; Collaborate</div>
       <h3 class="walk-heading">Bring others into the design</h3>
       <ol class="step-list">
@@ -499,7 +514,7 @@
     </div>
 
     <!-- PART 6 -->
-    <div class="walk-panel reveal" style="--accent: var(--blue);">
+    <div class="walk-panel reveal" id="part-6" style="--accent: var(--blue);">
       <div class="walk-badge">Part 6 &middot; Notice When New Questions Appear</div>
       <h3 class="walk-heading">A "defined" requirement can still raise new questions</h3>
       <p class="walk-body">
@@ -522,7 +537,7 @@
     </div>
 
     <!-- PART 7 -->
-    <div class="walk-panel reveal" style="--accent: var(--lyra);">
+    <div class="walk-panel reveal" id="part-7" style="--accent: var(--lyra);">
       <div class="walk-badge">Part 7 &middot; Move to Implementation</div>
       <h3 class="walk-heading">Send your design to Claude Code</h3>
       <p class="walk-body">
@@ -548,7 +563,7 @@
     </div>
 
     <!-- PART 8 -->
-    <div class="walk-panel reveal" style="--accent: var(--emerald);">
+    <div class="walk-panel reveal" id="part-8" style="--accent: var(--emerald);">
       <div class="walk-badge">Part 8 &middot; Explore the Implementation</div>
       <h3 class="walk-heading">Inspect what Claude Code created</h3>
       <ol class="step-list">
@@ -564,7 +579,7 @@
     </div>
 
     <!-- WHAT HAPPENS NEXT -->
-    <div class="walk-panel reveal" style="--accent: var(--text-muted, #9aa0ac);">
+    <div class="walk-panel reveal" id="next" style="--accent: var(--text-muted, #9aa0ac);">
       <div class="walk-badge">What Happens Next</div>
       <h3 class="walk-heading">A typical workflow</h3>
       <div class="flow-line">
@@ -589,12 +604,6 @@
         isn't actually as understood as you thought - that's useful. It tells you where more
         product or UX thinking is needed before moving forward.
       </p>
-      <div class="walk-actions">
-        <a class="btn-secondary is-placeholder" href="#" aria-disabled="true" onclick="return false;">Get UX support</a>
-        <a class="btn-secondary is-placeholder" href="#" aria-disabled="true" onclick="return false;">Claude Design resources</a>
-        <a class="btn-secondary is-placeholder" href="#" aria-disabled="true" onclick="return false;">Claude Code resources</a>
-        <span class="placeholder-note">Links coming - to be added before the session</span>
-      </div>
     </div>
   </section>
 
@@ -713,6 +722,15 @@
         });
       }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
       els.forEach(function (el) { io.observe(el); });
+    })();
+
+    // Hero logo video - pause for reduced-motion users
+    (function () {
+      var video = document.querySelector('.hero-logo-video');
+      if (video && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        video.removeAttribute('autoplay');
+        video.pause();
+      }
     })();
 
     // Magnetic primary button - lynn/motion/magnetic-button

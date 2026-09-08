@@ -102,6 +102,7 @@ body {
 }
 .logo-nice { color: var(--blue); }
 .logo-designer { color: var(--text); }
+.logo-suite { color: var(--text); }
 .nav-download {
   text-decoration: none;
   background: var(--blue);
@@ -147,6 +148,11 @@ body {
 @media (max-width: 768px) {
   .site-nav {
     padding: 0 20px;
+  }
+}
+@media (max-width: 480px) {
+  .logo-suite {
+    display: none;
   }
 }
 
