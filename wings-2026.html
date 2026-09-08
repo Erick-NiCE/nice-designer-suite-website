@@ -57,10 +57,23 @@
       100% { transform: translate(0, 0) scale(1); }
     }
     .hero-content { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; }
-    .hero-logo-video {
-      display: block; width: min(1920px, 90vw); height: auto;
+    /* The source video is a 1920x1080 frame with the actual logo mark
+       centered in roughly the middle 48% (w) x 35% (h) of it, against a
+       solid black backdrop. This crops that dead space away: the wrap
+       is sized to just the (padded) logo bounding box, and the video is
+       scaled/shifted inside it so that box exactly fills the wrap. */
+    .hero-logo-wrap {
       position: relative; left: 50%; transform: translateX(-50%);
-      margin: 0 0 -24px;
+      width: min(1140px, 54vw);
+      aspect-ratio: 2.41 / 1;
+      overflow: hidden;
+      margin: 0 0 -12px;
+    }
+    .hero-logo-video {
+      display: block;
+      position: absolute;
+      top: -59.6%; left: -34.15%;
+      width: 168.3%; height: 228%;
     }
     .hero-title { font-size: clamp(52px, 8.5vw, 100px); font-weight: 900; letter-spacing: -3px; line-height: 0.95; margin-bottom: 20px; }
     .hero-title .gradient-word {
@@ -279,7 +292,9 @@
     <div class="hero-orb hero-orb-2"></div>
     <div class="hero-orb hero-orb-3"></div>
     <div class="hero-content">
-      <video class="hero-logo-video" src="./videos/nice-wings-2026.webm" autoplay muted loop playsinline aria-label="NiCE Wings 2026"></video>
+      <div class="hero-logo-wrap">
+        <video class="hero-logo-video" src="./videos/nice-wings-2026.webm" autoplay muted loop playsinline aria-label="NiCE Wings 2026"></video>
+      </div>
       <h1 class="hero-title">Designing with <span class="gradient-word">Claude</span></h1>
       <p class="hero-sub">
         Everything from the session in one place: the full class walkthrough, plus the people
