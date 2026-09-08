@@ -114,6 +114,30 @@
     .walk-heading { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; }
     .walk-body { font-size: 15px; color: var(--text-secondary); line-height: 1.7; max-width: 620px; margin-bottom: 26px; }
     .walk-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .walk-panel + .walk-panel { margin-top: 24px; }
+
+    /* ---- STEP LIST ---- */
+    .step-list { list-style: none; counter-reset: step; margin: 0 0 24px; padding: 0; display: flex; flex-direction: column; gap: 16px; max-width: 640px; }
+    .step-list li { position: relative; padding-left: 44px; font-size: 15px; color: var(--text-secondary); line-height: 1.65; }
+    .step-list li::before {
+      counter-increment: step; content: counter(step);
+      position: absolute; left: 0; top: -1px;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: color-mix(in srgb, var(--accent, var(--blue)) 15%, transparent);
+      color: var(--accent, var(--blue));
+      font-weight: 700; font-size: 13px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-list strong, .walk-body strong, .decision-copy strong { color: var(--text, #fff); font-weight: 600; }
+
+    /* ---- TOOL NOTE ---- */
+    .tool-note {
+      display: flex; gap: 10px; align-items: flex-start;
+      font-size: 13px; color: var(--text-secondary); line-height: 1.6;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 16px; max-width: 620px; margin-bottom: 26px;
+    }
+    .tool-note strong { color: var(--text, #fff); }
 
     /* ---- BUTTONS ---- */
     .btn-primary, .btn-secondary {
@@ -175,6 +199,49 @@
       border-left: 2px solid var(--border); padding-left: 16px; max-width: 640px;
     }
 
+    /* ---- DECISION GRID (self-service vs reach out) ---- */
+    .decision-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .decision-card {
+      position: relative;
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      padding: 24px; overflow: hidden;
+    }
+    .decision-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--accent, var(--blue));
+      opacity: 0.85;
+    }
+    .decision-role { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent, var(--blue)); margin-bottom: 8px; }
+    .decision-heading { font-size: 17px; font-weight: 700; letter-spacing: -0.2px; margin-bottom: 14px; }
+    .decision-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+    .decision-list li {
+      position: relative; padding-left: 22px;
+      font-size: 13px; color: var(--text-secondary); line-height: 1.6;
+    }
+    .decision-list li::before {
+      content: ''; position: absolute; left: 0; top: 7px;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent, var(--blue));
+    }
+    .decision-copy { font-size: 13px; color: var(--text-secondary); line-height: 1.65; margin: 0; }
+
+    /* ---- STACKED DECISION STEPS ---- */
+    .decision-step + .decision-step { margin-top: 32px; }
+    .decision-step-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 8px;
+    }
+    .decision-step-heading { font-size: 20px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 16px; }
+
+    /* ---- FLOW DIAGRAM ---- */
+    .flow-line { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .flow-line .flow-stage {
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 100px;
+      padding: 8px 16px; font-size: 13px; color: var(--text-secondary); white-space: nowrap;
+    }
+    .flow-line .flow-arrow { color: var(--text-muted); font-weight: 700; font-size: 14px; }
+
     @media (max-width: 720px) {
       .wings-section { padding: 56px 24px; }
       .walk-panel { padding: 28px; }
@@ -213,32 +280,320 @@
     </div>
   </header>
 
-  <!-- CLASS CONTENT -->
+  <!-- TWO DECISIONS -->
+  <section class="wings-section" id="decisions">
+    <div class="reveal">
+      <div class="wings-label">Before You Start</div>
+      <h2 class="wings-title">Two decisions <span>before you dive in</span></h2>
+      <p class="wings-desc">
+        Work through these in order. The first tells you whether to loop in UX. The second
+        tells you which tool to reach for.
+      </p>
+    </div>
+
+    <div class="decision-step reveal">
+      <div class="decision-step-label">Decision 1</div>
+      <h3 class="decision-step-heading">Is the problem understood?</h3>
+      <div class="decision-grid">
+        <div class="decision-card" style="--accent: var(--coral);">
+          <div class="decision-role">Not Yet &rarr; Work With UX</div>
+          <p class="decision-copy">
+            If you're still trying to understand the user problem, determine the right workflow,
+            decide what should be built, or figure out which solution will create value, involve UX.
+          </p>
+        </div>
+        <div class="decision-card" style="--accent: var(--blue);">
+          <div class="decision-role">Yes &rarr; Move It Forward</div>
+          <p class="decision-copy">
+            If the problem and direction are already understood, Claude can help you move the
+            work forward without waiting for UX to create every artifact or iteration.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="decision-step reveal">
+      <div class="decision-step-label">Decision 2</div>
+      <h3 class="decision-step-heading">What do I need to do?</h3>
+      <div class="decision-grid">
+        <div class="decision-card" style="--accent: var(--lyra);">
+          <div class="decision-role">Explore or Communicate &rarr; Claude Design</div>
+          <p class="decision-copy">
+            Visualize a defined change, explore variations, compare options, gather feedback,
+            and communicate what the experience should be.
+          </p>
+        </div>
+        <div class="decision-card" style="--accent: var(--emerald);">
+          <div class="decision-role">Work With the Implementation &rarr; Claude Code</div>
+          <p class="decision-copy">
+            Inspect components and code, understand implementation details, create handoff
+            information, and work toward implementation.
+          </p>
+        </div>
+      </div>
+      <div class="tool-note" style="margin-top: 20px;">
+        <span aria-hidden="true">&#128161;</span>
+        <span>
+          You may use one or both. A common flow: <strong>known problem &rarr; Claude Design &rarr;
+          align on experience &rarr; Claude Code &rarr; implementation.</strong> If the experience
+          is already established, a developer may start directly in Claude Code.
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- WALKTHROUGH -->
   <section class="wings-section" id="walkthrough">
     <div class="reveal">
-      <div class="wings-label">Class Content</div>
-      <h2 class="wings-title">The full <span>walkthrough</span></h2>
+      <div class="wings-label">Try It Yourself</div>
+      <h2 class="wings-title">Claude Design <span>+ Claude Code</span></h2>
       <p class="wings-desc">
-        The walkthrough covers everything demonstrated live in the session, step by step,
-        so you can work through it again at your own pace. Nothing here is gated - open the
+        Practice making a small, defined product change with Claude Design, collaborating on
+        that change, and then bringing it into Claude Code. Nothing here is gated - open the
         link, follow along, and reuse it as often as you need.
       </p>
     </div>
 
-    <div class="walk-panel reveal">
-      <div class="walk-badge">Claude Design</div>
-      <h3 class="walk-heading">NiCE Wings 2026 walkthrough</h3>
+    <!-- PART 1 -->
+    <div class="walk-panel reveal" style="--accent: var(--blue);">
+      <div class="walk-badge">Part 1 &middot; Start in Claude Design</div>
+      <h3 class="walk-heading">Open Claude Design and set up your workspace</h3>
+      <ol class="step-list">
+        <li>Open the Claude application and select <strong>Design</strong> from the bottom-left navigation.</li>
+        <li>
+          Check the design system shown beneath the prompt field. If <strong>NiCE Brand</strong>
+          is selected, change it to <strong>CXONE Official &ndash; Lyra Design System</strong>.
+          NiCE Brand is intended for things like marketing and communications; Lyra contains the
+          building blocks and standards intended for CXone product experiences.
+        </li>
+        <li>Open the practice dashboard below and <strong>make your own copy</strong> before editing. For this exercise, imagine it represents the current version of a real product.</li>
+      </ol>
+      <div class="tool-note">
+        <span aria-hidden="true">&#128161;</span>
+        <span>
+          Using Lyra gives Claude a better starting point for product components, typography,
+          spacing, colors, interaction patterns, and accessibility considerations. It doesn't mean
+          everything Claude creates is automatically correct - you'll still need to review the result.
+        </span>
+      </div>
+      <div class="walk-actions">
+        <a class="btn-primary"
+           href="https://claude.ai/design/p/9b037e74-c7bc-4f4a-9923-6447b3c2f862?file=Dashboard-Duplicate+Me.html&via=share"
+           target="_blank" rel="noopener">
+          Open the practice dashboard
+        </a>
+      </div>
+    </div>
+
+    <!-- PART 2 -->
+    <div class="walk-panel reveal" style="--accent: var(--lyra);">
+      <div class="walk-badge">Part 2 &middot; Make a Product Change</div>
+      <h3 class="walk-heading">Add the ability to favorite a dashboard</h3>
       <p class="walk-body">
-        The interactive Claude Design walkthrough used in class. Open it in a browser -
-        no install, no plugin, and no password required.
+        Users may have dozens of dashboards, but typically return to the same few throughout the
+        day. The team has already decided to let users <strong>favorite dashboards so they can
+        quickly find the ones they use most.</strong>
+      </p>
+      <div class="tool-note">
+        <span aria-hidden="true">&#127919;</span>
+        <span><strong>Your task:</strong> add the ability to favorite a dashboard and view only your favorites.</span>
+      </div>
+      <p class="walk-body">
+        Notice where we are in the decision model: is the problem understood? Yes. We know the
+        problem and the direction the team wants to pursue. We're not asking Claude to decide what
+        feature customers need - we're using Claude Design to explore and communicate how an
+        already-defined feature could work.
+      </p>
+      <ol class="step-list">
+        <li>
+          Prompt Claude to add the Favorites functionality. There isn't one correct prompt or a
+          magic formula - describe what you want naturally and see what Claude creates. Try
+          starting with only the requirement you've been given rather than specifying exactly what
+          the interface should look like.
+        </li>
+        <li>
+          Review what Claude decided. Don't assume the first result is correct just because it
+          looks polished - compare it against the original requirement.
+        </li>
+        <li>Find at least one thing you'd change, tell Claude what you want corrected, and iterate. <strong>Claude isn't the decision-maker. You are.</strong></li>
+      </ol>
+      <ul class="decision-list" style="max-width: 640px; margin-bottom: 26px;">
+        <li>Did it change only what I asked it to change?</li>
+        <li>Can I easily tell whether a dashboard is favorited?</li>
+        <li>Can I easily find just my favorites?</li>
+        <li>Does the change make sense for the user's task?</li>
+        <li>What decisions did Claude make that weren't actually in the requirement?</li>
+        <li>What happens when there aren't any favorites yet, or someone unfavorites an item while viewing only favorites?</li>
+      </ul>
+      <p class="walk-body">
+        You don't need to solve every one of these questions. The goal is to notice that Claude
+        made decisions beyond what you explicitly told it - AI can make it much faster to create
+        and change an artifact, but you still need to evaluate what it creates.
+      </p>
+    </div>
+
+    <!-- PART 3 -->
+    <div class="walk-panel reveal" style="--accent: var(--emerald);">
+      <div class="walk-badge">Part 3 &middot; Compare Your Solution</div>
+      <h3 class="walk-heading">Two people, one requirement, different results</h3>
+      <p class="walk-body">
+        If you're doing this exercise with someone else, compare your results. You both started
+        with the same product and the same requirement: add the ability to favorite a dashboard
+        and view only your favorites.
+      </p>
+      <ul class="decision-list" style="max-width: 640px; margin-bottom: 26px;">
+        <li>Did Claude give you the same solution?</li>
+        <li>Where did it put the Favorite action?</li>
+        <li>How did it represent the selected state?</li>
+        <li>How did it let you view your favorites?</li>
+        <li>Which decisions do you prefer, and why?</li>
+      </ul>
+      <p class="walk-body">
+        Two people can give Claude essentially the same requirement and receive different results.
+        <strong>AI output isn't automatically "the design."</strong> It's something you can use to
+        explore, discuss, and iterate.
+      </p>
+    </div>
+
+    <!-- PART 4 -->
+    <div class="walk-panel reveal" style="--accent: var(--coral);">
+      <div class="walk-badge">Part 4 &middot; Create a Tweak</div>
+      <h3 class="walk-heading">Show today's experience next to Favorites</h3>
+      <p class="walk-body">
+        Now imagine Favorites is being considered for an upcoming release. You want to show
+        someone the product as it exists today and then quickly show what changes when Favorites
+        is included. That's where <strong>Tweaks</strong> can help.
+      </p>
+      <ol class="step-list">
+        <li>Open the <strong>Tweaks</strong> panel.</li>
+        <li>Ask Claude to make the Favorites enhancement a Tweak.</li>
+        <li>Once it's created, turn it on and off - now you have a simple way to communicate current experience versus Favorites enabled.</li>
+      </ol>
+      <div class="tool-note">
+        <span aria-hidden="true">&#128161;</span>
+        <span>
+          Tweaks can also be useful for discussing feature scope, exploring variations, previewing
+          combinations of proposed features, and showing how an experience might change across
+          releases.
+        </span>
+      </div>
+    </div>
+
+    <!-- PART 5 -->
+    <div class="walk-panel reveal" style="--accent: var(--indigo);">
+      <div class="walk-badge">Part 5 &middot; Collaborate</div>
+      <h3 class="walk-heading">Bring others into the design</h3>
+      <ol class="step-list">
+        <li>
+          Turn on <strong>Comment</strong> mode from the top bar and add a comment directly to an
+          element of your design - for example, questioning the placement of the Favorite control
+          or suggesting a different way to filter favorites.
+        </li>
+        <li>Comments let PMs, developers, designers, and other collaborators discuss a change in the context of the experience itself. Editors can respond, resolve comments, or ask Claude to apply feedback to the design.</li>
+        <li>Use <strong>Share</strong> to send your work to someone else, ask them to review your Favorites experience and leave a comment, then use that feedback to iterate again.</li>
+      </ol>
+      <p class="walk-body">
+        The artifact you're creating can become a shared place for the team to discuss a defined
+        product change, rather than simply being disposable AI output.
+      </p>
+    </div>
+
+    <!-- PART 6 -->
+    <div class="walk-panel reveal" style="--accent: var(--blue);">
+      <div class="walk-badge">Part 6 &middot; Notice When New Questions Appear</div>
+      <h3 class="walk-heading">A "defined" requirement can still raise new questions</h3>
+      <p class="walk-body">
+        We started with what sounded like a defined requirement: let users favorite dashboards so
+        they can quickly find the ones they use most. But working through the experience might
+        uncover questions such as: <strong>are favorites personal to each user, or shared across a
+        team?</strong>
+      </p>
+      <p class="walk-body">
+        Maybe your requirements already answer that. If they don't, Claude shouldn't quietly make
+        that product decision for you. This doesn't necessarily mean you have to stop everything
+        and call UX - it means you've discovered something that needs to be clarified with the
+        right people. Sometimes you'll uncover a bigger question about the user's needs, workflow,
+        or experience. <strong>That's when you may need to bring UX into the conversation.</strong>
+      </p>
+      <div class="tool-note">
+        <span aria-hidden="true">&#128161;</span>
+        <span>Using AI to move faster doesn't mean removing human judgment. Sometimes moving faster helps us discover the questions we still need to answer.</span>
+      </div>
+    </div>
+
+    <!-- PART 7 -->
+    <div class="walk-panel reveal" style="--accent: var(--lyra);">
+      <div class="walk-badge">Part 7 &middot; Move to Implementation</div>
+      <h3 class="walk-heading">Send your design to Claude Code</h3>
+      <p class="walk-body">
+        Now imagine the team has reviewed the Favorites enhancement, answered the important
+        questions, and agreed on the direction. We were exploring and communicating the experience
+        in Claude Design - now we need to work with the implementation in Claude Code.
+      </p>
+      <ol class="step-list">
+        <li>From your Claude Design project, select <strong>Share</strong>.</li>
+        <li>Select <strong>More formats and apps</strong>.</li>
+        <li>Find Claude and select <strong>Send</strong>.</li>
+        <li>Choose the appropriate options, then <strong>Copy prompt</strong> or <strong>Start session</strong>.</li>
+      </ol>
+      <div class="tool-note">
+        <span aria-hidden="true">&#128161;</span>
+        <span>
+          Sending a design to Claude Code does not mean AI-generated code is automatically ready
+          for production. Developers still own architecture, application state, business logic,
+          APIs, testing, accessibility validation, code quality, code review, and integration into
+          the actual product.
+        </span>
+      </div>
+    </div>
+
+    <!-- PART 8 -->
+    <div class="walk-panel reveal" style="--accent: var(--emerald);">
+      <div class="walk-badge">Part 8 &middot; Explore the Implementation</div>
+      <h3 class="walk-heading">Inspect what Claude Code created</h3>
+      <ol class="step-list">
+        <li>Explore the implementation: which components are being used, how the page is structured, how styles are applied, how the Favorite state is represented, how filtering works, and how your Tweak variation is represented.</li>
+        <li>Ask Claude Code to explain which components the page uses.</li>
+        <li>Ask Claude Code what components and states are needed to implement the Favorites feature, and to walk you through how the interaction is implemented.</li>
+        <li>Ask Claude Code to create handoff documentation for the Favorites enhancement.</li>
+      </ol>
+      <p class="walk-body">
+        The value isn't simply that AI can produce code. Claude Code can also help you understand
+        and work with the implementation.
+      </p>
+    </div>
+
+    <!-- WHAT HAPPENS NEXT -->
+    <div class="walk-panel reveal" style="--accent: var(--text-muted, #9aa0ac);">
+      <div class="walk-badge">What Happens Next</div>
+      <h3 class="walk-heading">A typical workflow</h3>
+      <div class="flow-line">
+        <span class="flow-stage">Problem &amp; direction understood</span>
+        <span class="flow-arrow">&rarr;</span>
+        <span class="flow-stage">Claude Design - explore &amp; communicate</span>
+        <span class="flow-arrow">&rarr;</span>
+        <span class="flow-stage">Review - discover questions &amp; iterate</span>
+      </div>
+      <div class="flow-line">
+        <span class="flow-stage">Share + comment - PM, UX, Dev align</span>
+        <span class="flow-arrow">&rarr;</span>
+        <span class="flow-stage">Claude Code - work with implementation</span>
+        <span class="flow-arrow">&rarr;</span>
+        <span class="flow-stage">Developer integrates into the product</span>
+        <span class="flow-arrow">&rarr;</span>
+        <span class="flow-stage">Normal testing, validation, review, release</span>
+      </div>
+      <p class="walk-body" style="margin-top: 22px;">
+        You don't always need every step. If the experience is already established, a developer
+        may start directly with Claude Code. And at any point, you may discover that the problem
+        isn't actually as understood as you thought - that's useful. It tells you where more
+        product or UX thinking is needed before moving forward.
       </p>
       <div class="walk-actions">
-        <!-- TODO: replace href with the real Claude Design walkthrough URL, and
-             remove the `is-placeholder` class + `.placeholder-note` span below. -->
-        <a class="btn-primary is-placeholder" href="#" aria-disabled="true" onclick="return false;">
-          Open the walkthrough
-        </a>
-        <span class="placeholder-note">Link coming - to be added before the session</span>
+        <a class="btn-secondary is-placeholder" href="#" aria-disabled="true" onclick="return false;">Get UX support</a>
+        <a class="btn-secondary is-placeholder" href="#" aria-disabled="true" onclick="return false;">Claude Design resources</a>
+        <a class="btn-secondary is-placeholder" href="#" aria-disabled="true" onclick="return false;">Claude Code resources</a>
+        <span class="placeholder-note">Links coming - to be added before the session</span>
       </div>
     </div>
   </section>
