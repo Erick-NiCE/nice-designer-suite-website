@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NiCE Wings 2026 — NiCE Designer</title>
+  <title>NiCE Wings 2026 - NiCE Designer</title>
   <meta name="description" content="Class content and contacts for the NiCE Wings 2026 session." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,7 +14,52 @@
     NOTE: this page is intentionally PUBLIC - no site-gate.css / site-gate.js
     and no #nice-site-gate markup. It is the link handed out to the whole
     NiCE Wings 2026 class, so it must open without a password.
+
+    That is why the lynn-ui block below is *missing* two things every other
+    migrated page has: there is no `AccessGate` in the mount script, and no
+    `html.lynn-gate-pending` pre-paint guard in this <head>. The guard exists
+    only to stop a locked visitor reading a gated page in the tick before
+    React arrives; with nothing to gate, holding the page back would cost a
+    blank first paint and buy nothing - so this page paints immediately, as
+    it always has.
   -->
+
+  <!--
+    ===== lynn-ui: the site chrome, as React components =====
+    The nav, the footer and the doc rail all come from lynn-ui now - see the
+    single #lynn-app-root mount script at the end of <body> - along with this
+    page's contact cards, its walkthrough badges, its numbered step lists and
+    its two primary CTAs.
+
+    Three things are needed, and none of them affect the rest of the page:
+      1. dist/lynn-ui.css - the package's built stylesheet. Everything in it
+         is either a `--lynn-*` custom property or a `.lynn-*` class, so it
+         cannot collide with this page's own tokens/classes.
+      2. the import map  - React, ReactDOM and matter-js as CDN ESM.
+         `?external=react` on react-dom stops a second copy of React being
+         pulled in ("invalid hook call"). matter-js is in the map because
+         dist/index.js is one barrel that also reaches LiquidFill.
+      3. `.lynn-mount` - the chrome renders through portals into placeholder
+         divs left where the old markup was. `display: contents` means those
+         placeholders generate no box, so the sticky nav, the footer and the
+         badge/step/button slots inside each walk panel still resolve their
+         margins against their real parents exactly as before.
+  -->
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@18.3.1",
+      "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+      "react-dom": "https://esm.sh/react-dom@18.3.1?external=react",
+      "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?external=react",
+      "scheduler": "https://esm.sh/scheduler@0.23.2",
+      "matter-js": "https://esm.sh/matter-js@0.20.0"
+    }
+  }
+  </script>
+  <style>.lynn-mount { display: contents; }</style>
+
   <style>
     /* ---- HERO ---- */
     .hero {
@@ -123,10 +168,14 @@
       background: linear-gradient(90deg, var(--blue), var(--indigo), var(--emerald));
     }
     .walk-panel:hover { border-color: rgba(255,255,255,0.13); transform: translateY(-1px); }
-    .walk-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
-      color: var(--lyra); background: rgba(185,143,255,0.13); border-radius: 100px;
+    /* The `.walk-badge`s are lynn-ui <Badge tone="lynn"> now (see the mount
+       script at the end of <body>) - the component's pill is the same
+       185,143,255 tint at 14%, so the fill, the radius and the color have
+       gone with the markup. These four declarations are all this page still
+       adds on top of it: the source's 11px uppercase tracking (Badge's base
+       is a 10px sentence-case pill) and its 18px gap down to the heading. */
+    .walk-panel .lynn-badge {
+      font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
       padding: 6px 14px; margin-bottom: 18px;
     }
     .walk-heading { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; }
@@ -134,18 +183,16 @@
     .walk-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
     .walk-panel + .walk-panel { margin-top: 24px; }
 
-    /* ---- STEP LIST ---- */
-    .step-list { list-style: none; counter-reset: step; margin: 0 0 24px; padding: 0; display: flex; flex-direction: column; gap: 16px; max-width: 640px; }
-    .step-list li { position: relative; padding-left: 44px; font-size: 15px; color: var(--text-secondary); line-height: 1.65; }
-    .step-list li::before {
-      counter-increment: step; content: counter(step);
-      position: absolute; left: 0; top: -1px;
-      width: 28px; height: 28px; border-radius: 50%;
-      background: color-mix(in srgb, var(--accent, var(--blue)) 15%, transparent);
-      color: var(--accent, var(--blue));
-      font-weight: 700; font-size: 13px;
-      display: flex; align-items: center; justify-content: center;
-    }
+    /* ---- STEP LIST ----
+       The numbered disc is lynn-ui <StepNumber size="sm" fill="tint"> now -
+       which the component documents as a port of this very rule (28px, a 15%
+       accent disc, accent 13px/700 numerals) - so the CSS counter and the
+       `::before` that drew it have gone with it. The row keeps the source's
+       geometry exactly: 44px of indent minus the 28px disc is the 16px gap,
+       and the disc still rides 1px above the first line of text. */
+    .step-list { list-style: none; margin: 0 0 24px; padding: 0; display: flex; flex-direction: column; gap: 16px; max-width: 640px; }
+    .step-list li { display: flex; align-items: flex-start; gap: 16px; font-size: 15px; color: var(--text-secondary); line-height: 1.65; }
+    .step-list .lynn-step-number { margin-top: -1px; }
     .step-list strong, .walk-body strong, .decision-copy strong { color: var(--text, #fff); font-weight: 600; }
 
     /* ---- TOOL NOTE ---- */
@@ -157,22 +204,15 @@
     }
     .tool-note strong { color: var(--text, #fff); }
 
-    /* ---- BUTTONS ---- */
-    .btn-primary, .btn-secondary {
-      display: inline-flex; align-items: center; gap: 10px;
-      font-family: var(--font); font-size: 14px; font-weight: 700;
-      padding: 13px 26px; border-radius: 12px; border: 1px solid transparent;
-      text-decoration: none; cursor: pointer;
-      transition: background 0.4s cubic-bezier(0.23,1,0.32,1), transform 0.4s cubic-bezier(0.23,1,0.32,1), box-shadow 0.4s cubic-bezier(0.23,1,0.32,1), border-color 0.4s cubic-bezier(0.23,1,0.32,1);
-    }
-    .btn-primary { background: var(--blue); color: #fff; box-shadow: 0 8px 24px rgba(54,148,252,0.32); }
-    .btn-primary:hover { background: #4fa3ff; box-shadow: 0 12px 30px rgba(54,148,252,0.42); }
-    .btn-secondary { background: rgba(255,255,255,0.06); color: #fff; border-color: var(--border); }
-    .btn-secondary:hover { background: rgba(255,255,255,0.10); border-color: rgba(255,255,255,0.13); }
-    .btn-primary.is-placeholder {
-      background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.42); box-shadow: none;
-      border-color: var(--border); cursor: not-allowed;
-    }
+    /* ---- BUTTONS ----
+       The two walkthrough CTAs are lynn-ui <Button variant="primary"> now, so
+       `.btn-primary` / `.btn-secondary` / `.btn-primary.is-placeholder` have
+       gone with the markup - `.lynn-btn-*` in lynn-ui.css is the same family
+       (and this page's `.btn-secondary` is, per Button's own doc comment, the
+       source the package's `secondary` variant was ported from; no element on
+       this page ever carried the class, only the rule did).
+       `.placeholder-note` below is kept as-is: it is a sibling label, not a
+       button class, and it has no markup on this page either way. */
     .placeholder-note {
       font-size: 12px; font-weight: 500; color: var(--coral);
       background: rgba(255,91,138,0.12); border-radius: 100px; padding: 6px 14px;
@@ -180,20 +220,19 @@
 
     /* ---- CONTACT CARDS ---- */
     .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
-    .contact-card {
-      position: relative;
-      display: flex; flex-direction: column;
-      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
-      padding: 24px; overflow: hidden; text-decoration: none; color: inherit;
-      transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), border-color 0.4s cubic-bezier(0.23,1,0.32,1), box-shadow 0.4s cubic-bezier(0.23,1,0.32,1);
-    }
-    .contact-card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: var(--accent, var(--blue));
-      opacity: 0.85;
-    }
-    .contact-card:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.13); box-shadow: 0 12px 28px rgba(0,0,0,0.32); }
+    /* The `.contact-card`s are lynn-ui <Card variant="solid" accent="..."> now
+       (see the mount script at the end of <body>). Card.css is a verbatim
+       port of the surface that used to be declared here - same `card`
+       background, 1px border, 16px radius, 24px padding, the same
+       translateY(-1px) / 0 12px 28px rgba(0,0,0,.32) hover, and the same 2px
+       accent strip from `.contact-card::before` - and `Card`'s built-in
+       tilt+spotlight is the same 7deg / 900px handler this page's own script
+       used to bind to `.contact-card`. So only the two rules below are still
+       this page's business, retargeted at the component's class: the column
+       layout the grid item needs, and the pointer for the whole-card click.
+       Everything from `.contact-icon` down is unchanged inner layout, still
+       reading the `--accent` each card sets. */
+    .contact-grid .lynn-card { display: flex; flex-direction: column; cursor: pointer; }
     .contact-icon {
       width: 40px; height: 40px; border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
@@ -204,12 +243,17 @@
     .contact-role { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent, var(--blue)); margin-bottom: 8px; }
     .contact-name { font-size: 17px; font-weight: 700; letter-spacing: -0.2px; margin-bottom: 8px; }
     .contact-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.65; margin-bottom: 20px; flex: 1; }
+    /* Was a <span> inside the card-wide <a>; it is the card's real, keyboard
+       reachable link now (the <Card> div only forwards the mouse click), so
+       it needs the underline reset the wrapping anchor used to carry. */
     .contact-link {
       display: inline-flex; align-items: center; gap: 8px;
       font-size: 13px; font-weight: 700; color: var(--accent, var(--blue));
+      text-decoration: none;
       transition: gap 0.4s cubic-bezier(0.23,1,0.32,1);
     }
-    .contact-card:hover .contact-link { gap: 12px; }
+    .contact-link:hover { text-decoration: none; }
+    .contact-grid .lynn-card:hover .contact-link { gap: 12px; }
 
     /* ---- FOOTER NOTE ---- */
     .wings-note {
@@ -260,8 +304,13 @@
     }
     .flow-line .flow-arrow { color: var(--text-muted); font-weight: 700; font-size: 14px; }
 
-    /* ---- FOOTER (sitemap hidden on this public page) ---- */
-    .site-footer .footer-nav { display: none; }
+    /* ---- FOOTER (sitemap hidden on this public page) ----
+       Retargeted at lynn-ui <Footer>'s own class. The rule is deliberately
+       kept: this page is handed out publicly, and its one footer column
+       links to ./index.html, which is behind the site-wide access code - so
+       the column stays in the markup (and in the accessibility tree, with
+       its real "Site" grouping) but off-screen, exactly as it is today. */
+    .lynn-footer .lynn-footer-nav { display: none; }
 
     @media (max-width: 720px) {
       .wings-section { padding: 56px 24px; }
@@ -277,13 +326,16 @@
 </head>
 <body>
 
-  <!-- NAV (no gate - this page is public) -->
-  <nav class="site-nav" id="site-nav">
-    <a href="./index.html" class="nav-logo">
-      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span><span class="logo-suite"> Suite</span>
-    </a>
-    <span class="nav-download is-disabled" aria-disabled="true">Download<span class="coming-soon-tag">Coming soon!</span></span>
-  </nav>
+  <!-- lynn-ui chrome. One React root, one ThemeProvider (see the mount script
+       at the end of <body>). Nothing renders *here* - this page has no access
+       gate, so every piece of chrome portals into a `.lynn-mount`
+       placeholder below and this div stays empty. -->
+  <div id="lynn-app-root"></div>
+
+  <!-- NAV (lynn-ui <Nav>, no gate - this page is public)
+       + DOC RAIL (lynn-ui <DocRail mode="sections">, position: fixed) -->
+  <div id="lynn-nav-root" class="lynn-mount"></div>
+  <div id="lynn-docrail-root" class="lynn-mount"></div>
 
   <!-- HERO -->
   <header class="hero">
@@ -379,18 +431,11 @@
 
     <!-- PART 1 -->
     <div class="walk-panel reveal" id="part-1" style="--accent: var(--blue);">
-      <div class="walk-badge">Part 1 &middot; Start in Claude Design</div>
+      <!-- lynn-ui <Badge tone="lynn"> -->
+      <div id="lynn-badge-part-1" class="lynn-mount"></div>
       <h3 class="walk-heading">Open Claude Design and set up your workspace</h3>
-      <ol class="step-list">
-        <li>Open the Claude application and select <strong>Design</strong> from the bottom-left navigation.</li>
-        <li>
-          Check the design system shown beneath the prompt field. If <strong>NiCE Brand</strong>
-          is selected, change it to <strong>CXONE Official &ndash; Lyra Design System</strong>.
-          NiCE Brand is intended for things like marketing and communications; Lyra contains the
-          building blocks and standards intended for CXone product experiences.
-        </li>
-        <li>Open the practice dashboard below and <strong>make your own copy</strong> before editing. For this exercise, imagine it represents the current version of a real product.</li>
-      </ol>
+      <!-- lynn-ui <StepNumber size="sm" fill="tint" color="blue"> x3 -->
+      <div id="lynn-steps-part-1" class="lynn-mount"></div>
       <div class="tool-note">
         <span aria-hidden="true">&#128161;</span>
         <span>
@@ -400,17 +445,15 @@
         </span>
       </div>
       <div class="walk-actions">
-        <a class="btn-primary"
-           href="https://claude.ai/design/p/9b037e74-c7bc-4f4a-9923-6447b3c2f862?file=Dashboard.html&via=share"
-           target="_blank" rel="noopener">
-          Open the practice dashboard
-        </a>
+        <!-- lynn-ui <Button variant="primary"> -->
+        <div id="lynn-cta-part-1" class="lynn-mount"></div>
       </div>
     </div>
 
     <!-- PART 2 -->
     <div class="walk-panel reveal" id="part-2" style="--accent: var(--lyra);">
-      <div class="walk-badge">Part 2 &middot; Make a Product Change</div>
+      <!-- lynn-ui <Badge tone="lynn"> -->
+      <div id="lynn-badge-part-2" class="lynn-mount"></div>
       <h3 class="walk-heading">Add the ability to favorite a dashboard</h3>
       <p class="walk-body">
         Users may have dozens of dashboards, but typically return to the same few throughout the
@@ -427,19 +470,8 @@
         feature customers need - we're using Claude Design to explore and communicate how an
         already-defined feature could work.
       </p>
-      <ol class="step-list">
-        <li>
-          Prompt Claude to add the Favorites functionality. There isn't one correct prompt or a
-          magic formula - describe what you want naturally and see what Claude creates. Try
-          starting with only the requirement you've been given rather than specifying exactly what
-          the interface should look like.
-        </li>
-        <li>
-          Review what Claude decided. Don't assume the first result is correct just because it
-          looks polished - compare it against the original requirement.
-        </li>
-        <li>Find at least one thing you'd change, tell Claude what you want corrected, and iterate. <strong>Claude isn't the decision-maker. You are.</strong></li>
-      </ol>
+      <!-- lynn-ui <StepNumber size="sm" fill="tint" color="lynn"> x3 -->
+      <div id="lynn-steps-part-2" class="lynn-mount"></div>
       <ul class="decision-list" style="max-width: 640px; margin-bottom: 26px;">
         <li>Did it change only what I asked it to change?</li>
         <li>Can I easily tell whether a dashboard is favorited?</li>
@@ -457,7 +489,8 @@
 
     <!-- PART 3 -->
     <div class="walk-panel reveal" id="part-3" style="--accent: var(--emerald);">
-      <div class="walk-badge">Part 3 &middot; Compare Your Solution</div>
+      <!-- lynn-ui <Badge tone="lynn"> -->
+      <div id="lynn-badge-part-3" class="lynn-mount"></div>
       <h3 class="walk-heading">Two people, one requirement, different results</h3>
       <p class="walk-body">
         If you're doing this exercise with someone else, compare your results. You both started
@@ -480,18 +513,16 @@
 
     <!-- PART 4 -->
     <div class="walk-panel reveal" id="part-4" style="--accent: var(--coral);">
-      <div class="walk-badge">Part 4 &middot; Create a Tweak</div>
+      <!-- lynn-ui <Badge tone="lynn"> -->
+      <div id="lynn-badge-part-4" class="lynn-mount"></div>
       <h3 class="walk-heading">Show today's experience next to Favorites</h3>
       <p class="walk-body">
         Now imagine Favorites is being considered for an upcoming release. You want to show
         someone the product as it exists today and then quickly show what changes when Favorites
         is included. That's where <strong>Tweaks</strong> can help.
       </p>
-      <ol class="step-list">
-        <li>Open the <strong>Tweaks</strong> panel.</li>
-        <li>Ask Claude to make the Favorites enhancement a Tweak.</li>
-        <li>Once it's created, turn it on and off - now you have a simple way to communicate current experience versus Favorites enabled.</li>
-      </ol>
+      <!-- lynn-ui <StepNumber size="sm" fill="tint" color="coral"> x3 -->
+      <div id="lynn-steps-part-4" class="lynn-mount"></div>
       <div class="tool-note">
         <span aria-hidden="true">&#128161;</span>
         <span>
@@ -501,27 +532,18 @@
         </span>
       </div>
       <div class="walk-actions">
-        <a class="btn-primary"
-           href="https://claude.ai/design/p/bb2ce6ab-3083-4b1c-8d0c-4a775752f4f0?file=Release+Timeline+Example.html&via=share"
-           target="_blank" rel="noopener">
-          Open the Release Timeline Tweaks example
-        </a>
+        <!-- lynn-ui <Button variant="primary"> -->
+        <div id="lynn-cta-part-4" class="lynn-mount"></div>
       </div>
     </div>
 
     <!-- PART 5 -->
     <div class="walk-panel reveal" id="part-5" style="--accent: var(--indigo);">
-      <div class="walk-badge">Part 5 &middot; Collaborate</div>
+      <!-- lynn-ui <Badge tone="lynn"> -->
+      <div id="lynn-badge-part-5" class="lynn-mount"></div>
       <h3 class="walk-heading">Bring others into the design</h3>
-      <ol class="step-list">
-        <li>
-          Turn on <strong>Comment</strong> mode from the top bar and add a comment directly to an
-          element of your design - for example, questioning the placement of the Favorite control
-          or suggesting a different way to filter favorites.
-        </li>
-        <li>Comments let PMs, developers, designers, and other collaborators discuss a change in the context of the experience itself. Editors can respond, resolve comments, or ask Claude to apply feedback to the design.</li>
-        <li>Use <strong>Share</strong> to send your work to someone else, ask them to review your Favorites experience and leave a comment, then use that feedback to iterate again.</li>
-      </ol>
+      <!-- lynn-ui <StepNumber size="sm" fill="tint" color="indigo"> x3 -->
+      <div id="lynn-steps-part-5" class="lynn-mount"></div>
       <p class="walk-body">
         The artifact you're creating can become a shared place for the team to discuss a defined
         product change, rather than simply being disposable AI output.
@@ -530,7 +552,8 @@
 
     <!-- PART 6 -->
     <div class="walk-panel reveal" id="part-6" style="--accent: var(--blue);">
-      <div class="walk-badge">Part 6 &middot; Notice When New Questions Appear</div>
+      <!-- lynn-ui <Badge tone="lynn"> -->
+      <div id="lynn-badge-part-6" class="lynn-mount"></div>
       <h3 class="walk-heading">A "defined" requirement can still raise new questions</h3>
       <p class="walk-body">
         We started with what sounded like a defined requirement: let users favorite dashboards so
@@ -553,19 +576,16 @@
 
     <!-- PART 7 -->
     <div class="walk-panel reveal" id="part-7" style="--accent: var(--lyra);">
-      <div class="walk-badge">Part 7 &middot; Move to Implementation</div>
+      <!-- lynn-ui <Badge tone="lynn"> -->
+      <div id="lynn-badge-part-7" class="lynn-mount"></div>
       <h3 class="walk-heading">Send your design to Claude Code</h3>
       <p class="walk-body">
         Now imagine the team has reviewed the Favorites enhancement, answered the important
         questions, and agreed on the direction. We were exploring and communicating the experience
         in Claude Design - now we need to work with the implementation in Claude Code.
       </p>
-      <ol class="step-list">
-        <li>From your Claude Design project, select <strong>Share</strong>.</li>
-        <li>Select <strong>More formats and apps</strong>.</li>
-        <li>Find Claude and select <strong>Send</strong>.</li>
-        <li>Choose the appropriate options, then <strong>Copy prompt</strong> or <strong>Start session</strong>.</li>
-      </ol>
+      <!-- lynn-ui <StepNumber size="sm" fill="tint" color="lynn"> x4 -->
+      <div id="lynn-steps-part-7" class="lynn-mount"></div>
       <div class="tool-note">
         <span aria-hidden="true">&#128161;</span>
         <span>
@@ -579,14 +599,11 @@
 
     <!-- PART 8 -->
     <div class="walk-panel reveal" id="part-8" style="--accent: var(--emerald);">
-      <div class="walk-badge">Part 8 &middot; Explore the Implementation</div>
+      <!-- lynn-ui <Badge tone="lynn"> -->
+      <div id="lynn-badge-part-8" class="lynn-mount"></div>
       <h3 class="walk-heading">Inspect what Claude Code created</h3>
-      <ol class="step-list">
-        <li>Explore the implementation: which components are being used, how the page is structured, how styles are applied, how the Favorite state is represented, how filtering works, and how your Tweak variation is represented.</li>
-        <li>Ask Claude Code to explain which components the page uses.</li>
-        <li>Ask Claude Code what components and states are needed to implement the Favorites feature, and to walk you through how the interaction is implemented.</li>
-        <li>Ask Claude Code to create handoff documentation for the Favorites enhancement.</li>
-      </ol>
+      <!-- lynn-ui <StepNumber size="sm" fill="tint" color="emerald"> x4 -->
+      <div id="lynn-steps-part-8" class="lynn-mount"></div>
       <p class="walk-body">
         The value isn't simply that AI can produce code. Claude Code can also help you understand
         and work with the implementation.
@@ -595,7 +612,8 @@
 
     <!-- WHAT HAPPENS NEXT -->
     <div class="walk-panel reveal" id="next" style="--accent: var(--text-muted, #9aa0ac);">
-      <div class="walk-badge">What Happens Next</div>
+      <!-- lynn-ui <Badge tone="lynn"> -->
+      <div id="lynn-badge-next" class="lynn-mount"></div>
       <h3 class="walk-heading">A typical workflow</h3>
       <div class="flow-line">
         <span class="flow-stage">Problem &amp; direction understood</span>
@@ -632,63 +650,11 @@
       </p>
     </div>
 
-    <div class="contact-grid reveal">
-
-      <!-- Megan - instructor -->
-      <a class="contact-card" style="--accent: var(--blue);"
-         href="https://teams.microsoft.com/l/chat/0/0?users=Megan.Fisher@nice.com"
-         target="_blank" rel="noopener">
-        <div class="contact-icon" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-4 0-8 2-8 5v1h16v-1c0-3-4-5-8-5z" fill="currentColor"/>
-          </svg>
-        </div>
-        <div class="contact-role">Instructor</div>
-        <div class="contact-name">Megan Fisher</div>
-        <p class="contact-desc">
-          Questions about the class itself - what was covered, something that did not click,
-          or a step you want to walk through again.
-        </p>
-        <span class="contact-link">Message Megan on Teams &rarr;</span>
-      </a>
-
-      <!-- Design system team -->
-      <a class="contact-card" style="--accent: var(--lyra);"
-         href="https://teams.microsoft.com/l/channel/19%3A719be06edac04712a605aca8a6d6f936%40thread.tacv2/Lyra%20Design%20Support%20and%20Help%20Desk?groupId=c9888e36-654f-414f-9d1c-d335be5a5b13&amp;tenantId=7123dabd-0e87-4da9-9cb9-b7ec82011aad"
-         target="_blank" rel="noopener">
-        <div class="contact-icon" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z" fill="currentColor"/>
-          </svg>
-        </div>
-        <div class="contact-role">Design System</div>
-        <div class="contact-name">Lyra Design Support and Help Desk</div>
-        <p class="contact-desc">
-          Questions about Lyra itself - tokens, components, patterns, or whether something
-          you are building lines up with the design system.
-        </p>
-        <span class="contact-link">Open the Teams channel &rarr;</span>
-      </a>
-
-      <!-- Erick - future sessions -->
-      <a class="contact-card" style="--accent: var(--emerald);"
-         href="https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com"
-         target="_blank" rel="noopener">
-        <div class="contact-icon" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2zm5 4a1 1 0 00-1 1v3H8a1 1 0 100 2h3v3a1 1 0 102 0v-3h3a1 1 0 100-2h-3V8a1 1 0 00-1-1z" fill="currentColor"/>
-          </svg>
-        </div>
-        <div class="contact-role">Future Sessions</div>
-        <div class="contact-name">Erick Mathews</div>
-        <p class="contact-desc">
-          Want this session run for your team, or a deeper follow-up on any part of it?
-          Reach out and we will get one on the calendar.
-        </p>
-        <span class="contact-link">Message Erick on Teams &rarr;</span>
-      </a>
-
-    </div>
+    <!-- The three contact cards: lynn-ui <Card variant="solid"> x3 (see the
+         mount script at the end of <body>). They portal into this grid
+         rather than into a placeholder inside it, so each card stays a real
+         grid child. -->
+    <div class="contact-grid reveal" id="lynn-contacts-root"></div>
   </section>
 
   <!-- NOTE -->
@@ -705,38 +671,45 @@
     </div>
   </section>
 
-  <footer class="site-footer">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="footer-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></div>
-      </div>
-      <nav class="footer-nav">
-        <div class="footer-nav-col">
-          <a href="./index.html">Overview</a>
-          <a href="./wings-2026.html" class="active">NiCE Wings 2026</a>
-        </div>
-      </nav>
-    </div>
-  </footer>
+  <!-- FOOTER (lynn-ui <Footer>, with this page's own reduced single column -
+       NOT the component's default three-column sitemap; see the mount
+       script at the end of <body>) -->
+  <div id="lynn-footer-root" class="lynn-mount"></div>
 
-  <script src="nice-effects.js"></script>
+  <script src="nice-effects.js?v=11"></script>
   <script>
     // Scroll reveal - lynn/motion/scroll-reveal
     (function () {
-      var els = document.querySelectorAll('.reveal');
-      if (!('IntersectionObserver' in window)) {
-        els.forEach(function (el) { el.classList.add('visible'); });
-        return;
-      }
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            io.unobserve(entry.target);
-          }
+      var io = 'IntersectionObserver' in window
+        ? new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                io.unobserve(entry.target);
+              }
+            });
+          }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' })
+        : null;
+
+      function observe(els) {
+        els.forEach(function (el) {
+          if (io) io.observe(el);
+          else el.classList.add('visible');
         });
-      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-      els.forEach(function (el) { io.observe(el); });
+      }
+
+      // Every `.reveal` on this page is static markup except the contacts
+      // grid, which is empty until the lynn-ui mount script fills it. A
+      // zero-height target reports an intersectionRatio of 1, so observing it
+      // now would fade an empty box in and leave the cards to pop in with no
+      // animation at all - the mount script hands it back through
+      // `WingsReveal.observe()` once the three cards are in it.
+      var LATE = 'lynn-contacts-root';
+      observe([].slice.call(document.querySelectorAll('.reveal')).filter(
+        function (el) { return el.id !== LATE; }
+      ));
+
+      window.WingsReveal = { observe: observe };
     })();
 
     // Hero logo video - pause for reduced-motion users
@@ -748,35 +721,448 @@
       }
     })();
 
-    // Magnetic primary button - lynn/motion/magnetic-button
-    (function () {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      document.querySelectorAll('.btn-primary:not(.is-placeholder)').forEach(function (btn) {
-        btn.addEventListener('mousemove', function (e) {
-          var r = btn.getBoundingClientRect();
-          var x = (e.clientX - r.left - r.width / 2) * 0.28;
-          var y = (e.clientY - r.top - r.height / 2) * 0.28;
-          btn.style.transform = 'translate(' + x + 'px,' + y + 'px)';
-        });
-        btn.addEventListener('mouseleave', function () { btn.style.transform = ''; });
-      });
-    })();
+    // The magnetic-button pass over `.btn-primary` and the tilt+spotlight
+    // pass over `.contact-card` both used to live here. Both are now the
+    // components' own: lynn-ui's `useMagneticButton` runs inside every
+    // <Button variant="primary"> (the same 0.28 drift, plus the 1.04 scale
+    // the package standardized on), and `useTiltSpotlight` runs inside every
+    // <Card> (the same 7deg / 900px / translateY(-1px) handler, lifted from
+    // this very page). Each still bails out under prefers-reduced-motion, so
+    // there is nothing left for the page to bind.
+  </script>
 
-    // Card tilt + spotlight - lynn/motion/card-tilt-spotlight
-    (function () {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      document.querySelectorAll('.contact-card').forEach(function (card) {
-        card.addEventListener('mousemove', function (e) {
-          var r = card.getBoundingClientRect();
-          var px = (e.clientX - r.left) / r.width;
-          var py = (e.clientY - r.top) / r.height;
-          card.style.transform =
-            'perspective(900px) rotateX(' + ((0.5 - py) * 7).toFixed(2) + 'deg) ' +
-            'rotateY(' + ((px - 0.5) * 7).toFixed(2) + 'deg) translateY(-1px)';
-        });
-        card.addEventListener('mouseleave', function () { card.style.transform = ''; });
+  <!--
+    ===== lynn-ui mount =====
+    One createRoot, one ThemeProvider, one <App>: the nav, the doc rail, the
+    footer, the three contact cards, the nine walkthrough badges, the six
+    numbered step lists and the two walkthrough CTAs. Keeping them in a
+    single root is what keeps the theme in sync between them - separate roots
+    would each get their own provider and drift apart.
+
+    There is NO <AccessGate> here, and no `lynn-gate-pending` class to clear:
+    this page is deliberately public (see the note at the top of <head>).
+
+    Anything that belongs elsewhere in the document is placed with
+    createPortal into a `.lynn-mount` placeholder rather than rendered here:
+    a footer rendered next to the nav would sit at the top of the page, and a
+    nav rendered inside a wrapper mid-document could not be sticky. The
+    contact cards portal into the page's own `.contact-grid`, so they stay
+    real grid children.
+  -->
+  <script type="module">
+    import { createElement as h, Fragment, useEffect, useState } from 'react';
+    import { createPortal } from 'react-dom';
+    import { createRoot } from 'react-dom/client';
+    import {
+      Badge,
+      Button,
+      Card,
+      DocRail,
+      Footer,
+      Nav,
+      StepNumber,
+      ThemeProvider,
+      ThemeToggle,
+      useLynnTheme,
+    } from './lynn-ui/dist/index.js';
+
+    const PAGE = 'wings-2026.html';
+
+    /* ---- doc rail ------------------------------------------------------- */
+    /* This page is the one entry in nice-effects.js's DOC_PAGES that sets
+       `standalone: true`, which is exactly what `DocRail mode="sections"`
+       means: only this page's own anchors, no cross-page switcher and no
+       search box. That is deliberate, not an omission - the rail on a public
+       page must never surface a link into the access-code-protected site,
+       which is what buildDocRail() was doing for this page too (header label
+       "On This Page", no `.doc-rail-search`). The groups are read straight
+       off nice-effects.js rather than hand-copied, so adding a section anchor
+       there still updates this rail. Collapse state shares nice-effects.js's
+       own localStorage key. */
+    const RAIL_KEY = 'nice-doc-rail-collapsed';
+    const DOC_PAGES = (window.NiceEffects && window.NiceEffects.docPages) || [];
+    const railGroups = (DOC_PAGES.find((page) => page.href === PAGE) || {}).groups || [];
+
+    /* ---- footer --------------------------------------------------------- */
+    /* This page's real footer, NOT Footer's DEFAULT_COLUMNS: one column with
+       the two links the static markup had - Overview, and this page itself
+       marked active. The page's own stylesheet hides `.lynn-footer-nav`
+       (see the FOOTER note in <head>), so the column is present for screen
+       readers and off-screen visually, exactly as it renders today. */
+    const FOOTER_COLUMNS = [
+      {
+        title: 'Site',
+        links: [
+          { label: 'Overview', href: './index.html' },
+          { label: 'NiCE Wings 2026', href: './wings-2026.html', active: true },
+        ],
+      },
+    ];
+
+    /* ---- content helpers ------------------------------------------------ */
+    /* Several step items carry inline <strong> from the source. They are
+       authored right here in this file - not user input - so keeping them as
+       markup is both safe and far more legible than nesting createElement
+       three deep for a bold clause. */
+    const rich = (html) => h('span', { dangerouslySetInnerHTML: { __html: html } });
+
+    /* ---- the nine walkthrough badges ------------------------------------ */
+    /* `.walk-badge` was always `--lyra` tinted regardless of its panel's own
+       `--accent`, so every one of these is `tone="lynn"` (#B98FFF). Keyed by
+       the id of the `.lynn-mount` div each renders into. */
+    const BADGES = {
+      'lynn-badge-part-1': 'Part 1 · Start in Claude Design',
+      'lynn-badge-part-2': 'Part 2 · Make a Product Change',
+      'lynn-badge-part-3': 'Part 3 · Compare Your Solution',
+      'lynn-badge-part-4': 'Part 4 · Create a Tweak',
+      'lynn-badge-part-5': 'Part 5 · Collaborate',
+      'lynn-badge-part-6': 'Part 6 · Notice When New Questions Appear',
+      'lynn-badge-part-7': 'Part 7 · Move to Implementation',
+      'lynn-badge-part-8': 'Part 8 · Explore the Implementation',
+      'lynn-badge-next': 'What Happens Next',
+    };
+
+    /* ---- the six numbered step lists ------------------------------------ */
+    /* `StepNumber size="sm" fill="tint"` is - per the component's own doc
+       comment - the port of this page's `.step-list li::before`: a 28px disc
+       at 15% accent with accent 13px/700 numerals. `color` is each panel's
+       own `--accent`, which is what the CSS counter was reading. The <ol>
+       keeps the page's `.step-list` class, so the row spacing and the 640px
+       measure are unchanged, and the ordinal still reaches assistive tech
+       from the list rather than from the (aria-hidden) disc. */
+    const STEP_LISTS = {
+      'lynn-steps-part-1': {
+        color: 'blue',
+        items: [
+          rich('Open the Claude application and select <strong>Design</strong> from the bottom-left navigation.'),
+          rich('Check the design system shown beneath the prompt field. If <strong>NiCE Brand</strong> is selected, change it to <strong>CXONE Official &ndash; Lyra Design System</strong>. NiCE Brand is intended for things like marketing and communications; Lyra contains the building blocks and standards intended for CXone product experiences.'),
+          rich('Open the practice dashboard below and <strong>make your own copy</strong> before editing. For this exercise, imagine it represents the current version of a real product.'),
+        ],
+      },
+      'lynn-steps-part-2': {
+        color: 'lynn',
+        items: [
+          "Prompt Claude to add the Favorites functionality. There isn't one correct prompt or a magic formula - describe what you want naturally and see what Claude creates. Try starting with only the requirement you've been given rather than specifying exactly what the interface should look like.",
+          "Review what Claude decided. Don't assume the first result is correct just because it looks polished - compare it against the original requirement.",
+          rich("Find at least one thing you'd change, tell Claude what you want corrected, and iterate. <strong>Claude isn't the decision-maker. You are.</strong>"),
+        ],
+      },
+      'lynn-steps-part-4': {
+        color: 'coral',
+        items: [
+          rich('Open the <strong>Tweaks</strong> panel.'),
+          'Ask Claude to make the Favorites enhancement a Tweak.',
+          "Once it's created, turn it on and off - now you have a simple way to communicate current experience versus Favorites enabled.",
+        ],
+      },
+      'lynn-steps-part-5': {
+        color: 'indigo',
+        items: [
+          rich('Turn on <strong>Comment</strong> mode from the top bar and add a comment directly to an element of your design - for example, questioning the placement of the Favorite control or suggesting a different way to filter favorites.'),
+          'Comments let PMs, developers, designers, and other collaborators discuss a change in the context of the experience itself. Editors can respond, resolve comments, or ask Claude to apply feedback to the design.',
+          rich('Use <strong>Share</strong> to send your work to someone else, ask them to review your Favorites experience and leave a comment, then use that feedback to iterate again.'),
+        ],
+      },
+      'lynn-steps-part-7': {
+        color: 'lynn',
+        items: [
+          rich('From your Claude Design project, select <strong>Share</strong>.'),
+          rich('Select <strong>More formats and apps</strong>.'),
+          rich('Find Claude and select <strong>Send</strong>.'),
+          rich('Choose the appropriate options, then <strong>Copy prompt</strong> or <strong>Start session</strong>.'),
+        ],
+      },
+      'lynn-steps-part-8': {
+        color: 'emerald',
+        items: [
+          'Explore the implementation: which components are being used, how the page is structured, how styles are applied, how the Favorite state is represented, how filtering works, and how your Tweak variation is represented.',
+          'Ask Claude Code to explain which components the page uses.',
+          'Ask Claude Code what components and states are needed to implement the Favorites feature, and to walk you through how the interaction is implemented.',
+          'Ask Claude Code to create handoff documentation for the Favorites enhancement.',
+        ],
+      },
+    };
+
+    const stepList = (id) => {
+      const list = STEP_LISTS[id];
+      return h(
+        'ol',
+        { className: 'step-list' },
+        list.items.map((item, index) =>
+          h(
+            'li',
+            { key: index },
+            h(StepNumber, {
+              n: index + 1,
+              size: 'sm',
+              fill: 'tint',
+              color: list.color,
+            }),
+            h('span', null, item)
+          )
+        )
+      );
+    };
+
+    /* ---- the two walkthrough CTAs --------------------------------------- */
+    /* Both were `.btn-primary.nice-glow-pulse` anchors. `nice-glow-pulse` is
+       a nice-effects.css class (the breathing purple/blue halo), not a
+       lynn-ui one, so it rides along in `className` and the pill keeps the
+       exact effect it has today - Button's own `glow` prop is a different,
+       accent-tinted animation. The leading glyph moves from the unstyled
+       `.btn-cta-icon` span into Button's `icon` slot, which renders the same
+       aria-hidden wrapper. */
+    const sparkleIcon = h('svg', {
+      width: 16,
+      height: 16,
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      strokeWidth: 2,
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round',
+      dangerouslySetInnerHTML: {
+        __html: '<path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6" />',
+      },
+    });
+
+    const CTAS = {
+      'lynn-cta-part-1': {
+        label: 'Open the practice dashboard',
+        href: 'https://claude.ai/design/p/9b037e74-c7bc-4f4a-9923-6447b3c2f862?file=Dashboard.html&via=share',
+      },
+      'lynn-cta-part-4': {
+        label: 'Open the Release Timeline Tweaks example',
+        href: 'https://claude.ai/design/p/bb2ce6ab-3083-4b1c-8d0c-4a775752f4f0?file=Release+Timeline+Example.html&via=share',
+      },
+    };
+
+    const cta = (id) =>
+      h(
+        Button,
+        {
+          variant: 'primary',
+          className: 'nice-glow-pulse',
+          href: CTAS[id].href,
+          target: '_blank',
+          rel: 'noopener',
+          icon: sparkleIcon,
+        },
+        CTAS[id].label
+      );
+
+    /* ---- the three contact cards ---------------------------------------- */
+    /* `accent` draws the 2px top strip `.contact-card::before` used to draw;
+       `--accent` is still set inline because the icon tile, the role label
+       and the link arrow all read it, exactly as they did on the anchor.
+       The source card was one big <a>; `Card` renders a div with no role, so
+       the "Message ... on Teams" line is a real anchor now (keyboard
+       reachable, and the thing a screen reader announces) and the card's
+       `onClick` only forwards a mouse click on the surrounding surface. */
+    const CONTACTS = [
+      {
+        accent: 'blue',
+        cssAccent: 'var(--blue)',
+        role: 'Instructor',
+        name: 'Megan Fisher',
+        desc: 'Questions about the class itself - what was covered, something that did not click, or a step you want to walk through again.',
+        linkLabel: 'Message Megan on Teams →',
+        href: 'https://teams.microsoft.com/l/chat/0/0?users=Megan.Fisher@nice.com',
+        icon: '<path d="M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-4 0-8 2-8 5v1h16v-1c0-3-4-5-8-5z" fill="currentColor"/>',
+      },
+      {
+        accent: 'lynn',
+        cssAccent: 'var(--lyra)',
+        role: 'Design System',
+        name: 'Lyra Design Support and Help Desk',
+        desc: 'Questions about Lyra itself - tokens, components, patterns, or whether something you are building lines up with the design system.',
+        linkLabel: 'Open the Teams channel →',
+        href: 'https://teams.microsoft.com/l/channel/19%3A719be06edac04712a605aca8a6d6f936%40thread.tacv2/Lyra%20Design%20Support%20and%20Help%20Desk?groupId=c9888e36-654f-414f-9d1c-d335be5a5b13&tenantId=7123dabd-0e87-4da9-9cb9-b7ec82011aad',
+        icon: '<path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z" fill="currentColor"/>',
+      },
+      {
+        accent: 'emerald',
+        cssAccent: 'var(--emerald)',
+        role: 'Future Sessions',
+        name: 'Erick Mathews',
+        desc: 'Want this session run for your team, or a deeper follow-up on any part of it? Reach out and we will get one on the calendar.',
+        linkLabel: 'Message Erick on Teams →',
+        href: 'https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com',
+        icon: '<path d="M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2zm5 4a1 1 0 00-1 1v3H8a1 1 0 100 2h3v3a1 1 0 102 0v-3h3a1 1 0 100-2h-3V8a1 1 0 00-1-1z" fill="currentColor"/>',
+      },
+    ];
+
+    const contactCard = (contact) =>
+      h(
+        Card,
+        {
+          key: contact.href,
+          variant: 'solid',
+          accent: contact.accent,
+          style: { '--accent': contact.cssAccent },
+          // The real link is the `.contact-link` anchor below; this only
+          // reproduces the old card-wide click target for the mouse, and
+          // stands aside when the anchor itself was the thing clicked (it
+          // navigates on its own - handling it here too would open twice).
+          onClick: (event) => {
+            if (event.target.closest('a')) return;
+            window.open(contact.href, '_blank', 'noopener');
+          },
+        },
+        h('div', {
+          className: 'contact-icon',
+          'aria-hidden': true,
+          dangerouslySetInnerHTML: {
+            __html:
+              '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+              contact.icon +
+              '</svg>',
+          },
+        }),
+        h('div', { className: 'contact-role' }, contact.role),
+        h('div', { className: 'contact-name' }, contact.name),
+        h('p', { className: 'contact-desc' }, contact.desc),
+        h(
+          'a',
+          {
+            className: 'contact-link',
+            href: contact.href,
+            target: '_blank',
+            rel: 'noopener',
+          },
+          contact.linkLabel
+        )
+      );
+
+    /* The nav's single action slot. The download pill is the exact markup it
+       replaces - the disabled Download pill plus its "Coming soon!" tag;
+       `nav-download` / `coming-soon-tag` are theme.css classes, so it keeps
+       its exact look. The theme toggle is new here, and is the same one the
+       other migrated pages carry. */
+    const downloadPill = (key) =>
+      h(
+        'span',
+        { key, className: 'nav-download is-disabled', 'aria-disabled': 'true' },
+        'Download',
+        h('span', { className: 'coming-soon-tag' }, 'Coming soon!')
+      );
+
+    /* ThemeProvider stamps `data-lynn-theme` on its own wrapper div, but the
+       portalled chrome and cards live outside that div - so mirror the
+       attribute onto <html>, where the same `[data-lynn-theme]` rules in
+       lynn-ui.css apply to the whole document. */
+    function ThemeBridge() {
+      const { theme } = useLynnTheme();
+      useEffect(() => {
+        document.documentElement.setAttribute('data-lynn-theme', theme);
+      }, [theme]);
+      return null;
+    }
+
+    /* createPortal's third argument is the portal's own React key - the
+       badge / step-list / CTA portals below are rendered from arrays, so
+       each needs one, and the mount id is already unique per portal. */
+    function portal(node, id) {
+      const host = document.getElementById(id);
+      return host ? createPortal(node, host, id) : null;
+    }
+
+    function App() {
+      /* No `unlocked` / `error` state: there is no gate on this page. */
+      const [railCollapsed, setRailCollapsed] = useState(() => {
+        try {
+          return localStorage.getItem(RAIL_KEY) === '1';
+        } catch (e) {
+          return false;
+        }
       });
-    })();
+
+      useEffect(() => {
+        // The contacts grid was empty while the page's own reveal pass ran,
+        // so it was skipped there; now that it has three cards in it, it can
+        // fade in like every other `.reveal` block.
+        const grid = document.getElementById('lynn-contacts-root');
+        if (grid && window.WingsReveal) window.WingsReveal.observe([grid]);
+
+        // Every `#part-N` / `#contacts` anchor is still static markup, so the
+        // browser's own jump on load already worked - but the badges and step
+        // lists inside each walk panel mount a tick later and change that
+        // panel's height, which moves a target the page had already scrolled
+        // to. Re-running the jump lands it in the right place.
+        const hash = location.hash.slice(1);
+        if (hash) {
+          const target = document.getElementById(hash);
+          if (target) target.scrollIntoView();
+        }
+      }, []);
+
+      // Cmd+K / Ctrl+K opens the rail - the shortcut buildDocRail() used to
+      // own. This rail is `mode="sections"` and so has no filter box, which
+      // is exactly the "pages with no search box just expand" branch of the
+      // original handler; the query below simply finds nothing.
+      useEffect(() => {
+        function onKeyDown(event) {
+          if (event.key !== 'k' && event.key !== 'K') return;
+          if (!(event.metaKey || event.ctrlKey)) return;
+          event.preventDefault();
+          setRail(false);
+          const input = document.querySelector('.lynn-doc-rail-search');
+          if (input) {
+            input.focus();
+            input.select();
+          }
+        }
+        document.addEventListener('keydown', onKeyDown);
+        return () => document.removeEventListener('keydown', onKeyDown);
+      }, []);
+
+      const setRail = (collapsed) => {
+        setRailCollapsed(collapsed);
+        try {
+          localStorage.setItem(RAIL_KEY, collapsed ? '1' : '0');
+        } catch (e) { /* no persistence, still collapses for this visit */ }
+      };
+
+      return h(
+        Fragment,
+        null,
+        h(ThemeBridge, { key: 'theme-bridge' }),
+        portal(
+          h(Nav, {
+            logoHref: './index.html',
+            cta: h(Fragment, null, [
+              h(ThemeToggle, { key: 'theme', showLabels: false }),
+              downloadPill('download'),
+            ]),
+          }),
+          'lynn-nav-root'
+        ),
+        portal(
+          h(DocRail, {
+            mode: 'sections',
+            groups: railGroups,
+            searchable: false,
+            collapsed: railCollapsed,
+            onToggle: setRail,
+          }),
+          'lynn-docrail-root'
+        ),
+        Object.keys(BADGES).map((id) =>
+          portal(h(Badge, { tone: 'lynn' }, BADGES[id]), id)
+        ),
+        Object.keys(STEP_LISTS).map((id) => portal(stepList(id), id)),
+        Object.keys(CTAS).map((id) => portal(cta(id), id)),
+        portal(
+          h(Fragment, null, CONTACTS.map(contactCard)),
+          'lynn-contacts-root'
+        ),
+        portal(h(Footer, { columns: FOOTER_COLUMNS }), 'lynn-footer-root')
+      );
+    }
+
+    createRoot(document.getElementById('lynn-app-root')).render(
+      h(ThemeProvider, { defaultTheme: 'lynn' }, h(App))
+    );
   </script>
 </body>
 </html>

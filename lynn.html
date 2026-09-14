@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lynn — NiCE Designer</title>
+  <title>Lynn - NiCE Designer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
@@ -13,6 +13,38 @@
   <script src="embed.js"></script>
   <link rel="stylesheet" href="site-gate.css" />
   <script src="site-gate.js" defer></script>
+
+  <!--
+    ===== lynn-ui: the real React component package =====
+    The "Interactive components" section near the bottom of this page mounts
+    the lynn-ui playground (lynn-ui/playground/app.js) into
+    #lynn-playground-root. Three things are needed for that, and nothing here
+    affects the rest of the page:
+      1. dist/lynn-ui.css - the package's built stylesheet. Everything in it
+         is either a `--lynn-*` custom property on `:root` or a `.lynn-*`
+         class, so it cannot collide with this page's own tokens/classes.
+      2. playground.css   - the playground's own chrome, shared verbatim with
+         the standalone shell at lynn-ui/playground/index.html.
+      3. the import map   - React, ReactDOM and matter-js as CDN ESM, exactly
+         as the standalone shell loads them. `?external=react` on
+         react-dom/client stops a second copy of React being pulled in
+         ("invalid hook call").
+  -->
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css" />
+  <link rel="stylesheet" href="./lynn-ui/playground/playground.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@18.3.1",
+      "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+      "react-dom": "https://esm.sh/react-dom@18.3.1?external=react",
+      "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?external=react",
+      "scheduler": "https://esm.sh/scheduler@0.23.2",
+      "matter-js": "https://esm.sh/matter-js@0.20.0"
+    }
+  }
+  </script>
+
   <style>
     :root { --bg-card: #2f2f3d; }
 
@@ -207,8 +239,39 @@
 
     /* Plasma + liquid stages */
     .fx-plasma-stage, .fx-liquid-stage { background: #1b1b24; }
+
+    /* Sparkle / glow-pulse / sheen demo */
+    .fx-sgs-stage { gap: 56px; flex-wrap: wrap; }
+    .fx-sgs-item { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .fx-sgs-label { font-family: 'SF Mono', monospace; font-size: 12px; color: var(--text-secondary); }
+    .fx-sgs-glow-demo {
+      display: block; width: 56px; height: 56px; border-radius: 50%;
+      background: var(--card); border: 1px solid var(--border);
+    }
+    .fx-sgs-sheen-demo {
+      display: inline-flex; align-items: center; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8);
+      padding: 10px 22px; border-radius: 100px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14);
+    }
     .fx-caption { position: relative; z-index: 1; font-size: 13px; color: rgba(255,255,255,0.55); text-align: center; padding: 0 24px; }
     .fx-liquid-stage { cursor: default; }
+
+    /* ---- LYNN-UI PLAYGROUND MOUNT ---- */
+    /* Only the box the React tree lands in. Everything inside it is styled by
+       dist/lynn-ui.css + lynn-ui/playground/playground.css. */
+    /* Clear the sticky nav when the doc rail jumps here. Scoped to this
+       section on purpose: the page's other sections keep the exact anchor
+       behavior they already had. */
+    #lynn-playground { scroll-margin-top: calc(var(--nav-h) + 24px); }
+    .lynn-playground-mount { min-height: 300px; }
+    .lynn-playground-fallback {
+      padding: 48px 24px;
+      border: 1px dashed var(--border-md);
+      border-radius: 24px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      text-align: center;
+    }
 
     @media (max-width: 768px) {
       .lynn-section { padding: 52px 24px; }
@@ -222,7 +285,7 @@
   <!-- SITE-WIDE ACCESS GATE (see site-gate.css / site-gate.js) -->
   <div id="nice-site-gate">
     <div class="sg-card">
-      <div class="sg-lock">🔒</div>
+      <div class="sg-lock"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6" /><path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" /><path d="M8 11v-4a4 4 0 1 1 8 0v4" /></svg></div>
       <div class="sg-title">NiCE Designer Site Login</div>
       <div class="sg-subtitle">This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.</div>
       <div class="sg-input-wrap">
@@ -260,7 +323,7 @@
       <p class="hero-eyebrow">Design System Reference &amp; Live Demo</p>
       <h1 class="hero-title">Meet <span class="gradient-word">Lynn</span></h1>
       <p class="hero-sub">
-        Lynn is NiCE Designer Suite's own visual identity — the dark, gradient-driven,
+        Lynn is NiCE Designer Suite's own visual identity - the dark, gradient-driven,
         motion-rich language you're looking at right now. It isn't a system the Suite audits
         or converts other work against; SOL and Lyra still are. Lynn is the tool's own skin,
         documented here in the same token shape.
@@ -272,7 +335,7 @@
   <section class="lynn-section reveal" id="lynn-colors">
     <p class="lynn-label">Tokens</p>
     <h2 class="lynn-title">Color <span>palette</span></h2>
-    <p class="lynn-desc">Six accents on a dark charcoal base. Text always uses <code>rgba(255,255,255,N)</code> — never a gray hex.</p>
+    <p class="lynn-desc">Six accents on a dark charcoal base. Text always uses <code>rgba(255,255,255,N)</code> - never a gray hex.</p>
     <div class="swatch-grid">
       <div class="swatch"><div class="swatch-fill" style="background:#21212B"></div><div class="swatch-meta"><div class="swatch-name">bg</div><div class="swatch-hex">#21212B</div></div></div>
       <div class="swatch"><div class="swatch-fill" style="background:#2a2a36"></div><div class="swatch-meta"><div class="swatch-name">surface</div><div class="swatch-hex">#2A2A36</div></div></div>
@@ -348,7 +411,7 @@
   <section class="lynn-section reveal" id="lynn-compare">
     <p class="lynn-label">Compare</p>
     <h2 class="lynn-title">SOL vs. Lyra vs. <span>Lynn</span></h2>
-    <p class="lynn-desc">Same sample heading, body copy, button, badge, and card — re-skinned live with each system's real tokens. Toggle to see the difference.</p>
+    <p class="lynn-desc">Same sample heading, body copy, button, badge, and card - re-skinned live with each system's real tokens. Toggle to see the difference.</p>
     <div class="compare-toggle" role="tablist" aria-label="Design system">
       <button type="button" class="compare-btn" data-system="sol" role="tab">SOL</button>
       <button type="button" class="compare-btn" data-system="lyra" role="tab">Lyra</button>
@@ -357,7 +420,7 @@
     <div class="compare-stage" data-system="lynn" id="compare-stage">
       <p class="compare-eyebrow">Sample panel</p>
       <h3 class="compare-heading">Design that just works</h3>
-      <p class="compare-body">This heading, body copy, button, and card are all rendered with the selected system's real font, color, and radius tokens — nothing here is a mockup.</p>
+      <p class="compare-body">This heading, body copy, button, and card are all rendered with the selected system's real font, color, and radius tokens - nothing here is a mockup.</p>
       <div class="compare-row">
         <button type="button" class="compare-cta">Primary action</button>
         <span class="compare-badge">Badge</span>
@@ -381,6 +444,9 @@
       <div class="motion-card"><div class="motion-card-name">lynn/motion/plasma-lightning</div><div class="motion-card-desc">Canvas plasma-ball filaments that bend toward the cursor, with drifting motes.</div></div>
       <div class="motion-card"><div class="motion-card-name">lynn/motion/liquid-fill</div><div class="motion-card-desc">Matter.js particle pool that sloshes and fills a container on hover.</div></div>
       <div class="motion-card"><div class="motion-card-name">lynn/motion/scroll-reveal</div><div class="motion-card-desc">translateY + opacity on enter, cubic-bezier(0.23,1,0.32,1).</div></div>
+      <div class="motion-card"><div class="motion-card-name">lynn/motion/sparkle</div><div class="motion-card-desc">2.6s scale + rotate + opacity pulse on a small icon glyph.</div></div>
+      <div class="motion-card"><div class="motion-card-name">lynn/motion/glow-pulse</div><div class="motion-card-desc">3s breathing box-shadow halo, purple to blue.</div></div>
+      <div class="motion-card"><div class="motion-card-name">lynn/motion/sheen</div><div class="motion-card-desc">4.2s diagonal light sweep across a pill or button.</div></div>
     </div>
   </section>
 
@@ -437,6 +503,50 @@
       <div class="fx-stage fx-liquid-stage" id="fx-liquid-stage">
         <span class="fx-caption">Hover to fill this container with a sloshing particle pool (Matter.js)</span>
       </div>
+    </div>
+
+    <div class="fx-block" id="fx-sparkle-glow-sheen">
+      <div class="fx-head"><span class="fx-name">Sparkle, glow &amp; sheen</span><span class="fx-token">lynn/motion/sparkle &middot; glow-pulse &middot; sheen</span></div>
+      <div class="fx-stage fx-sgs-stage">
+        <div class="fx-sgs-item">
+          <span class="nice-sparkle" aria-hidden="true"><svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path class="nice-sparkle-layer nice-sparkle-layer-a" d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2Z" /><path class="nice-sparkle-layer nice-sparkle-layer-b" d="M16 6a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2Z" /><path class="nice-sparkle-layer nice-sparkle-layer-c" d="M9 18a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6Z" /></svg></span>
+          <span class="fx-sgs-label">sparkle</span>
+        </div>
+        <div class="fx-sgs-item">
+          <span class="fx-sgs-glow-demo nice-glow-pulse"></span>
+          <span class="fx-sgs-label">glow-pulse</span>
+        </div>
+        <div class="fx-sgs-item">
+          <span class="fx-sgs-sheen-demo nice-sheen">Pill tag</span>
+          <span class="fx-sgs-label">sheen</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--
+    INTERACTIVE COMPONENTS - the lynn-ui playground, mounted by React.
+
+    Deliberately NOT `.reveal`: the scroll-reveal observer fires at a 0.05
+    intersection ratio, and this section is thousands of pixels tall, so
+    leaving it opacity-0 until it "enters" would be a coin flip. The section
+    is also the only place on the page with a React tree - the mount div is
+    the whole contract, and everything inside it is real lynn-ui.
+  -->
+  <section class="lynn-section" id="lynn-playground">
+    <p class="lynn-label">Live playground</p>
+    <h2 class="lynn-title">Interactive <span>components</span></h2>
+    <p class="lynn-desc">
+      Lynn ships as a real React package, <code>lynn-ui</code> - every token above is a
+      CSS custom property in it, and every component below is the built package running
+      on this page, not a screenshot. Drive the pickers to change props, read the JSX
+      each state generates, and use the theme switch to re-skin all of it live.
+    </p>
+    <div class="lynn-playground-mount" id="lynn-playground-root">
+      <p class="lynn-playground-fallback">
+        Loading the component playground…<br />
+        It needs JavaScript modules and the <code>lynn-ui/dist</code> build.
+      </p>
     </div>
   </section>
 
@@ -536,7 +646,8 @@
 
   <!-- Reusable canvas effects (Matter.js is the physics engine for the liquid demo) -->
   <script src="https://cdn.jsdelivr.net/npm/matter-js@0.19.0/build/matter.min.js"></script>
-  <script src="nice-effects.js?v=9"></script>
+  <!-- v10: DOC_PAGES gained this page's "Interactive Components" group. -->
+  <script src="nice-effects.js?v=11"></script>
   <script>
     var plasmaStage = document.getElementById('fx-plasma-stage');
     if (plasmaStage) {
@@ -571,6 +682,32 @@
         });
       });
     })();
+  </script>
+
+  <!--
+    Interactive components: mount the lynn-ui playground into this page.
+
+    `app.js` is the same module the standalone shell at
+    lynn-ui/playground/index.html loads - it exports a mount function and has
+    no side effects, so the only difference here is `embedded: true`, which
+    drops the playground's own Nav (this page has one), moves its ThemeToggle
+    into the section's local header, and turns its DocRail into a sticky
+    right-hand column scoped to this section instead of a second fixed
+    sidebar competing with the site's own .doc-rail.
+  -->
+  <script type="module">
+    const mount = document.getElementById('lynn-playground-root');
+
+    import('./lynn-ui/playground/app.js')
+      .then(({ mountPlayground }) => mountPlayground(mount, { embedded: true }))
+      .catch((error) => {
+        // Never leave a silently empty section: say what went wrong in place.
+        console.error('[lynn.html] playground failed to mount', error);
+        mount.innerHTML =
+          '<p class="lynn-playground-fallback">The component playground could not load.' +
+          '<br /><code></code></p>';
+        mount.querySelector('code').textContent = String(error);
+      });
   </script>
 </body>
 </html>

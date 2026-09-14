@@ -1,0 +1,239 @@
+/*!
+ * ChangelogEntry
+ * Ported from release-notes.html:
+ *   `.changelog-card`        - `surface` fill, 1px border, 16px radius,
+ *                              `overflow: hidden`
+ *   `.changelog-main`        - grid 220px / 1fr, collapsing to one column at
+ *                              700px where the meta rail becomes a top row
+ *   `.changelog-meta`        - 32px padding, 12px column gap, right hairline
+ *   `.version-badge`         - 20px/800 row
+ *   `.version-latest`        - the `LATEST` pill (rendered by `Badge` at
+ *                              `tone="emerald" bordered`, with the source's
+ *                              uppercase + 1.5px track restored below)
+ *   `.version-date`          - 13px secondary
+ *   `.changelog-content`     - 32px padding
+ *   `.changelog-group`       - 24px bottom margin (0 on the last)
+ *   `.changelog-group-label` - 11px/700 uppercase, 1.5px track
+ *   `.changelog-list`        - 8px-gap column, 14px items at 1.6 with a 5px
+ *                              dot 9px from the top, blue by default, coral
+ *                              for fixes and emerald for improvements
+ *   `.changelog-toggle-row`  - full-width row, 20px/32px padding, 3% white
+ *                              hover, 18px/800 version + 13px date
+ *   `.changelog-toggle-arrow`- rotates 180deg when open
+ *   `.changelog-collapsible` - 1px top rule
+ *
+ * One correction: the source hard-codes `rgba(255,255,255,0.85)` list text,
+ * which reads as white-on-white in light mode, so the items read
+ * `--lynn-color-text` at 85% opacity instead - same look in `lynn`, correct
+ * in all three modes.
+ */
+
+.lynn-changelog-card {
+  background: var(--lynn-color-surface);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-lg);
+  overflow: hidden;
+  font-family: var(--lynn-font-family);
+}
+
+/* ---------- expanded body (both forms) ---------- */
+.lynn-changelog-main {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+}
+
+.lynn-changelog-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lynn-space-md);
+  padding: var(--lynn-space-2xl);
+  border-right: 1px solid var(--lynn-color-border);
+}
+
+.lynn-changelog-version {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lynn-space-sm);
+  font-size: 20px;
+  font-weight: var(--lynn-font-weight-extrabold);
+  color: var(--lynn-color-text);
+}
+
+/* The source's `.version-latest` type, which `Badge`'s `tone` pills do not
+   carry (only its `status` pills uppercase). */
+.lynn-changelog-version .lynn-badge {
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.lynn-changelog-date {
+  font-size: 13px;
+  color: var(--lynn-color-text-secondary);
+}
+
+.lynn-changelog-content {
+  padding: var(--lynn-space-2xl);
+}
+
+.lynn-changelog-group {
+  margin-bottom: var(--lynn-space-xl);
+}
+
+.lynn-changelog-group:last-child {
+  margin-bottom: 0;
+}
+
+.lynn-changelog-group-label {
+  margin-bottom: var(--lynn-space-md);
+  font-size: 11px;
+  font-weight: var(--lynn-font-weight-bold);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--lynn-color-text-secondary);
+}
+
+.lynn-changelog-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--lynn-space-sm);
+  margin: 0;
+  padding: 0;
+}
+
+.lynn-changelog-list li {
+  position: relative;
+  padding-left: 15px;
+  font-size: var(--lynn-font-size-body);
+  line-height: 1.6;
+  color: var(--lynn-color-text);
+  opacity: 0.85;
+}
+
+.lynn-changelog-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--lynn-changelog-dot);
+}
+
+/* ---------- toggle row (older entries) ---------- */
+.lynn-changelog-card > .lynn-changelog-toggle {
+  width: 100%;
+  padding: 20px var(--lynn-space-2xl);
+  color: var(--lynn-color-text);
+  transition: background 0.15s var(--lynn-ease);
+}
+
+.lynn-changelog-card > .lynn-changelog-toggle:hover {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--lynn-color-text);
+}
+
+/* `Button` wraps its children in `.lynn-btn-label`; the row's own layout has
+   to live on that span, not on the button box. */
+.lynn-changelog-toggle .lynn-btn-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lynn-space-lg);
+  width: 100%;
+  text-align: left;
+}
+
+.lynn-changelog-toggle-left {
+  display: flex;
+  align-items: center;
+  gap: var(--lynn-space-lg);
+  flex-wrap: wrap;
+}
+
+.lynn-changelog-toggle-version {
+  font-size: 18px;
+  font-weight: var(--lynn-font-weight-extrabold);
+}
+
+.lynn-changelog-toggle-date {
+  font-size: 13px;
+  font-weight: var(--lynn-font-weight-regular);
+  color: var(--lynn-color-text-secondary);
+}
+
+.lynn-changelog-toggle-arrow {
+  font-size: 18px;
+  line-height: 1;
+  color: var(--lynn-color-text-secondary);
+  transition: transform 0.25s var(--lynn-ease);
+}
+
+.lynn-changelog-toggle-arrow-open {
+  transform: rotate(180deg);
+}
+
+.lynn-changelog-collapsible {
+  border-top: 1px solid var(--lynn-color-border);
+}
+
+.lynn-changelog-collapsible[hidden] {
+  display: none;
+}
+
+/* ---------- bullet tones ---------- */
+.lynn-changelog-list-blue {
+  --lynn-changelog-dot: var(--lynn-color-blue);
+}
+.lynn-changelog-list-electric-blue {
+  --lynn-changelog-dot: var(--lynn-color-electric-blue);
+}
+.lynn-changelog-list-indigo {
+  --lynn-changelog-dot: var(--lynn-color-indigo);
+}
+.lynn-changelog-list-emerald {
+  --lynn-changelog-dot: var(--lynn-color-emerald);
+}
+.lynn-changelog-list-teal {
+  --lynn-changelog-dot: var(--lynn-color-teal);
+}
+.lynn-changelog-list-coral {
+  --lynn-changelog-dot: var(--lynn-color-coral);
+}
+.lynn-changelog-list-lynn {
+  --lynn-changelog-dot: var(--lynn-color-lynn);
+}
+
+@media (max-width: 700px) {
+  .lynn-changelog-main {
+    grid-template-columns: 1fr;
+  }
+
+  .lynn-changelog-meta {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--lynn-space-md);
+    padding: 20px;
+    border-right: none;
+    border-bottom: 1px solid var(--lynn-color-border);
+  }
+
+  .lynn-changelog-content {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .lynn-changelog-card > .lynn-changelog-toggle {
+    padding: var(--lynn-space-lg) 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-changelog-card > .lynn-changelog-toggle,
+  .lynn-changelog-toggle-arrow {
+    transition: none;
+  }
+}

@@ -11,9 +11,64 @@
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <link rel="stylesheet" href="site-gate.css" />
-  <script src="site-gate.js" defer></script>
-  <script src="nice-effects.js?v=9" defer></script>
+  <script src="nice-effects.js?v=11" defer></script>
+
+  <!--
+    ===== lynn-ui: the site chrome, as React components =====
+    The access gate, the nav and (on pages that have them) the footer and the
+    doc rail all come from lynn-ui now - see the single #lynn-app-root mount
+    script at the end of <body>. site-gate.css / site-gate.js are gone with
+    them; `AccessGate` is the same screen and the mount script re-runs the
+    same client-side code check.
+
+    Three things are needed, and none of them affect the rest of the page:
+      1. dist/lynn-ui.css - the package's built stylesheet. Everything in it
+         is either a `--lynn-*` custom property or a `.lynn-*` class, so it
+         cannot collide with this page's own tokens/classes.
+      2. the import map  - React, ReactDOM and matter-js as CDN ESM.
+         `?external=react` on react-dom stops a second copy of React being
+         pulled in ("invalid hook call"). matter-js is in the map because
+         dist/index.js is one barrel that also reaches LiquidFill.
+      3. `.lynn-mount` - the chrome renders through portals into placeholder
+         divs left where the old markup was. `display: contents` means those
+         placeholders generate no box, so the sticky nav and the footer's
+         margin still resolve against <body> exactly as before.
+  -->
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@18.3.1",
+      "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+      "react-dom": "https://esm.sh/react-dom@18.3.1?external=react",
+      "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?external=react",
+      "scheduler": "https://esm.sh/scheduler@0.23.2",
+      "matter-js": "https://esm.sh/matter-js@0.20.0"
+    }
+  }
+  </script>
+  <style>.lynn-mount { display: contents; }</style>
+
+  <!--
+    The gate used to be static markup covered by blocking CSS, so it was up
+    before first paint. React arrives as ESM from a CDN, so the component
+    can only mount a tick later - hold the page back until it does, or a
+    locked visitor reads the whole page in the gap. Costs nothing once the
+    session is unlocked (the class is never added), and a 4s failsafe means
+    a CDN that never answers leaves a readable page rather than a blank one.
+  -->
+  <style>html.lynn-gate-pending body { visibility: hidden; }</style>
+  <script>
+    (function () {
+      try {
+        if (sessionStorage.getItem('nice-site-access') === '1') return;
+      } catch (e) { /* blocked storage: fall through and gate */ }
+      var root = document.documentElement;
+      root.classList.add('lynn-gate-pending');
+      setTimeout(function () { root.classList.remove('lynn-gate-pending'); }, 4000);
+    })();
+  </script>
+
   <style>
     body { line-height: 1.6; }
 
@@ -45,75 +100,41 @@
       margin: 0 auto;
     }
 
-    /* ── FAQ ── */
+    /* ── FAQ ──
+       The ten questions are lynn-ui's <Accordion> / <AccordionItem> now (see
+       the mount script at the end of <body>), so the `.faq-item` / `.faq-q` /
+       `.faq-list` card, header and chevron CSS has gone with the <details>
+       markup it styled - `.lynn-accordion*` in lynn-ui.css is the same design,
+       ported from exactly these rules.
+
+       What is left here is what lynn-ui deliberately does not own: the section
+       frame, and the prose inside an answer. `.faq-a-body` is the old `.faq-a`
+       block minus the padding and the top rule, which the component's own
+       `.lynn-accordion-panel` now provides. */
     .faq-section { max-width: 860px; margin: 0 auto; padding: 64px 48px 96px; }
-    .faq-list { display: flex; flex-direction: column; gap: 12px; }
-    .faq-item {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; overflow: hidden;
-      transition: border-color 0.2s;
-    }
-    .faq-item[open] { border-color: rgba(54,148,252,0.3); }
-    .faq-q {
-      padding: 20px 24px; font-size: 16px; font-weight: 700;
-      color: var(--text); cursor: pointer; list-style: none;
-      display: flex; justify-content: space-between; align-items: center;
-      gap: 16px;
-    }
-    .faq-q::-webkit-details-marker { display: none; }
-    .faq-q::after {
-      content: '+'; font-size: 20px; font-weight: 300;
-      color: var(--blue); flex-shrink: 0;
-      transition: transform 0.2s;
-    }
-    .faq-item[open] .faq-q::after { content: '+'; transform: rotate(45deg); }
-    .faq-a {
-      padding: 0 24px 20px; font-size: 14px;
-      color: var(--text-sec); line-height: 1.75;
-      border-top: 1px solid var(--border);
-    }
-    .faq-a p { margin-top: 14px; }
-    .faq-a p:first-child { margin-top: 14px; }
-    .faq-a ul { margin: 12px 0 0 20px; display: flex; flex-direction: column; gap: 8px; }
-    .faq-a a { color: var(--blue); text-decoration: none; }
-    .faq-a a:hover { text-decoration: underline; }
+
+    .faq-a-body p { margin-top: 14px; }
+    /* The panel has real top padding of its own, which the old `.faq-a` (padded
+       `0 24px 20px`) did not - so the first paragraph no longer needs to supply
+       that gap itself. */
+    .faq-a-body p:first-child { margin-top: 0; }
+    .faq-a-body ul { margin: 12px 0 0 20px; display: flex; flex-direction: column; gap: 8px; }
+    .faq-a-body a { color: var(--blue); text-decoration: none; }
+    .faq-a-body a:hover { text-decoration: underline; }
 
     @media (max-width: 600px) { .faq-section { padding: 48px 24px 64px; } }
   </style>
 </head>
 <body>
 
-  <!-- SITE-WIDE ACCESS GATE (see site-gate.css / site-gate.js) -->
-  <div id="nice-site-gate">
-    <div class="sg-card">
-      <div class="sg-lock">🔒</div>
-      <div class="sg-title">NiCE Designer Site Login</div>
-      <div class="sg-subtitle">This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.</div>
-      <div class="sg-input-wrap">
-        <input id="nice-site-gate-input" type="password" placeholder="Enter code" autocomplete="off" />
-      </div>
-      <div class="sg-error" id="nice-site-gate-error"></div>
-      <button id="nice-site-gate-btn" type="button">Unlock</button>
-      <div class="sg-divider"></div>
-      <div class="sg-cta">
-        Don't have the code?<br>
-        <strong>Reach out to Erick Mathews on Teams</strong> to request access.
-        <br>
-        <a class="sg-teams-btn" href="https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com" target="_blank" rel="noopener">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H8a2 2 0 00-2 2v2H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2h2a2 2 0 002-2V4a2 2 0 00-2-2zM4 20V8h12v12H4zm16-4h-2V8a2 2 0 00-2-2H8V4h12v12z" fill="currentColor"/></svg>
-          Message on Teams
-        </a>
-      </div>
-    </div>
-  </div>
+  <!-- lynn-ui chrome. One React root, one ThemeProvider (see the mount
+       script at the end of <body>); the gate renders inside it, everything
+       else portals into the `.lynn-mount` placeholders below. -->
+  <div id="lynn-app-root"></div>
 
-  <!-- NAV -->
-  <nav class="site-nav" id="site-nav">
-    <a href="./index.html" class="nav-logo">
-      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span><span class="logo-suite"> Suite</span>
-    </a>
-    <span class="nav-download is-disabled" aria-disabled="true">Download<span class="coming-soon-tag">Coming soon!</span></span>
-  </nav>
+  <!-- NAV (lynn-ui <Nav>) + DOC RAIL (lynn-ui <DocRail>, position: fixed) -->
+  <div id="lynn-nav-root" class="lynn-mount"></div>
+  <div id="lynn-docrail-root" class="lynn-mount"></div>
 
   <!-- HERO -->
   <section class="hero">
@@ -124,124 +145,20 @@
     </div>
   </section>
 
-  <!-- FAQ -->
+  <!-- FAQ (lynn-ui <Accordion> + ten <AccordionItem>s - see the mount script) -->
   <section class="faq-section" id="faq">
-    <div class="faq-list">
-
-      <details class="faq-item reveal" id="faq-design-system" open>
-        <summary class="faq-q">How do the NiCE Designer tools understand the design system?</summary>
-        <div class="faq-a">
-          <p>The tools are built on three sources of truth:</p>
-          <ul>
-            <li><strong>Storybook</strong> - the design team's live component library at <a href="https://na1.dev.nice-incontact.com/sol/?path=/story/react_internal-icon--examples" target="_blank" rel="noopener">na1.dev.nice-incontact.com/sol</a>, which provides live component definitions, variants, and usage examples.</li>
-            <li><strong>Figma foundation files</strong> - the Lyra and SOL Foundation Figma files, which define the canonical token sets, spacing scales, color palettes, and typography styles for both systems.</li>
-            <li><strong>Claude design system knowledge</strong> - AI context built from the same sources, enabling Claude to reason about tokens, patterns, and compliance in natural language.</li>
-          </ul>
-        </div>
-      </details>
-
-      <details class="faq-item reveal" id="faq-generate">
-        <summary class="faq-q">Does NiCE Designer generate designs or pages?</summary>
-        <div class="faq-a">
-          <p>No. NiCE Designer works with pages and designs that already exist - it audits, converts, and annotates them rather than generating new ones from scratch.</p>
-          <p>The philosophy: generation is best left to tools like Claude Code for code and to UX designers for design. NiCE Designer's job is to ensure that what's already been built actually matches the design system.</p>
-        </div>
-      </details>
-
-      <details class="faq-item reveal" id="faq-supercharge">
-        <summary class="faq-q">What is Supercharge?</summary>
-        <div class="faq-a">
-          <p>Supercharge is what happens when NiCE Designer connects to Claude via the local MCP server. On their own, the Figma plugin and Chrome extension can audit designs. With Supercharge connected, Claude can drive both tools simultaneously using natural language - running multi-step workflows like SOL &rarr; Lyra conversion, reasoning across Figma and the live page at the same time, and using the full library of MCP tools and Claude skills.</p>
-          <p>Think of the plugin and extension as the hands, and Supercharge as the brain.</p>
-        </div>
-      </details>
-
-      <details class="faq-item reveal" id="faq-sol-lyra">
-        <summary class="faq-q">What's the difference between SOL and Lyra, and can NiCE Designer convert between them?</summary>
-        <div class="faq-a">
-          <p>SOL and Lyra are NiCE's two design systems, each with their own token sets, spacing scales, and component libraries. There's no dedicated in-app Convert tool anymore - instead, we recommend <a href="https://claude.ai/design/p/019dda40-58d9-795b-92eb-5ee83bf676e4" target="_blank" rel="noopener">Claude Design</a> alongside the <a href="https://ndlr.netlify.app/#/erick-mathews/uncategorized" target="_blank" rel="noopener">official Lyra design system reference</a> for mapping a frame from one system to the other, using semantic role (text, background, border, icon) so tokens that differ by role are handled correctly rather than mapped one-to-one by name.</p>
-        </div>
-      </details>
-
-      <details class="faq-item reveal" id="faq-mcp-required">
-        <summary class="faq-q">Do I need the MCP server running to use the Figma plugin or Chrome extension?</summary>
-        <div class="faq-a">
-          <p>No. The Figma plugin and Chrome extension both work standalone for auditing and applying fixes. Design-system conversion work requires Supercharge, since it's done by asking Claude directly rather than through a dedicated in-app tool. The MCP server is only required for Supercharge - connecting Claude to drive both clients with natural language. See the <a href="./install-guide.html">Install Guide</a> for setup order.</p>
-        </div>
-      </details>
-
-      <details class="faq-item reveal" id="faq-disagree-fix">
-        <summary class="faq-q">What happens if I disagree with a suggested fix?</summary>
-        <div class="faq-a">
-          <p>Every fix is opt-in and reversible. You can snooze an individual flagged item, skip it entirely, or apply it and then revert - both clients keep a full edit history with undo/redo per step, including restoring prior variable bindings.</p>
-        </div>
-      </details>
-
-      <details class="faq-item reveal" id="faq-update">
-        <summary class="faq-q">How do I know when there's a new version, and how do I update?</summary>
-        <div class="faq-a">
-          <p>In Chrome, click the refresh icon next to the version number in Settings - it checks the latest published release and shows "You're up to date" or an "Update available" link straight to the download, with a "last checked" timestamp. After updating, a "What's new" popup summarizes the changes automatically (also reachable anytime from the version number).</p>
-          <p>Since the extension is a manually loaded unpacked build (not from the Chrome Web Store), updating means downloading the new <code>.zip</code> from the <a href="./install-guide.html">Install Guide</a>, unzipping it, and clicking the reload icon for NiCE Designer on <code>chrome://extensions</code>.</p>
-        </div>
-      </details>
-
-      <details class="faq-item reveal" id="faq-lite-mode">
-        <summary class="faq-q">What is Lite mode?</summary>
-        <div class="faq-a">
-          <p>Lite mode is a simpler view that shows just Frontend Audit and Design System, hiding Spec Mode, Supercharge, Documentation, and (in Chrome) the Frontend Editor. Brand-new installs start here by default - a first-launch Welcome screen lets you pick Lite mode or the Full toolkit, then walks through a short guided tour. Toggle it anytime in Settings; nothing is lost when you switch, it just changes what's shown.</p>
-        </div>
-      </details>
-
-      <details class="faq-item reveal" id="faq-any-figma-file">
-        <summary class="faq-q">Does NiCE Designer work on any Figma file, or only CXone product files?</summary>
-        <div class="faq-a">
-          <p>It works on any Figma file, but its audit rules are built against the SOL and Lyra foundation files, so compliance scoring is most meaningful on CXone product work. Running it against a file outside those systems will still surface off-token colors, spacing, and type, but there won't be a matching token to suggest as a fix.</p>
-        </div>
-      </details>
-
-      <details class="faq-item reveal" id="faq-access">
-        <summary class="faq-q">How do I get access to NiCE Designer?</summary>
-        <div class="faq-a">
-          <p>This site is currently access-gated. If you don't have the code, reach out to <strong>Erick Mathews on Teams</strong> to request it - see the button on the access screen or the <a href="./install-guide.html">Install Guide</a> for what happens after you're in.</p>
-        </div>
-      </details>
-
-    </div>
+    <div id="lynn-faq-root" class="lynn-mount"></div>
   </section>
 
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="footer-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></div>
-      </div>
-      <nav class="footer-nav">
-        <div class="footer-nav-col">
-          <a href="./index.html">Overview</a>
-          <a href="./install-guide.html">Install Guide</a>
-          <a href="./claude-skills.html">Claude Skills</a>
-          <a href="./the-suite.html">The Suite</a>
-        </div>
-        <div class="footer-nav-col">
-          <a href="./use-cases.html">Use Cases</a>
-          <a href="./scoring.html">Scoring</a>
-          <a href="./dashboard.html">Dashboard</a>
-          <a href="./roadmap.html">Roadmap</a>
-        </div>
-        <div class="footer-nav-col">
-          <a href="./release-notes.html">Release Notes</a>
-          <a href="./faq.html" class="active">FAQ</a>
-          <a href="./tools.html">Tools</a>
-          <a href="./marketplace.html">Marketplace</a>
-          <a href="./lynn.html">Lynn</a>
-        </div>
-      </nav>
-    </div>
-  </footer>
+  <!-- FOOTER (lynn-ui <Footer>) -->
+  <div id="lynn-footer-root" class="lynn-mount"></div>
 
   <script>
 
-    // Scroll reveal via IntersectionObserver
+    // Scroll reveal via IntersectionObserver. Only the hero's `.reveal` is a
+    // real element at this point - the ten question cards are React-rendered
+    // and arrive a tick later, so the mount script observes those on commit
+    // with the same options.
     var revealEls = document.querySelectorAll('.reveal');
     var observer = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
@@ -322,10 +239,478 @@
     });
     document.addEventListener('mouseleave', function() { glow.style.opacity = '0'; });
 
-    document.querySelectorAll('.faq-item').forEach(function(card) {
-      card.classList.add('tilt-ready');
-    });
+    // The `.tilt-ready` hover spotlight used to be stamped onto the static
+    // `.faq-item`s here. They are React-rendered `.lynn-accordion-item`s now,
+    // so the mount script passes the class through `AccordionItem`'s own
+    // `className` prop instead - see the mount script at the end of <body>.
   })();
+  </script>
+
+  <!--
+    ===== lynn-ui mount =====
+    One createRoot, one ThemeProvider, one <App>: the access gate, the nav,
+    the doc rail, the footer and the ten FAQ questions. Keeping them in a
+    single root is what keeps the theme in sync between them - four roots
+    would each get their own provider and drift apart.
+
+    Anything that belongs elsewhere in the document is placed with
+    createPortal into a `.lynn-mount` placeholder rather than rendered here:
+    a footer rendered next to the nav would sit at the top of the page, and a
+    nav rendered inside a 60px wrapper could not be sticky.
+  -->
+  <script type="module">
+    import { createElement as h, Fragment, useEffect, useState } from 'react';
+    import { createPortal } from 'react-dom';
+    import { createRoot } from 'react-dom/client';
+    import {
+      Accordion,
+      AccordionItem,
+      AccessGate,
+      DocRail,
+      Footer,
+      Nav,
+      ThemeProvider,
+      ThemeToggle,
+      useLynnTheme,
+    } from './lynn-ui/dist/index.js';
+
+    const PAGE = 'faq.html';
+
+    /* ---- the real gate, ported from site-gate.js ------------------------ */
+    /* Same session key, same password, same message, same Teams link. Still
+       a soft deterrent, not security - the check is client-side and readable
+       right here, exactly as it was in site-gate.js. */
+    const GATE_KEY = 'nice-site-access';
+    const GATE_PASSWORD = 'niceux';
+    const GATE_ERROR = 'Incorrect code. Contact Erick Mathews on Teams for access.';
+    const TEAMS_HREF = 'https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com';
+
+    /* ---- doc rail ------------------------------------------------------- */
+    /* The page table is read straight off nice-effects.js (which publishes
+       its own DOC_PAGES as NiceEffects.docPages) rather than hand-copied, so
+       adding a question anchor there still updates this rail. Every entry
+       goes into the switcher, `standalone` ones included - that flag only
+       decides whether a page's *own* rail is sections-only (wings-2026.html
+       is the one that sets it), which is exactly what buildDocRail() did.
+       Collapse state shares nice-effects.js's own localStorage key, which is
+       also the one embed.js stashes. */
+    const RAIL_KEY = 'nice-doc-rail-collapsed';
+    const DOC_PAGES = (window.NiceEffects && window.NiceEffects.docPages) || [];
+    const railPages = DOC_PAGES.map((page) => ({
+      href: './' + page.href,
+      label: page.label,
+    }));
+    const railGroups = (DOC_PAGES.find((page) => page.href === PAGE) || {}).groups || [];
+
+    /* ---- footer --------------------------------------------------------- */
+    /* The same three columns the static markup had, with this page marked
+       active. Passed explicitly rather than relying on Footer's defaults,
+       because the defaults cannot know which page is current. */
+    const FOOTER_COLUMNS = [
+      {
+        title: 'Product',
+        links: [
+          { label: 'Overview', href: './index.html' },
+          { label: 'Install Guide', href: './install-guide.html' },
+          { label: 'Claude Skills', href: './claude-skills.html' },
+          { label: 'The Suite', href: './the-suite.html' },
+        ],
+      },
+      {
+        title: 'Learn',
+        links: [
+          { label: 'Use Cases', href: './use-cases.html' },
+          { label: 'Scoring', href: './scoring.html' },
+          { label: 'Dashboard', href: './dashboard.html' },
+          { label: 'Roadmap', href: './roadmap.html' },
+        ],
+      },
+      {
+        title: 'Reference',
+        links: [
+          { label: 'Release Notes', href: './release-notes.html' },
+          { label: 'FAQ', href: './faq.html', active: true },
+          { label: 'Tools', href: './tools.html' },
+          { label: 'Marketplace', href: './marketplace.html' },
+          { label: 'Lynn', href: './lynn.html' },
+        ],
+      },
+    ];
+
+    /* ---- the ten questions ---------------------------------------------- */
+    /* `answer` is the source's own markup, verbatim - these answers carry
+       inline <strong>, <code>, <a> and an &rarr;, and they are authored right
+       here in this file rather than being user input, so keeping them as
+       markup is both safe and far more legible than nesting createElement
+       three deep for a bold clause or a link.
+
+       `id` is the id the doc rail's Questions group links to (see
+       NiceEffects.docPages), so these must stay in step with that table. */
+    const FAQS = [
+      {
+        id: 'faq-design-system',
+        question: 'How do the NiCE Designer tools understand the design system?',
+        // The one question that was `<details open>` in the source.
+        defaultOpen: true,
+        answer: `
+          <p>The tools are built on three sources of truth:</p>
+          <ul>
+            <li><strong>Storybook</strong> - the design team's live component library at <a href="https://na1.dev.nice-incontact.com/sol/?path=/story/react_internal-icon--examples" target="_blank" rel="noopener">na1.dev.nice-incontact.com/sol</a>, which provides live component definitions, variants, and usage examples.</li>
+            <li><strong>Figma foundation files</strong> - the Lyra and SOL Foundation Figma files, which define the canonical token sets, spacing scales, color palettes, and typography styles for both systems.</li>
+            <li><strong>Claude design system knowledge</strong> - AI context built from the same sources, enabling Claude to reason about tokens, patterns, and compliance in natural language.</li>
+          </ul>
+        `,
+      },
+      {
+        id: 'faq-generate',
+        question: 'Does NiCE Designer generate designs or pages?',
+        answer: `
+          <p>No. NiCE Designer works with pages and designs that already exist - it audits, converts, and annotates them rather than generating new ones from scratch.</p>
+          <p>The philosophy: generation is best left to tools like Claude Code for code and to UX designers for design. NiCE Designer's job is to ensure that what's already been built actually matches the design system.</p>
+        `,
+      },
+      {
+        id: 'faq-supercharge',
+        question: 'What is Supercharge?',
+        answer: `
+          <p>Supercharge is what happens when NiCE Designer connects to Claude via the local MCP server. On their own, the Figma plugin and Chrome extension can audit designs. With Supercharge connected, Claude can drive both tools simultaneously using natural language - running multi-step workflows like SOL &rarr; Lyra conversion, reasoning across Figma and the live page at the same time, and using the full library of MCP tools and Claude skills.</p>
+          <p>Think of the plugin and extension as the hands, and Supercharge as the brain.</p>
+        `,
+      },
+      {
+        id: 'faq-sol-lyra',
+        question:
+          "What's the difference between SOL and Lyra, and can NiCE Designer convert between them?",
+        answer: `
+          <p>SOL and Lyra are NiCE's two design systems, each with their own token sets, spacing scales, and component libraries. There's no dedicated in-app Convert tool anymore - instead, we recommend <a href="https://claude.ai/design/p/019dda40-58d9-795b-92eb-5ee83bf676e4" target="_blank" rel="noopener">Claude Design</a> alongside the <a href="https://ndlr.netlify.app/#/erick-mathews/uncategorized" target="_blank" rel="noopener">official Lyra design system reference</a> for mapping a frame from one system to the other, using semantic role (text, background, border, icon) so tokens that differ by role are handled correctly rather than mapped one-to-one by name.</p>
+        `,
+      },
+      {
+        id: 'faq-mcp-required',
+        question:
+          'Do I need the MCP server running to use the Figma plugin or Chrome extension?',
+        answer: `
+          <p>No. The Figma plugin and Chrome extension both work standalone for auditing and applying fixes. Design-system conversion work requires Supercharge, since it's done by asking Claude directly rather than through a dedicated in-app tool. The MCP server is only required for Supercharge - connecting Claude to drive both clients with natural language. See the <a href="./install-guide.html">Install Guide</a> for setup order.</p>
+        `,
+      },
+      {
+        id: 'faq-disagree-fix',
+        question: 'What happens if I disagree with a suggested fix?',
+        answer: `
+          <p>Every fix is opt-in and reversible. You can snooze an individual flagged item, skip it entirely, or apply it and then revert - both clients keep a full edit history with undo/redo per step, including restoring prior variable bindings.</p>
+        `,
+      },
+      {
+        id: 'faq-update',
+        question: "How do I know when there's a new version, and how do I update?",
+        answer: `
+          <p>In Chrome, click the refresh icon next to the version number in Settings - it checks the latest published release and shows "You're up to date" or an "Update available" link straight to the download, with a "last checked" timestamp. After updating, a "What's new" popup summarizes the changes automatically (also reachable anytime from the version number).</p>
+          <p>Since the extension is a manually loaded unpacked build (not from the Chrome Web Store), updating means downloading the new <code>.zip</code> from the <a href="./install-guide.html">Install Guide</a>, unzipping it, and clicking the reload icon for NiCE Designer on <code>chrome://extensions</code>.</p>
+        `,
+      },
+      {
+        id: 'faq-lite-mode',
+        question: 'What is Lite mode?',
+        answer: `
+          <p>Lite mode is a simpler view that shows just Frontend Audit and Design System, hiding Spec Mode, Supercharge, Documentation, and (in Chrome) the Frontend Editor. Brand-new installs start here by default - a first-launch Welcome screen lets you pick Lite mode or the Full toolkit, then walks through a short guided tour. Toggle it anytime in Settings; nothing is lost when you switch, it just changes what's shown.</p>
+        `,
+      },
+      {
+        id: 'faq-any-figma-file',
+        question: 'Does NiCE Designer work on any Figma file, or only CXone product files?',
+        answer: `
+          <p>It works on any Figma file, but its audit rules are built against the SOL and Lyra foundation files, so compliance scoring is most meaningful on CXone product work. Running it against a file outside those systems will still surface off-token colors, spacing, and type, but there won't be a matching token to suggest as a fix.</p>
+        `,
+      },
+      {
+        id: 'faq-access',
+        question: 'How do I get access to NiCE Designer?',
+        answer: `
+          <p>This site is currently access-gated. If you don't have the code, reach out to <strong>Erick Mathews on Teams</strong> to request it - see the button on the access screen or the <a href="./install-guide.html">Install Guide</a> for what happens after you're in.</p>
+        `,
+      },
+    ];
+
+    const FAQ_IDS = FAQS.map((faq) => faq.id);
+
+    /* The nav's single action slot, unchanged from the markup it replaces:
+       the disabled Download pill plus its "Coming soon!" tag. `nav-download`
+       / `coming-soon-tag` are theme.css classes, so it keeps its exact look.
+       If a live version label is ever wanted here, `data-latest-label` is
+       the attribute downloads.js looks for - no page on the site sets it on
+       this pill today. */
+    const downloadPill = (key) =>
+      h(
+        'span',
+        { key, className: 'nav-download is-disabled', 'aria-disabled': 'true' },
+        'Download',
+        h('span', { className: 'coming-soon-tag' }, 'Coming soon!')
+      );
+
+    /* ThemeProvider stamps `data-lynn-theme` on its own wrapper div, but the
+       portalled chrome lives outside that div - so mirror the attribute onto
+       <html>, where the same `[data-lynn-theme]` rules in lynn-ui.css apply
+       to the whole document. */
+    function ThemeBridge() {
+      const { theme } = useLynnTheme();
+      useEffect(() => {
+        document.documentElement.setAttribute('data-lynn-theme', theme);
+      }, [theme]);
+      return null;
+    }
+
+    function portal(node, id) {
+      const host = document.getElementById(id);
+      return host ? createPortal(node, host) : null;
+    }
+
+    /* The doc rail's Questions group links at `#faq-…`. buildDocRail() used to
+       force the matching <details open> before the jump, and DocRail still
+       does the same for a real <details> - but an `AccordionItem` is a div
+       with its own open state, so that fixup cannot reach it. This is the
+       page's replacement for it: the id of the item to force open, plus a
+       counter, because re-clicking the same rail link has to reopen an item
+       the reader has since collapsed. Bumping the counter changes that one
+       item's React key, so it remounts with `defaultOpen: true` - and every
+       sibling keeps the key, and therefore the open state, it already had. */
+    function hashId() {
+      const id = decodeURIComponent(location.hash.slice(1));
+      return FAQ_IDS.indexOf(id) === -1 ? null : id;
+    }
+
+    function App() {
+      const [unlocked, setUnlocked] = useState(() => {
+        try {
+          return sessionStorage.getItem(GATE_KEY) === '1';
+        } catch (e) {
+          return false;
+        }
+      });
+      const [error, setError] = useState(undefined);
+      const [railCollapsed, setRailCollapsed] = useState(() => {
+        try {
+          return localStorage.getItem(RAIL_KEY) === '1';
+        } catch (e) {
+          return false;
+        }
+      });
+      // Seeded from the URL so a `faq.html#faq-lite-mode` deep link opens that
+      // question on the very first render, with no remount at all.
+      const [forced, setForced] = useState(() => {
+        const id = hashId();
+        return { id, n: id ? 1 : 0 };
+      });
+
+      useEffect(() => {
+        // The chrome is up; let the page paint (see the gate-pending guard
+        // in <head>).
+        document.documentElement.classList.remove('lynn-gate-pending');
+        // The question cards are React-rendered, so they missed the reveal
+        // observer the page's own script set up. Same options, same one-shot
+        // unobserve.
+        const cards = document.querySelectorAll('.faq-anchor.reveal:not(.visible)');
+        if (cards.length) {
+          const reveal = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add('visible');
+                  reveal.unobserve(entry.target);
+                }
+              });
+            },
+            { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+          );
+          cards.forEach((card) => reveal.observe(card));
+        }
+        // The cards used to be static markup, so the browser could honour a
+        // `#faq-access` deep link on load. They render a tick later now, by
+        // which time that jump has already failed - so re-run it. (An FAQ id
+        // is handled by the `forced` effect below, which has to wait for the
+        // item to be open before it scrolls; this covers `#faq` itself.)
+        const hash = location.hash.slice(1);
+        if (hash && !hashId()) {
+          const target = document.getElementById(hash);
+          if (target) target.scrollIntoView();
+        }
+      }, []);
+
+      // Open + jump to a question the doc rail points at. Both paths matter:
+      // `hashchange` covers a deep link pasted into the address bar and a rail
+      // click that changes the hash, and the click listener covers re-clicking
+      // the link for the question you are already on, where the hash does not
+      // change and no `hashchange` fires.
+      useEffect(() => {
+        const open = (id) => {
+          if (FAQ_IDS.indexOf(id) === -1) return;
+          setForced((prev) => ({ id, n: prev.id === id ? prev.n + 1 : 1 }));
+        };
+        const onHashChange = () => {
+          const id = hashId();
+          if (id) open(id);
+        };
+        const onClick = (event) => {
+          const link =
+            event.target.closest && event.target.closest('.lynn-doc-rail-sublink');
+          if (!link) return;
+          const href = link.getAttribute('href') || '';
+          if (href.charAt(0) !== '#') return;
+          open(decodeURIComponent(href.slice(1)));
+        };
+        window.addEventListener('hashchange', onHashChange);
+        document.addEventListener('click', onClick);
+        return () => {
+          window.removeEventListener('hashchange', onHashChange);
+          document.removeEventListener('click', onClick);
+        };
+      }, []);
+
+      // Runs after the forced item has committed - i.e. after it is open - so
+      // the jump lands on the answer rather than on a collapsed header.
+      useEffect(() => {
+        if (!forced.id) return;
+        const target = document.getElementById(forced.id);
+        if (target) target.scrollIntoView();
+      }, [forced]);
+
+      // Cmd+K / Ctrl+K opens the rail and focuses its filter box - the
+      // shortcut buildDocRail() used to own.
+      useEffect(() => {
+        function onKeyDown(event) {
+          if (event.key !== 'k' && event.key !== 'K') return;
+          if (!(event.metaKey || event.ctrlKey)) return;
+          event.preventDefault();
+          setRail(false);
+          const input = document.querySelector('.lynn-doc-rail-search');
+          if (input) {
+            input.focus();
+            input.select();
+          }
+        }
+        document.addEventListener('keydown', onKeyDown);
+        return () => document.removeEventListener('keydown', onKeyDown);
+      }, []);
+
+      const checkCode = (code) => {
+        if (code === GATE_PASSWORD) {
+          try {
+            sessionStorage.setItem(GATE_KEY, '1');
+          } catch (e) { /* unwritable store just means no persistence */ }
+          setError(undefined);
+          setUnlocked(true);
+        } else {
+          setError(GATE_ERROR);
+        }
+      };
+
+      const setRail = (collapsed) => {
+        setRailCollapsed(collapsed);
+        try {
+          localStorage.setItem(RAIL_KEY, collapsed ? '1' : '0');
+        } catch (e) { /* no persistence, still collapses for this visit */ }
+      };
+
+      return h(
+        Fragment,
+        null,
+        h(ThemeBridge, { key: 'theme-bridge' }),
+        h(AccessGate, {
+          key: 'gate',
+          title: 'NiCE Designer Site Login',
+          subtitle:
+            'This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.',
+          onSubmit: checkCode,
+          error,
+          unlocked,
+          ctaText: h(
+            Fragment,
+            null,
+            "Don't have the code?",
+            h('br'),
+            h('strong', null, 'Reach out to Erick Mathews on Teams'),
+            ' to request access.'
+          ),
+          ctaHref: TEAMS_HREF,
+        }),
+        portal(
+          h(Nav, {
+            logoHref: './index.html',
+            cta: h(Fragment, null, [
+              h(ThemeToggle, { key: 'theme', showLabels: false }),
+              downloadPill('download'),
+            ]),
+          }),
+          'lynn-nav-root'
+        ),
+        portal(
+          h(DocRail, {
+            mode: 'pages',
+            pages: railPages,
+            groups: railGroups,
+            activeHref: './' + PAGE,
+            searchable: true,
+            collapsed: railCollapsed,
+            onToggle: setRail,
+          }),
+          'lynn-docrail-root'
+        ),
+        portal(
+          h(
+            Accordion,
+            null,
+            FAQS.map((faq) => {
+              const isForced = forced.id === faq.id;
+              return h(
+                // `AccordionItem` renders no DOM id of its own (its `id` prop
+                // is the panel's aria-controls target), and the doc rail, the
+                // anchor-warmth hook and any `#faq-…` deep link all reach
+                // these by getElementById - so the real id lives on a wrapper,
+                // where it also carries the `.reveal` the old `.faq-item` had.
+                'div',
+                { key: faq.id, id: faq.id, className: 'faq-anchor reveal' },
+                h(
+                  AccordionItem,
+                  {
+                    // Bumping the counter on a rail click remounts just this
+                    // item, open. Everything else keeps its key and its state.
+                    key: isForced ? faq.id + ':' + forced.n : faq.id,
+                    id: faq.id,
+                    title: faq.question,
+                    // The hover spotlight the page's own polish script used to
+                    // stamp on the static `.faq-item`s. Passed as a prop rather
+                    // than stamped on afterwards, because the item rewrites its
+                    // own className every time it opens or closes - which would
+                    // drop any class added from outside.
+                    className: 'tilt-ready',
+                    defaultOpen: isForced || !!faq.defaultOpen,
+                    // The source's <details> did not remember which questions
+                    // a reader had opened, and AccordionItem persists by
+                    // default - so this is required to keep the page's real
+                    // behavior. See the component's own JSDoc: "Set
+                    // persist={false} for equal-weight lists such as a plain
+                    // FAQ".
+                    persist: false,
+                  },
+                  h('div', {
+                    className: 'faq-a-body',
+                    dangerouslySetInnerHTML: { __html: faq.answer },
+                  })
+                )
+              );
+            })
+          ),
+          'lynn-faq-root'
+        ),
+        portal(
+          h(Footer, { columns: FOOTER_COLUMNS }),
+          'lynn-footer-root'
+        )
+      );
+    }
+
+    createRoot(document.getElementById('lynn-app-root')).render(
+      h(ThemeProvider, { defaultTheme: 'lynn' }, h(App))
+    );
   </script>
 
 </body>

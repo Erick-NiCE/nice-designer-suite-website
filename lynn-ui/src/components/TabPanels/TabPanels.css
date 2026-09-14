@@ -1,0 +1,42 @@
+/*!
+ * TabPanels / TabPanel
+ * `bar` chrome <- dashboard.html `.section-nav` (10px/20px padding,
+ *                 `surface` background, 1px bottom border, wrapping row)
+ * Panel        <- dashboard.html `.section-panel` (16px/20px/32px padding,
+ *                 `display: none` until active)
+ *
+ * Only the row *container* and the panel come from the source; the segments
+ * themselves are `Tabs` and are deliberately not restyled here, so the system
+ * has one segmented control rather than two.
+ */
+
+.lynn-tab-panels {
+  font-family: var(--lynn-font-family);
+}
+
+.lynn-tab-panels-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.lynn-tab-panels-bar > .lynn-tab-panels-nav {
+  padding: 10px 20px;
+  background: var(--lynn-color-surface);
+  border-bottom: 1px solid var(--lynn-color-border);
+}
+
+.lynn-tab-panel {
+  padding-top: var(--lynn-space-lg);
+}
+
+.lynn-tab-panels-bar .lynn-tab-panel {
+  padding: var(--lynn-space-lg) 20px var(--lynn-space-2xl);
+}
+
+/* `hidden` already does the hiding; this is the belt-and-braces the source's
+   own `.section-panel { display: none }` provided, for hosts whose reset
+   overrides the attribute's UA style. */
+.lynn-tab-panel[hidden] {
+  display: none;
+}

@@ -1,0 +1,38 @@
+/*!
+ * ShimmerText - ported verbatim from lynn.html's `.hero-title .gradient-word`
+ * and its 4s `@keyframes shimmer` (-200% -> 200% background-position).
+ */
+
+@keyframes lynn-shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.lynn-shimmer {
+  background: linear-gradient(
+    90deg,
+    #fff 0%,
+    var(--lynn-color-blue) 30%,
+    var(--lynn-color-lynn) 60%,
+    var(--lynn-color-emerald) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: lynn-shimmer var(--lynn-shimmer-duration, 4s) linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-shimmer {
+    animation: none;
+    /* Hold the sweep at a position where all four stops are visible instead
+       of freezing on the off-canvas start frame. */
+    background-position: 50% center;
+  }
+}

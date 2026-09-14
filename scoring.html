@@ -11,9 +11,64 @@
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <link rel="stylesheet" href="site-gate.css" />
-  <script src="site-gate.js" defer></script>
-  <script src="nice-effects.js?v=9" defer></script>
+  <script src="nice-effects.js?v=11" defer></script>
+
+  <!--
+    ===== lynn-ui: the site chrome, as React components =====
+    The access gate, the nav and (on pages that have them) the footer and the
+    doc rail all come from lynn-ui now - see the single #lynn-app-root mount
+    script at the end of <body>. site-gate.css / site-gate.js are gone with
+    them; `AccessGate` is the same screen and the mount script re-runs the
+    same client-side code check.
+
+    Three things are needed, and none of them affect the rest of the page:
+      1. dist/lynn-ui.css - the package's built stylesheet. Everything in it
+         is either a `--lynn-*` custom property or a `.lynn-*` class, so it
+         cannot collide with this page's own tokens/classes.
+      2. the import map  - React, ReactDOM and matter-js as CDN ESM.
+         `?external=react` on react-dom stops a second copy of React being
+         pulled in ("invalid hook call"). matter-js is in the map because
+         dist/index.js is one barrel that also reaches LiquidFill.
+      3. `.lynn-mount` - the chrome renders through portals into placeholder
+         divs left where the old markup was. `display: contents` means those
+         placeholders generate no box, so the sticky nav and the footer's
+         margin still resolve against <body> exactly as before.
+  -->
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@18.3.1",
+      "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+      "react-dom": "https://esm.sh/react-dom@18.3.1?external=react",
+      "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?external=react",
+      "scheduler": "https://esm.sh/scheduler@0.23.2",
+      "matter-js": "https://esm.sh/matter-js@0.20.0"
+    }
+  }
+  </script>
+  <style>.lynn-mount { display: contents; }</style>
+
+  <!--
+    The gate used to be static markup covered by blocking CSS, so it was up
+    before first paint. React arrives as ESM from a CDN, so the component
+    can only mount a tick later - hold the page back until it does, or a
+    locked visitor reads the whole page in the gap. Costs nothing once the
+    session is unlocked (the class is never added), and a 4s failsafe means
+    a CDN that never answers leaves a readable page rather than a blank one.
+  -->
+  <style>html.lynn-gate-pending body { visibility: hidden; }</style>
+  <script>
+    (function () {
+      try {
+        if (sessionStorage.getItem('nice-site-access') === '1') return;
+      } catch (e) { /* blocked storage: fall through and gate */ }
+      var root = document.documentElement;
+      root.classList.add('lynn-gate-pending');
+      setTimeout(function () { root.classList.remove('lynn-gate-pending'); }, 4000);
+    })();
+  </script>
+
   <style>
     body { line-height: 1.6; } /* page-specific */
 
@@ -154,32 +209,10 @@
       letter-spacing: 0.02em;
     }
 
-    .formula-example {
-      background: rgba(54,148,252,0.08);
-      border: 1px solid rgba(54,148,252,0.2);
-      border-radius: 10px;
-      padding: 18px 20px;
-      margin-top: 16px;
-    }
-
-    .formula-example-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--blue);
-      margin-bottom: 8px;
-    }
-
-    .formula-example p {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-
-    .formula-example strong {
-      color: var(--text);
-    }
+    /* The blue "Example" box under the equation is lynn-ui's <Alert
+       variant="info" title="Example"> now, so its `.formula-example*` rules
+       have gone with the markup - `.lynn-alert-info` in lynn-ui.css is the
+       same tinted-callout shape. */
 
     .formula-note {
       margin-top: 16px;
@@ -267,41 +300,18 @@
       color: var(--text);
     }
 
-    /* THRESHOLD TABLE */
-    .threshold-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 28px;
-      font-size: 0.9rem;
-    }
+    /* THRESHOLD TABLE
+       The table itself is lynn-ui's <DataTable> now (see the mount script at
+       the end of <body>), which brings its own card border, header row and
+       cell rhythm - so `.threshold-table` has gone with the markup, as have
+       the `.gauge-row` / `.gauge-bar-wrap` / `.gauge-bar` fill bars that used
+       to live in its Visual column (<ProgressBar> draws those).
 
-    .threshold-table th {
-      text-align: left;
-      padding: 10px 16px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-secondary);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .threshold-table td {
-      padding: 14px 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      color: var(--text-secondary);
-      vertical-align: middle;
-    }
-
-    .threshold-table tr:last-child td {
-      border-bottom: none;
-    }
-
-    .threshold-table td:first-child {
-      font-weight: 600;
-      color: var(--text);
-    }
-
+       `.pill` stays: the legend below the table is documenting the
+       dashboard's own pill CSS classes *by name*, alongside the exact hex it
+       paints, so those three chips have to keep being those three classes.
+       The table's own Label column is <Badge status> - see the mount script's
+       note on the two that differ. */
     .pill {
       display: inline-block;
       padding: 3px 10px;
@@ -313,27 +323,6 @@
     .pill-bad   { background: rgba(255,91,138,0.15); color: var(--coral); }
     .pill-ok    { background: rgba(245,158,11,0.15); color: var(--amber); }
     .pill-good  { background: rgba(0,226,160,0.15);  color: var(--emerald); }
-    .pill-great { background: rgba(0,226,160,0.15);  color: var(--emerald); }
-
-    .gauge-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .gauge-bar-wrap {
-      flex: 1;
-      height: 6px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-
-    .gauge-bar {
-      height: 100%;
-      border-radius: 3px;
-      transition: width 0.6s ease;
-    }
 
     /* TIPS SECTION */
     .tips-grid {
@@ -352,20 +341,9 @@
     }
     .tip-card:hover { transform: translateY(-2px); }
 
-    .tip-number {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: rgba(54,148,252,0.12);
-      border: 1px solid rgba(54,148,252,0.25);
-      color: var(--blue);
-      font-size: 0.85rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 14px;
-    }
+    /* The three numbered discs are lynn-ui's <StepNumber size="md"
+       fill="tint" color="blue">, which its own docs list as this exact 32px
+       instance - so `.tip-number` has gone with the markup. */
 
     .tip-text {
       font-size: 0.9rem;
@@ -422,15 +400,8 @@
       margin-bottom: 12px;
     }
 
-    .snooze-badge {
-      font-size: 0.68rem;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 20px;
-      background: rgba(185,143,255,0.15);
-      color: var(--lyra);
-      letter-spacing: 0.06em;
-    }
+    /* The "Since v10" pill is <Badge tone="lynn"> now - same lyra tint - so
+       `.snooze-badge` has gone with the markup. */
 
     /* SCROLL REVEAL */
     .reveal {
@@ -453,19 +424,9 @@
       margin: 28px 0;
     }
 
-    /* INLINE BADGE */
-    .badge {
-      display: inline-block;
-      font-size: 0.7rem;
-      font-weight: 700;
-      padding: 1px 7px;
-      border-radius: 10px;
-      vertical-align: middle;
-      margin-left: 4px;
-    }
-    .badge-blue   { background: rgba(54,148,252,0.15); color: var(--blue); }
-    .badge-emerald{ background: rgba(0,226,160,0.15);  color: var(--emerald); }
-    .badge-lyra   { background: rgba(185,143,255,0.15);color: var(--lyra); }
+    /* INLINE BADGE
+       The one instance on the page (the "Since v9" pill in the formula note)
+       is <Badge tone="blue"> now, so `.badge*` has gone with it. */
 
     /* RESPONSIVE */
     @media (max-width: 768px) {
@@ -473,44 +434,19 @@
       .section { padding: 52px 0; }
       .formula-box { padding: 20px; }
       .category-card { padding: 22px 18px 18px; }
-      .threshold-table { font-size: 0.82rem; }
-      .threshold-table th, .threshold-table td { padding: 10px 10px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- SITE-WIDE ACCESS GATE (see site-gate.css / site-gate.js) -->
-  <div id="nice-site-gate">
-    <div class="sg-card">
-      <div class="sg-lock">🔒</div>
-      <div class="sg-title">NiCE Designer Site Login</div>
-      <div class="sg-subtitle">This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.</div>
-      <div class="sg-input-wrap">
-        <input id="nice-site-gate-input" type="password" placeholder="Enter code" autocomplete="off" />
-      </div>
-      <div class="sg-error" id="nice-site-gate-error"></div>
-      <button id="nice-site-gate-btn" type="button">Unlock</button>
-      <div class="sg-divider"></div>
-      <div class="sg-cta">
-        Don't have the code?<br>
-        <strong>Reach out to Erick Mathews on Teams</strong> to request access.
-        <br>
-        <a class="sg-teams-btn" href="https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com" target="_blank" rel="noopener">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H8a2 2 0 00-2 2v2H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2h2a2 2 0 002-2V4a2 2 0 00-2-2zM4 20V8h12v12H4zm16-4h-2V8a2 2 0 00-2-2H8V4h12v12z" fill="currentColor"/></svg>
-          Message on Teams
-        </a>
-      </div>
-    </div>
-  </div>
+  <!-- lynn-ui chrome. One React root, one ThemeProvider (see the mount
+       script at the end of <body>); the gate renders inside it, everything
+       else portals into the `.lynn-mount` placeholders below. -->
+  <div id="lynn-app-root"></div>
 
-  <!-- NAV -->
-  <nav class="site-nav" id="site-nav">
-    <a href="./index.html" class="nav-logo">
-      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span><span class="logo-suite"> Suite</span>
-    </a>
-    <span class="nav-download is-disabled" aria-disabled="true">Download<span class="coming-soon-tag">Coming soon!</span></span>
-  </nav>
+  <!-- NAV (lynn-ui <Nav>) + DOC RAIL (lynn-ui <DocRail>, position: fixed) -->
+  <div id="lynn-nav-root" class="lynn-mount"></div>
+  <div id="lynn-docrail-root" class="lynn-mount"></div>
 
   <!-- HERO -->
   <section class="hero">
@@ -562,18 +498,11 @@
         <p class="section-body">Every audit category uses the same formula. The tool inspects every relevant property in the selection, counts how many have an issue, and divides the clean count by the total.</p>
       </div>
 
+      <!-- The equation, the "Example" <Alert> and the "Since v9" <Badge>
+           (lynn-ui - see the mount script). The `.formula-box` wrapper stays
+           static so its own `.reveal` still comes from this page's observer. -->
       <div class="formula-box reveal reveal-delay-1">
-        <div class="formula-equation">
-          Score = ((total &minus; issues) / total) &times; 100
-        </div>
-        <div class="formula-example">
-          <div class="formula-example-label">Example</div>
-          <p><strong>"15/147 Colors"</strong> means 15 color properties have issues out of 147 total inspected.<br />
-          Score = ((147 &minus; 15) / 147) &times; 100 = 89.8%, shown as <strong>90%</strong>.</p>
-        </div>
-        <p class="formula-note">
-          <span class="badge badge-blue">Since v9</span> each category uses its own denominator, not a global total. A file with many more spacing properties than color properties will not have its color score affected by that imbalance.
-        </p>
+        <div id="lynn-formula-root" class="lynn-mount"></div>
       </div>
     </div>
   </section>
@@ -763,65 +692,12 @@
         <p class="section-body">On the dashboard (dashboard.html), each page row shows a gauge chart for each score. Score pills on the page list use the same color thresholds. Here's what each band means and when to act.</p>
       </div>
 
-      <div class="reveal reveal-delay-1" style="margin-top:32px;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;">
-        <table class="threshold-table">
-          <thead>
-            <tr>
-              <th>Range</th>
-              <th>Label</th>
-              <th>Color</th>
-              <th>Visual</th>
-              <th>What it means</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>0 - 49%</td>
-              <td><span class="pill pill-bad">Needs work</span></td>
-              <td style="color:var(--coral)">Coral</td>
-              <td>
-                <div class="gauge-row">
-                  <div class="gauge-bar-wrap"><div class="gauge-bar" style="width:30%;background:var(--coral)"></div></div>
-                </div>
-              </td>
-              <td>Significant issues. Conversion recommended before handoff.</td>
-            </tr>
-            <tr>
-              <td>50 - 74%</td>
-              <td><span class="pill pill-ok">Partial</span></td>
-              <td style="color:var(--amber)">Amber</td>
-              <td>
-                <div class="gauge-row">
-                  <div class="gauge-bar-wrap"><div class="gauge-bar" style="width:62%;background:var(--amber)"></div></div>
-                </div>
-              </td>
-              <td>Partially compliant. Many issues remain.</td>
-            </tr>
-            <tr>
-              <td>75 - 89%</td>
-              <td><span class="pill pill-good">Mostly OK</span></td>
-              <td style="color:#a3e635">Yellow-green</td>
-              <td>
-                <div class="gauge-row">
-                  <div class="gauge-bar-wrap"><div class="gauge-bar" style="width:82%;background:#a3e635"></div></div>
-                </div>
-              </td>
-              <td>Mostly compliant. Minor issues left to address.</td>
-            </tr>
-            <tr>
-              <td>90 - 100%</td>
-              <td><span class="pill pill-good">Compliant</span></td>
-              <td style="color:var(--emerald)">Emerald</td>
-              <td>
-                <div class="gauge-row">
-                  <div class="gauge-bar-wrap"><div class="gauge-bar" style="width:95%;background:var(--emerald)"></div></div>
-                </div>
-              </td>
-              <td>Compliant. Ready for handoff or production.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <!-- THRESHOLD TABLE (lynn-ui <DataTable>, with <Badge> in the Label
+           column and <ProgressBar> in the Visual column - see the mount
+           script). <DataTable> draws its own card border and radius, so the
+           wrapper div that used to supply them is gone too; the `.reveal`
+           class it carried moves onto the table itself. -->
+      <div id="lynn-threshold-root" class="lynn-mount"></div>
 
       <div class="reveal reveal-delay-2" style="margin-top:20px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;">
         <p style="font-size:0.875rem;color:var(--text-secondary);line-height:1.6;">
@@ -879,7 +755,7 @@
 
       <div class="snooze-box reveal reveal-delay-1">
         <div class="snooze-header">
-          <span class="snooze-badge">Since v10</span>
+          <span id="lynn-snooze-badge-root" class="lynn-mount"></span>
           <span style="font-size:0.9rem;font-weight:600;">Auto-snooze behavior</span>
         </div>
         <p style="font-size:0.875rem;color:var(--text-secondary);line-height:1.7;">
@@ -898,52 +774,27 @@
       </div>
 
       <div class="tips-grid">
+        <!-- The numbered discs are lynn-ui <StepNumber>s (see the mount
+             script); the cards themselves stay static, so their `.reveal`
+             still comes from this page's own observer. -->
         <div class="tip-card reveal reveal-delay-1">
-          <div class="tip-number">1</div>
+          <span id="lynn-tip-1-root" class="lynn-mount"></span>
           <p class="tip-text">Run the audit before and after conversion to verify your score improved. The before/after delta is the clearest signal that the conversion worked correctly.</p>
         </div>
         <div class="tip-card reveal reveal-delay-2">
-          <div class="tip-number">2</div>
+          <span id="lynn-tip-2-root" class="lynn-mount"></span>
           <p class="tip-text">A score of 75%+ means most issues are minor. Focus on Components and Colors first -- they have the biggest visual impact and are the most visible in design reviews.</p>
         </div>
         <div class="tip-card reveal reveal-delay-3">
-          <div class="tip-number">3</div>
+          <span id="lynn-tip-3-root" class="lynn-mount"></span>
           <p class="tip-text">Use the <strong style="color:var(--text)">manual-fixes-checklist</strong> skill after running automated fixes to see what the automation couldn't handle and what still needs a human decision.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="footer-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></div>
-      </div>
-      <nav class="footer-nav">
-        <div class="footer-nav-col">
-          <a href="./index.html">Overview</a>
-          <a href="./install-guide.html">Install Guide</a>
-          <a href="./claude-skills.html">Claude Skills</a>
-          <a href="./the-suite.html">The Suite</a>
-        </div>
-        <div class="footer-nav-col">
-          <a href="./use-cases.html">Use Cases</a>
-          <a href="./scoring.html" class="active">Scoring</a>
-          <a href="./dashboard.html">Dashboard</a>
-          <a href="./roadmap.html">Roadmap</a>
-        </div>
-        <div class="footer-nav-col">
-          <a href="./release-notes.html">Release Notes</a>
-          <a href="./faq.html">FAQ</a>
-          <a href="./tools.html">Tools</a>
-          <a href="./marketplace.html">Marketplace</a>
-          <a href="./lynn.html">Lynn</a>
-        </div>
-      </nav>
-    </div>
-  </footer>
+  <!-- FOOTER (lynn-ui <Footer>) -->
+  <div id="lynn-footer-root" class="lynn-mount"></div>
 
   <script>
 
@@ -962,25 +813,9 @@
       observer.observe(el);
     });
 
-    // Animate gauge bars on scroll
-    const gaugeBars = document.querySelectorAll('.gauge-bar');
-    const gaugeObserver = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          var bar = entry.target;
-          var target = bar.style.width;
-          bar.style.width = '0%';
-          setTimeout(function() {
-            bar.style.width = target;
-          }, 100);
-          gaugeObserver.unobserve(bar);
-        }
-      });
-    }, { threshold: 0.5 });
-
-    gaugeBars.forEach(function(bar) {
-      gaugeObserver.observe(bar);
-    });
+    // The gauge-bar width animation used to be wired up here. The Visual
+    // column is <ProgressBar> now, which owns its own fill transition, so
+    // there is no `.gauge-bar` left for this page to observe.
   </script>
 
 
@@ -1129,7 +964,415 @@
       el.dataset.polishDelay = (i % 6) * 55;
       ro.observe(el);
     });
+
+    // The React-rendered nodes (the threshold table) arrive after this
+    // script, so the mount script calls this to observe them too.
+    window.nicePolishReveal = function (el) {
+      el.dataset.polishDelay = 0;
+      ro.observe(el);
+    };
   })();
+  </script>
+
+  <!--
+    ===== lynn-ui mount =====
+    One createRoot, one ThemeProvider, one <App>: the access gate, the nav,
+    the doc rail, the footer, and this page's own migrated pieces - the
+    threshold <DataTable> with its <Badge>/<ProgressBar> cells, the formula
+    box's <Alert> and <Badge>, the snooze <Badge> and the three tip
+    <StepNumber>s. Keeping them in a single root is what keeps the theme in
+    sync between them - nine roots would each get their own provider and
+    drift apart.
+
+    Anything that belongs elsewhere in the document is placed with
+    createPortal into a `.lynn-mount` placeholder rather than rendered here:
+    a footer rendered next to the nav would sit at the top of the page, and a
+    nav rendered inside a 60px wrapper could not be sticky.
+  -->
+  <script type="module">
+    import { createElement as h, Fragment, useEffect, useState } from 'react';
+    import { createPortal } from 'react-dom';
+    import { createRoot } from 'react-dom/client';
+    import {
+      AccessGate,
+      Alert,
+      Badge,
+      DataTable,
+      DocRail,
+      Footer,
+      Nav,
+      ProgressBar,
+      StepNumber,
+      ThemeProvider,
+      ThemeToggle,
+      useLynnTheme,
+    } from './lynn-ui/dist/index.js';
+
+    const PAGE = 'scoring.html';
+
+    /* ---- the real gate, ported from site-gate.js ------------------------ */
+    /* Same session key, same password, same message, same Teams link. Still
+       a soft deterrent, not security - the check is client-side and readable
+       right here, exactly as it was in site-gate.js. */
+    const GATE_KEY = 'nice-site-access';
+    const GATE_PASSWORD = 'niceux';
+    const GATE_ERROR = 'Incorrect code. Contact Erick Mathews on Teams for access.';
+    const TEAMS_HREF = 'https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com';
+
+    /* ---- doc rail ------------------------------------------------------- */
+    /* The page table is read straight off nice-effects.js (which publishes
+       its own DOC_PAGES as NiceEffects.docPages) rather than hand-copied, so
+       adding a section anchor there still updates this rail. Every entry
+       goes into the switcher, `standalone` ones included - that flag only
+       decides whether a page's *own* rail is sections-only (wings-2026.html
+       is the one that sets it), which is exactly what buildDocRail() did.
+       Collapse state shares nice-effects.js's own localStorage key, which is
+       also the one embed.js stashes. */
+    const RAIL_KEY = 'nice-doc-rail-collapsed';
+    const DOC_PAGES = (window.NiceEffects && window.NiceEffects.docPages) || [];
+    const railPages = DOC_PAGES.map((page) => ({
+      href: './' + page.href,
+      label: page.label,
+    }));
+    const railGroups = (DOC_PAGES.find((page) => page.href === PAGE) || {}).groups || [];
+
+    /* ---- footer --------------------------------------------------------- */
+    /* The same three columns the static markup had, with this page marked
+       active. Passed explicitly rather than relying on Footer's defaults,
+       because the defaults cannot know which page is current. */
+    const FOOTER_COLUMNS = [
+      {
+        title: 'Product',
+        links: [
+          { label: 'Overview', href: './index.html' },
+          { label: 'Install Guide', href: './install-guide.html' },
+          { label: 'Claude Skills', href: './claude-skills.html' },
+          { label: 'The Suite', href: './the-suite.html' },
+        ],
+      },
+      {
+        title: 'Learn',
+        links: [
+          { label: 'Use Cases', href: './use-cases.html' },
+          { label: 'Scoring', href: './scoring.html', active: true },
+          { label: 'Dashboard', href: './dashboard.html' },
+          { label: 'Roadmap', href: './roadmap.html' },
+        ],
+      },
+      {
+        title: 'Reference',
+        links: [
+          { label: 'Release Notes', href: './release-notes.html' },
+          { label: 'FAQ', href: './faq.html' },
+          { label: 'Tools', href: './tools.html' },
+          { label: 'Marketplace', href: './marketplace.html' },
+          { label: 'Lynn', href: './lynn.html' },
+        ],
+      },
+    ];
+
+    /* A couple of strings carry inline <strong>/<br> from the source. They
+       are authored right here in this file - not user input - so keeping
+       them as markup is both safe and far more legible than nesting
+       createElement three deep for a bold clause. */
+    const rich = (html) => h('span', { dangerouslySetInnerHTML: { __html: html } });
+
+    /* ---- threshold table ------------------------------------------------ */
+    /* The four dashboard bands, verbatim from the `.threshold-table` markup
+       this replaces: the same ranges, labels, color names, bar widths and
+       sentences. Not sortable, because the source table was not - the bands
+       are a fixed ordered scale, and re-ordering them would only make the
+       reference harder to read.
+
+       `status` is lynn-ui's own four-step score ramp, which is what the four
+       `.pill-*` classes were: `bad` is the source's coral exactly and
+       `great` its emerald exactly. The middle two differ - the ramp's `ok`
+       is blue where the source pill was amber, and `good` is teal where the
+       source pill was #a3e635 - so the Color and Visual columns below keep
+       the source's literal hues, which is where this table actually
+       documents what the dashboard paints.
+
+       `accent` is only set for the two bands whose color is outside Lynn's
+       seven accents; it overrides `--lynn-progress-accent`, the custom
+       property <ProgressBar>'s fill reads. */
+    const BANDS = [
+      {
+        range: '0 - 49%',
+        label: 'Needs work',
+        status: 'bad',
+        color: 'Coral',
+        colorValue: 'var(--coral)',
+        percent: 30,
+        tone: 'coral',
+        meaning: 'Significant issues. Conversion recommended before handoff.',
+      },
+      {
+        range: '50 - 74%',
+        label: 'Partial',
+        status: 'ok',
+        color: 'Amber',
+        colorValue: 'var(--amber)',
+        percent: 62,
+        accent: 'var(--amber)',
+        meaning: 'Partially compliant. Many issues remain.',
+      },
+      {
+        range: '75 - 89%',
+        label: 'Mostly OK',
+        status: 'good',
+        color: 'Yellow-green',
+        colorValue: '#a3e635',
+        percent: 82,
+        accent: '#a3e635',
+        meaning: 'Mostly compliant. Minor issues left to address.',
+      },
+      {
+        range: '90 - 100%',
+        label: 'Compliant',
+        status: 'great',
+        color: 'Emerald',
+        colorValue: 'var(--emerald)',
+        percent: 95,
+        tone: 'emerald',
+        meaning: 'Compliant. Ready for handoff or production.',
+      },
+    ];
+
+    const BAND_COLUMNS = [
+      { key: 'range', label: 'Range' },
+      { key: 'label', label: 'Label' },
+      { key: 'color', label: 'Color' },
+      { key: 'visual', label: 'Visual' },
+      { key: 'meaning', label: 'What it means' },
+    ];
+
+    function renderBandCell(row, column) {
+      if (column.key === 'label') {
+        return h(Badge, { status: row.status }, row.label);
+      }
+      if (column.key === 'color') {
+        return h('span', { style: { color: row.colorValue } }, row.color);
+      }
+      if (column.key === 'visual') {
+        return h(ProgressBar, {
+          value: row.percent,
+          tone: row.tone || 'blue',
+          ariaLabel: row.range + ' band, ' + row.label,
+          style: row.accent ? { '--lynn-progress-accent': row.accent } : undefined,
+        });
+      }
+      return undefined;
+    }
+
+    /* The nav's single action slot, unchanged from the markup it replaces:
+       the disabled Download pill plus its "Coming soon!" tag. `nav-download`
+       / `coming-soon-tag` are theme.css classes, so it keeps its exact look.
+       If a live version label is ever wanted here, `data-latest-label` is
+       the attribute downloads.js looks for - no page on the site sets it on
+       this pill today. */
+    const downloadPill = (key) =>
+      h(
+        'span',
+        { key, className: 'nav-download is-disabled', 'aria-disabled': 'true' },
+        'Download',
+        h('span', { className: 'coming-soon-tag' }, 'Coming soon!')
+      );
+
+    const tipNumber = (n) =>
+      h(StepNumber, {
+        n,
+        size: 'md',
+        fill: 'tint',
+        color: 'blue',
+        style: { marginBottom: '14px' },
+      });
+
+    /* ThemeProvider stamps `data-lynn-theme` on its own wrapper div, but the
+       portalled chrome lives outside that div - so mirror the attribute onto
+       <html>, where the same `[data-lynn-theme]` rules in lynn-ui.css apply
+       to the whole document. */
+    function ThemeBridge() {
+      const { theme } = useLynnTheme();
+      useEffect(() => {
+        document.documentElement.setAttribute('data-lynn-theme', theme);
+      }, [theme]);
+      return null;
+    }
+
+    function portal(node, id) {
+      const host = document.getElementById(id);
+      return host ? createPortal(node, host) : null;
+    }
+
+    function App() {
+      const [unlocked, setUnlocked] = useState(() => {
+        try {
+          return sessionStorage.getItem(GATE_KEY) === '1';
+        } catch (e) {
+          return false;
+        }
+      });
+      const [error, setError] = useState(undefined);
+      const [railCollapsed, setRailCollapsed] = useState(() => {
+        try {
+          return localStorage.getItem(RAIL_KEY) === '1';
+        } catch (e) {
+          return false;
+        }
+      });
+
+      useEffect(() => {
+        // The chrome is up; let the page paint (see the gate-pending guard
+        // in <head>).
+        document.documentElement.classList.remove('lynn-gate-pending');
+        // The threshold table carries `.reveal`, but it renders a tick after
+        // both of this page's observers have already swept the document - so
+        // hand it to the polish script's observer now that it exists.
+        document
+          .querySelectorAll('.reveal:not(.visible)')
+          .forEach((el) => window.nicePolishReveal && window.nicePolishReveal(el));
+        // The table used to be static markup, so the browser could honour a
+        // `#reading-dashboard` deep link on load. It renders a tick later
+        // now, by which time that jump has already failed - so re-run it.
+        const hash = location.hash.slice(1);
+        if (hash) {
+          const target = document.getElementById(hash);
+          if (target) target.scrollIntoView();
+        }
+      }, []);
+
+      // Cmd+K / Ctrl+K opens the rail and focuses its filter box - the
+      // shortcut buildDocRail() used to own.
+      useEffect(() => {
+        function onKeyDown(event) {
+          if (event.key !== 'k' && event.key !== 'K') return;
+          if (!(event.metaKey || event.ctrlKey)) return;
+          event.preventDefault();
+          setRail(false);
+          const input = document.querySelector('.lynn-doc-rail-search');
+          if (input) {
+            input.focus();
+            input.select();
+          }
+        }
+        document.addEventListener('keydown', onKeyDown);
+        return () => document.removeEventListener('keydown', onKeyDown);
+      }, []);
+
+      const checkCode = (code) => {
+        if (code === GATE_PASSWORD) {
+          try {
+            sessionStorage.setItem(GATE_KEY, '1');
+          } catch (e) { /* unwritable store just means no persistence */ }
+          setError(undefined);
+          setUnlocked(true);
+        } else {
+          setError(GATE_ERROR);
+        }
+      };
+
+      const setRail = (collapsed) => {
+        setRailCollapsed(collapsed);
+        try {
+          localStorage.setItem(RAIL_KEY, collapsed ? '1' : '0');
+        } catch (e) { /* no persistence, still collapses for this visit */ }
+      };
+
+      return h(
+        Fragment,
+        null,
+        h(ThemeBridge, { key: 'theme-bridge' }),
+        h(AccessGate, {
+          key: 'gate',
+          title: 'NiCE Designer Site Login',
+          subtitle:
+            'This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.',
+          onSubmit: checkCode,
+          error,
+          unlocked,
+          ctaText: h(
+            Fragment,
+            null,
+            "Don't have the code?",
+            h('br'),
+            h('strong', null, 'Reach out to Erick Mathews on Teams'),
+            ' to request access.'
+          ),
+          ctaHref: TEAMS_HREF,
+        }),
+        portal(
+          h(Nav, {
+            logoHref: './index.html',
+            cta: h(Fragment, null, [
+              h(ThemeToggle, { key: 'theme', showLabels: false }),
+              downloadPill('download'),
+            ]),
+          }),
+          'lynn-nav-root'
+        ),
+        portal(
+          h(DocRail, {
+            mode: 'pages',
+            pages: railPages,
+            groups: railGroups,
+            activeHref: './' + PAGE,
+            searchable: true,
+            collapsed: railCollapsed,
+            onToggle: setRail,
+          }),
+          'lynn-docrail-root'
+        ),
+        portal(
+          h(
+            Fragment,
+            null,
+            h(
+              'div',
+              { className: 'formula-equation', key: 'equation' },
+              'Score = ((total − issues) / total) × 100'
+            ),
+            h(
+              Alert,
+              { key: 'example', variant: 'info', title: 'Example' },
+              rich(
+                '<strong>"15/147 Colors"</strong> means 15 color properties have issues out of 147 total inspected.<br />Score = ((147 − 15) / 147) × 100 = 89.8%, shown as <strong>90%</strong>.'
+              )
+            ),
+            h(
+              'p',
+              { className: 'formula-note', key: 'note' },
+              h(Badge, { tone: 'blue' }, 'Since v9'),
+              ' each category uses its own denominator, not a global total. A file with many more spacing properties than color properties will not have its color score affected by that imbalance.'
+            )
+          ),
+          'lynn-formula-root'
+        ),
+        portal(
+          h(DataTable, {
+            className: 'reveal reveal-delay-1',
+            style: { marginTop: '32px' },
+            ariaLabel: 'Compliance score thresholds',
+            columns: BAND_COLUMNS,
+            rows: BANDS,
+            renderCell: renderBandCell,
+            rowKey: (row) => row.range,
+          }),
+          'lynn-threshold-root'
+        ),
+        portal(h(Badge, { tone: 'lynn' }, 'Since v10'), 'lynn-snooze-badge-root'),
+        /* The three tip discs. `md` (32px) with the `tint` fill is what
+           StepNumber's own docs list for this page's `.tip-number`; the
+           14px gap under each disc came from that rule, so it moves here. */
+        portal(tipNumber(1), 'lynn-tip-1-root'),
+        portal(tipNumber(2), 'lynn-tip-2-root'),
+        portal(tipNumber(3), 'lynn-tip-3-root'),
+        portal(h(Footer, { columns: FOOTER_COLUMNS }), 'lynn-footer-root')
+      );
+    }
+
+    createRoot(document.getElementById('lynn-app-root')).render(
+      h(ThemeProvider, { defaultTheme: 'lynn' }, h(App))
+    );
   </script>
 
 </body>

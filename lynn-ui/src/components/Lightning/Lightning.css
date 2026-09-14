@@ -1,0 +1,101 @@
+/*!
+ * Lightning - the container/canvas shell that nice-effects.js's `prep()`
+ * used to apply imperatively (position: relative, overflow: hidden, children
+ * lifted to z-index 1), plus nice-effects.css's `.nice-plasma-canvas` /
+ * `.nice-motes-canvas` rules.
+ *
+ * The stage background `#1b1b24` is lynn.html's real `.fx-plasma-stage`
+ * value - slightly deeper than `bg` so the filaments read at full contrast.
+ * It is exposed as `--lynn-lightning-bg` because the animated ring's inner
+ * fill has to be exactly the same color to mask the conic gradient down to a
+ * 2px band.
+ */
+
+/* The rotating ring's angle. A registered property is what makes the angle
+   animatable at all - an unregistered custom property has no type, so a
+   keyframe on it would snap rather than sweep. */
+@property --lynn-lightning-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes lynn-lightning-ring {
+  to {
+    --lynn-lightning-angle: 360deg;
+  }
+}
+
+.lynn-lightning {
+  position: relative;
+  overflow: hidden;
+  min-height: 240px;
+  --lynn-lightning-bg: #1b1b24;
+  --lynn-lightning-radius: var(--lynn-radius-lg);
+  border-radius: var(--lynn-lightning-radius);
+  background: var(--lynn-lightning-bg);
+  font-family: var(--lynn-font-family);
+  color: var(--lynn-color-text);
+}
+
+/*
+ * The electric frame. One conic gradient sweeping the component's own `glow`
+ * -> `color` pair (passed down as `--lynn-lightning-glow` /
+ * `--lynn-lightning-color` by the TSX), rotated by animating the registered
+ * angle, then masked down to a thin band the plain way: the ring is padded
+ * 2px and its inner child repaints the stage color over everything but that
+ * padding. The canvases sit above it and are transparent wherever nothing is
+ * drawn, so the band stays visible.
+ */
+.lynn-lightning-ring {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--lynn-lightning-angle),
+    transparent 0%,
+    var(--lynn-lightning-glow, var(--lynn-color-indigo)) 18%,
+    var(--lynn-lightning-color, var(--lynn-color-lynn)) 32%,
+    transparent 52%
+  );
+  animation: lynn-lightning-ring 6s linear infinite;
+  pointer-events: none;
+}
+
+.lynn-lightning-ring-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: calc(var(--lynn-lightning-radius) - 2px);
+  background: var(--lynn-lightning-bg);
+}
+
+.lynn-lightning-plasma,
+.lynn-lightning-motes {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.lynn-lightning-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: inherit;
+  height: 100%;
+  padding: var(--lynn-space-xl);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* The frame stays - it is part of the component's look, not an animation -
+     parked at a fixed angle so the arc reads as a lit top-right edge. */
+  .lynn-lightning-ring {
+    animation: none;
+    --lynn-lightning-angle: 300deg;
+  }
+}

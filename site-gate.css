@@ -1,5 +1,5 @@
 /*!
- * NiCE Designer — site-wide access gate
+ * NiCE Designer - site-wide access gate
  * -------------------------------------------------------------
  * One password screen shared by every page (see site-gate.js).
  * Namespaced with an "sg-" prefix so it never collides with
@@ -43,7 +43,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
+  color: #fff;
   margin: 0 auto 24px;
   box-shadow: 0 8px 32px rgba(97, 0, 255, 0.35);
 }

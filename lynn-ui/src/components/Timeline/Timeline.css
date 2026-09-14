@@ -1,0 +1,314 @@
+/*!
+ * Timeline / Phase / RoadmapItemCard
+ * Ported from roadmap.html, the site's richest single pattern:
+ *   `.timeline::before` - 1px rule at left 15px, from 50% blue through 30%
+ *                         indigo at the midpoint to transparent
+ *   `.phase`            - 36px gap, 52px bottom padding (0 on the last)
+ *   `.phase-dot`        - 12px disc, 2px `bg`-colored border, 8px top margin
+ *   `.phase-header`     - baseline row, 12px gap; 18px/800 title with a
+ *                         -0.3px track, 12px muted period
+ *   `.phase-desc`       - 13px secondary at 1.65, 700px max width
+ *   `.phase-dep`        - 11px chip with the literal `Requires:` prefix
+ *   `.cards`            - auto-fill grid, 360px min column, 10px gap
+ *   `.card`             - 3% white fill, 7% border, `sm` radius,
+ *                         16px/18px/0/22px padding, 3px left stripe from
+ *                         `--card-color`, 1px hover lift
+ *   `.tag` / `.gates` / `.gate` / `.gate-avatars` - the footer families
+ *
+ * Two substitutions, both to keep one implementation of a shape rather than
+ * two: the pulsing dots are the `PulseDot` component (whose keyframes are the
+ * same `@keyframes pulse` this file's source defines), and both avatar stacks
+ * are the `Avatar` component at `sm` and `xs` - its two smallest sizes were
+ * taken from this very file.
+ *
+ * The card's fills stay as the source's white alphas rather than moving to
+ * `--lynn-color-card`: they are deliberately *translucent* over the phase
+ * background, which is what lets the left stripe and the hover lift read.
+ */
+
+.lynn-timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--lynn-font-family);
+}
+
+.lynn-timeline::before {
+  content: '';
+  position: absolute;
+  /* The source's own offset. The dots are 12px wide and sit at x 0, so the
+     rule runs just to their right rather than through them - reproduced
+     verbatim, and exposed as a variable for anyone who wants it centered. */
+  left: var(--lynn-timeline-line-left, 15px);
+  top: 12px;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    rgba(54, 148, 252, 0.5),
+    rgba(97, 0, 255, 0.3) 50%,
+    transparent
+  );
+}
+
+/* ---------- phase ---------- */
+.lynn-phase {
+  position: relative;
+  display: flex;
+  gap: 36px;
+  padding-bottom: 52px;
+  scroll-margin-top: calc(var(--lynn-nav-height) + var(--lynn-space-xl));
+}
+
+.lynn-phase:last-child {
+  padding-bottom: 0;
+}
+
+.lynn-phase-dot-slot {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.lynn-phase-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--lynn-color-bg);
+  flex-shrink: 0;
+  margin-top: var(--lynn-space-sm);
+  position: relative;
+  z-index: 1;
+}
+
+.lynn-phase-future .lynn-phase-dot {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.lynn-phase-shipped .lynn-phase-dot {
+  background: var(--lynn-color-emerald);
+  border-color: rgba(0, 226, 160, 0.4);
+}
+
+.lynn-phase-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.lynn-phase-header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--lynn-space-md);
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.lynn-phase-title {
+  font-size: 18px;
+  font-weight: var(--lynn-font-weight-extrabold);
+  letter-spacing: -0.3px;
+  color: var(--lynn-color-text);
+}
+
+.lynn-phase-period {
+  font-size: var(--lynn-font-size-metadata);
+  font-weight: var(--lynn-font-weight-medium);
+  color: var(--lynn-color-text-muted);
+}
+
+.lynn-phase-desc {
+  margin: 0 0 var(--lynn-space-lg);
+  max-width: 700px;
+  font-size: 13px;
+  font-weight: var(--lynn-font-weight-regular);
+  line-height: var(--lynn-line-height-body);
+  color: var(--lynn-color-text-secondary);
+}
+
+.lynn-phase-dep {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 18px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--lynn-color-border);
+  font-size: 11px;
+  font-weight: var(--lynn-font-weight-semibold);
+  color: var(--lynn-color-text-muted);
+}
+
+.lynn-phase-dep-label {
+  color: var(--lynn-color-text-muted);
+  opacity: 0.65;
+}
+
+.lynn-phase-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 10px;
+}
+
+/* ---------- item card ---------- */
+.lynn-roadmap-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: var(--lynn-space-lg) 18px 0 22px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: var(--lynn-radius-sm);
+  scroll-margin-top: calc(var(--lynn-nav-height) + var(--lynn-space-xl));
+  transition:
+    border-color 0.2s var(--lynn-ease),
+    background 0.2s var(--lynn-ease),
+    transform 0.2s var(--lynn-ease);
+}
+
+.lynn-roadmap-item:hover {
+  background: rgba(255, 255, 255, 0.055);
+  border-color: var(--lynn-color-border-hover);
+  transform: translateY(-1px);
+}
+
+.lynn-roadmap-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: var(--lynn-space-sm);
+  bottom: var(--lynn-space-sm);
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: var(--lynn-item-accent, rgba(255, 255, 255, 0.15));
+}
+
+.lynn-roadmap-item-highlight {
+  background: rgba(54, 148, 252, 0.05);
+  border-color: rgba(54, 148, 252, 0.3);
+}
+
+.lynn-roadmap-item-body {
+  flex: 1;
+  padding-bottom: var(--lynn-space-lg);
+}
+
+.lynn-roadmap-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lynn-space-sm);
+  margin-bottom: var(--lynn-space-sm);
+}
+
+.lynn-roadmap-item-name {
+  display: flex;
+  align-items: center;
+  gap: var(--lynn-space-sm);
+  font-size: var(--lynn-font-size-body);
+  font-weight: var(--lynn-font-weight-bold);
+  color: var(--lynn-color-text);
+}
+
+.lynn-roadmap-item-desc {
+  margin: 0 0 10px;
+  font-size: var(--lynn-font-size-metadata);
+  line-height: 1.6;
+  color: var(--lynn-color-text-secondary);
+}
+
+.lynn-roadmap-item-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lynn-space-sm);
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.lynn-roadmap-item-tags {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.lynn-roadmap-item-tag {
+  padding: 2px 7px;
+  border-radius: var(--lynn-radius-pill);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-medium);
+  color: var(--lynn-color-text-muted);
+}
+
+.lynn-roadmap-item-people {
+  display: flex;
+  gap: var(--lynn-space-xs);
+}
+
+/* ---------- gates ---------- */
+.lynn-roadmap-item-gates {
+  border-top: 1px solid var(--lynn-color-border-subtle);
+  padding: 10px 0 14px;
+}
+
+.lynn-roadmap-item-gates-label {
+  margin-bottom: var(--lynn-space-sm);
+  font-size: 9px;
+  font-weight: var(--lynn-font-weight-extrabold);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--lynn-color-text-muted);
+}
+
+.lynn-roadmap-item-gates-rows {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.lynn-roadmap-item-gate {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lynn-space-xs);
+  padding: 3px var(--lynn-space-sm);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-semibold);
+  color: var(--lynn-color-text-muted);
+  white-space: nowrap;
+}
+
+.lynn-roadmap-item-gate-icon {
+  font-size: 10px;
+  line-height: 1;
+}
+
+.lynn-roadmap-item-gate-avatars {
+  display: flex;
+  gap: 2px;
+  margin-left: 2px;
+}
+
+@media (max-width: 640px) {
+  .lynn-phase {
+    gap: var(--lynn-space-lg);
+  }
+
+  .lynn-phase-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-roadmap-item {
+    transition: none;
+  }
+
+  .lynn-roadmap-item:hover {
+    transform: none;
+  }
+}

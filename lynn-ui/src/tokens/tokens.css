@@ -1,0 +1,231 @@
+/*!
+ * Lynn design tokens
+ * -------------------------------------------------------------
+ * Canonical, `--lynn-` prefixed custom properties for the Lynn design
+ * system (NiCE Designer Suite's own visual identity).
+ *
+ * Provenance:
+ *   - Colors, nav height, and font stack are the real values in the site's
+ *     `theme.css`, cross-checked against `LYNN-DESIGN-SYSTEM.md`.
+ *   - `--lynn-color-surface` is `#2a2a36` (the documented value, and the real
+ *     per-page override used on tools.html / dashboard.html / roadmap.html).
+ *     `theme.css` globally aliases `--surface` to `--card` (`#2f2f3d`); that
+ *     collision is resolved here in favor of the documented two-step ramp.
+ *   - `--lynn-color-border` is `rgba(255,255,255,0.08)` (theme.css's real
+ *     value); the design-system doc's `0.07` is stale.
+ *   - `--lynn-color-border-subtle` is the fainter hairline the plugin calls
+ *     `--border-subtle` (skeleton rows, segmented-control shells, dropdown
+ *     dividers). Lynn's own stylesheets only ever expressed it inline, so it
+ *     is named here rather than re-typed per component.
+ *   - `theme.css` also defines `--amber: #f59e0b`. It is undocumented and
+ *     contradicts Lynn's own "never invent a 7th accent" rule, so it is
+ *     deliberately NOT exposed here or anywhere in this package.
+ *   - The radius and spacing scales are the full scales from the
+ *     design-system doc's tables (theme.css only defines `--radius: 16px`
+ *     and `--radius-sm: 8px`).
+ *
+ * Everything here is prefixed so dropping this stylesheet into a host page
+ * can never clobber that page's own `--blue` / `--card` / `--border`.
+ */
+
+:root {
+  /* ---------- Color: surfaces ---------- */
+  --lynn-color-bg: #21212b;
+  --lynn-color-surface: #2a2a36;
+  --lynn-color-card: #2f2f3d;
+
+  /* ---------- Color: lines ---------- */
+  --lynn-color-border: rgba(255, 255, 255, 0.08);
+  --lynn-color-border-hover: rgba(255, 255, 255, 0.13);
+  --lynn-color-border-subtle: rgba(255, 255, 255, 0.05);
+  --lynn-color-border-glow: rgba(54, 148, 252, 0.35);
+
+  /* ---------- Color: text ---------- */
+  --lynn-color-text: #ffffff;
+  --lynn-color-text-secondary: rgba(255, 255, 255, 0.58);
+  --lynn-color-text-muted: rgba(255, 255, 255, 0.3);
+
+  /* ---------- Color: accents (exactly seven, never invent an eighth) ---------- */
+  --lynn-color-blue: #3694fc;
+  --lynn-color-electric-blue: #025afb;
+  --lynn-color-indigo: #6100ff;
+  --lynn-color-emerald: #00e2a0;
+  --lynn-color-teal: #36ead0;
+  --lynn-color-coral: #ff5b8a;
+  --lynn-color-lynn: #b98fff;
+
+  /* ---------- Typography ---------- */
+  --lynn-font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', sans-serif;
+  --lynn-font-family-mono: 'SF Mono', 'Fira Code', ui-monospace, monospace;
+
+  --lynn-font-size-hero-title: clamp(52px, 8vw, 100px);
+  --lynn-font-size-section-title: clamp(32px, 5vw, 56px);
+  --lynn-font-size-card-title: 17px;
+  --lynn-font-size-body: 14px;
+  --lynn-font-size-section-label: 12px;
+  --lynn-font-size-nav-link: 14px;
+  --lynn-font-size-metadata: 12px;
+  --lynn-font-size-code: 12px;
+
+  --lynn-font-weight-regular: 400;
+  --lynn-font-weight-medium: 500;
+  --lynn-font-weight-semibold: 600;
+  --lynn-font-weight-bold: 700;
+  --lynn-font-weight-extrabold: 800;
+  --lynn-font-weight-black: 900;
+
+  --lynn-letter-spacing-hero-title: -2px;
+  --lynn-letter-spacing-section-title: -1px;
+  --lynn-letter-spacing-card-title: -0.2px;
+  --lynn-letter-spacing-section-label: 2px;
+
+  --lynn-line-height-body: 1.65;
+  --lynn-line-height-tight: 1;
+
+  /* ---------- Spacing ---------- */
+  --lynn-space-none: 0px;
+  --lynn-space-xs: 4px;
+  --lynn-space-sm: 8px;
+  --lynn-space-md: 12px;
+  --lynn-space-lg: 16px;
+  --lynn-space-xl: 24px;
+  --lynn-space-2xl: 32px;
+  --lynn-space-3xl: 48px;
+  --lynn-space-4xl: 64px;
+  --lynn-space-5xl: 80px;
+  --lynn-space-6xl: 96px;
+
+  /* ---------- Radius ---------- */
+  --lynn-radius-none: 0px;
+  --lynn-radius-xs: 4px;
+  --lynn-radius-sm: 8px;
+  --lynn-radius-md: 12px;
+  --lynn-radius-lg: 16px;
+  --lynn-radius-xl: 24px;
+  --lynn-radius-pill: 100px;
+
+  /* ---------- Elevation: neumorphic pair ---------- */
+  /* Lynn's own take on the extruded/embossed surface. Both colors are
+     derived from Lynn's *own* neutrals rather than the desaturated grey the
+     technique is usually shown with:
+       falloff   #14141b - `--lynn-color-bg` (#21212b) taken ~38% darker,
+                 so it keeps the bg's blue-violet cast.
+       highlight #424255 - `--lynn-color-card` (#2f2f3d) taken ~45% lighter.
+     A dark UI has no real light source, so the highlight is a low-alpha
+     lightened tint of the card itself, not a literal light grey - it reads
+     as "this edge catches the ambient glow", which is the only lighting
+     Lynn's dark surfaces have.
+
+     `pressed` keeps the same offsets: an `inset` shadow paints on the
+     *opposite* inner edge, so reusing `6px 6px` for the falloff puts it
+     along the top-left inside - exactly the inverted, pushed-in read. */
+  --lynn-shadow-raised: 6px 6px 16px rgba(20, 20, 27, 0.72),
+    -6px -6px 16px rgba(66, 66, 85, 0.34);
+  --lynn-shadow-pressed: inset 6px 6px 14px rgba(20, 20, 27, 0.72),
+    inset -6px -6px 14px rgba(66, 66, 85, 0.34);
+
+  /* ---------- Motion ---------- */
+  /* Every Lynn transition uses this easing. Never `linear`, never `ease`.
+     (Ambient, continuously-looping keyframes - shimmer, gradient drift - are
+     the documented exception and stay linear/ease.) */
+  --lynn-ease: cubic-bezier(0.23, 1, 0.32, 1);
+
+  /* ---------- Layout ---------- */
+  --lynn-nav-height: 60px;
+}
+
+/*!
+ * Theme modes: `data-lynn-theme="lynn" | "light" | "dark"`
+ * -------------------------------------------------------------
+ * The mechanism ported from the plugin (`styles.css:17-38` base/dark,
+ * `:2034-2047` light, `:5305-5332` site): one attribute redefines the same
+ * `--lynn-color-*` names, so every component's CSS is already theme-aware and
+ * none of them change. `ThemeProvider` writes the attribute onto its
+ * `.lynn-root` wrapper; putting it on `<html>` by hand works identically.
+ *
+ * Only neutrals, surfaces, lines, text and the neumorphic shadow pair differ
+ * between modes - the shadow pair because it is derived from that mode's own
+ * bg/card hues and a light mode genuinely does have a light source where a
+ * dark one does not. The seven accents, the radius/spacing scales and
+ * `--lynn-ease` are deliberately constant across all three - exactly how the
+ * plugin keeps `--accent` stable across its own light/dark modes.
+ *
+ * `:root` above already carries the `lynn` values, so a consumer that never
+ * mounts `ThemeProvider` gets today's look unchanged. The explicit
+ * `[data-lynn-theme='lynn']` block below repeats them so a `lynn` subtree
+ * nested inside a `light`/`dark` one still resolves correctly - inheritance,
+ * not specificity, is what picks a mode.
+ */
+
+[data-lynn-theme='lynn'] {
+  --lynn-color-bg: #21212b;
+  --lynn-color-surface: #2a2a36;
+  --lynn-color-card: #2f2f3d;
+
+  --lynn-color-border: rgba(255, 255, 255, 0.08);
+  --lynn-color-border-hover: rgba(255, 255, 255, 0.13);
+  --lynn-color-border-subtle: rgba(255, 255, 255, 0.05);
+
+  --lynn-color-text: #ffffff;
+  --lynn-color-text-secondary: rgba(255, 255, 255, 0.58);
+  --lynn-color-text-muted: rgba(255, 255, 255, 0.3);
+
+  --lynn-shadow-raised: 6px 6px 16px rgba(20, 20, 27, 0.72),
+    -6px -6px 16px rgba(66, 66, 85, 0.34);
+  --lynn-shadow-pressed: inset 6px 6px 14px rgba(20, 20, 27, 0.72),
+    inset -6px -6px 14px rgba(66, 66, 85, 0.34);
+}
+
+/* White-based. Ported from the plugin's `.app.light-mode` block. */
+[data-lynn-theme='light'] {
+  --lynn-color-bg: #f5f6f8;
+  --lynn-color-surface: #ffffff;
+  --lynn-color-card: #f0f1f3;
+
+  --lynn-color-border: #d0d5db;
+  /* The plugin's light mode has no hover line of its own; one step darker
+     than `border` keeps "hover reads as more prominent" true in every mode. */
+  --lynn-color-border-hover: #b4bcc6;
+  --lynn-color-border-subtle: #e2e5e9;
+
+  --lynn-color-text: #1a1d21;
+  --lynn-color-text-secondary: #3d4550;
+  --lynn-color-text-muted: #6b7280;
+
+  /* The only mode with a real light source, so this is the classic
+     light+dark pair. The highlight is literally `--lynn-color-surface`
+     (#ffffff); the falloff is `--lynn-color-bg` (#f5f6f8) taken ~30% darker
+     and nudged toward this mode's own line color (#d0d5db) so the shadow
+     reads as the same cool family as a light-mode border rather than as
+     neutral soot. */
+  --lynn-shadow-raised: 7px 7px 16px rgba(168, 174, 185, 0.5),
+    -7px -7px 16px rgba(255, 255, 255, 0.9);
+  --lynn-shadow-pressed: inset 7px 7px 14px rgba(168, 174, 185, 0.5),
+    inset -7px -7px 14px rgba(255, 255, 255, 0.9);
+}
+
+/* Grey-based, distinct from `lynn`'s blue-dark. Ported from the plugin's
+   base `:root`. */
+[data-lynn-theme='dark'] {
+  --lynn-color-bg: #1e1e1e;
+  --lynn-color-surface: #2a2a2a;
+  --lynn-color-card: #333333;
+
+  --lynn-color-border: #444444;
+  --lynn-color-border-hover: #555555;
+  --lynn-color-border-subtle: #3a3a3a;
+
+  --lynn-color-text: #e8e8e8;
+  --lynn-color-text-secondary: #999999;
+  --lynn-color-text-muted: #666666;
+
+  /* Same dark-UI adaptation as `lynn`, but this mode's neutrals genuinely
+     are grey, so the pair is derived off them: falloff #131313 is
+     `--lynn-color-bg` (#1e1e1e) ~38% darker, highlight #4a4a4a is
+     `--lynn-color-card` (#333333) ~45% lighter. */
+  --lynn-shadow-raised: 6px 6px 16px rgba(19, 19, 19, 0.74),
+    -6px -6px 16px rgba(74, 74, 74, 0.38);
+  --lynn-shadow-pressed: inset 6px 6px 14px rgba(19, 19, 19, 0.74),
+    inset -6px -6px 14px rgba(74, 74, 74, 0.38);
+}

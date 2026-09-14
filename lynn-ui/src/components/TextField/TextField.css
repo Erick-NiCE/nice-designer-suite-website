@@ -1,0 +1,218 @@
+/*!
+ * TextField
+ * -------------------------------------------------------------
+ * The site has no real form controls, so - like `Switch` - this is built
+ * from Lynn's own vocabulary rather than ported: `--lynn-ease` on every
+ * transition, the seven accents as the only focus colors, `text-secondary`
+ * for the resting label and `coral` (Lynn's error accent) for the invalid
+ * state.
+ *
+ * The underline is an SVG sine path, not a border. Two things change on
+ * focus and they are deliberately different mechanisms:
+ *   - `stroke-dashoffset` 100 -> 0 is a one-shot keyframe, so the wave
+ *     visibly draws in left-to-right.
+ *   - `scaleY` 0.1 -> 1 is a transition, so it also reverses smoothly on
+ *     blur rather than snapping flat.
+ *
+ * The 241 in the dash rules is the path's own length in viewBox user units
+ * (`getTotalLength()` on TextField.tsx's `d` is 240.9). Dash math is done in
+ * user space, and the viewBox is a fixed 240 wide however far
+ * `preserveAspectRatio="none"` stretches it, so one constant is correct at
+ * every field width. Two things that look like shortcuts here are not:
+ * `pathLength` is not honored for dashing in Chrome, and
+ * `vector-effect: non-scaling-stroke` moves dashing into screen space, where
+ * no constant can be right - both leave the "solid" wave visibly broken into
+ * chunks.
+ */
+
+@keyframes lynn-textfield-wave-draw {
+  from {
+    stroke-dashoffset: 241;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.lynn-textfield {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lynn-space-xs);
+  width: 100%;
+  font-family: var(--lynn-font-family);
+}
+
+/* 18px of headroom for the floated label, 10px of footroom for the wave. */
+.lynn-textfield-shell {
+  position: relative;
+  padding-top: 18px;
+  padding-bottom: 10px;
+}
+
+.lynn-textfield-input {
+  display: block;
+  width: 100%;
+  height: 34px;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--lynn-color-text);
+  font-family: inherit;
+  font-size: var(--lynn-font-size-body);
+  line-height: 34px;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* The real placeholder stays empty - the floating label is the placeholder. */
+.lynn-textfield-input::placeholder {
+  color: transparent;
+}
+
+.lynn-textfield-with-toggle .lynn-textfield-input {
+  padding-right: 34px;
+}
+
+/* ---------- floating label ---------- */
+.lynn-textfield-label {
+  position: absolute;
+  left: 0;
+  top: 18px;
+  font-size: var(--lynn-font-size-body);
+  line-height: 34px;
+  color: var(--lynn-color-text-secondary);
+  /* So a click on the label text lands on the input underneath it. */
+  pointer-events: none;
+  transform-origin: left center;
+  transition: transform 0.18s var(--lynn-ease),
+    font-size 0.18s var(--lynn-ease), line-height 0.18s var(--lynn-ease),
+    letter-spacing 0.18s var(--lynn-ease), color 0.18s var(--lynn-ease);
+}
+
+.lynn-textfield-floated .lynn-textfield-label {
+  transform: translateY(-18px);
+  font-size: var(--lynn-font-size-metadata);
+  line-height: 18px;
+  letter-spacing: 0.3px;
+  font-weight: var(--lynn-font-weight-medium);
+}
+
+.lynn-textfield-focused .lynn-textfield-label {
+  color: var(--lynn-textfield-accent);
+}
+
+.lynn-textfield-invalid .lynn-textfield-label,
+.lynn-textfield-invalid.lynn-textfield-focused .lynn-textfield-label {
+  color: var(--lynn-color-coral);
+}
+
+/* ---------- password visibility toggle ---------- */
+.lynn-textfield-toggle {
+  position: absolute;
+  right: 0;
+  top: 26px;
+  padding: 0;
+  color: var(--lynn-color-text-muted);
+}
+
+.lynn-textfield-toggle:hover {
+  color: var(--lynn-color-text);
+}
+
+/* ---------- the wave ---------- */
+.lynn-textfield-wave {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 10px;
+  display: block;
+  /* The 1.5px stroke's round caps sit right on the viewBox edges, so half of
+     one would be clipped otherwise. */
+  overflow: visible;
+  pointer-events: none;
+}
+
+.lynn-textfield-wave-path {
+  fill: none;
+  stroke: var(--lynn-color-border);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 241;
+  stroke-dashoffset: 0;
+  /* Squashed almost flat at rest: the same path reads as a hairline
+     baseline, and un-flattening it is what makes focus feel like a ripple. */
+  transform: scaleY(0.1);
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transition: transform 0.5s var(--lynn-ease), stroke 0.4s var(--lynn-ease),
+    opacity 0.4s var(--lynn-ease);
+  opacity: 0.85;
+}
+
+.lynn-textfield-focused .lynn-textfield-wave-path {
+  stroke: var(--lynn-textfield-accent);
+  transform: scaleY(1);
+  opacity: 1;
+  animation: lynn-textfield-wave-draw 0.52s var(--lynn-ease) both;
+}
+
+.lynn-textfield-invalid .lynn-textfield-wave-path {
+  stroke: var(--lynn-color-coral);
+  /* An error is worth seeing before the field is touched, so the wave sits
+     at a visible amplitude even unfocused. */
+  transform: scaleY(0.65);
+  opacity: 1;
+}
+.lynn-textfield-invalid.lynn-textfield-focused .lynn-textfield-wave-path {
+  transform: scaleY(1);
+}
+
+/* ---------- error text ---------- */
+.lynn-textfield-error {
+  margin: 0;
+  font-size: var(--lynn-font-size-metadata);
+  line-height: 1.4;
+  color: var(--lynn-color-coral);
+}
+
+/* ---------- accents ---------- */
+.lynn-textfield-accent-blue {
+  --lynn-textfield-accent: var(--lynn-color-blue);
+}
+.lynn-textfield-accent-electric-blue {
+  --lynn-textfield-accent: var(--lynn-color-electric-blue);
+}
+.lynn-textfield-accent-indigo {
+  --lynn-textfield-accent: var(--lynn-color-indigo);
+}
+.lynn-textfield-accent-emerald {
+  --lynn-textfield-accent: var(--lynn-color-emerald);
+}
+.lynn-textfield-accent-teal {
+  --lynn-textfield-accent: var(--lynn-color-teal);
+}
+.lynn-textfield-accent-coral {
+  --lynn-textfield-accent: var(--lynn-color-coral);
+}
+.lynn-textfield-accent-lynn {
+  --lynn-textfield-accent: var(--lynn-color-lynn);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* The label still moves and resizes - that is the state readout, not
+     decoration - but it arrives instantly. */
+  .lynn-textfield-label {
+    transition: none;
+  }
+  /* No draw-in, no un-flattening travel: the focused wave is simply there. */
+  .lynn-textfield-wave-path {
+    transition: none;
+    animation: none;
+  }
+  .lynn-textfield-focused .lynn-textfield-wave-path {
+    animation: none;
+  }
+}

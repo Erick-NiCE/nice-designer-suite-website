@@ -1,0 +1,92 @@
+/*!
+ * CodeBlock / InlineCode
+ * Panel  <- the plugin's `.dev-css` (`styles.css:2510-2524`): monospace at
+ *           11px/1.6 on `surface` in `--text`, 1px subtle hairline, `sm`
+ *           radius, 10px/12px padding, `white-space: pre`,
+ *           `overflow-x: auto`, `max-height: 300px` with `overflow-y: auto`
+ * Inline  <- install-guide.html `code, .inline-code` (0.85em mono, 8% white
+ *           chip, teal, 2px/7px, 5px radius, `white-space: nowrap`)
+ *
+ * Three theme corrections to the sources' hard-coded values:
+ *   - the inline chip's `rgba(255,255,255,0.08)` becomes an 8% mix of the
+ *     mode's own text color, so it stays visible in `light`;
+ *   - install-guide's `#1a1a26` panel fill becomes `--lynn-color-surface`,
+ *     the plugin's own choice, for the same reason;
+ *   - teal on a white surface is unreadable, so in `light` the inline chip's
+ *     text is teal mixed toward that mode's own text color rather than a new
+ *     hand-picked hue. install-guide's own `.code-block` paints the panel's
+ *     code teal too; the panel here follows the plugin's `--text` instead,
+ *     which needs no correction in any mode.
+ */
+
+.lynn-code-block {
+  background: var(--lynn-color-surface);
+  border: 1px solid var(--lynn-color-border-subtle);
+  border-radius: var(--lynn-radius-sm);
+  overflow: hidden;
+  font-family: var(--lynn-font-family);
+}
+
+.lynn-code-block-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lynn-space-sm);
+  padding: 6px 10px 6px 12px;
+  border-bottom: 1px solid var(--lynn-color-border-subtle);
+}
+
+.lynn-code-block-lang {
+  font-family: var(--lynn-font-family-mono);
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-semibold);
+  letter-spacing: 0.6px;
+  text-transform: lowercase;
+  color: var(--lynn-color-text-muted);
+}
+
+/* The header's copy button sits in a tight strip, so it drops the standalone
+   button's padding and pulls to the right edge on its own. */
+.lynn-code-block-head > .lynn-code-block-copy {
+  margin-left: auto;
+  padding: 0;
+  font-size: 11px;
+}
+
+.lynn-code-block-pre {
+  margin: 0;
+  padding: 10px 12px;
+  font-family: var(--lynn-font-family-mono);
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--lynn-color-text);
+  white-space: pre;
+  overflow-x: auto;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.lynn-code-block-pre:focus-visible {
+  outline: 2px solid var(--lynn-color-blue);
+  outline-offset: -2px;
+}
+
+.lynn-code-block-pre code {
+  font: inherit;
+  color: inherit;
+}
+
+/* ---------- inline ---------- */
+.lynn-inline-code {
+  font-family: var(--lynn-font-family-mono);
+  font-size: 0.85em;
+  background: color-mix(in srgb, var(--lynn-color-text) 8%, transparent);
+  color: var(--lynn-color-teal);
+  padding: 2px 7px;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+
+[data-lynn-theme='light'] .lynn-inline-code {
+  color: color-mix(in srgb, var(--lynn-color-teal), var(--lynn-color-text));
+}

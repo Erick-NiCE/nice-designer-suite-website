@@ -11,9 +11,64 @@
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <link rel="stylesheet" href="site-gate.css" />
-  <script src="site-gate.js" defer></script>
-  <script src="nice-effects.js?v=9" defer></script>
+  <script src="nice-effects.js?v=11" defer></script>
+
+  <!--
+    ===== lynn-ui: the site chrome, as React components =====
+    The access gate, the nav and (on pages that have them) the footer and the
+    doc rail all come from lynn-ui now - see the single #lynn-app-root mount
+    script at the end of <body>. site-gate.css / site-gate.js are gone with
+    them; `AccessGate` is the same screen and the mount script re-runs the
+    same client-side code check.
+
+    Three things are needed, and none of them affect the rest of the page:
+      1. dist/lynn-ui.css - the package's built stylesheet. Everything in it
+         is either a `--lynn-*` custom property or a `.lynn-*` class, so it
+         cannot collide with this page's own tokens/classes.
+      2. the import map  - React, ReactDOM and matter-js as CDN ESM.
+         `?external=react` on react-dom stops a second copy of React being
+         pulled in ("invalid hook call"). matter-js is in the map because
+         dist/index.js is one barrel that also reaches LiquidFill.
+      3. `.lynn-mount` - the chrome renders through portals into placeholder
+         divs left where the old markup was. `display: contents` means those
+         placeholders generate no box, so the sticky nav and the footer's
+         margin still resolve against <body> exactly as before.
+  -->
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@18.3.1",
+      "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+      "react-dom": "https://esm.sh/react-dom@18.3.1?external=react",
+      "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?external=react",
+      "scheduler": "https://esm.sh/scheduler@0.23.2",
+      "matter-js": "https://esm.sh/matter-js@0.20.0"
+    }
+  }
+  </script>
+  <style>.lynn-mount { display: contents; }</style>
+
+  <!--
+    The gate used to be static markup covered by blocking CSS, so it was up
+    before first paint. React arrives as ESM from a CDN, so the component
+    can only mount a tick later - hold the page back until it does, or a
+    locked visitor reads the whole page in the gap. Costs nothing once the
+    session is unlocked (the class is never added), and a 4s failsafe means
+    a CDN that never answers leaves a readable page rather than a blank one.
+  -->
+  <style>html.lynn-gate-pending body { visibility: hidden; }</style>
+  <script>
+    (function () {
+      try {
+        if (sessionStorage.getItem('nice-site-access') === '1') return;
+      } catch (e) { /* blocked storage: fall through and gate */ }
+      var root = document.documentElement;
+      root.classList.add('lynn-gate-pending');
+      setTimeout(function () { root.classList.remove('lynn-gate-pending'); }, 4000);
+    })();
+  </script>
+
   <style>
     body { line-height: 1.6; }
 
@@ -51,177 +106,27 @@
       margin: 0 auto;
     }
 
-    /* ========== CHANGELOG (moved from index.html) ========== */
-    .changelog-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      margin-bottom: 16px;
-      overflow: hidden;
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-    .changelog-card.revealed {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .changelog-main {
-      display: grid;
-      grid-template-columns: 220px 1fr;
-    }
-    @media (max-width: 700px) {
-      .changelog-main { grid-template-columns: 1fr; }
-    }
-    .changelog-meta {
-      padding: 32px;
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    @media (max-width: 700px) {
-      .changelog-meta {
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-        flex-direction: row;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 12px;
-        padding: 20px;
-      }
-    }
-    .version-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 20px;
-      font-weight: 800;
-    }
-    .version-latest {
-      display: inline-block;
-      background: rgba(0, 226, 160, 0.15);
-      color: var(--emerald);
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      padding: 3px 8px;
-      border-radius: 100px;
-      border: 1px solid rgba(0, 226, 160, 0.3);
-    }
-    .version-date {
-      font-size: 13px;
-      color: var(--text-secondary);
-    }
-    .changelog-content { padding: 32px; }
-    @media (max-width: 700px) {
-      .changelog-content { padding: 20px; }
-    }
-    .changelog-group { margin-bottom: 24px; }
-    .changelog-group:last-child { margin-bottom: 0; }
-    .changelog-group-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--text-secondary);
-      margin-bottom: 12px;
-    }
-    .changelog-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .changelog-list li {
-      font-size: 14px;
-      line-height: 1.6;
-      color: rgba(255, 255, 255, 0.85);
-      position: relative;
-      padding-left: 15px;
-    }
-    .changelog-list li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 9px;
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--blue);
-    }
-    .changelog-list.fixes li::before { background: var(--coral); }
-    .changelog-list.improvements li::before { background: var(--emerald); }
-
-    .changelog-toggle-row {
-      width: 100%;
-      background: none;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 32px;
-      color: var(--text);
-      font-family: 'Be Vietnam Pro', sans-serif;
-      text-align: left;
-    }
-    .changelog-toggle-row:hover { background: rgba(255, 255, 255, 0.03); }
-    .changelog-toggle-left { display: flex; align-items: center; gap: 16px; }
-    .changelog-toggle-version { font-size: 18px; font-weight: 800; }
-    .changelog-toggle-date { font-size: 13px; color: var(--text-secondary); }
-    .changelog-toggle-arrow {
-      font-size: 18px;
-      color: var(--text-secondary);
-      transition: transform 0.25s ease;
-    }
-    .changelog-toggle-arrow.open { transform: rotate(180deg); }
-    .changelog-collapsible {
-      border-top: 1px solid var(--border);
-      display: none;
-    }
-    .changelog-collapsible.open { display: block; }
+    /* The changelog itself is lynn-ui's <ChangelogEntry> now (see the mount
+       script at the end of <body>), so the ~130 lines of `.changelog-*` /
+       `.version-*` CSS that used to live here have gone with the markup -
+       `.lynn-changelog-*` in lynn-ui.css is the same design. */
 
     @media (max-width: 768px) {
       .page-section { padding: 48px 20px; }
-      .changelog-toggle-row { padding: 16px 20px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- SITE-WIDE ACCESS GATE (see site-gate.css / site-gate.js) -->
-  <div id="nice-site-gate">
-    <div class="sg-card">
-      <div class="sg-lock">🔒</div>
-      <div class="sg-title">NiCE Designer Site Login</div>
-      <div class="sg-subtitle">This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.</div>
-      <div class="sg-input-wrap">
-        <input id="nice-site-gate-input" type="password" placeholder="Enter code" autocomplete="off" />
-      </div>
-      <div class="sg-error" id="nice-site-gate-error"></div>
-      <button id="nice-site-gate-btn" type="button">Unlock</button>
-      <div class="sg-divider"></div>
-      <div class="sg-cta">
-        Don't have the code?<br>
-        <strong>Reach out to Erick Mathews on Teams</strong> to request access.
-        <br>
-        <a class="sg-teams-btn" href="https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com" target="_blank" rel="noopener">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H8a2 2 0 00-2 2v2H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2h2a2 2 0 002-2V4a2 2 0 00-2-2zM4 20V8h12v12H4zm16-4h-2V8a2 2 0 00-2-2H8V4h12v12z" fill="currentColor"/></svg>
-          Message on Teams
-        </a>
-      </div>
-    </div>
-  </div>
+  <!-- lynn-ui chrome. One React root, one ThemeProvider (see the mount
+       script at the end of <body>); the gate renders inside it, everything
+       else portals into the `.lynn-mount` placeholders below. -->
+  <div id="lynn-app-root"></div>
 
-  <!-- NAV -->
-  <nav class="site-nav" id="site-nav">
-    <a href="./index.html" class="nav-logo">
-      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span><span class="logo-suite"> Suite</span>
-    </a>
-    <span class="nav-download is-disabled" aria-disabled="true">Download<span class="coming-soon-tag">Coming soon!</span></span>
-  </nav>
+  <!-- NAV (lynn-ui <Nav>) + DOC RAIL (lynn-ui <DocRail>, position: fixed) -->
+  <div id="lynn-nav-root" class="lynn-mount"></div>
+  <div id="lynn-docrail-root" class="lynn-mount"></div>
+
 
   <!-- HERO -->
   <section class="hero">
@@ -232,333 +137,24 @@
     </div>
   </section>
 
-  <!-- CHANGELOG -->
+  <!-- CHANGELOG (lynn-ui <ChangelogEntry> x7 - see the mount script) -->
   <div class="page-section" id="changelog">
-
-    <!-- v11.4 - always shown -->
-    <div class="changelog-card stagger-1" id="release-v11-4">
-      <div class="changelog-main">
-        <div class="changelog-meta">
-          <div class="version-badge">
-            v11.4 <span class="version-latest">LATEST</span>
-          </div>
-          <div class="version-date">September 2026</div>
-        </div>
-        <div class="changelog-content">
-          <div class="changelog-group">
-            <div class="changelog-group-label">New features</div>
-            <ul class="changelog-list">
-              <li>New skill - <strong>Emotional Intelligence</strong> (by Megan Fisher): a voice-and-tone guide for leadership writing, feedback, performance reviews, and difficult conversations like layoffs, PIPs, and conflict mediation</li>
-            </ul>
-          </div>
-          <div class="changelog-group">
-            <div class="changelog-group-label">Fixes</div>
-            <ul class="changelog-list improvements">
-              <li>Fixed the compliance gauge on both Figma and Chrome: the score used to be a single ratio pooled across all instance counts, which let one huge category (Colors, often tens of thousands of paints) fully mask another sitting at 0% compliance but small (e.g. Components). The score is now the average of each audited category's own compliance rate, weighted equally regardless of instance count</li>
-              <li>Removed the "use Figma content as default on figma.com" Settings toggle - the panel already blocks figma.com outright, so Chrome's view of that domain was never a real option to pick</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- v11.3 - collapsible -->
-    <div class="changelog-card stagger-2" id="release-v11-3">
-      <button class="changelog-toggle-row" aria-expanded="false" data-target="v11-3-body">
-        <div class="changelog-toggle-left">
-          <span class="changelog-toggle-version">v11.3</span>
-          <span class="changelog-toggle-date">September 2026</span>
-        </div>
-        <span class="changelog-toggle-arrow" id="v11-3-arrow">&#8964;</span>
-      </button>
-      <div class="changelog-collapsible" id="v11-3-body">
-      <div class="changelog-main">
-        <div class="changelog-meta">
-          <div class="version-badge">v11.3</div>
-          <div class="version-date">September 2026</div>
-        </div>
-        <div class="changelog-content">
-          <div class="changelog-group">
-            <div class="changelog-group-label">New features</div>
-            <ul class="changelog-list">
-              <li>Browsing a Figma file in Chrome no longer reports on Figma's own interface - Figma draws its canvas in WebGL, so a Figma tab has no design content to read. The panel now says so and offers a one-click deep link that opens the exact file and layer in the Figma desktop app, where the Figma plugin reads the real document</li>
-              <li>New Settings toggle: "Use Figma content as default on figma.com" - with both the plugin and extension connected to Claude, tools that would previously have to ask which one you meant now default to the real Figma file</li>
-              <li>Spec Mode now reads SVG - selecting a chart, gauge, or icon used to return an empty CSS document and a single flat colour. It now reports every painted fill and stroke in the graphic with its stroke width, the geometry attributes for each shape, and the SVG markup itself</li>
-            </ul>
-          </div>
-          <div class="changelog-group">
-            <div class="changelog-group-label">Improvements</div>
-            <ul class="changelog-list improvements">
-              <li>The CSS section follows your selection: click a frame and it shows and copies that frame's CSS, not the last thing you looked at</li>
-              <li>One clear copy button in the CSS section instead of three that each copied something slightly different</li>
-              <li>Spec Mode reordered so what you have selected reads top-down: the selection and its details lead, with the eyedropper and saved palettes moved below them</li>
-              <li>Fixed inline links rendering in the browser default blue instead of the design system accent colour, and added a shared text input style so pasted-value fields match the rest of the app</li>
-              <li>Retired the Figma accessibility guide skill - it depended on Figma REST file reads, which are rate limited to roughly 20 per month on a view-only seat</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      </div>
-    </div>
-
-    <!-- v11.2 - collapsible -->
-    <div class="changelog-card stagger-3" id="release-v11-2">
-      <button class="changelog-toggle-row" aria-expanded="false" data-target="v11-2-body">
-        <div class="changelog-toggle-left">
-          <span class="changelog-toggle-version">v11.2</span>
-          <span class="changelog-toggle-date">August 2026</span>
-        </div>
-        <span class="changelog-toggle-arrow" id="v11-2-arrow">&#8964;</span>
-      </button>
-      <div class="changelog-collapsible" id="v11-2-body">
-      <div class="changelog-main">
-        <div class="changelog-meta">
-          <div class="version-badge">v11.2</div>
-          <div class="version-date">August 2026</div>
-        </div>
-        <div class="changelog-content">
-          <div class="changelog-group">
-            <div class="changelog-group-label">New features</div>
-            <ul class="changelog-list">
-              <li>Components browser now matches Storybook 1:1 - every synced component shows its description, guidelines, variant names, use cases, and Do's and Don'ts, pulled live, with SOL branding normalized to our own naming (e.g. "Tabs", not "SOL Tabs")</li>
-              <li>Skills are now found and loaded through <code>list_skills</code> / <code>get_skill</code>, which check a small hosted catalog first - so a skill fix or a brand-new skill reaches every installed connector with <strong>no reinstall</strong></li>
-              <li>New skill - <strong>North Star Fox</strong> (by Janet Gonzales): scores a CXone AI design or JIRA ticket against the 12 NiCE AI design tenets plus Lyra/NiCE Brand adherence</li>
-              <li>New skill - <strong>Team Strengths</strong>: look up a teammate's CliftonStrengths, staff a piece of work, check whether a group is balanced, or prep a strengths-based 1:1</li>
-              <li>New skill - <strong>EAC Framework Guide</strong>: the EAC Team's PM behavior framework, for calibrations, 1:1 prep, and working out which tenet a situation falls under</li>
-              <li>Anonymous, opt-out usage analytics (Settings - "Share anonymous usage") so we can see which tools and skills actually get used. No node names, file names, page contents, or URLs ever leave your machine</li>
-            </ul>
-          </div>
-          <div class="changelog-group">
-            <div class="changelog-group-label">Improvements</div>
-            <ul class="changelog-list improvements">
-              <li>Self-update script for unpacked Chrome installs - one command grabs and applies the latest build</li>
-              <li>Audit tab now tracks replaced rows, so a re-run shows what actually changed</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      </div>
-    </div>
-
-    <!-- v11.1 - collapsible -->
-    <div class="changelog-card stagger-4" id="release-v11-1">
-      <button class="changelog-toggle-row" aria-expanded="false" data-target="v11-1-body">
-        <div class="changelog-toggle-left">
-          <span class="changelog-toggle-version">v11.1</span>
-          <span class="changelog-toggle-date">August 2026</span>
-        </div>
-        <span class="changelog-toggle-arrow" id="v11-1-arrow">&#8964;</span>
-      </button>
-      <div class="changelog-collapsible" id="v11-1-body">
-      <div class="changelog-main">
-        <div class="changelog-meta">
-          <div class="version-badge">v11.1</div>
-          <div class="version-date">August 2026</div>
-        </div>
-        <div class="changelog-content">
-          <div class="changelog-group">
-            <div class="changelog-group-label">New features</div>
-            <ul class="changelog-list">
-              <li>Rebranded to <strong>NiCE Designer Suite</strong>, with a new Supercharge tool/skill catalog and per-domain audit scoring</li>
-              <li>First-launch onboarding: a Welcome screen lets you pick <strong>Simple (Lite mode)</strong> or the <strong>Full toolkit</strong>, with live previews for Reduce Animations and Hide Card Descriptions, then a guided spotlight tour of Home, Audit, and Settings</li>
-              <li>Lite mode: a simpler view showing just Frontend Audit and Design System; brand-new installs start here by default. Toggle it anytime in Settings, and replay the welcome tour or any per-tool mini tour (graduation-cap icon on each Home card) whenever you like</li>
-              <li>In-app update check (Chrome): a refresh icon next to the version number in Settings checks for a newer build and links straight to the download, with a "last checked" timestamp</li>
-              <li>"What's New" popup: appears automatically after an update, or open it anytime from the version number in Settings</li>
-              <li>One-click Claude Desktop install: a "Click to install Claude Connector.mcpb" file now ships in the download - double-click it instead of hand-editing <code>claude_desktop_config.json</code></li>
-            </ul>
-          </div>
-          <div class="changelog-group">
-            <div class="changelog-group-label">Improvements</div>
-            <ul class="changelog-list improvements">
-              <li>Docs now load in an in-app pane instead of opening a new browser tab (Chrome)</li>
-              <li>Design System and Accessibility audits merged into one pass, plus Storybook component sync</li>
-              <li>New Magic trigger modes, an animated gradient layer, and scrubbable-input detection</li>
-              <li>QA tab redesigned with a gauge/breakdown layout to match Audit</li>
-              <li>Flattened Chrome build and a refreshed Supercharge panel</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      </div>
-    </div>
-
-    <!-- v10 - collapsible -->
-    <div class="changelog-card stagger-5" id="release-v10">
-      <button class="changelog-toggle-row" aria-expanded="false" data-target="v10-body">
-        <div class="changelog-toggle-left">
-          <span class="changelog-toggle-version">v10</span>
-          <span class="changelog-toggle-date">June 2026</span>
-        </div>
-        <span class="changelog-toggle-arrow" id="v10-arrow">&#8964;</span>
-      </button>
-      <div class="changelog-collapsible" id="v10-body">
-        <div class="changelog-main">
-          <div class="changelog-meta">
-            <div class="version-badge">v10</div>
-            <div class="version-date">June 2026</div>
-          </div>
-          <div class="changelog-content">
-            <div class="changelog-group">
-              <div class="changelog-group-label">New features</div>
-              <ul class="changelog-list">
-                <li>Complete redesign: new icons, UX, and micro-animations throughout the interface</li>
-                <li>Role-based onboarding: first-launch modal asks for your role; adjusts default panel, skill set, and suggested MCP tools. Re-selectable in settings.</li>
-                <li>Claude / MCP skills (9): apply_token_fix, apply_all_fixes, get_audit_results, get_selected_node, set_selected_node, export_css, get_history, undo_fix, convert_design_system. Callable from Claude chat or any MCP-compatible client.</li>
-                <li>Edit mode: click the pencil in the header to edit webpages with familiar design tools</li>
-                <li>Edit history (undo/redo): full history stack in Chrome extension; each fix is logged, undo/redo per step</li>
-                <li>Export fixes as CSS: Export CSS button outputs all applied fixes with rule count and token names</li>
-              </ul>
-            </div>
-            <div class="changelog-group">
-              <div class="changelog-group-label">Improvements</div>
-              <ul class="changelog-list improvements">
-                <li>Semantic color matching: context-aware token lookup considers role (text, background, border, icon)</li>
-                <li>SOL to Lyra conversion: token mapping is context-aware, correctly handles tokens that differ by semantic role</li>
-                <li>Serialized MCP messages: calls queued and processed in order, preventing race conditions</li>
-                <li>Auto-snooze after Apply All: fixed items automatically snoozed; toggleable in settings</li>
-              </ul>
-            </div>
-            <div class="changelog-group">
-              <div class="changelog-group-label">Fixes</div>
-              <ul class="changelog-list fixes">
-                <li>Custom hex values no longer revert on blur</li>
-                <li>Variable binding preserved when applying fix to a node with existing bound variable</li>
-                <li>Chrome extension detection no longer fails on pages that load in an iframe</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- v9 - collapsible -->
-    <div class="changelog-card stagger-6" id="release-v9">
-      <button class="changelog-toggle-row" aria-expanded="false" data-target="v9-body">
-        <div class="changelog-toggle-left">
-          <span class="changelog-toggle-version">v9</span>
-          <span class="changelog-toggle-date">May 2026</span>
-        </div>
-        <span class="changelog-toggle-arrow" id="v9-arrow">&#8964;</span>
-      </button>
-      <div class="changelog-collapsible" id="v9-body">
-        <div class="changelog-main">
-          <div class="changelog-meta">
-            <div class="version-badge">v9</div>
-            <div class="version-date">May 2026</div>
-          </div>
-          <div class="changelog-content">
-            <div class="changelog-group">
-              <div class="changelog-group-label">New features</div>
-              <ul class="changelog-list">
-                <li>Vision/screenshot support for Claude: Claude can pull in a visual to make targeted changes</li>
-                <li>Per-row revert: Apply/Replace leaves a revert link on each row; one click restores prior state including variable bindings</li>
-                <li>Custom value live edit: hex input for colors, px input for font size, spacing, and radius on every row</li>
-                <li>Export applied fixes: returns a CSS document of every live edit in the session, including rule count</li>
-                <li>Per-category audit totals: every audit tile shows bad/total (e.g. 15/147 Colors); design score divides by per-category sum</li>
-                <li>Family-aware text matching: font family + size + weight all considered when flagging wrong-system text</li>
-                <li>10x faster library load: variable imports parallelized 16-wide with 10-second timeout fallback</li>
-              </ul>
-            </div>
-            <div class="changelog-group">
-              <div class="changelog-group-label">Fixes</div>
-              <ul class="changelog-list fixes">
-                <li>Radius variable binding now correctly binds all four corner properties</li>
-                <li>Open Sans SemiBold loads reliably across weight-naming variants</li>
-                <li>Audit ring stability fixed - no more race condition on pull refresh</li>
-                <li>MCP server v0.5.0 with four new revert_single_* tools and custom value fields on apply tools</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- v8 - collapsible -->
-    <div class="changelog-card stagger-7" id="release-v8">
-      <button class="changelog-toggle-row" aria-expanded="false" data-target="v8-body">
-        <div class="changelog-toggle-left">
-          <span class="changelog-toggle-version">v8</span>
-          <span class="changelog-toggle-date">April 2026</span>
-        </div>
-        <span class="changelog-toggle-arrow" id="v8-arrow">&#8964;</span>
-      </button>
-      <div class="changelog-collapsible" id="v8-body">
-        <div class="changelog-main">
-          <div class="changelog-meta">
-            <div class="version-badge">v8</div>
-            <div class="version-date">April 2026</div>
-          </div>
-          <div class="changelog-content">
-            <div class="changelog-group">
-              <div class="changelog-group-label">New features</div>
-              <ul class="changelog-list">
-                <li>MCP connection with Claude: NiCE Designer now includes an MCP server; Figma and Chrome share context for complex AI-driven tasks</li>
-                <li>Standalone popup mode for Chrome: dock the extension on a second monitor via a toggle in settings</li>
-                <li>Chrome extension no longer needs to reset per window when switching pages</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
+    <div id="lynn-changelog-root" class="lynn-mount"></div>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="footer-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></div>
-      </div>
-      <nav class="footer-nav">
-        <div class="footer-nav-col">
-          <a href="./index.html">Overview</a>
-          <a href="./install-guide.html">Install Guide</a>
-          <a href="./claude-skills.html">Claude Skills</a>
-          <a href="./the-suite.html">The Suite</a>
-        </div>
-        <div class="footer-nav-col">
-          <a href="./use-cases.html">Use Cases</a>
-          <a href="./scoring.html">Scoring</a>
-          <a href="./dashboard.html">Dashboard</a>
-          <a href="./roadmap.html">Roadmap</a>
-        </div>
-        <div class="footer-nav-col">
-          <a href="./release-notes.html" class="active">Release Notes</a>
-          <a href="./faq.html">FAQ</a>
-          <a href="./tools.html">Tools</a>
-          <a href="./marketplace.html">Marketplace</a>
-          <a href="./lynn.html">Lynn</a>
-        </div>
-      </nav>
-    </div>
-  </footer>
+  <!-- FOOTER (lynn-ui <Footer>) -->
+  <div id="lynn-footer-root" class="lynn-mount"></div>
 
   <script>
 
-    // Changelog collapsibles
-    document.querySelectorAll('.changelog-toggle-row').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var targetId = btn.getAttribute('data-target');
-        var body = document.getElementById(targetId);
-        var arrowId = targetId.replace('-body', '-arrow');
-        var arrow = document.getElementById(arrowId);
-        var isOpen = body.classList.contains('open');
+    // The changelog collapsibles used to be wired up here. <ChangelogEntry>
+    // owns its own toggle (and its own aria-expanded / aria-controls), so
+    // there is nothing left for this page to bind.
 
-        if (isOpen) {
-          body.classList.remove('open');
-          arrow.classList.remove('open');
-          btn.setAttribute('aria-expanded', 'false');
-        } else {
-          body.classList.add('open');
-          arrow.classList.add('open');
-          btn.setAttribute('aria-expanded', 'true');
-        }
-      });
-    });
-
-    // Scroll reveal via IntersectionObserver
-    var revealTargets = document.querySelectorAll('.changelog-card, .reveal');
+    // Scroll reveal via IntersectionObserver. Only the hero's `.reveal` is
+    // left to observe - the changelog cards are React-rendered and come in
+    // already visible.
+    var revealTargets = document.querySelectorAll('.reveal');
 
     var observer = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
@@ -643,10 +239,475 @@
     });
     document.addEventListener('mouseleave', function() { glow.style.opacity = '0'; });
 
-    document.querySelectorAll('.changelog-card').forEach(function(card) {
-      card.classList.add('tilt-ready');
-    });
+    // The `.tilt-ready` hover spotlight used to be stamped onto the static
+    // `.changelog-card`s here. They are React-rendered now and arrive after
+    // this script, so the mount script applies it on commit instead.
   })();
+  </script>
+
+  <!--
+    ===== lynn-ui mount =====
+    One createRoot, one ThemeProvider, one <App>: the access gate, the nav,
+    the doc rail, the footer and the seven changelog entries. Keeping them in
+    a single root is what keeps the theme in sync between them - four roots
+    would each get their own provider and drift apart.
+
+    Anything that belongs elsewhere in the document is placed with
+    createPortal into a `.lynn-mount` placeholder rather than rendered here:
+    a footer rendered next to the nav would sit at the top of the page, and a
+    nav rendered inside a 60px wrapper could not be sticky.
+  -->
+  <script type="module">
+    import { createElement as h, Fragment, useEffect, useState } from 'react';
+    import { createPortal } from 'react-dom';
+    import { createRoot } from 'react-dom/client';
+    import {
+      AccessGate,
+      ChangelogEntry,
+      DocRail,
+      Footer,
+      Nav,
+      ThemeProvider,
+      ThemeToggle,
+      useLynnTheme,
+    } from './lynn-ui/dist/index.js';
+
+    const PAGE = 'release-notes.html';
+
+    /* ---- the real gate, ported from site-gate.js ------------------------ */
+    /* Same session key, same password, same message, same Teams link. Still
+       a soft deterrent, not security - the check is client-side and readable
+       right here, exactly as it was in site-gate.js. */
+    const GATE_KEY = 'nice-site-access';
+    const GATE_PASSWORD = 'niceux';
+    const GATE_ERROR = 'Incorrect code. Contact Erick Mathews on Teams for access.';
+    const TEAMS_HREF = 'https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com';
+
+    /* ---- doc rail ------------------------------------------------------- */
+    /* The page table is read straight off nice-effects.js (which publishes
+       its own DOC_PAGES as NiceEffects.docPages) rather than hand-copied, so
+       adding a section anchor there still updates this rail. Every entry
+       goes into the switcher, `standalone` ones included - that flag only
+       decides whether a page's *own* rail is sections-only (wings-2026.html
+       is the one that sets it), which is exactly what buildDocRail() did.
+       Collapse state shares nice-effects.js's own localStorage key, which is
+       also the one embed.js stashes. */
+    const RAIL_KEY = 'nice-doc-rail-collapsed';
+    const DOC_PAGES = (window.NiceEffects && window.NiceEffects.docPages) || [];
+    const railPages = DOC_PAGES.map((page) => ({
+      href: './' + page.href,
+      label: page.label,
+    }));
+    const railGroups = (DOC_PAGES.find((page) => page.href === PAGE) || {}).groups || [];
+
+    /* ---- footer --------------------------------------------------------- */
+    /* The same three columns the static markup had, with this page marked
+       active. Passed explicitly rather than relying on Footer's defaults,
+       because the defaults cannot know which page is current. */
+    const FOOTER_COLUMNS = [
+      {
+        title: 'Product',
+        links: [
+          { label: 'Overview', href: './index.html' },
+          { label: 'Install Guide', href: './install-guide.html' },
+          { label: 'Claude Skills', href: './claude-skills.html' },
+          { label: 'The Suite', href: './the-suite.html' },
+        ],
+      },
+      {
+        title: 'Learn',
+        links: [
+          { label: 'Use Cases', href: './use-cases.html' },
+          { label: 'Scoring', href: './scoring.html' },
+          { label: 'Dashboard', href: './dashboard.html' },
+          { label: 'Roadmap', href: './roadmap.html' },
+        ],
+      },
+      {
+        title: 'Reference',
+        links: [
+          { label: 'Release Notes', href: './release-notes.html', active: true },
+          { label: 'FAQ', href: './faq.html' },
+          { label: 'Tools', href: './tools.html' },
+          { label: 'Marketplace', href: './marketplace.html' },
+          { label: 'Lynn', href: './lynn.html' },
+        ],
+      },
+    ];
+
+    /* ---- changelog ------------------------------------------------------ */
+    /* A handful of bullets carry inline <strong>/<code> from the source.
+       They are authored right here in this file - not user input - so
+       keeping them as markup is both safe and far more legible than nesting
+       createElement three deep for a bold clause. */
+    const rich = (html) => h('span', { dangerouslySetInnerHTML: { __html: html } });
+
+    /* Tones follow what the group means, which is also what lynn-ui
+       documents: blue for new features, emerald for improvements, coral for
+       fixes. NOTE one source drift resolved here - v11.4's "Fixes" list
+       carried `class="changelog-list improvements"`, so it rendered emerald
+       dots under a Fixes heading. It is coral here, like every other Fixes
+       group on the page. */
+    const RELEASES = [
+      {
+        id: 'release-v11-4',
+        version: 'v11.4',
+        date: 'September 2026',
+        isLatest: true,
+        groups: [
+          {
+            label: 'New features',
+            tone: 'blue',
+            items: [
+              rich('New skill - <strong>Emotional Intelligence</strong> (by Megan Fisher): a voice-and-tone guide for leadership writing, feedback, performance reviews, and difficult conversations like layoffs, PIPs, and conflict mediation'),
+            ],
+          },
+          {
+            label: 'Fixes',
+            tone: 'coral',
+            items: [
+              `Fixed the compliance gauge on both Figma and Chrome: the score used to be a single ratio pooled across all instance counts, which let one huge category (Colors, often tens of thousands of paints) fully mask another sitting at 0% compliance but small (e.g. Components). The score is now the average of each audited category's own compliance rate, weighted equally regardless of instance count`,
+              `Removed the "use Figma content as default on figma.com" Settings toggle - the panel already blocks figma.com outright, so Chrome's view of that domain was never a real option to pick`,
+            ],
+          },
+        ],
+      },
+      {
+        id: 'release-v11-3',
+        version: 'v11.3',
+        date: 'September 2026',
+        groups: [
+          {
+            label: 'New features',
+            tone: 'blue',
+            items: [
+              `Browsing a Figma file in Chrome no longer reports on Figma's own interface - Figma draws its canvas in WebGL, so a Figma tab has no design content to read. The panel now says so and offers a one-click deep link that opens the exact file and layer in the Figma desktop app, where the Figma plugin reads the real document`,
+              `New Settings toggle: "Use Figma content as default on figma.com" - with both the plugin and extension connected to Claude, tools that would previously have to ask which one you meant now default to the real Figma file`,
+              `Spec Mode now reads SVG - selecting a chart, gauge, or icon used to return an empty CSS document and a single flat colour. It now reports every painted fill and stroke in the graphic with its stroke width, the geometry attributes for each shape, and the SVG markup itself`,
+            ],
+          },
+          {
+            label: 'Improvements',
+            tone: 'emerald',
+            items: [
+              `The CSS section follows your selection: click a frame and it shows and copies that frame's CSS, not the last thing you looked at`,
+              `One clear copy button in the CSS section instead of three that each copied something slightly different`,
+              `Spec Mode reordered so what you have selected reads top-down: the selection and its details lead, with the eyedropper and saved palettes moved below them`,
+              `Fixed inline links rendering in the browser default blue instead of the design system accent colour, and added a shared text input style so pasted-value fields match the rest of the app`,
+              `Retired the Figma accessibility guide skill - it depended on Figma REST file reads, which are rate limited to roughly 20 per month on a view-only seat`,
+            ],
+          },
+        ],
+      },
+      {
+        id: 'release-v11-2',
+        version: 'v11.2',
+        date: 'August 2026',
+        groups: [
+          {
+            label: 'New features',
+            tone: 'blue',
+            items: [
+              `Components browser now matches Storybook 1:1 - every synced component shows its description, guidelines, variant names, use cases, and Do's and Don'ts, pulled live, with SOL branding normalized to our own naming (e.g. "Tabs", not "SOL Tabs")`,
+              rich('Skills are now found and loaded through <code>list_skills</code> / <code>get_skill</code>, which check a small hosted catalog first - so a skill fix or a brand-new skill reaches every installed connector with <strong>no reinstall</strong>'),
+              rich('New skill - <strong>North Star Fox</strong> (by Janet Gonzales): scores a CXone AI design or JIRA ticket against the 12 NiCE AI design tenets plus Lyra/NiCE Brand adherence'),
+              rich("New skill - <strong>Team Strengths</strong>: look up a teammate's CliftonStrengths, staff a piece of work, check whether a group is balanced, or prep a strengths-based 1:1"),
+              rich("New skill - <strong>EAC Framework Guide</strong>: the EAC Team's PM behavior framework, for calibrations, 1:1 prep, and working out which tenet a situation falls under"),
+              `Anonymous, opt-out usage analytics (Settings - "Share anonymous usage") so we can see which tools and skills actually get used. No node names, file names, page contents, or URLs ever leave your machine`,
+            ],
+          },
+          {
+            label: 'Improvements',
+            tone: 'emerald',
+            items: [
+              `Self-update script for unpacked Chrome installs - one command grabs and applies the latest build`,
+              `Audit tab now tracks replaced rows, so a re-run shows what actually changed`,
+            ],
+          },
+        ],
+      },
+      {
+        id: 'release-v11-1',
+        version: 'v11.1',
+        date: 'August 2026',
+        groups: [
+          {
+            label: 'New features',
+            tone: 'blue',
+            items: [
+              rich('Rebranded to <strong>NiCE Designer Suite</strong>, with a new Supercharge tool/skill catalog and per-domain audit scoring'),
+              rich('First-launch onboarding: a Welcome screen lets you pick <strong>Simple (Lite mode)</strong> or the <strong>Full toolkit</strong>, with live previews for Reduce Animations and Hide Card Descriptions, then a guided spotlight tour of Home, Audit, and Settings'),
+              `Lite mode: a simpler view showing just Frontend Audit and Design System; brand-new installs start here by default. Toggle it anytime in Settings, and replay the welcome tour or any per-tool mini tour (graduation-cap icon on each Home card) whenever you like`,
+              `In-app update check (Chrome): a refresh icon next to the version number in Settings checks for a newer build and links straight to the download, with a "last checked" timestamp`,
+              `"What's New" popup: appears automatically after an update, or open it anytime from the version number in Settings`,
+              rich('One-click Claude Desktop install: a "Click to install Claude Connector.mcpb" file now ships in the download - double-click it instead of hand-editing <code>claude_desktop_config.json</code>'),
+            ],
+          },
+          {
+            label: 'Improvements',
+            tone: 'emerald',
+            items: [
+              `Docs now load in an in-app pane instead of opening a new browser tab (Chrome)`,
+              `Design System and Accessibility audits merged into one pass, plus Storybook component sync`,
+              `New Magic trigger modes, an animated gradient layer, and scrubbable-input detection`,
+              `QA tab redesigned with a gauge/breakdown layout to match Audit`,
+              `Flattened Chrome build and a refreshed Supercharge panel`,
+            ],
+          },
+        ],
+      },
+      {
+        id: 'release-v10',
+        version: 'v10',
+        date: 'June 2026',
+        groups: [
+          {
+            label: 'New features',
+            tone: 'blue',
+            items: [
+              `Complete redesign: new icons, UX, and micro-animations throughout the interface`,
+              `Role-based onboarding: first-launch modal asks for your role; adjusts default panel, skill set, and suggested MCP tools. Re-selectable in settings.`,
+              `Claude / MCP skills (9): apply_token_fix, apply_all_fixes, get_audit_results, get_selected_node, set_selected_node, export_css, get_history, undo_fix, convert_design_system. Callable from Claude chat or any MCP-compatible client.`,
+              `Edit mode: click the pencil in the header to edit webpages with familiar design tools`,
+              `Edit history (undo/redo): full history stack in Chrome extension; each fix is logged, undo/redo per step`,
+              `Export fixes as CSS: Export CSS button outputs all applied fixes with rule count and token names`,
+            ],
+          },
+          {
+            label: 'Improvements',
+            tone: 'emerald',
+            items: [
+              `Semantic color matching: context-aware token lookup considers role (text, background, border, icon)`,
+              `SOL to Lyra conversion: token mapping is context-aware, correctly handles tokens that differ by semantic role`,
+              `Serialized MCP messages: calls queued and processed in order, preventing race conditions`,
+              `Auto-snooze after Apply All: fixed items automatically snoozed; toggleable in settings`,
+            ],
+          },
+          {
+            label: 'Fixes',
+            tone: 'coral',
+            items: [
+              `Custom hex values no longer revert on blur`,
+              `Variable binding preserved when applying fix to a node with existing bound variable`,
+              `Chrome extension detection no longer fails on pages that load in an iframe`,
+            ],
+          },
+        ],
+      },
+      {
+        id: 'release-v9',
+        version: 'v9',
+        date: 'May 2026',
+        groups: [
+          {
+            label: 'New features',
+            tone: 'blue',
+            items: [
+              `Vision/screenshot support for Claude: Claude can pull in a visual to make targeted changes`,
+              `Per-row revert: Apply/Replace leaves a revert link on each row; one click restores prior state including variable bindings`,
+              `Custom value live edit: hex input for colors, px input for font size, spacing, and radius on every row`,
+              `Export applied fixes: returns a CSS document of every live edit in the session, including rule count`,
+              `Per-category audit totals: every audit tile shows bad/total (e.g. 15/147 Colors); design score divides by per-category sum`,
+              `Family-aware text matching: font family + size + weight all considered when flagging wrong-system text`,
+              `10x faster library load: variable imports parallelized 16-wide with 10-second timeout fallback`,
+            ],
+          },
+          {
+            label: 'Fixes',
+            tone: 'coral',
+            items: [
+              `Radius variable binding now correctly binds all four corner properties`,
+              `Open Sans SemiBold loads reliably across weight-naming variants`,
+              `Audit ring stability fixed - no more race condition on pull refresh`,
+              `MCP server v0.5.0 with four new revert_single_* tools and custom value fields on apply tools`,
+            ],
+          },
+        ],
+      },
+      {
+        id: 'release-v8',
+        version: 'v8',
+        date: 'April 2026',
+        groups: [
+          {
+            label: 'New features',
+            tone: 'blue',
+            items: [
+              `MCP connection with Claude: NiCE Designer now includes an MCP server; Figma and Chrome share context for complex AI-driven tasks`,
+              `Standalone popup mode for Chrome: dock the extension on a second monitor via a toggle in settings`,
+              `Chrome extension no longer needs to reset per window when switching pages`,
+            ],
+          },
+        ],
+      },
+    ];
+
+    /* The nav's single action slot, unchanged from the markup it replaces:
+       the disabled Download pill plus its "Coming soon!" tag. `nav-download`
+       / `coming-soon-tag` are theme.css classes, so it keeps its exact look.
+       If a live version label is ever wanted here, `data-latest-label` is
+       the attribute downloads.js looks for - no page on the site sets it on
+       this pill today. */
+    const downloadPill = (key) =>
+      h(
+        'span',
+        { key, className: 'nav-download is-disabled', 'aria-disabled': 'true' },
+        'Download',
+        h('span', { className: 'coming-soon-tag' }, 'Coming soon!')
+      );
+
+    /* ThemeProvider stamps `data-lynn-theme` on its own wrapper div, but the
+       portalled chrome lives outside that div - so mirror the attribute onto
+       <html>, where the same `[data-lynn-theme]` rules in lynn-ui.css apply
+       to the whole document. */
+    function ThemeBridge() {
+      const { theme } = useLynnTheme();
+      useEffect(() => {
+        document.documentElement.setAttribute('data-lynn-theme', theme);
+      }, [theme]);
+      return null;
+    }
+
+    function portal(node, id) {
+      const host = document.getElementById(id);
+      return host ? createPortal(node, host) : null;
+    }
+
+    function App() {
+      const [unlocked, setUnlocked] = useState(() => {
+        try {
+          return sessionStorage.getItem(GATE_KEY) === '1';
+        } catch (e) {
+          return false;
+        }
+      });
+      const [error, setError] = useState(undefined);
+      const [railCollapsed, setRailCollapsed] = useState(() => {
+        try {
+          return localStorage.getItem(RAIL_KEY) === '1';
+        } catch (e) {
+          return false;
+        }
+      });
+
+      useEffect(() => {
+        // The chrome is up; let the page paint (see the gate-pending guard
+        // in <head>).
+        document.documentElement.classList.remove('lynn-gate-pending');
+        // The hover spotlight the page's own polish script used to stamp on
+        // the static changelog cards.
+        document
+          .querySelectorAll('.lynn-changelog-card')
+          .forEach((card) => card.classList.add('tilt-ready'));
+        // The cards used to be static markup, so the browser could honour a
+        // `#release-v9` deep link on load. They render a tick later now, by
+        // which time that jump has already failed - so re-run it.
+        const hash = location.hash.slice(1);
+        if (hash) {
+          const target = document.getElementById(hash);
+          if (target) target.scrollIntoView();
+        }
+      }, []);
+
+      // Cmd+K / Ctrl+K opens the rail and focuses its filter box - the
+      // shortcut buildDocRail() used to own.
+      useEffect(() => {
+        function onKeyDown(event) {
+          if (event.key !== 'k' && event.key !== 'K') return;
+          if (!(event.metaKey || event.ctrlKey)) return;
+          event.preventDefault();
+          setRail(false);
+          const input = document.querySelector('.lynn-doc-rail-search');
+          if (input) {
+            input.focus();
+            input.select();
+          }
+        }
+        document.addEventListener('keydown', onKeyDown);
+        return () => document.removeEventListener('keydown', onKeyDown);
+      }, []);
+
+      const checkCode = (code) => {
+        if (code === GATE_PASSWORD) {
+          try {
+            sessionStorage.setItem(GATE_KEY, '1');
+          } catch (e) { /* unwritable store just means no persistence */ }
+          setError(undefined);
+          setUnlocked(true);
+        } else {
+          setError(GATE_ERROR);
+        }
+      };
+
+      const setRail = (collapsed) => {
+        setRailCollapsed(collapsed);
+        try {
+          localStorage.setItem(RAIL_KEY, collapsed ? '1' : '0');
+        } catch (e) { /* no persistence, still collapses for this visit */ }
+      };
+
+      return h(
+        Fragment,
+        null,
+        h(ThemeBridge, { key: 'theme-bridge' }),
+        h(AccessGate, {
+          key: 'gate',
+          title: 'NiCE Designer Site Login',
+          subtitle:
+            'This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.',
+          onSubmit: checkCode,
+          error,
+          unlocked,
+          ctaText: h(
+            Fragment,
+            null,
+            "Don't have the code?",
+            h('br'),
+            h('strong', null, 'Reach out to Erick Mathews on Teams'),
+            ' to request access.'
+          ),
+          ctaHref: TEAMS_HREF,
+        }),
+        portal(
+          h(Nav, {
+            logoHref: './index.html',
+            cta: h(Fragment, null, [
+              h(ThemeToggle, { key: 'theme', showLabels: false }),
+              downloadPill('download'),
+            ]),
+          }),
+          'lynn-nav-root'
+        ),
+        portal(
+          h(DocRail, {
+            mode: 'pages',
+            pages: railPages,
+            groups: railGroups,
+            activeHref: './' + PAGE,
+            searchable: true,
+            collapsed: railCollapsed,
+            onToggle: setRail,
+          }),
+          'lynn-docrail-root'
+        ),
+        portal(
+          h(
+            Fragment,
+            null,
+            RELEASES.map((release) => h(ChangelogEntry, { ...release, key: release.id }))
+          ),
+          'lynn-changelog-root'
+        ),
+        portal(
+          h(Footer, { columns: FOOTER_COLUMNS }),
+          'lynn-footer-root'
+        )
+      );
+    }
+
+    createRoot(document.getElementById('lynn-app-root')).render(
+      h(ThemeProvider, { defaultTheme: 'lynn' }, h(App))
+    );
   </script>
 
 </body>

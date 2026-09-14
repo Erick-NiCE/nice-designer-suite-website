@@ -1,0 +1,7 @@
+/*!
+ * Lynn typeface: Be Vietnam Pro, weights 300-900, from Google Fonts.
+ * Ported verbatim from the <link> every page of the source site carries.
+ * The build step marks this remote @import external, so it survives into
+ * dist/lynn-ui.css untouched rather than being inlined.
+ */
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap');

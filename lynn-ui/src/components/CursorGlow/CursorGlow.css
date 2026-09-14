@@ -1,0 +1,32 @@
+/*!
+ * CursorGlow - ported from index.html's `#nice-cursor-glow`, including the
+ * 0.08s linear left/top transition that produces the trailing lag. That
+ * `linear` is deliberate and not a violation of the easing rule: it is a
+ * continuous pointer follow, not a discrete state change - an eased curve
+ * would make the glow rubber-band behind fast cursor movement.
+ */
+
+.lynn-cursor-glow {
+  position: fixed;
+  pointer-events: none;
+  width: var(--lynn-cursor-glow-size, 480px);
+  height: var(--lynn-cursor-glow-size, 480px);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(54, 148, 252, 0.055) 0%,
+    rgba(97, 0, 255, 0.025) 40%,
+    transparent 70%
+  );
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  transition: left 0.08s linear, top 0.08s linear, opacity 0.5s var(--lynn-ease);
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-cursor-glow {
+    display: none;
+  }
+}

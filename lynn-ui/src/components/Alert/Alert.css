@@ -1,0 +1,95 @@
+/*!
+ * Alert (callout)
+ * Shape    <- install-guide.html `.note-box` / `.tip-box` / `.warn-box`
+ *             (flex row, 10px gap, icon flex-shrink 0 nudged 1px down,
+ *             10px radius, 14px/16px padding, 0.875rem body at 1.6)
+ * Compact  <- roadmap.html `.callout` (6px radius, 9px/11px padding,
+ *             11px body at 1.55, block `strong` title with a 3px gap)
+ * Tints    <- the union of both files' color sets, one variant per real
+ *             color: `.note-box`/`.callout.blue`, `.tip-box`/`.callout.green`,
+ *             `.callout.amber`, `.callout.orange`, `.callout.purple`.
+ *
+ * Two deliberate corrections to the sources:
+ *   - install-guide's `.warn-box` is amber (`rgba(255,176,32,...)`), an
+ *     accent Lynn does not have. roadmap's `.callout.amber` is *already*
+ *     teal, so `warning` follows that in-repo precedent instead.
+ *   - the sources hard-code `rgba(255,255,255,0.65)` body text. That reads
+ *     as white-on-white in light mode, so the body reads
+ *     `--lynn-color-text-secondary` and only the title keeps its accent.
+ */
+
+.lynn-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: var(--lynn-alert-bg);
+  border: 1px solid var(--lynn-alert-border);
+  font-family: var(--lynn-font-family);
+  font-size: var(--lynn-font-size-body);
+  line-height: 1.6;
+  color: var(--lynn-color-text-secondary);
+}
+
+.lynn-alert-icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.lynn-alert-body {
+  min-width: 0;
+}
+
+.lynn-alert-title {
+  display: block;
+  margin-bottom: 3px;
+  font-weight: var(--lynn-font-weight-bold);
+  color: var(--lynn-alert-title);
+}
+
+/* ---------- compact: roadmap's own tighter scale ---------- */
+.lynn-alert-compact {
+  gap: 8px;
+  padding: 9px 11px;
+  border-radius: var(--lynn-radius-xs);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.lynn-alert-compact .lynn-alert-icon {
+  font-size: 12px;
+}
+
+/* ---------- tints ---------- */
+.lynn-alert-info {
+  --lynn-alert-bg: rgba(54, 148, 252, 0.07);
+  --lynn-alert-border: rgba(54, 148, 252, 0.2);
+  --lynn-alert-title: #6ab4ff;
+}
+
+.lynn-alert-success {
+  --lynn-alert-bg: rgba(0, 226, 160, 0.06);
+  --lynn-alert-border: rgba(0, 226, 160, 0.2);
+  --lynn-alert-title: #00e2a0;
+}
+
+.lynn-alert-warning {
+  --lynn-alert-bg: rgba(54, 234, 208, 0.07);
+  --lynn-alert-border: rgba(54, 234, 208, 0.2);
+  --lynn-alert-title: #36ead0;
+}
+
+.lynn-alert-danger {
+  --lynn-alert-bg: rgba(255, 91, 138, 0.07);
+  --lynn-alert-border: rgba(255, 91, 138, 0.2);
+  --lynn-alert-title: #ff8ab0;
+}
+
+.lynn-alert-purple {
+  --lynn-alert-bg: rgba(97, 0, 255, 0.1);
+  --lynn-alert-border: rgba(97, 0, 255, 0.25);
+  --lynn-alert-title: #b98fff;
+}

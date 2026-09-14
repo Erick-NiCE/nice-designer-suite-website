@@ -1,0 +1,74 @@
+/*!
+ * Sparkle - the default glyph is Tabler's `sparkles` icon, split back into
+ * the three diamonds it's built from (one large, two small) so each can
+ * twinkle - scale + opacity, no rotation - on its own staggered delay. A
+ * single rigid rotate (the very first version, and `nice-effects.css`'s
+ * original `.nice-sparkle` before it) reads as a lopsided half-spin on a
+ * shape with no 4-fold symmetry; three independently pulsing layers is what
+ * actually reads as the glyph transforming rather than just spinning.
+ *
+ * `transform-box: fill-box` scopes each path's `transform-origin: center` to
+ * its own bounding box rather than the shared SVG viewport, so each diamond
+ * pulses around its own center instead of the icon's.
+ */
+
+@keyframes lynn-sparkle-twinkle {
+  0%,
+  100% {
+    transform: scale(0.55);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.lynn-sparkle {
+  display: inline-flex;
+  color: var(--lynn-color-lynn);
+  overflow: visible;
+}
+
+.lynn-sparkle-layer {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: lynn-sparkle-twinkle 2.4s ease-in-out infinite;
+}
+
+.lynn-sparkle-layer-a {
+  animation-delay: 0s;
+}
+
+.lynn-sparkle-layer-b {
+  animation-delay: 0.5s;
+}
+
+.lynn-sparkle-layer-c {
+  animation-delay: 0.9s;
+}
+
+/* Custom `children` get a simple pulse - no per-shape layers to stagger. */
+.lynn-sparkle-custom {
+  display: inline-flex;
+  animation: lynn-sparkle-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes lynn-sparkle-pulse {
+  0%,
+  100% {
+    transform: scale(0.85);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-sparkle-layer,
+  .lynn-sparkle-custom {
+    animation: none;
+  }
+}

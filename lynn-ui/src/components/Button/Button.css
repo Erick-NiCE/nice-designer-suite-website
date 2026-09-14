@@ -1,0 +1,269 @@
+/*!
+ * Button
+ * Primary  <- index.html  `.btn-primary`
+ * Secondary <- wings-2026.html `.btn-secondary`
+ * Ghost    <- the-suite.html `.roadmap-link`
+ *
+ * Transitions are standardized on `--lynn-ease` per the design system's
+ * hard easing rule; the source's `0.2s`/`0.15s` linear-ish transitions on
+ * `.btn-primary` were the inconsistency this package resolves.
+ */
+
+.lynn-btn {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--lynn-font-family);
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: transparent;
+}
+
+.lynn-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
+/* ---------- primary ---------- */
+.lynn-btn-primary {
+  gap: var(--lynn-space-sm);
+  background: var(--lynn-color-blue);
+  color: #fff;
+  font-size: 15px;
+  font-weight: var(--lynn-font-weight-bold);
+  padding: 14px 32px;
+  border-radius: var(--lynn-radius-pill);
+  box-shadow: 0 4px 20px rgba(54, 148, 252, 0.35);
+  transition: background 0.4s var(--lynn-ease),
+    box-shadow 0.4s var(--lynn-ease), transform 0.15s var(--lynn-ease);
+}
+.lynn-btn-primary:hover {
+  background: #4fa3ff;
+  box-shadow: 0 8px 28px rgba(54, 148, 252, 0.5);
+}
+
+/* ---------- secondary ---------- */
+.lynn-btn-secondary {
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--lynn-color-text);
+  border-color: var(--lynn-color-border);
+  font-size: var(--lynn-font-size-body);
+  font-weight: var(--lynn-font-weight-bold);
+  padding: 13px 26px;
+  border-radius: var(--lynn-radius-md);
+  transition: background 0.4s var(--lynn-ease),
+    border-color 0.4s var(--lynn-ease), transform 0.4s var(--lynn-ease),
+    box-shadow 0.4s var(--lynn-ease);
+}
+.lynn-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--lynn-color-border-hover);
+}
+
+/* ---------- ghost ---------- */
+.lynn-btn-ghost {
+  gap: 6px;
+  padding: 0;
+  color: var(--lynn-color-blue);
+  font-size: var(--lynn-font-size-body);
+  font-weight: var(--lynn-font-weight-semibold);
+  border-radius: var(--lynn-radius-none);
+  transition: color 0.4s var(--lynn-ease), gap 0.4s var(--lynn-ease);
+}
+.lynn-btn-ghost:hover {
+  color: var(--lynn-color-text);
+  gap: 10px;
+}
+
+/* ---------- loading ---------- */
+/*
+ * The in-flight sweep: one diagonal band of the *button's own* accent, a
+ * lighter tint of it held translucent so the label stays readable underneath,
+ * travelling left to right on a continuous 1.8s loop.
+ *
+ * Deliberately not `Sheen`: that one is a 45%-wide skewed bar on a 4.2s
+ * ease-in-out cycle that parks off-canvas for 40% of the loop. This is
+ * narrower, unskewed (the diagonal comes from the gradient angle, so the
+ * band's edges stay parallel to the pill), linear, and never rests - which is
+ * what makes it read as "working" rather than as decoration.
+ */
+@keyframes lynn-btn-sweep {
+  0% {
+    transform: translateX(-110%);
+  }
+  100% {
+    transform: translateX(275%);
+  }
+}
+
+.lynn-btn-loading {
+  position: relative;
+  overflow: hidden;
+  cursor: progress;
+  /* A lighter tint of Lynn's action accent (the fill of `primary`, the text
+     of `secondary`/`ghost`), then dropped to 42% alpha - not a white sheen. */
+  --lynn-btn-sweep-tint: color-mix(in srgb, var(--lynn-color-blue) 45%, #ffffff);
+  --lynn-btn-sweep: color-mix(
+    in srgb,
+    var(--lynn-btn-sweep-tint) 42%,
+    transparent
+  );
+}
+
+.lynn-btn-loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 38%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    var(--lynn-btn-sweep) 50%,
+    transparent 100%
+  );
+  transform: translateX(-110%);
+  animation: lynn-btn-sweep 1.8s linear infinite;
+  pointer-events: none;
+}
+
+.lynn-btn-spinner {
+  flex-shrink: 0;
+}
+
+/* ---------- neon glow ---------- */
+/*
+ * `glow` upgrades `primary`'s static `0 4px 20px rgba(54,148,252,0.35)` halo
+ * rather than replacing the look: same accent, same two-shadow stack, but
+ * breathing between a resting and a peak intensity on a 2.6s loop, with a
+ * 1px inset line along the top edge.
+ *
+ * That inset line is the "refraction" half and is what stops this from being
+ * just a brighter shadow: a pill lit from inside would catch its own light on
+ * the upper lip, so the highlight is a white-shifted mix of the accent
+ * (`color-mix` against `#ffffff`, the same tinting move `loading`'s sweep
+ * makes) laid in a single inset pixel - never a full inner ring, which would
+ * read as a second border.
+ *
+ * Continuous ambient loop, so `ease-in-out` here is the documented exception
+ * to Lynn's `--lynn-ease` rule rather than a miss.
+ */
+@keyframes lynn-btn-neon {
+  0%,
+  100% {
+    box-shadow:
+      0 2px 12px var(--lynn-btn-glow-halo),
+      0 6px 22px var(--lynn-btn-glow-halo),
+      inset 0 1px 0 var(--lynn-btn-glow-rim-rest);
+  }
+  50% {
+    box-shadow:
+      0 2px 18px var(--lynn-btn-glow-halo-peak),
+      0 10px 36px var(--lynn-btn-glow-halo-peak),
+      inset 0 1px 0 var(--lynn-btn-glow-rim);
+  }
+}
+
+.lynn-btn-glow {
+  /* One knob: every tint below is mixed from this, so a consumer can
+     re-point the whole treatment at another accent from `className`. */
+  --lynn-btn-glow-accent: var(--lynn-color-blue);
+  --lynn-btn-glow-halo: color-mix(
+    in srgb,
+    var(--lynn-btn-glow-accent) 42%,
+    transparent
+  );
+  --lynn-btn-glow-halo-peak: color-mix(
+    in srgb,
+    var(--lynn-btn-glow-accent) 62%,
+    transparent
+  );
+  /* `-base` exists so the combined glow+loading rule below can re-point
+     `--lynn-btn-glow-rim` at the resting tint without the two properties
+     referencing each other - a custom-property cycle makes both invalid. */
+  --lynn-btn-glow-rim-base: color-mix(
+    in srgb,
+    var(--lynn-btn-glow-accent) 30%,
+    #ffffff
+  );
+  --lynn-btn-glow-rim: var(--lynn-btn-glow-rim-base);
+  --lynn-btn-glow-rim-rest: color-mix(
+    in srgb,
+    var(--lynn-btn-glow-rim-base) 55%,
+    transparent
+  );
+  /* A running animation outranks a plain declaration in the cascade, so this
+     also takes over `primary:hover`'s box-shadow - the halo keeps breathing
+     while hovered instead of jumping to the hover value and back. The
+     background still brightens on hover as it always did. */
+  animation: lynn-btn-neon 2.6s ease-in-out infinite;
+}
+
+/*
+ * Both at once. The sweep is the message while an action is in flight, so
+ * the halo steps back a notch and slows down: two loops at 1.8s and 3.4s
+ * read as one travelling band over a slow breath, where 1.8s against 2.6s
+ * beat against each other. The inset rim drops to the resting tint at both
+ * ends of the loop so the band still crosses a darker surface than itself.
+ */
+.lynn-btn-glow.lynn-btn-loading {
+  --lynn-btn-glow-halo: color-mix(
+    in srgb,
+    var(--lynn-btn-glow-accent) 28%,
+    transparent
+  );
+  --lynn-btn-glow-halo-peak: color-mix(
+    in srgb,
+    var(--lynn-btn-glow-accent) 46%,
+    transparent
+  );
+  --lynn-btn-glow-rim: var(--lynn-btn-glow-rim-rest);
+  animation-duration: 3.4s;
+}
+
+/* ---------- disabled ---------- */
+.lynn-btn-disabled,
+.lynn-btn-disabled:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.4);
+  border-color: var(--lynn-color-border);
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+.lynn-btn-ghost.lynn-btn-disabled,
+.lynn-btn-ghost.lynn-btn-disabled:hover {
+  background: transparent;
+  border-color: transparent;
+  gap: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-btn {
+    transition: none;
+  }
+  .lynn-btn-ghost:hover {
+    gap: 6px;
+  }
+  /* The spinner and the inert state stay; only the travel stops, parked
+     mid-button so the band is still visible as a static highlight. */
+  .lynn-btn-loading::after {
+    animation: none;
+    transform: translateX(80%);
+  }
+  /* The neon treatment is held at its peak rather than removed - it is an
+     emphasis cue, and a static bright halo still carries it. `:hover` is
+     listed because without the running animation `primary:hover`'s own
+     box-shadow would otherwise win it back. */
+  .lynn-btn-glow,
+  .lynn-btn-glow:hover {
+    animation: none;
+    box-shadow:
+      0 2px 18px var(--lynn-btn-glow-halo-peak),
+      0 10px 36px var(--lynn-btn-glow-halo-peak),
+      inset 0 1px 0 var(--lynn-btn-glow-rim);
+  }
+}

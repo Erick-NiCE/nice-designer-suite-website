@@ -1,0 +1,101 @@
+/*!
+ * Toast - ported from the plugin's `.toast` bar (styles.css:1468-1491) and
+ * its `toast-in` entrance. Two departures from the source:
+ *   - the plugin pins the bar to `left: 12px; right: 12px` (it lives in a
+ *     240px panel) while its own keyframe animates `translateX(-50%)`; here
+ *     the bar is genuinely centered, so the keyframe matches the layout.
+ *   - the three kinds resolve to Lynn's real accents (emerald / coral / blue)
+ *     rather than the plugin's `--success` / `--danger` / `--accent`.
+ */
+
+@keyframes lynn-toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.lynn-toast {
+  position: fixed;
+  bottom: var(--lynn-space-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lynn-space-md);
+  width: max-content;
+  max-width: min(560px, calc(100% - 32px));
+  padding: 10px 16px;
+  border-radius: var(--lynn-radius-md);
+  font-family: var(--lynn-font-family);
+  font-size: var(--lynn-font-size-metadata);
+  font-weight: var(--lynn-font-weight-medium);
+  line-height: 1.4;
+  text-align: center;
+  word-break: break-word;
+  z-index: 10000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  background: var(--lynn-toast-bg);
+  color: var(--lynn-toast-fg);
+  animation: lynn-toast-in 0.2s var(--lynn-ease);
+}
+
+.lynn-toast-message {
+  min-width: 0;
+}
+
+.lynn-toast-action {
+  flex-shrink: 0;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: var(--lynn-font-weight-bold);
+  padding: 3px 10px;
+  border-radius: var(--lynn-radius-pill);
+  cursor: pointer;
+  transition: background 0.15s var(--lynn-ease);
+}
+
+.lynn-toast-action:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.lynn-toast-action:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* `emerald` is bright enough that white text on it fails contrast, so the
+   success toast takes Lynn's own dark ground as its ink. */
+.lynn-toast-success {
+  --lynn-toast-bg: var(--lynn-color-emerald);
+  --lynn-toast-fg: #21212b;
+}
+.lynn-toast-error {
+  --lynn-toast-bg: var(--lynn-color-coral);
+  --lynn-toast-fg: #fff;
+}
+.lynn-toast-info {
+  --lynn-toast-bg: var(--lynn-color-blue);
+  --lynn-toast-fg: #fff;
+}
+
+.lynn-toast-success .lynn-toast-action:hover {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-toast {
+    animation: none;
+  }
+  .lynn-toast-action {
+    transition: none;
+  }
+}

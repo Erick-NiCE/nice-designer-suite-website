@@ -1,4 +1,4 @@
-# NiCE Designer Suite — Website
+# NiCE Designer Suite - Website
 
 Marketing and documentation site for **NiCE Designer**, a suite of design-system
 compliance tools (a Figma plugin, a Chrome extension, and a local MCP server that
@@ -21,16 +21,16 @@ Each page maps to a nav tab. Every page shares `theme.css` and `nice-effects.css
 | `scoring.html`       | Scoring       | How the compliance scores are calculated               |
 | `dashboard.html`     | Dashboard     | CXone accessibility audit dashboard (Chart.js gauges)  |
 | `roadmap.html`       | Roadmap       | Product roadmap (access-gated)                         |
-| `tools.html`         | —             | Full tool catalog (not linked from the nav)            |
-| `404.html`           | —             | Branded not-found page; redirects renamed old URLs     |
+| `tools.html`         | -             | Full tool catalog (not linked from the nav)            |
+| `404.html`           | -             | Branded not-found page; redirects renamed old URLs     |
 
 ## Shared files
 
-- **`theme.css`** — single source of truth for the design system: color/font
+- **`theme.css`** - single source of truth for the design system: color/font
   tokens (CSS variables), base reset, and the top navigation. Change a brand
   color or the nav here and it updates every page. Pages keep only their own
   page-specific tokens inline.
-- **`nice-effects.css` / `nice-effects.js`** — reusable, framework-free visual
+- **`nice-effects.css` / `nice-effects.js`** - reusable, framework-free visual
   effects and micro-animations. Portable into the NiCE Designer plugin.
 
 ### Effects API
@@ -51,9 +51,9 @@ requires [Matter.js](https://brm.io/matter-js/) to be loaded on the page.
 
 Also included in the effects layer:
 
-- **Micro-animations** — animated mobile-nav open/close, a page-transition
+- **Micro-animations** - animated mobile-nav open/close, a page-transition
   cross-fade, and nav-tab hover/press feedback.
-- **Brand gradients** — `.nice-gradient-animated`, `.nice-gradient-animated-fast`,
+- **Brand gradients** - `.nice-gradient-animated`, `.nice-gradient-animated-fast`,
   and `.nice-gradient-static` utility classes.
 
 All animations respect `prefers-reduced-motion`.

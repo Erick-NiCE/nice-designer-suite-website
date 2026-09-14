@@ -1,12 +1,12 @@
 /*!
- * NiCE Designer — embed mode
+ * NiCE Designer - embed mode
  * -------------------------------------------------------------
  * Lets any page on this site render inside the NiCE Designer app's
  * own docs pane (the Chrome extension side panel) instead of a
  * separate browser tab.
  *
  * Activated by `?embed=1` on the URL. Pairs with embed.css, which
- * holds every layout override behind an `html.nice-embed` scope —
+ * holds every layout override behind an `html.nice-embed` scope -
  * so a normal browser visit is byte-for-byte unaffected.
  *
  * This file is loaded BLOCKING from <head> (not deferred) on purpose:
@@ -30,7 +30,7 @@
 
   // ── Activation ────────────────────────────────────────────────────────────
   // Explicit param only. We deliberately do NOT auto-detect "am I in an
-  // iframe" — the site may legitimately be framed elsewhere, and embed mode
+  // iframe" - the site may legitimately be framed elsewhere, and embed mode
   // strips the nav and the access gate.
   var params;
   try {
@@ -43,8 +43,8 @@
   // ── Doc rail default state ────────────────────────────────────────────────
   // In the pane the rail renders as a bottom drawer (see embed.css) and must
   // start closed, or it covers the content you came to read. nice-effects.js
-  // reads its own RAIL_KEY at defer time — i.e. before DOMContentLoaded and
-  // before any handler we could register — so the value has to be in place
+  // reads its own RAIL_KEY at defer time - i.e. before DOMContentLoaded and
+  // before any handler we could register - so the value has to be in place
   // right now, synchronously.
   //
   // localStorage is shared with normal browser visits, so we stash whatever
@@ -102,9 +102,9 @@
   }
 
   // Sorts an href into one of three buckets:
-  //   'skip'      in-page anchor or non-navigating scheme — leave alone
-  //   'internal'  same-origin navigation — keep embed mode sticky
-  //   'external'  another origin — push out to a real browser tab
+  //   'skip'      in-page anchor or non-navigating scheme - leave alone
+  //   'internal'  same-origin navigation - keep embed mode sticky
+  //   'external'  another origin - push out to a real browser tab
   function classify(href) {
     if (!href) return { kind: 'skip' };
     if (/^(#|mailto:|tel:|javascript:)/i.test(href)) return { kind: 'skip' };
@@ -203,7 +203,7 @@
     var data = event.data;
     if (!data || data.target !== POST_SOURCE) return;
     if (data.type === 'navigate' && typeof data.page === 'string') {
-      // Same-origin page names only — never a caller-supplied absolute URL.
+      // Same-origin page names only - never a caller-supplied absolute URL.
       if (!/^[a-z0-9._-]+\.html(#[a-z0-9._-]+)?$/i.test(data.page)) return;
       var next = withEmbed('./' + data.page);
       if (next) global.location.assign(next);

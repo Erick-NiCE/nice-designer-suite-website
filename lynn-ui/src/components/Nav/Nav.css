@@ -1,0 +1,75 @@
+/*!
+ * Nav - ported from theme.css `.site-nav` / `.nav-logo` / `.logo-*`
+ * and the `.nav-scroll-hidden` transform driven by nice-effects.js's
+ * initScrollHide().
+ *
+ * The source's raw rgba fills are re-expressed as `color-mix` against a
+ * theme token, with the source's literal kept above it as the fallback
+ * (see DocRail.css for the fuller explanation of this pattern). In Lynn's
+ * own mode the two are the same color; in light mode the literals would
+ * leave a dark bar with dark text.
+ */
+
+.lynn-nav {
+  height: var(--lynn-nav-height);
+  background: rgba(33, 33, 43, 0.92);
+  background: color-mix(in srgb, var(--lynn-color-surface) 92%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--lynn-color-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lynn-space-lg);
+  padding: 0 var(--lynn-space-2xl);
+  font-family: var(--lynn-font-family);
+  transition: transform 0.3s var(--lynn-ease), opacity 0.3s var(--lynn-ease);
+}
+
+.lynn-nav-hidden {
+  transform: translateY(-100%);
+}
+
+.lynn-nav-logo {
+  text-decoration: none;
+  font-weight: var(--lynn-font-weight-extrabold);
+  font-size: 18px;
+  letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  height: var(--lynn-nav-height);
+}
+.lynn-nav-logo-nice {
+  color: var(--lynn-color-blue);
+}
+.lynn-nav-logo-designer,
+.lynn-nav-logo-suite {
+  color: var(--lynn-color-text);
+}
+
+.lynn-nav-cta {
+  display: flex;
+  align-items: center;
+  gap: var(--lynn-space-sm);
+}
+
+@media (max-width: 768px) {
+  .lynn-nav {
+    padding: 0 20px;
+  }
+}
+@media (max-width: 480px) {
+  .lynn-nav-logo-suite {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-nav {
+    transition: none;
+  }
+}

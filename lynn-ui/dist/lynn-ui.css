@@ -1,0 +1,5347 @@
+@import "https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap";
+
+/* src/tokens/tokens.css */
+:root {
+  --lynn-color-bg: #21212b;
+  --lynn-color-surface: #2a2a36;
+  --lynn-color-card: #2f2f3d;
+  --lynn-color-border: rgba(255, 255, 255, 0.08);
+  --lynn-color-border-hover: rgba(255, 255, 255, 0.13);
+  --lynn-color-border-subtle: rgba(255, 255, 255, 0.05);
+  --lynn-color-border-glow: rgba(54, 148, 252, 0.35);
+  --lynn-color-text: #ffffff;
+  --lynn-color-text-secondary: rgba(255, 255, 255, 0.58);
+  --lynn-color-text-muted: rgba(255, 255, 255, 0.3);
+  --lynn-color-blue: #3694fc;
+  --lynn-color-electric-blue: #025afb;
+  --lynn-color-indigo: #6100ff;
+  --lynn-color-emerald: #00e2a0;
+  --lynn-color-teal: #36ead0;
+  --lynn-color-coral: #ff5b8a;
+  --lynn-color-lynn: #b98fff;
+  --lynn-font-family:
+    "Be Vietnam Pro",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  --lynn-font-family-mono:
+    "SF Mono",
+    "Fira Code",
+    ui-monospace,
+    monospace;
+  --lynn-font-size-hero-title: clamp(52px, 8vw, 100px);
+  --lynn-font-size-section-title: clamp(32px, 5vw, 56px);
+  --lynn-font-size-card-title: 17px;
+  --lynn-font-size-body: 14px;
+  --lynn-font-size-section-label: 12px;
+  --lynn-font-size-nav-link: 14px;
+  --lynn-font-size-metadata: 12px;
+  --lynn-font-size-code: 12px;
+  --lynn-font-weight-regular: 400;
+  --lynn-font-weight-medium: 500;
+  --lynn-font-weight-semibold: 600;
+  --lynn-font-weight-bold: 700;
+  --lynn-font-weight-extrabold: 800;
+  --lynn-font-weight-black: 900;
+  --lynn-letter-spacing-hero-title: -2px;
+  --lynn-letter-spacing-section-title: -1px;
+  --lynn-letter-spacing-card-title: -0.2px;
+  --lynn-letter-spacing-section-label: 2px;
+  --lynn-line-height-body: 1.65;
+  --lynn-line-height-tight: 1;
+  --lynn-space-none: 0px;
+  --lynn-space-xs: 4px;
+  --lynn-space-sm: 8px;
+  --lynn-space-md: 12px;
+  --lynn-space-lg: 16px;
+  --lynn-space-xl: 24px;
+  --lynn-space-2xl: 32px;
+  --lynn-space-3xl: 48px;
+  --lynn-space-4xl: 64px;
+  --lynn-space-5xl: 80px;
+  --lynn-space-6xl: 96px;
+  --lynn-radius-none: 0px;
+  --lynn-radius-xs: 4px;
+  --lynn-radius-sm: 8px;
+  --lynn-radius-md: 12px;
+  --lynn-radius-lg: 16px;
+  --lynn-radius-xl: 24px;
+  --lynn-radius-pill: 100px;
+  --lynn-shadow-raised: 6px 6px 16px rgba(20, 20, 27, 0.72), -6px -6px 16px rgba(66, 66, 85, 0.34);
+  --lynn-shadow-pressed: inset 6px 6px 14px rgba(20, 20, 27, 0.72), inset -6px -6px 14px rgba(66, 66, 85, 0.34);
+  --lynn-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --lynn-nav-height: 60px;
+}
+[data-lynn-theme=lynn] {
+  --lynn-color-bg: #21212b;
+  --lynn-color-surface: #2a2a36;
+  --lynn-color-card: #2f2f3d;
+  --lynn-color-border: rgba(255, 255, 255, 0.08);
+  --lynn-color-border-hover: rgba(255, 255, 255, 0.13);
+  --lynn-color-border-subtle: rgba(255, 255, 255, 0.05);
+  --lynn-color-text: #ffffff;
+  --lynn-color-text-secondary: rgba(255, 255, 255, 0.58);
+  --lynn-color-text-muted: rgba(255, 255, 255, 0.3);
+  --lynn-shadow-raised: 6px 6px 16px rgba(20, 20, 27, 0.72), -6px -6px 16px rgba(66, 66, 85, 0.34);
+  --lynn-shadow-pressed: inset 6px 6px 14px rgba(20, 20, 27, 0.72), inset -6px -6px 14px rgba(66, 66, 85, 0.34);
+}
+[data-lynn-theme=light] {
+  --lynn-color-bg: #f5f6f8;
+  --lynn-color-surface: #ffffff;
+  --lynn-color-card: #f0f1f3;
+  --lynn-color-border: #d0d5db;
+  --lynn-color-border-hover: #b4bcc6;
+  --lynn-color-border-subtle: #e2e5e9;
+  --lynn-color-text: #1a1d21;
+  --lynn-color-text-secondary: #3d4550;
+  --lynn-color-text-muted: #6b7280;
+  --lynn-shadow-raised: 7px 7px 16px rgba(168, 174, 185, 0.5), -7px -7px 16px rgba(255, 255, 255, 0.9);
+  --lynn-shadow-pressed: inset 7px 7px 14px rgba(168, 174, 185, 0.5), inset -7px -7px 14px rgba(255, 255, 255, 0.9);
+}
+[data-lynn-theme=dark] {
+  --lynn-color-bg: #1e1e1e;
+  --lynn-color-surface: #2a2a2a;
+  --lynn-color-card: #333333;
+  --lynn-color-border: #444444;
+  --lynn-color-border-hover: #555555;
+  --lynn-color-border-subtle: #3a3a3a;
+  --lynn-color-text: #e8e8e8;
+  --lynn-color-text-secondary: #999999;
+  --lynn-color-text-muted: #666666;
+  --lynn-shadow-raised: 6px 6px 16px rgba(19, 19, 19, 0.74), -6px -6px 16px rgba(74, 74, 74, 0.38);
+  --lynn-shadow-pressed: inset 6px 6px 14px rgba(19, 19, 19, 0.74), inset -6px -6px 14px rgba(74, 74, 74, 0.38);
+}
+
+/* src/styles/fonts.css */
+
+/* src/styles/base.css */
+.lynn-root {
+  font-family: var(--lynn-font-family);
+  background: var(--lynn-color-bg);
+  color: var(--lynn-color-text);
+  overflow-x: hidden;
+}
+[class^=lynn-],
+[class*=" lynn-"],
+[class^=lynn-]::before,
+[class^=lynn-]::after,
+[class*=" lynn-"]::before,
+[class*=" lynn-"]::after {
+  box-sizing: border-box;
+}
+.lynn-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* src/components/AccessGate/AccessGate.css */
+.lynn-access-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--lynn-color-bg);
+  font-family: var(--lynn-font-family);
+}
+.lynn-access-gate-unlocked {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.lynn-access-gate-card {
+  width: 100%;
+  max-width: 420px;
+  margin: var(--lynn-space-xl);
+  padding: 48px 40px 40px;
+  background: var(--lynn-color-card);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-xl);
+  text-align: center;
+}
+.lynn-access-gate-lock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto var(--lynn-space-xl);
+  border-radius: 18px;
+  background:
+    linear-gradient(
+      135deg,
+      var(--lynn-color-indigo),
+      var(--lynn-color-lynn));
+  box-shadow: 0 8px 32px rgba(97, 0, 255, 0.35);
+  color: #fff;
+}
+.lynn-access-gate-title {
+  margin-bottom: var(--lynn-space-sm);
+  font-size: 22px;
+  font-weight: var(--lynn-font-weight-extrabold);
+  letter-spacing: -0.3px;
+  color: var(--lynn-color-text);
+}
+.lynn-access-gate-subtitle {
+  margin-bottom: var(--lynn-space-2xl);
+  font-size: var(--lynn-font-size-body);
+  line-height: 1.6;
+  color: var(--lynn-color-text-secondary);
+}
+.lynn-access-gate-input-wrap {
+  position: relative;
+  margin-bottom: var(--lynn-space-md);
+}
+.lynn-access-gate-input {
+  width: 100%;
+  padding: 14px 18px;
+  background: var(--lynn-color-surface);
+  border: 1px solid var(--lynn-color-border-hover);
+  border-radius: var(--lynn-radius-md);
+  color: var(--lynn-color-text);
+  font-family: inherit;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s var(--lynn-ease);
+}
+.lynn-access-gate-input::placeholder {
+  color: var(--lynn-color-text-muted);
+  letter-spacing: normal;
+}
+.lynn-access-gate-input:focus {
+  border-color: var(--lynn-color-indigo);
+}
+.lynn-access-gate-input-error {
+  border-color: var(--lynn-color-coral);
+}
+@keyframes lynn-access-gate-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+}
+.lynn-access-gate-input-shake {
+  animation: lynn-access-gate-shake 0.35s var(--lynn-ease);
+}
+.lynn-access-gate-error {
+  min-height: 18px;
+  margin-bottom: var(--lynn-space-md);
+  font-size: var(--lynn-font-size-metadata);
+  color: var(--lynn-color-coral);
+  transition: opacity 0.2s var(--lynn-ease);
+}
+.lynn-access-gate-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lynn-space-sm);
+  width: 100%;
+  margin-bottom: 28px;
+  padding: 14px;
+  border: none;
+  border-radius: var(--lynn-radius-md);
+  background:
+    linear-gradient(
+      135deg,
+      var(--lynn-color-indigo),
+      var(--lynn-color-lynn));
+  color: #fff;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: var(--lynn-font-weight-bold);
+  cursor: pointer;
+  transition: opacity 0.2s var(--lynn-ease), transform 0.15s var(--lynn-ease);
+}
+.lynn-access-gate-submit:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+.lynn-access-gate-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+.lynn-access-gate-submit:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+.lynn-access-gate-divider {
+  height: 1px;
+  margin-bottom: var(--lynn-space-xl);
+  background: var(--lynn-color-border);
+}
+.lynn-access-gate-cta {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--lynn-color-text-secondary);
+}
+.lynn-access-gate-cta strong {
+  color: var(--lynn-color-text);
+  font-weight: var(--lynn-font-weight-semibold);
+}
+.lynn-access-gate-cta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: var(--lynn-space-md);
+  padding: 9px 18px;
+  background: rgba(97, 0, 255, 0.12);
+  border: 1px solid rgba(97, 0, 255, 0.3);
+  border-radius: var(--lynn-radius-pill);
+  color: var(--lynn-color-lynn);
+  font-family: inherit;
+  font-size: var(--lynn-font-size-metadata);
+  font-weight: var(--lynn-font-weight-semibold);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s var(--lynn-ease), border-color 0.2s var(--lynn-ease);
+}
+.lynn-access-gate-cta-link:hover {
+  background: rgba(97, 0, 255, 0.22);
+  border-color: rgba(185, 143, 255, 0.5);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-access-gate-unlocked,
+  .lynn-access-gate-input,
+  .lynn-access-gate-error,
+  .lynn-access-gate-submit,
+  .lynn-access-gate-cta-link {
+    transition: none;
+  }
+  .lynn-access-gate-submit:hover:not(:disabled) {
+    transform: none;
+  }
+  .lynn-access-gate-input-shake {
+    animation: none;
+    background: rgba(255, 91, 138, 0.12);
+  }
+}
+
+/* src/components/Accordion/Accordion.css */
+.lynn-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lynn-space-md);
+  font-family: var(--lynn-font-family);
+}
+.lynn-accordion-item {
+  background: var(--lynn-color-card);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-lg);
+  overflow: hidden;
+  transition: border-color 0.2s var(--lynn-ease);
+}
+.lynn-accordion-item-open {
+  border-color: rgba(54, 148, 252, 0.3);
+}
+.lynn-accordion-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 20px 24px;
+}
+.lynn-accordion-head > .lynn-accordion-toggle {
+  flex: 1;
+  min-width: 0;
+  justify-content: flex-start;
+  text-align: left;
+  font-size: var(--lynn-font-size-card-title);
+  font-weight: var(--lynn-font-weight-bold);
+  color: var(--lynn-color-text);
+}
+.lynn-accordion-chevron {
+  display: inline-block;
+  font-size: 9px;
+  color: var(--lynn-color-blue);
+  transition: transform 120ms ease;
+}
+.lynn-accordion-chevron-open {
+  transform: rotate(90deg);
+}
+.lynn-accordion-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--lynn-space-xs);
+  margin-left: auto;
+}
+.lynn-accordion-panel {
+  padding: var(--lynn-space-lg) 24px 20px;
+  border-top: 1px solid var(--lynn-color-border);
+  font-size: var(--lynn-font-size-body);
+  line-height: 1.75;
+  color: var(--lynn-color-text-secondary);
+}
+.lynn-accordion-panel[hidden] {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-accordion-item,
+  .lynn-accordion-chevron {
+    transition: none;
+  }
+}
+
+/* src/components/Alert/Alert.css */
+.lynn-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: var(--lynn-alert-bg);
+  border: 1px solid var(--lynn-alert-border);
+  font-family: var(--lynn-font-family);
+  font-size: var(--lynn-font-size-body);
+  line-height: 1.6;
+  color: var(--lynn-color-text-secondary);
+}
+.lynn-alert-icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+  font-size: 16px;
+  line-height: 1;
+}
+.lynn-alert-body {
+  min-width: 0;
+}
+.lynn-alert-title {
+  display: block;
+  margin-bottom: 3px;
+  font-weight: var(--lynn-font-weight-bold);
+  color: var(--lynn-alert-title);
+}
+.lynn-alert-compact {
+  gap: 8px;
+  padding: 9px 11px;
+  border-radius: var(--lynn-radius-xs);
+  font-size: 11px;
+  line-height: 1.55;
+}
+.lynn-alert-compact .lynn-alert-icon {
+  font-size: 12px;
+}
+.lynn-alert-info {
+  --lynn-alert-bg: rgba(54, 148, 252, 0.07);
+  --lynn-alert-border: rgba(54, 148, 252, 0.2);
+  --lynn-alert-title: #6ab4ff;
+}
+.lynn-alert-success {
+  --lynn-alert-bg: rgba(0, 226, 160, 0.06);
+  --lynn-alert-border: rgba(0, 226, 160, 0.2);
+  --lynn-alert-title: #00e2a0;
+}
+.lynn-alert-warning {
+  --lynn-alert-bg: rgba(54, 234, 208, 0.07);
+  --lynn-alert-border: rgba(54, 234, 208, 0.2);
+  --lynn-alert-title: #36ead0;
+}
+.lynn-alert-danger {
+  --lynn-alert-bg: rgba(255, 91, 138, 0.07);
+  --lynn-alert-border: rgba(255, 91, 138, 0.2);
+  --lynn-alert-title: #ff8ab0;
+}
+.lynn-alert-purple {
+  --lynn-alert-bg: rgba(97, 0, 255, 0.1);
+  --lynn-alert-border: rgba(97, 0, 255, 0.25);
+  --lynn-alert-title: #b98fff;
+}
+
+/* src/components/Avatar/Avatar.css */
+.lynn-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--lynn-color-card);
+  font-family: var(--lynn-font-family);
+  color: var(--lynn-color-text-secondary);
+  text-transform: uppercase;
+  user-select: none;
+}
+.lynn-avatar-xs {
+  width: 14px;
+  height: 14px;
+  font-size: 7px;
+  font-weight: var(--lynn-font-weight-bold);
+}
+.lynn-avatar-sm {
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--lynn-color-border);
+  font-size: 8px;
+  font-weight: var(--lynn-font-weight-bold);
+}
+.lynn-avatar-lg {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--lynn-color-border);
+  font-size: 11px;
+  font-weight: var(--lynn-font-weight-extrabold);
+}
+.lynn-avatar-gradient {
+  background:
+    linear-gradient(
+      135deg,
+      var(--lynn-color-blue),
+      var(--lynn-color-indigo));
+  color: #fff;
+}
+
+/* src/components/Badge/Badge.css */
+.lynn-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lynn-space-xs);
+  font-family: var(--lynn-font-family);
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-bold);
+  padding: 3px 8px;
+  border-radius: var(--lynn-radius-pill);
+  border: 1px solid transparent;
+  white-space: nowrap;
+  flex-shrink: 0;
+  background: var(--lynn-badge-bg);
+  color: var(--lynn-badge-fg);
+}
+.lynn-badge-icon {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+.lynn-badge-bordered {
+  border-color: var(--lynn-badge-border);
+}
+.lynn-badge-tone-blue {
+  --lynn-badge-bg: rgba(54, 148, 252, 0.14);
+  --lynn-badge-fg: #3694fc;
+  --lynn-badge-border: rgba(54, 148, 252, 0.2);
+}
+.lynn-badge-tone-electric-blue {
+  --lynn-badge-bg: rgba(2, 90, 251, 0.14);
+  --lynn-badge-fg: #025afb;
+  --lynn-badge-border: rgba(2, 90, 251, 0.2);
+}
+.lynn-badge-tone-indigo {
+  --lynn-badge-bg: rgba(97, 0, 255, 0.14);
+  --lynn-badge-fg: #6100ff;
+  --lynn-badge-border: rgba(97, 0, 255, 0.2);
+}
+.lynn-badge-tone-emerald {
+  --lynn-badge-bg: rgba(0, 226, 160, 0.14);
+  --lynn-badge-fg: #00e2a0;
+  --lynn-badge-border: rgba(0, 226, 160, 0.2);
+}
+.lynn-badge-tone-teal {
+  --lynn-badge-bg: rgba(54, 234, 208, 0.14);
+  --lynn-badge-fg: #36ead0;
+  --lynn-badge-border: rgba(54, 234, 208, 0.2);
+}
+.lynn-badge-tone-coral {
+  --lynn-badge-bg: rgba(255, 91, 138, 0.14);
+  --lynn-badge-fg: #ff5b8a;
+  --lynn-badge-border: rgba(255, 91, 138, 0.2);
+}
+.lynn-badge-tone-lynn {
+  --lynn-badge-bg: rgba(185, 143, 255, 0.14);
+  --lynn-badge-fg: #b98fff;
+  --lynn-badge-border: rgba(185, 143, 255, 0.2);
+}
+.lynn-badge[class*=lynn-badge-status-] {
+  font-size: 9px;
+  font-weight: var(--lynn-font-weight-extrabold);
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+.lynn-badge-status-active {
+  --lynn-badge-bg: rgba(54, 148, 252, 0.2);
+  --lynn-badge-fg: #6ab4ff;
+}
+.lynn-badge-status-shipped {
+  --lynn-badge-bg: rgba(0, 226, 160, 0.15);
+  --lynn-badge-fg: #00e2a0;
+}
+.lynn-badge-status-next {
+  --lynn-badge-bg: rgba(0, 226, 160, 0.12);
+  --lynn-badge-fg: #00e2a0;
+}
+.lynn-badge-status-planned {
+  --lynn-badge-bg: rgba(255, 255, 255, 0.06);
+  --lynn-badge-fg: rgba(255, 255, 255, 0.3);
+}
+.lynn-badge-status-new {
+  --lynn-badge-bg: rgba(97, 0, 255, 0.2);
+  --lynn-badge-fg: #b98fff;
+}
+.lynn-badge-status-dropped {
+  --lynn-badge-bg: rgba(255, 91, 138, 0.15);
+  --lynn-badge-fg: #ff8ab0;
+}
+.lynn-badge-status-great {
+  --lynn-badge-bg: rgba(0, 226, 160, 0.2);
+  --lynn-badge-fg: #00e2a0;
+}
+.lynn-badge-status-good {
+  --lynn-badge-bg: rgba(54, 234, 208, 0.15);
+  --lynn-badge-fg: #36ead0;
+}
+.lynn-badge-status-ok {
+  --lynn-badge-bg: rgba(54, 148, 252, 0.15);
+  --lynn-badge-fg: #6ab4ff;
+}
+.lynn-badge-status-bad {
+  --lynn-badge-bg: rgba(255, 91, 138, 0.15);
+  --lynn-badge-fg: #ff8ab0;
+}
+.lynn-badge-status-beta {
+  --lynn-badge-bg: rgba(97, 0, 255, 0.2);
+  --lynn-badge-fg: #b98fff;
+}
+.lynn-badge-status-recommended {
+  --lynn-badge-bg: rgba(0, 226, 160, 0.12);
+  --lynn-badge-fg: #00e2a0;
+}
+.lynn-badge-status-optional {
+  --lynn-badge-bg: var(--lynn-color-card);
+  --lynn-badge-fg: var(--lynn-color-text-muted);
+}
+
+/* src/components/Button/Button.css */
+.lynn-btn {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--lynn-font-family);
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: transparent;
+}
+.lynn-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+.lynn-btn-primary {
+  gap: var(--lynn-space-sm);
+  background: var(--lynn-color-blue);
+  color: #fff;
+  font-size: 15px;
+  font-weight: var(--lynn-font-weight-bold);
+  padding: 14px 32px;
+  border-radius: var(--lynn-radius-pill);
+  box-shadow: 0 4px 20px rgba(54, 148, 252, 0.35);
+  transition:
+    background 0.4s var(--lynn-ease),
+    box-shadow 0.4s var(--lynn-ease),
+    transform 0.15s var(--lynn-ease);
+}
+.lynn-btn-primary:hover {
+  background: #4fa3ff;
+  box-shadow: 0 8px 28px rgba(54, 148, 252, 0.5);
+}
+.lynn-btn-secondary {
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--lynn-color-text);
+  border-color: var(--lynn-color-border);
+  font-size: var(--lynn-font-size-body);
+  font-weight: var(--lynn-font-weight-bold);
+  padding: 13px 26px;
+  border-radius: var(--lynn-radius-md);
+  transition:
+    background 0.4s var(--lynn-ease),
+    border-color 0.4s var(--lynn-ease),
+    transform 0.4s var(--lynn-ease),
+    box-shadow 0.4s var(--lynn-ease);
+}
+.lynn-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--lynn-color-border-hover);
+}
+.lynn-btn-ghost {
+  gap: 6px;
+  padding: 0;
+  color: var(--lynn-color-blue);
+  font-size: var(--lynn-font-size-body);
+  font-weight: var(--lynn-font-weight-semibold);
+  border-radius: var(--lynn-radius-none);
+  transition: color 0.4s var(--lynn-ease), gap 0.4s var(--lynn-ease);
+}
+.lynn-btn-ghost:hover {
+  color: var(--lynn-color-text);
+  gap: 10px;
+}
+@keyframes lynn-btn-sweep {
+  0% {
+    transform: translateX(-110%);
+  }
+  100% {
+    transform: translateX(275%);
+  }
+}
+.lynn-btn-loading {
+  position: relative;
+  overflow: hidden;
+  cursor: progress;
+  --lynn-btn-sweep-tint: color-mix(in srgb, var(--lynn-color-blue) 45%, #ffffff);
+  --lynn-btn-sweep: color-mix( in srgb, var(--lynn-btn-sweep-tint) 42%, transparent );
+}
+.lynn-btn-loading::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 38%;
+  background:
+    linear-gradient(
+      100deg,
+      transparent 0%,
+      var(--lynn-btn-sweep) 50%,
+      transparent 100%);
+  transform: translateX(-110%);
+  animation: lynn-btn-sweep 1.8s linear infinite;
+  pointer-events: none;
+}
+.lynn-btn-spinner {
+  flex-shrink: 0;
+}
+@keyframes lynn-btn-neon {
+  0%, 100% {
+    box-shadow:
+      0 2px 12px var(--lynn-btn-glow-halo),
+      0 6px 22px var(--lynn-btn-glow-halo),
+      inset 0 1px 0 var(--lynn-btn-glow-rim-rest);
+  }
+  50% {
+    box-shadow:
+      0 2px 18px var(--lynn-btn-glow-halo-peak),
+      0 10px 36px var(--lynn-btn-glow-halo-peak),
+      inset 0 1px 0 var(--lynn-btn-glow-rim);
+  }
+}
+.lynn-btn-glow {
+  --lynn-btn-glow-accent: var(--lynn-color-blue);
+  --lynn-btn-glow-halo: color-mix( in srgb, var(--lynn-btn-glow-accent) 42%, transparent );
+  --lynn-btn-glow-halo-peak: color-mix( in srgb, var(--lynn-btn-glow-accent) 62%, transparent );
+  --lynn-btn-glow-rim-base: color-mix( in srgb, var(--lynn-btn-glow-accent) 30%, #ffffff );
+  --lynn-btn-glow-rim: var(--lynn-btn-glow-rim-base);
+  --lynn-btn-glow-rim-rest: color-mix( in srgb, var(--lynn-btn-glow-rim-base) 55%, transparent );
+  animation: lynn-btn-neon 2.6s ease-in-out infinite;
+}
+.lynn-btn-glow.lynn-btn-loading {
+  --lynn-btn-glow-halo: color-mix( in srgb, var(--lynn-btn-glow-accent) 28%, transparent );
+  --lynn-btn-glow-halo-peak: color-mix( in srgb, var(--lynn-btn-glow-accent) 46%, transparent );
+  --lynn-btn-glow-rim: var(--lynn-btn-glow-rim-rest);
+  animation-duration: 3.4s;
+}
+.lynn-btn-disabled,
+.lynn-btn-disabled:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.4);
+  border-color: var(--lynn-color-border);
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+.lynn-btn-ghost.lynn-btn-disabled,
+.lynn-btn-ghost.lynn-btn-disabled:hover {
+  background: transparent;
+  border-color: transparent;
+  gap: 6px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-btn {
+    transition: none;
+  }
+  .lynn-btn-ghost:hover {
+    gap: 6px;
+  }
+  .lynn-btn-loading::after {
+    animation: none;
+    transform: translateX(80%);
+  }
+  .lynn-btn-glow,
+  .lynn-btn-glow:hover {
+    animation: none;
+    box-shadow:
+      0 2px 18px var(--lynn-btn-glow-halo-peak),
+      0 10px 36px var(--lynn-btn-glow-halo-peak),
+      inset 0 1px 0 var(--lynn-btn-glow-rim);
+  }
+}
+
+/* src/components/Card/Card.css */
+.lynn-card {
+  position: relative;
+  background: var(--lynn-color-card);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-lg);
+  padding: var(--lynn-space-xl);
+  color: var(--lynn-color-text);
+  overflow: hidden;
+  transition:
+    transform 0.4s var(--lynn-ease),
+    border-color 0.4s var(--lynn-ease),
+    box-shadow 0.4s var(--lynn-ease),
+    background 0.4s var(--lynn-ease);
+}
+.lynn-card:hover {
+  border-color: var(--lynn-color-border-hover);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.32);
+}
+.lynn-card-glass {
+  background: rgba(47, 47, 61, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+}
+@keyframes lynn-card-liquid-drift {
+  0%, 100% {
+    background-position: 14% 20%, 84% 76%;
+  }
+  50% {
+    background-position: 38% 52%, 54% 30%;
+  }
+}
+.lynn-card-glass.lynn-card-liquid {
+  background-image:
+    radial-gradient(
+      closest-side,
+      rgba(255, 255, 255, 0.16) 0%,
+      rgba(255, 255, 255, 0.06) 45%,
+      rgba(255, 255, 255, 0) 100%),
+    radial-gradient(
+      closest-side,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0) 100%);
+  background-color: rgba(47, 47, 61, 0.92);
+  background-repeat: no-repeat;
+  background-size: 150% 130%, 120% 110%;
+  background-position: 14% 20%, 84% 76%;
+  animation: lynn-card-liquid-drift 11s ease-in-out infinite;
+}
+.lynn-card-accent::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--lynn-card-accent-fill);
+  opacity: 0.85;
+  z-index: 2;
+}
+.lynn-card-accent-blue {
+  --lynn-card-accent-fill:
+    linear-gradient(
+      90deg,
+      #3694fc,
+      #025afb);
+}
+.lynn-card-accent-indigo {
+  --lynn-card-accent-fill:
+    linear-gradient(
+      90deg,
+      #6100ff,
+      #b98fff);
+}
+.lynn-card-accent-teal {
+  --lynn-card-accent-fill:
+    linear-gradient(
+      90deg,
+      #36ead0,
+      #00e2a0);
+}
+.lynn-card-accent-electric-blue {
+  --lynn-card-accent-fill: var(--lynn-color-electric-blue);
+}
+.lynn-card-accent-emerald {
+  --lynn-card-accent-fill: var(--lynn-color-emerald);
+}
+.lynn-card-accent-coral {
+  --lynn-card-accent-fill: var(--lynn-color-coral);
+}
+.lynn-card-accent-lynn {
+  --lynn-card-accent-fill: var(--lynn-color-lynn);
+}
+.lynn-card-interactive {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.lynn-card-interactive::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(
+      220px circle at var(--lynn-mx, 50%) var(--lynn-my, 50%),
+      rgba(255, 255, 255, 0.09) 0%,
+      transparent 70%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s var(--lynn-ease);
+  z-index: 1;
+}
+.lynn-card-interactive:hover::after {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-card {
+    transition: none;
+  }
+  .lynn-card-interactive::after,
+  .lynn-card-interactive:hover::after {
+    display: none;
+  }
+  .lynn-card-glass.lynn-card-liquid {
+    animation: none;
+    background-position: 14% 20%, 84% 76%;
+  }
+}
+
+/* src/components/Carousel/Carousel.css */
+.lynn-carousel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lynn-space-lg);
+  width: 100%;
+  font-family: var(--lynn-font-family);
+}
+.lynn-carousel-viewport {
+  position: relative;
+  overflow: hidden;
+  padding: 12px;
+  border-radius: var(--lynn-radius-xl);
+  cursor: grab;
+  touch-action: pan-y;
+}
+.lynn-carousel-dragging .lynn-carousel-viewport {
+  cursor: grabbing;
+}
+.lynn-carousel-track {
+  display: flex;
+  width: 100%;
+  transition: transform 0.55s var(--lynn-ease);
+  will-change: transform;
+}
+.lynn-carousel-slide {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+.lynn-carousel-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-lg);
+  background: var(--lynn-color-card);
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+  transform-style: preserve-3d;
+  will-change: transform;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.lynn-carousel-image {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.lynn-carousel-glass {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to top,
+      rgba(33, 33, 43, 0.94) 0%,
+      rgba(47, 47, 61, 0.78) 30%,
+      rgba(47, 47, 61, 0.34) 58%,
+      rgba(47, 47, 61, 0.06) 82%,
+      rgba(47, 47, 61, 0) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  mask-image:
+    linear-gradient(
+      to top,
+      #000 0%,
+      #000 46%,
+      transparent 84%);
+  -webkit-mask-image:
+    linear-gradient(
+      to top,
+      #000 0%,
+      #000 46%,
+      transparent 84%);
+  pointer-events: none;
+  z-index: 1;
+}
+.lynn-carousel-spotlight {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      220px circle at var(--lynn-mx, 50%) var(--lynn-my, 50%),
+      rgba(255, 255, 255, 0.09) 0%,
+      transparent 70%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s var(--lynn-ease);
+  z-index: 2;
+}
+.lynn-carousel-card:hover .lynn-carousel-spotlight {
+  opacity: 1;
+}
+.lynn-carousel-body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--lynn-space-sm);
+  padding: var(--lynn-space-xl);
+  transform: translateZ(28px);
+  z-index: 3;
+}
+.lynn-carousel-title {
+  margin: 0;
+  font-size: var(--lynn-font-size-card-title);
+  font-weight: var(--lynn-font-weight-extrabold);
+  letter-spacing: var(--lynn-letter-spacing-card-title);
+  line-height: 1.2;
+  color: #fff;
+}
+.lynn-carousel-tagline {
+  margin: 0;
+  max-width: 44ch;
+  font-size: var(--lynn-font-size-body);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.72);
+}
+.lynn-carousel-body > .lynn-carousel-cta {
+  margin-top: var(--lynn-space-xs);
+  padding: 9px 20px;
+  font-size: 13px;
+}
+.lynn-carousel-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--lynn-space-xs);
+}
+.lynn-carousel-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: var(--lynn-radius-pill);
+  cursor: pointer;
+}
+.lynn-carousel-dot:focus-visible {
+  outline: 2px solid var(--lynn-color-blue);
+  outline-offset: -2px;
+}
+.lynn-carousel-dot-pellet {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--lynn-radius-pill);
+  background: var(--lynn-color-border-hover);
+  transition: width 0.4s var(--lynn-ease), background 0.4s var(--lynn-ease);
+}
+.lynn-carousel-dot:hover .lynn-carousel-dot-pellet {
+  background: var(--lynn-color-text-muted);
+}
+.lynn-carousel-dot[aria-current=true] .lynn-carousel-dot-pellet {
+  width: 22px;
+  background: var(--lynn-color-blue);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-carousel-track {
+    transition: none;
+  }
+  .lynn-carousel-spotlight,
+  .lynn-carousel-card:hover .lynn-carousel-spotlight {
+    display: none;
+  }
+  .lynn-carousel-dot-pellet {
+    transition: none;
+  }
+}
+
+/* src/components/ChangelogEntry/ChangelogEntry.css */
+.lynn-changelog-card {
+  background: var(--lynn-color-surface);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-lg);
+  overflow: hidden;
+  font-family: var(--lynn-font-family);
+}
+.lynn-changelog-main {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+}
+.lynn-changelog-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lynn-space-md);
+  padding: var(--lynn-space-2xl);
+  border-right: 1px solid var(--lynn-color-border);
+}
+.lynn-changelog-version {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lynn-space-sm);
+  font-size: 20px;
+  font-weight: var(--lynn-font-weight-extrabold);
+  color: var(--lynn-color-text);
+}
+.lynn-changelog-version .lynn-badge {
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+.lynn-changelog-date {
+  font-size: 13px;
+  color: var(--lynn-color-text-secondary);
+}
+.lynn-changelog-content {
+  padding: var(--lynn-space-2xl);
+}
+.lynn-changelog-group {
+  margin-bottom: var(--lynn-space-xl);
+}
+.lynn-changelog-group:last-child {
+  margin-bottom: 0;
+}
+.lynn-changelog-group-label {
+  margin-bottom: var(--lynn-space-md);
+  font-size: 11px;
+  font-weight: var(--lynn-font-weight-bold);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--lynn-color-text-secondary);
+}
+.lynn-changelog-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--lynn-space-sm);
+  margin: 0;
+  padding: 0;
+}
+.lynn-changelog-list li {
+  position: relative;
+  padding-left: 15px;
+  font-size: var(--lynn-font-size-body);
+  line-height: 1.6;
+  color: var(--lynn-color-text);
+  opacity: 0.85;
+}
+.lynn-changelog-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--lynn-changelog-dot);
+}
+.lynn-changelog-card > .lynn-changelog-toggle {
+  width: 100%;
+  padding: 20px var(--lynn-space-2xl);
+  color: var(--lynn-color-text);
+  transition: background 0.15s var(--lynn-ease);
+}
+.lynn-changelog-card > .lynn-changelog-toggle:hover {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--lynn-color-text);
+}
+.lynn-changelog-toggle .lynn-btn-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lynn-space-lg);
+  width: 100%;
+  text-align: left;
+}
+.lynn-changelog-toggle-left {
+  display: flex;
+  align-items: center;
+  gap: var(--lynn-space-lg);
+  flex-wrap: wrap;
+}
+.lynn-changelog-toggle-version {
+  font-size: 18px;
+  font-weight: var(--lynn-font-weight-extrabold);
+}
+.lynn-changelog-toggle-date {
+  font-size: 13px;
+  font-weight: var(--lynn-font-weight-regular);
+  color: var(--lynn-color-text-secondary);
+}
+.lynn-changelog-toggle-arrow {
+  font-size: 18px;
+  line-height: 1;
+  color: var(--lynn-color-text-secondary);
+  transition: transform 0.25s var(--lynn-ease);
+}
+.lynn-changelog-toggle-arrow-open {
+  transform: rotate(180deg);
+}
+.lynn-changelog-collapsible {
+  border-top: 1px solid var(--lynn-color-border);
+}
+.lynn-changelog-collapsible[hidden] {
+  display: none;
+}
+.lynn-changelog-list-blue {
+  --lynn-changelog-dot: var(--lynn-color-blue);
+}
+.lynn-changelog-list-electric-blue {
+  --lynn-changelog-dot: var(--lynn-color-electric-blue);
+}
+.lynn-changelog-list-indigo {
+  --lynn-changelog-dot: var(--lynn-color-indigo);
+}
+.lynn-changelog-list-emerald {
+  --lynn-changelog-dot: var(--lynn-color-emerald);
+}
+.lynn-changelog-list-teal {
+  --lynn-changelog-dot: var(--lynn-color-teal);
+}
+.lynn-changelog-list-coral {
+  --lynn-changelog-dot: var(--lynn-color-coral);
+}
+.lynn-changelog-list-lynn {
+  --lynn-changelog-dot: var(--lynn-color-lynn);
+}
+@media (max-width: 700px) {
+  .lynn-changelog-main {
+    grid-template-columns: 1fr;
+  }
+  .lynn-changelog-meta {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--lynn-space-md);
+    padding: 20px;
+    border-right: none;
+    border-bottom: 1px solid var(--lynn-color-border);
+  }
+  .lynn-changelog-content {
+    padding: 20px;
+  }
+}
+@media (max-width: 768px) {
+  .lynn-changelog-card > .lynn-changelog-toggle {
+    padding: var(--lynn-space-lg) 20px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-changelog-card > .lynn-changelog-toggle,
+  .lynn-changelog-toggle-arrow {
+    transition: none;
+  }
+}
+
+/* src/components/CodeBlock/CodeBlock.css */
+.lynn-code-block {
+  background: var(--lynn-color-surface);
+  border: 1px solid var(--lynn-color-border-subtle);
+  border-radius: var(--lynn-radius-sm);
+  overflow: hidden;
+  font-family: var(--lynn-font-family);
+}
+.lynn-code-block-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lynn-space-sm);
+  padding: 6px 10px 6px 12px;
+  border-bottom: 1px solid var(--lynn-color-border-subtle);
+}
+.lynn-code-block-lang {
+  font-family: var(--lynn-font-family-mono);
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-semibold);
+  letter-spacing: 0.6px;
+  text-transform: lowercase;
+  color: var(--lynn-color-text-muted);
+}
+.lynn-code-block-head > .lynn-code-block-copy {
+  margin-left: auto;
+  padding: 0;
+  font-size: 11px;
+}
+.lynn-code-block-pre {
+  margin: 0;
+  padding: 10px 12px;
+  font-family: var(--lynn-font-family-mono);
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--lynn-color-text);
+  white-space: pre;
+  overflow-x: auto;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.lynn-code-block-pre:focus-visible {
+  outline: 2px solid var(--lynn-color-blue);
+  outline-offset: -2px;
+}
+.lynn-code-block-pre code {
+  font: inherit;
+  color: inherit;
+}
+.lynn-inline-code {
+  font-family: var(--lynn-font-family-mono);
+  font-size: 0.85em;
+  background: color-mix(in srgb, var(--lynn-color-text) 8%, transparent);
+  color: var(--lynn-color-teal);
+  padding: 2px 7px;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+[data-lynn-theme=light] .lynn-inline-code {
+  color: color-mix(in srgb, var(--lynn-color-teal), var(--lynn-color-text));
+}
+
+/* src/components/CopyButton/CopyButton.css */
+.lynn-copy-button {
+  gap: 5px;
+  padding: 9px 16px;
+  font-size: 13px;
+}
+.lynn-copy-button svg {
+  flex-shrink: 0;
+  display: block;
+}
+
+/* src/components/CtaBanner/CtaBanner.css */
+.lynn-cta-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  font-family: var(--lynn-font-family);
+  color: var(--lynn-color-text-secondary);
+}
+.lynn-cta-banner-text {
+  line-height: 1.6;
+}
+.lynn-cta-banner-text strong {
+  color: var(--lynn-color-text);
+  font-weight: var(--lynn-font-weight-bold);
+}
+.lynn-cta-banner > .lynn-cta-banner-btn {
+  flex-shrink: 0;
+  border-radius: var(--lynn-radius-pill);
+}
+.lynn-cta-banner-gradient {
+  gap: 18px;
+  padding: var(--lynn-space-xl) 28px;
+  border-radius: var(--lynn-radius-lg);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(97, 0, 255, 0.16),
+      rgba(54, 148, 252, 0.1));
+  border: 1px solid rgba(97, 0, 255, 0.3);
+  font-size: var(--lynn-font-size-body);
+}
+.lynn-cta-banner-gradient .lynn-cta-banner-text {
+  max-width: 560px;
+}
+.lynn-cta-banner-gradient > .lynn-cta-banner-btn {
+  padding: 11px 20px;
+  font-size: var(--lynn-font-size-body);
+}
+.lynn-cta-banner-tinted {
+  gap: var(--lynn-space-lg);
+  padding: 18px 22px;
+  border-radius: 14px;
+  background: rgba(185, 143, 255, 0.08);
+  border: 1px solid rgba(185, 143, 255, 0.22);
+  font-size: 13px;
+}
+.lynn-cta-banner-tinted > .lynn-cta-banner-btn {
+  padding: 9px var(--lynn-space-lg);
+  font-size: 13px;
+}
+.lynn-cta-banner-tinted > .lynn-cta-banner-btn:hover {
+  background: rgba(185, 143, 255, 0.18);
+  border-color: rgba(185, 143, 255, 0.4);
+}
+@media (max-width: 720px) {
+  .lynn-cta-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* src/components/CursorGlow/CursorGlow.css */
+.lynn-cursor-glow {
+  position: fixed;
+  pointer-events: none;
+  width: var(--lynn-cursor-glow-size, 480px);
+  height: var(--lynn-cursor-glow-size, 480px);
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle,
+      rgba(54, 148, 252, 0.055) 0%,
+      rgba(97, 0, 255, 0.025) 40%,
+      transparent 70%);
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  transition:
+    left 0.08s linear,
+    top 0.08s linear,
+    opacity 0.5s var(--lynn-ease);
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-cursor-glow {
+    display: none;
+  }
+}
+
+/* src/components/DataTable/DataTable.css */
+.lynn-data-table {
+  overflow-x: auto;
+  background: var(--lynn-color-card);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-md);
+  font-family: var(--lynn-font-family);
+}
+.lynn-data-table-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.lynn-data-table-table th {
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  background: color-mix(in srgb, var(--lynn-color-text) 3%, transparent);
+  border-bottom: 1px solid var(--lynn-color-border);
+  color: var(--lynn-color-text-muted);
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-bold);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-align: left;
+  white-space: nowrap;
+  transition: color 0.15s var(--lynn-ease);
+}
+.lynn-data-table-table th:hover {
+  color: var(--lynn-color-text);
+}
+.lynn-data-table-sort-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+  user-select: none;
+}
+.lynn-data-table-sort-button:focus-visible {
+  outline: 2px solid var(--lynn-color-blue);
+  outline-offset: 2px;
+}
+.lynn-data-table-sort-icon {
+  display: inline-flex;
+  margin-left: var(--lynn-space-xs);
+  opacity: 0.4;
+}
+.lynn-data-table-asc .lynn-data-table-sort-icon,
+.lynn-data-table-desc .lynn-data-table-sort-icon {
+  opacity: 1;
+}
+.lynn-data-table-asc,
+.lynn-data-table-desc {
+  color: var(--lynn-color-text);
+}
+.lynn-data-table-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--lynn-color-border-subtle);
+  color: var(--lynn-color-text-secondary);
+  vertical-align: middle;
+}
+.lynn-data-table-table tr:last-child td {
+  border-bottom: none;
+}
+.lynn-data-table-table tbody tr:hover td {
+  background: color-mix(in srgb, var(--lynn-color-text) 3%, transparent);
+  color: var(--lynn-color-text);
+}
+.lynn-data-table-empty {
+  padding: 28px 12px;
+  color: var(--lynn-color-text-muted);
+  text-align: center;
+}
+.lynn-data-table-left {
+  text-align: left;
+}
+.lynn-data-table-center {
+  text-align: center;
+}
+.lynn-data-table-right {
+  text-align: right;
+}
+.lynn-data-table-table td .lynn-progress {
+  min-width: 90px;
+}
+.lynn-data-table-table td .lynn-badge {
+  vertical-align: middle;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-data-table-table th {
+    transition: none;
+  }
+}
+
+/* src/components/DocRail/DocRail.css */
+.lynn-doc-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  position: fixed;
+  top: calc(var(--lynn-nav-height) + 16px);
+  left: var(--lynn-space-xl);
+  width: 220px;
+  max-height: calc(100vh - var(--lynn-nav-height) - 32px);
+  overflow: hidden;
+  padding: 14px;
+  background: rgba(47, 47, 61, 0.92);
+  background: color-mix(in srgb, var(--lynn-color-card) 92%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: 14px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+  z-index: 90;
+  font-family: var(--lynn-font-family);
+  transition: transform 0.25s var(--lynn-ease), opacity 0.2s var(--lynn-ease);
+}
+.lynn-doc-rail-collapsed {
+  transform: translateX(-16px);
+  opacity: 0;
+  pointer-events: none;
+}
+.lynn-doc-rail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2px;
+}
+.lynn-doc-rail-label {
+  padding: 4px 0 10px;
+  font-size: 11px;
+  font-weight: var(--lynn-font-weight-bold);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--lynn-color-text-secondary);
+}
+.lynn-doc-rail-collapse {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-bottom: var(--lynn-space-sm);
+  background: transparent;
+  border: 1px solid var(--lynn-color-border);
+  border-radius: 6px;
+  color: var(--lynn-color-text-secondary);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s var(--lynn-ease), background 0.2s var(--lynn-ease);
+}
+.lynn-doc-rail-collapse:hover {
+  color: var(--lynn-color-text);
+  background: color-mix(in srgb, var(--lynn-color-text) 6%, transparent);
+}
+.lynn-doc-rail-icon {
+  display: block;
+  overflow: visible;
+}
+.lynn-doc-rail-icon-bar {
+  fill: currentColor;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.3s var(--lynn-ease), opacity 0.18s var(--lynn-ease);
+}
+.lynn-doc-rail-icon-crossed .lynn-doc-rail-icon-top {
+  transform: translateY(5px) rotate(45deg) scale(1.15, 1.12);
+}
+.lynn-doc-rail-icon-crossed .lynn-doc-rail-icon-mid {
+  opacity: 0;
+  transform: scaleX(0.2);
+}
+.lynn-doc-rail-icon-crossed .lynn-doc-rail-icon-bot {
+  transform: translateY(-5px) rotate(-45deg) scale(1.15, 1.12);
+}
+.lynn-doc-rail-expand {
+  position: fixed;
+  top: calc(var(--lynn-nav-height) + 16px);
+  left: 0;
+  width: 26px;
+  height: 40px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(47, 47, 61, 0.92);
+  background: color-mix(in srgb, var(--lynn-color-card) 92%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--lynn-color-border);
+  border-left: none;
+  border-radius: 0 10px 10px 0;
+  color: var(--lynn-color-text-secondary);
+  font-family: var(--lynn-font-family);
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 90;
+  transition: color 0.2s var(--lynn-ease), background 0.2s var(--lynn-ease);
+}
+.lynn-doc-rail-expand-visible {
+  display: flex;
+}
+.lynn-doc-rail-expand:hover {
+  color: var(--lynn-color-text);
+  background: rgba(54, 148, 252, 0.18);
+}
+.lynn-doc-rail-search-wrap {
+  padding: 0 2px 10px;
+}
+.lynn-doc-rail-search {
+  width: 100%;
+  padding: 7px 10px;
+  background: rgba(255, 255, 255, 0.06);
+  background: color-mix(in srgb, var(--lynn-color-text) 6%, transparent);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-sm);
+  color: var(--lynn-color-text);
+  font-family: var(--lynn-font-family);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s var(--lynn-ease), background 0.2s var(--lynn-ease);
+}
+.lynn-doc-rail-search::placeholder {
+  color: var(--lynn-color-text-secondary);
+}
+.lynn-doc-rail-search:focus {
+  border-color: rgba(54, 148, 252, 0.4);
+  background: color-mix(in srgb, var(--lynn-color-text) 9%, transparent);
+}
+.lynn-doc-rail-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.lynn-doc-rail-links,
+.lynn-doc-rail-page,
+.lynn-doc-rail-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.lynn-doc-rail-link {
+  padding: 8px 10px;
+  border-radius: var(--lynn-radius-sm);
+  color: var(--lynn-color-text-secondary);
+  font-size: 13px;
+  font-weight: var(--lynn-font-weight-medium);
+  text-decoration: none;
+  transition: color 0.2s var(--lynn-ease), background 0.2s var(--lynn-ease);
+}
+.lynn-doc-rail-link:hover {
+  color: var(--lynn-color-text);
+  background: color-mix(in srgb, var(--lynn-color-text) 6%, transparent);
+}
+.lynn-doc-rail-link-active {
+  color: var(--lynn-color-text);
+  background: rgba(54, 148, 252, 0.14);
+}
+.lynn-doc-rail-group-label {
+  padding: 10px 10px 2px 20px;
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-bold);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--lynn-color-text-secondary);
+}
+.lynn-doc-rail-sublink {
+  --lynn-warmth: 0;
+  padding: 6px 10px 6px 20px;
+  border-radius: var(--lynn-radius-sm);
+  font-size: var(--lynn-font-size-metadata);
+  font-weight: var(--lynn-font-weight-medium);
+  text-decoration: none;
+  color: var(--lynn-color-text-secondary);
+  background: rgba(54, 148, 252, calc(var(--lynn-warmth) * 0.16));
+  box-shadow: inset 2px 0 0 rgba(54, 148, 252, var(--lynn-warmth));
+  transition:
+    color 0.15s linear,
+    background 0.15s linear,
+    box-shadow 0.15s linear;
+}
+.lynn-doc-rail-sublink[aria-current=true] {
+  color: var(--lynn-color-text);
+}
+.lynn-doc-rail-sublink:hover {
+  color: var(--lynn-color-text);
+  background: color-mix(in srgb, var(--lynn-color-text) 6%, transparent);
+}
+.lynn-doc-rail-empty {
+  padding: 8px 10px;
+  font-size: var(--lynn-font-size-metadata);
+  color: var(--lynn-color-text-secondary);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-doc-rail,
+  .lynn-doc-rail-collapse,
+  .lynn-doc-rail-expand,
+  .lynn-doc-rail-search,
+  .lynn-doc-rail-link,
+  .lynn-doc-rail-sublink {
+    transition: none;
+  }
+  .lynn-doc-rail-collapsed {
+    transform: none;
+  }
+  .lynn-doc-rail-icon-bar {
+    transition: none;
+  }
+}
+
+/* src/components/Dropdown/Dropdown.css */
+.lynn-dropdown {
+  position: relative;
+  width: 100%;
+  font-family: var(--lynn-font-family);
+}
+.lynn-dropdown-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--lynn-space-sm);
+  width: 100%;
+  min-height: 34px;
+  padding: 6px 10px;
+  background: var(--lynn-color-surface);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-sm);
+  color: var(--lynn-color-text);
+  font-family: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s var(--lynn-ease);
+}
+.lynn-dropdown-trigger:hover:not(:disabled) {
+  border-color: var(--lynn-color-border-hover);
+}
+.lynn-dropdown-open .lynn-dropdown-trigger {
+  border-color: var(--lynn-color-blue);
+}
+.lynn-dropdown-trigger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.lynn-dropdown-trigger:focus-visible {
+  outline: 2px solid var(--lynn-color-blue);
+  outline-offset: 1px;
+}
+.lynn-dropdown-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1px solid var(--lynn-color-border-hover);
+  flex-shrink: 0;
+}
+.lynn-dropdown-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lynn-dropdown-label-placeholder {
+  color: var(--lynn-color-text-muted);
+}
+.lynn-dropdown-arrow {
+  flex-shrink: 0;
+  font-size: 9px;
+  opacity: 0.5;
+  transition: transform 0.15s var(--lynn-ease);
+}
+.lynn-dropdown-open .lynn-dropdown-arrow {
+  transform: rotate(180deg);
+}
+.lynn-dropdown-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--lynn-color-card);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-sm);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  z-index: 200;
+  overflow: hidden;
+}
+.lynn-dropdown-search-wrap {
+  padding: 6px;
+  border-bottom: 1px solid var(--lynn-color-border-subtle);
+  flex-shrink: 0;
+}
+.lynn-dropdown-search {
+  width: 100%;
+  padding: 6px 8px;
+  background: var(--lynn-color-bg);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-sm);
+  color: var(--lynn-color-text);
+  font-family: inherit;
+  font-size: 12px;
+  outline: none;
+}
+.lynn-dropdown-search:focus {
+  border-color: var(--lynn-color-blue);
+}
+.lynn-dropdown-search::placeholder {
+  color: var(--lynn-color-text-muted);
+}
+.lynn-dropdown-scroll {
+  max-height: 260px;
+  overflow-y: auto;
+}
+.lynn-dropdown-empty {
+  padding: 14px 8px;
+  font-size: 12px;
+  color: var(--lynn-color-text-muted);
+  text-align: center;
+}
+.lynn-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: var(--lynn-space-sm);
+  width: 100%;
+  padding: 7px 10px;
+  border: none;
+  background: transparent;
+  color: var(--lynn-color-text);
+  font-family: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+.lynn-dropdown-item:hover:not(:disabled),
+.lynn-dropdown-item:focus-visible {
+  background: rgba(54, 148, 252, 0.14);
+  outline: none;
+}
+.lynn-dropdown-item-active {
+  background: rgba(54, 148, 252, 0.14);
+  font-weight: var(--lynn-font-weight-semibold);
+}
+.lynn-dropdown-item:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.lynn-dropdown-item-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lynn-dropdown-item-hint {
+  flex-shrink: 0;
+  font-family: var(--lynn-font-family-mono);
+  font-size: 11px;
+  color: var(--lynn-color-text-muted);
+}
+.lynn-dropdown-section-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 7px 10px 4px;
+  background: var(--lynn-color-card);
+  border-top: 1px solid var(--lynn-color-border-subtle);
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--lynn-color-text-muted);
+}
+.lynn-dropdown-section:first-child .lynn-dropdown-section-header {
+  border-top: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-dropdown-trigger,
+  .lynn-dropdown-arrow {
+    transition: none;
+  }
+}
+
+/* src/components/FeatureCard/FeatureCard.css */
+.lynn-feature-card {
+  position: relative;
+  overflow: hidden;
+  background: var(--lynn-color-card);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-lg);
+  font-family: var(--lynn-font-family);
+  transition:
+    transform 0.3s var(--lynn-ease),
+    box-shadow 0.3s var(--lynn-ease),
+    border-color 0.3s var(--lynn-ease);
+}
+.lynn-feature-card-full:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--lynn-t-color);
+  border-color: var(--lynn-t-color);
+}
+.lynn-feature-card-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--lynn-t-gradient);
+}
+.lynn-feature-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--lynn-space-lg);
+  padding: 28px 28px 20px;
+}
+.lynn-feature-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--lynn-t-gradient);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  font-size: 24px;
+}
+.lynn-feature-card-name-wrap {
+  flex: 1;
+  min-width: 0;
+}
+.lynn-feature-card-name {
+  margin-bottom: var(--lynn-space-xs);
+  font-size: 22px;
+  font-weight: var(--lynn-font-weight-extrabold);
+  letter-spacing: -0.3px;
+  color: var(--lynn-color-text);
+}
+.lynn-feature-card-tagline {
+  font-size: 13px;
+  font-weight: var(--lynn-font-weight-regular);
+  color: var(--lynn-color-text-secondary);
+}
+.lynn-feature-card-body {
+  padding: 0 28px 28px;
+}
+.lynn-feature-card-why {
+  margin: 0 0 20px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--lynn-color-text) 4%, transparent);
+  border-left: 2px solid var(--lynn-t-color);
+  border-radius: 0 var(--lynn-radius-sm) var(--lynn-radius-sm) 0;
+  font-size: var(--lynn-font-size-body);
+  line-height: 1.6;
+  color: var(--lynn-color-text);
+}
+.lynn-feature-card-why strong {
+  color: var(--lynn-t-color);
+  font-weight: var(--lynn-font-weight-bold);
+}
+.lynn-feature-card-bullets-label {
+  margin-bottom: var(--lynn-space-md);
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-bold);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--lynn-t-color);
+}
+.lynn-feature-card-bullets {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lynn-space-sm);
+  margin: 0 0 20px;
+  padding: 0;
+  list-style: none;
+}
+.lynn-feature-card-bullets li {
+  position: relative;
+  padding-left: var(--lynn-space-lg);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--lynn-color-text-secondary);
+}
+.lynn-feature-card-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--lynn-t-color);
+}
+.lynn-feature-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--lynn-space-sm);
+  padding-top: var(--lynn-space-lg);
+  border-top: 1px solid var(--lynn-color-border);
+}
+.lynn-feature-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.lynn-feature-card-tag {
+  padding: 3px 9px;
+  background: rgba(255, 255, 255, 0.06);
+  background: color-mix(in srgb, var(--lynn-color-text) 6%, transparent);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-pill);
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-semibold);
+  letter-spacing: 0.3px;
+  color: var(--lynn-color-text-muted);
+  white-space: nowrap;
+}
+.lynn-feature-card-compact {
+  border-radius: 14px;
+  transition:
+    transform 0.2s var(--lynn-ease),
+    box-shadow 0.2s var(--lynn-ease),
+    border-color 0.2s var(--lynn-ease),
+    background 0.2s var(--lynn-ease);
+}
+.lynn-feature-card-compact:hover {
+  transform: translateY(-1px);
+  border-color: var(--lynn-color-border-hover);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
+}
+.lynn-feature-card-compact .lynn-feature-card-glow {
+  height: 2px;
+}
+.lynn-feature-card-compact .lynn-feature-card-header {
+  flex-direction: column;
+  gap: var(--lynn-space-md);
+  padding: 20px 20px var(--lynn-space-md);
+}
+.lynn-feature-card-compact .lynn-feature-card-icon {
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  font-size: 22px;
+}
+.lynn-feature-card-compact .lynn-feature-card-name {
+  margin-bottom: 6px;
+  font-size: 15px;
+  font-weight: var(--lynn-font-weight-bold);
+  letter-spacing: normal;
+}
+.lynn-feature-card-compact .lynn-feature-card-tagline {
+  font-size: 13px;
+  line-height: 1.65;
+}
+.lynn-feature-card-compact .lynn-feature-card-body {
+  padding: 0 20px 20px;
+}
+.lynn-feature-card-compact .lynn-feature-card-why {
+  margin-bottom: 14px;
+  font-size: 12.5px;
+}
+.lynn-feature-card-compact .lynn-feature-card-bullets {
+  margin-bottom: 14px;
+}
+.lynn-feature-card-compact .lynn-feature-card-bullets li {
+  font-size: 12.5px;
+}
+.lynn-feature-card-compact .lynn-feature-card-footer {
+  padding-top: var(--lynn-space-md);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-feature-card {
+    transition: none;
+  }
+  .lynn-feature-card-full:hover,
+  .lynn-feature-card-compact:hover {
+    transform: none;
+  }
+}
+
+/* src/components/FeaturePanel/FeaturePanel.css */
+.lynn-feature-panel {
+  position: relative;
+  padding: 40px;
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-xl);
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 12% 0%,
+      rgba(97, 0, 255, 0.2),
+      transparent 55%),
+    radial-gradient(
+      circle at 92% 100%,
+      rgba(0, 226, 160, 0.16),
+      transparent 55%),
+    var(--lynn-color-card);
+  font-family: var(--lynn-font-family);
+  scroll-margin-top: calc(var(--lynn-nav-height) + var(--lynn-space-xl));
+  transition: border-color 0.4s var(--lynn-ease), transform 0.4s var(--lynn-ease);
+}
+.lynn-feature-panel:hover {
+  border-color: var(--lynn-color-border-hover);
+  transform: translateY(-1px);
+}
+.lynn-feature-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var( --lynn-panel-stripe, linear-gradient( 90deg, var(--lynn-color-blue), var(--lynn-color-indigo), var(--lynn-color-emerald) ) );
+}
+.lynn-feature-panel > .lynn-feature-panel-badge {
+  margin-bottom: 18px;
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: var(--lynn-font-weight-bold);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.lynn-feature-panel-heading {
+  margin: 0 0 var(--lynn-space-md);
+  font-size: 26px;
+  font-weight: var(--lynn-font-weight-extrabold);
+  letter-spacing: -0.5px;
+  color: var(--lynn-color-text);
+}
+.lynn-feature-panel-body {
+  margin: 0 0 26px;
+  max-width: 620px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--lynn-color-text-secondary);
+}
+.lynn-feature-panel-body strong {
+  color: var(--lynn-color-text);
+  font-weight: var(--lynn-font-weight-semibold);
+}
+.lynn-feature-panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+@media (max-width: 720px) {
+  .lynn-feature-panel {
+    padding: var(--lynn-space-xl);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-feature-panel {
+    transition: none;
+  }
+  .lynn-feature-panel:hover {
+    transform: none;
+  }
+}
+
+/* src/components/Float/Float.css */
+@keyframes lynn-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(var(--lynn-float-distance, -6px));
+  }
+}
+.lynn-float {
+  display: inline-flex;
+  animation: lynn-float var(--lynn-float-duration, 6s) ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-float {
+    animation: none;
+  }
+}
+
+/* src/components/Footer/Footer.css */
+.lynn-footer {
+  --lynn-mx: 50%;
+  --lynn-my: 50%;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border-top: 1px solid var(--lynn-color-border);
+  margin-top: 40px;
+  font-family: var(--lynn-font-family);
+}
+.lynn-footer-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  background-image:
+    radial-gradient(
+      circle at center,
+      color-mix(in srgb, var(--lynn-color-text) 22%, transparent) 0 1px,
+      transparent 1.2px);
+  background-size: 24px 24px;
+  background-position: center;
+}
+.lynn-footer-grid::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.45s var(--lynn-ease);
+  background-image:
+    radial-gradient(
+      circle at center,
+      color-mix(in srgb, var(--lynn-color-blue) 85%, transparent) 0 1.7px,
+      transparent 2.1px);
+  background-size: 24px 24px;
+  background-position: center;
+  -webkit-mask-image:
+    radial-gradient(
+      circle 150px at var(--lynn-mx) var(--lynn-my),
+      #000 0%,
+      rgba(0, 0, 0, 0.5) 45%,
+      transparent 72%);
+  mask-image:
+    radial-gradient(
+      circle 150px at var(--lynn-mx) var(--lynn-my),
+      #000 0%,
+      rgba(0, 0, 0, 0.5) 45%,
+      transparent 72%);
+}
+.lynn-footer.lynn-grid-lit .lynn-footer-grid::after {
+  opacity: 1;
+}
+.lynn-footer-top {
+  position: relative;
+  z-index: 1;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 48px var(--lynn-space-2xl) 40px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--lynn-space-2xl);
+  flex-wrap: wrap;
+}
+.lynn-footer-logo {
+  font-size: 20px;
+  font-weight: var(--lynn-font-weight-extrabold);
+  letter-spacing: -0.3px;
+}
+.lynn-footer-logo-nice {
+  color: var(--lynn-color-blue);
+}
+.lynn-footer-logo-designer {
+  color: var(--lynn-color-text);
+}
+.lynn-footer-nav {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.lynn-footer-nav-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.lynn-footer-nav-col a {
+  color: var(--lynn-color-text-secondary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: var(--lynn-font-weight-medium);
+  transition: color 0.2s var(--lynn-ease);
+}
+.lynn-footer-nav-col a:hover {
+  color: var(--lynn-color-text);
+}
+.lynn-footer-nav-col a.lynn-footer-link-active {
+  color: var(--lynn-color-blue);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-footer-nav-col a {
+    transition: none;
+  }
+  .lynn-footer-grid::after {
+    display: none;
+  }
+}
+
+/* src/components/GaugeRing/GaugeRing.css */
+.lynn-gauge {
+  position: relative;
+  flex-shrink: 0;
+  font-family: var(--lynn-font-family);
+  color: var(--lynn-gauge-accent);
+}
+.lynn-gauge-plate {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--lynn-color-surface);
+  box-shadow: var(--lynn-shadow-raised);
+  transition: box-shadow 0.18s var(--lynn-ease);
+}
+.lynn-gauge:hover .lynn-gauge-plate,
+.lynn-gauge:focus-within .lynn-gauge-plate {
+  box-shadow: var(--lynn-shadow-pressed);
+}
+.lynn-gauge-svg {
+  display: block;
+  position: relative;
+  z-index: 1;
+  transform: rotate(-90deg);
+}
+.lynn-gauge-arc {
+  transition: stroke-dashoffset 0.9s var(--lynn-ease);
+}
+.lynn-gauge-value {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  pointer-events: none;
+}
+.lynn-gauge-num {
+  font-size: 28px;
+  font-weight: var(--lynn-font-weight-bold);
+  line-height: var(--lynn-line-height-tight);
+  color: var(--lynn-gauge-accent);
+}
+.lynn-gauge-label {
+  font-size: 9px;
+  font-weight: var(--lynn-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--lynn-color-text-secondary);
+  text-align: center;
+}
+.lynn-gauge-tone-blue {
+  --lynn-gauge-accent: var(--lynn-color-blue);
+}
+.lynn-gauge-tone-electric-blue {
+  --lynn-gauge-accent: var(--lynn-color-electric-blue);
+}
+.lynn-gauge-tone-indigo {
+  --lynn-gauge-accent: var(--lynn-color-indigo);
+}
+.lynn-gauge-tone-emerald {
+  --lynn-gauge-accent: var(--lynn-color-emerald);
+}
+.lynn-gauge-tone-teal {
+  --lynn-gauge-accent: var(--lynn-color-teal);
+}
+.lynn-gauge-tone-coral {
+  --lynn-gauge-accent: var(--lynn-color-coral);
+}
+.lynn-gauge-tone-lynn {
+  --lynn-gauge-accent: var(--lynn-color-lynn);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-gauge-arc {
+    transition: none;
+  }
+  .lynn-gauge-plate {
+    transition: none;
+  }
+  .lynn-gauge:hover .lynn-gauge-plate,
+  .lynn-gauge:focus-within .lynn-gauge-plate {
+    box-shadow: var(--lynn-shadow-raised);
+  }
+}
+
+/* src/components/GlowPulse/GlowPulse.css */
+@keyframes lynn-glow-pulse {
+  0%, 100% {
+    box-shadow:
+      0 8px 26px -8px rgba(20, 10, 60, 0.4),
+      0 0 0 0 color-mix(in srgb, var(--lynn-color-lynn) 0%, transparent),
+      0 0 0 0 color-mix(in srgb, var(--lynn-color-blue) 0%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 8px 26px -8px rgba(20, 10, 60, 0.4),
+      0 0 34px 6px color-mix(in srgb, var(--lynn-color-lynn) 75%, transparent),
+      0 0 60px 12px color-mix(in srgb, var(--lynn-color-blue) 50%, transparent);
+  }
+}
+.lynn-glow-pulse {
+  animation: lynn-glow-pulse 3s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-glow-pulse {
+    animation: none;
+  }
+}
+
+/* src/components/GradientBackground/GradientBackground.css */
+@keyframes lynn-gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes lynn-gradient-shift-fast {
+  0% {
+    background-position: 0% 0%;
+  }
+  33% {
+    background-position: 100% 50%;
+  }
+  66% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+.lynn-gradient {
+  position: relative;
+}
+.lynn-gradient-animated {
+  background:
+    linear-gradient(
+      135deg,
+      #21212b 0%,
+      #170d40 18%,
+      #0d1f6b 38%,
+      #3694fc 55%,
+      #6100ff 72%,
+      #00e2a0 87%,
+      #21212b 100%);
+  background-size: 400% 400%;
+  animation: lynn-gradient-shift 13s ease infinite;
+}
+.lynn-gradient-animated-fast {
+  background:
+    linear-gradient(
+      120deg,
+      #21212b 0%,
+      #6100ff 30%,
+      #3694fc 52%,
+      #00e2a0 74%,
+      #21212b 100%);
+  background-size: 300% 300%;
+  animation: lynn-gradient-shift-fast 8s ease infinite;
+}
+.lynn-gradient-static {
+  background:
+    linear-gradient(
+      135deg,
+      #21212b 0%,
+      #170d40 18%,
+      #0d1f6b 38%,
+      #3694fc 55%,
+      #6100ff 72%,
+      #00e2a0 87%,
+      #21212b 100%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-gradient-animated,
+  .lynn-gradient-animated-fast {
+    animation: none;
+  }
+}
+
+/* src/components/Hero/Hero.css */
+@keyframes lynn-orb-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-30px);
+  }
+}
+@keyframes lynn-orb-float-centered {
+  0%, 100% {
+    transform: translate(-50%, -50%) translateY(0px);
+  }
+  50% {
+    transform: translate(-50%, -50%) translateY(-30px);
+  }
+}
+.lynn-hero {
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-align: center;
+  font-family: var(--lynn-font-family);
+  background: var(--lynn-color-bg);
+  color: var(--lynn-color-text);
+}
+.lynn-hero-bg {
+  position: absolute;
+  inset: 0;
+}
+.lynn-hero-radial {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 30%,
+      var(--lynn-color-bg) 80%);
+}
+.lynn-hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.45;
+  pointer-events: none;
+}
+.lynn-hero-orb-1 {
+  width: 400px;
+  height: 400px;
+  background: var(--lynn-color-blue);
+  top: -100px;
+  left: -100px;
+  animation: lynn-orb-float 80s ease-in-out infinite;
+}
+.lynn-hero-orb-2 {
+  width: 350px;
+  height: 350px;
+  background: var(--lynn-color-indigo);
+  bottom: -80px;
+  right: -80px;
+  animation: lynn-orb-float 80s ease-in-out infinite;
+  animation-delay: -3s;
+}
+.lynn-hero-orb-3 {
+  width: 300px;
+  height: 300px;
+  background: var(--lynn-color-emerald);
+  top: 50%;
+  left: 60%;
+  animation: lynn-orb-float-centered 80s ease-in-out infinite;
+  animation-delay: -6s;
+}
+.lynn-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  padding: 60px var(--lynn-space-2xl);
+}
+.lynn-hero-eyebrow {
+  font-size: var(--lynn-font-size-section-label);
+  font-weight: var(--lynn-font-weight-bold);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--lynn-color-emerald);
+  margin-bottom: 20px;
+}
+.lynn-hero-title {
+  font-size: clamp(56px, 9vw, 100px);
+  font-weight: var(--lynn-font-weight-black);
+  line-height: var(--lynn-line-height-tight);
+  letter-spacing: var(--lynn-letter-spacing-hero-title);
+  margin: 0 0 var(--lynn-space-xl);
+}
+.lynn-hero-subtitle {
+  font-size: clamp(15px, 2vw, 18px);
+  font-weight: var(--lynn-font-weight-regular);
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.7;
+  max-width: 600px;
+  margin: 0 auto 40px;
+}
+.lynn-hero-actions {
+  display: flex;
+  gap: var(--lynn-space-lg);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--lynn-space-xl);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-hero-orb {
+    animation: none;
+  }
+  .lynn-hero-orb-3 {
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* src/components/IconCard/IconCard.css */
+.lynn-icon-card {
+  border-radius: var(--lynn-radius-lg);
+  font-family: var(--lynn-font-family);
+  transition: border-color 0.2s var(--lynn-ease);
+}
+.lynn-icon-card-main {
+  min-width: 0;
+}
+.lynn-icon-card-title {
+  color: var(--lynn-color-text);
+}
+.lynn-icon-card-desc {
+  color: var(--lynn-color-text-secondary);
+}
+.lynn-icon-card-footer {
+  margin-top: var(--lynn-space-lg);
+  padding-top: var(--lynn-space-md);
+  border-top: 1px solid var(--lynn-color-border);
+}
+.lynn-icon-card-vertical {
+  padding: var(--lynn-space-2xl);
+  background: var(--lynn-color-surface);
+  border: 1px solid var(--lynn-color-border);
+}
+.lynn-icon-card-vertical:hover {
+  border-color: var(--lynn-color-border-hover);
+}
+.lynn-icon-card-vertical .lynn-icon-card-icon {
+  display: block;
+  margin-bottom: 20px;
+  font-size: 36px;
+  line-height: 1;
+}
+.lynn-icon-card-vertical .lynn-icon-card-title {
+  margin-bottom: var(--lynn-space-md);
+  font-size: 20px;
+  font-weight: var(--lynn-font-weight-bold);
+}
+.lynn-icon-card-vertical .lynn-icon-card-desc {
+  font-size: 15px;
+  line-height: 1.65;
+}
+.lynn-icon-card-horizontal {
+  display: flex;
+  gap: 14px;
+  padding: 20px;
+  background: var(--lynn-color-card);
+  border: 1px solid var(--lynn-color-border-subtle);
+}
+.lynn-icon-card-horizontal:hover {
+  border-color: var(--lynn-color-border);
+}
+.lynn-icon-card-horizontal .lynn-icon-card-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  font-size: 22px;
+  line-height: 1;
+}
+.lynn-icon-card-horizontal .lynn-icon-card-title {
+  margin-bottom: 6px;
+  font-size: var(--lynn-font-size-body);
+  font-weight: var(--lynn-font-weight-bold);
+}
+.lynn-icon-card-horizontal .lynn-icon-card-desc {
+  font-size: 13px;
+  line-height: 1.65;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-icon-card {
+    transition: none;
+  }
+}
+
+/* src/components/Legend/Legend.css */
+.lynn-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--lynn-space-xl);
+  font-family: var(--lynn-font-family);
+}
+.lynn-legend-label {
+  margin-right: var(--lynn-space-xs);
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-bold);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--lynn-color-text-muted);
+}
+.lynn-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: var(--lynn-font-size-metadata);
+  font-weight: var(--lynn-font-weight-medium);
+  color: var(--lynn-color-text-secondary);
+}
+.lynn-legend-dot {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--lynn-legend-swatch);
+}
+.lynn-legend-pill {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: var(--lynn-radius-pill);
+  background: var(--lynn-color-card);
+  background: color-mix(in srgb, var(--lynn-legend-swatch) 15%, transparent);
+  color: var(--lynn-legend-swatch);
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-bold);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.lynn-legend-desc {
+  font-size: 13px;
+  font-weight: var(--lynn-font-weight-regular);
+  color: var(--lynn-color-text-secondary);
+}
+.lynn-legend-variant-pill {
+  gap: var(--lynn-space-lg);
+}
+.lynn-legend-variant-pill .lynn-legend-item {
+  gap: var(--lynn-space-sm);
+}
+
+/* src/components/Lightning/Lightning.css */
+@property --lynn-lightning-angle { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+@keyframes lynn-lightning-ring {
+  to {
+    --lynn-lightning-angle: 360deg;
+  }
+}
+.lynn-lightning {
+  position: relative;
+  overflow: hidden;
+  min-height: 240px;
+  --lynn-lightning-bg: #1b1b24;
+  --lynn-lightning-radius: var(--lynn-radius-lg);
+  border-radius: var(--lynn-lightning-radius);
+  background: var(--lynn-lightning-bg);
+  font-family: var(--lynn-font-family);
+  color: var(--lynn-color-text);
+}
+.lynn-lightning-ring {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background:
+    conic-gradient(
+      from var(--lynn-lightning-angle),
+      transparent 0%,
+      var(--lynn-lightning-glow, var(--lynn-color-indigo)) 18%,
+      var(--lynn-lightning-color, var(--lynn-color-lynn)) 32%,
+      transparent 52%);
+  animation: lynn-lightning-ring 6s linear infinite;
+  pointer-events: none;
+}
+.lynn-lightning-ring-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: calc(var(--lynn-lightning-radius) - 2px);
+  background: var(--lynn-lightning-bg);
+}
+.lynn-lightning-plasma,
+.lynn-lightning-motes {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.lynn-lightning-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: inherit;
+  height: 100%;
+  padding: var(--lynn-space-xl);
+  text-align: center;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-lightning-ring {
+    animation: none;
+    --lynn-lightning-angle: 300deg;
+  }
+}
+
+/* src/components/LiquidFill/LiquidFill.css */
+.lynn-liquid {
+  position: relative;
+  overflow: hidden;
+  min-height: 240px;
+  border-radius: var(--lynn-radius-lg);
+  background: #1b1b24;
+  font-family: var(--lynn-font-family);
+  color: var(--lynn-color-text);
+}
+.lynn-liquid-fx {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  opacity: 0;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  transition: opacity 0.4s var(--lynn-ease);
+}
+.lynn-liquid-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: url(#lynn-goo);
+}
+.lynn-liquid-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: inherit;
+  height: 100%;
+  padding: var(--lynn-space-xl);
+  text-align: center;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-liquid-fx {
+    display: none;
+    transition: none;
+  }
+}
+
+/* src/components/Nav/Nav.css */
+.lynn-nav {
+  height: var(--lynn-nav-height);
+  background: rgba(33, 33, 43, 0.92);
+  background: color-mix(in srgb, var(--lynn-color-surface) 92%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--lynn-color-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lynn-space-lg);
+  padding: 0 var(--lynn-space-2xl);
+  font-family: var(--lynn-font-family);
+  transition: transform 0.3s var(--lynn-ease), opacity 0.3s var(--lynn-ease);
+}
+.lynn-nav-hidden {
+  transform: translateY(-100%);
+}
+.lynn-nav-logo {
+  text-decoration: none;
+  font-weight: var(--lynn-font-weight-extrabold);
+  font-size: 18px;
+  letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  height: var(--lynn-nav-height);
+}
+.lynn-nav-logo-nice {
+  color: var(--lynn-color-blue);
+}
+.lynn-nav-logo-designer,
+.lynn-nav-logo-suite {
+  color: var(--lynn-color-text);
+}
+.lynn-nav-cta {
+  display: flex;
+  align-items: center;
+  gap: var(--lynn-space-sm);
+}
+@media (max-width: 768px) {
+  .lynn-nav {
+    padding: 0 20px;
+  }
+}
+@media (max-width: 480px) {
+  .lynn-nav-logo-suite {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-nav {
+    transition: none;
+  }
+}
+
+/* src/components/ProgressBar/ProgressBar.css */
+@keyframes lynn-progress-slide {
+  0% {
+    left: -40%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+.lynn-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  font-family: var(--lynn-font-family);
+}
+.lynn-progress-track {
+  position: relative;
+  height: 4px;
+  background: var(--lynn-color-card);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.lynn-progress-fill {
+  height: 100%;
+  width: 0;
+  background: var(--lynn-progress-accent);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+.lynn-progress-indeterminate .lynn-progress-fill {
+  position: absolute;
+  top: 0;
+  left: -40%;
+  width: 40%;
+  transition: none;
+  animation: lynn-progress-slide 1.1s ease-in-out infinite;
+}
+.lynn-progress-label {
+  font-size: var(--lynn-font-size-metadata);
+  color: var(--lynn-color-text-secondary);
+}
+.lynn-progress-tone-blue {
+  --lynn-progress-accent: var(--lynn-color-blue);
+}
+.lynn-progress-tone-electric-blue {
+  --lynn-progress-accent: var(--lynn-color-electric-blue);
+}
+.lynn-progress-tone-indigo {
+  --lynn-progress-accent: var(--lynn-color-indigo);
+}
+.lynn-progress-tone-emerald {
+  --lynn-progress-accent: var(--lynn-color-emerald);
+}
+.lynn-progress-tone-teal {
+  --lynn-progress-accent: var(--lynn-color-teal);
+}
+.lynn-progress-tone-coral {
+  --lynn-progress-accent: var(--lynn-color-coral);
+}
+.lynn-progress-tone-lynn {
+  --lynn-progress-accent: var(--lynn-color-lynn);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-progress-fill {
+    transition: none;
+  }
+  .lynn-progress-indeterminate .lynn-progress-fill {
+    animation: none;
+    left: 0;
+  }
+}
+
+/* src/components/PulseDot/PulseDot.css */
+@keyframes lynn-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 currentColor;
+    opacity: 1;
+  }
+  50% {
+    box-shadow: 0 0 0 6px transparent;
+    opacity: 0.7;
+  }
+}
+.lynn-pulse-dot-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lynn-space-sm);
+  font-family: var(--lynn-font-family);
+}
+.lynn-pulse-dot-label {
+  font-size: var(--lynn-font-size-metadata);
+  font-weight: var(--lynn-font-weight-semibold);
+  color: var(--lynn-color-text-secondary);
+}
+.lynn-pulse-dot {
+  display: inline-block;
+  width: var(--lynn-pulse-size, 12px);
+  height: var(--lynn-pulse-size, 12px);
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: currentColor;
+  animation: lynn-pulse var(--lynn-pulse-duration, 2s) ease infinite;
+}
+@keyframes lynn-pulse-breathe {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+.lynn-pulse-dot-plate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: var(--lynn-space-sm);
+  border-radius: 50%;
+  background: var(--lynn-color-surface);
+  box-shadow: var(--lynn-shadow-raised);
+}
+.lynn-pulse-dot-plated {
+  animation: lynn-pulse-breathe var(--lynn-pulse-duration, 2s) ease infinite;
+}
+.lynn-pulse-dot-blue {
+  color: var(--lynn-color-blue);
+}
+.lynn-pulse-dot-electric-blue {
+  color: var(--lynn-color-electric-blue);
+}
+.lynn-pulse-dot-indigo {
+  color: var(--lynn-color-indigo);
+}
+.lynn-pulse-dot-emerald {
+  color: var(--lynn-color-emerald);
+}
+.lynn-pulse-dot-teal {
+  color: var(--lynn-color-teal);
+}
+.lynn-pulse-dot-coral {
+  color: var(--lynn-color-coral);
+}
+.lynn-pulse-dot-lynn {
+  color: var(--lynn-color-lynn);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-pulse-dot {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* src/components/Reveal/Reveal.css */
+.lynn-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.55s var(--lynn-ease), transform 0.55s var(--lynn-ease);
+}
+.lynn-reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* src/components/ScrollArea/ScrollArea.css */
+.lynn-scroll-area {
+  --lynn-scroll-radius: var(--lynn-radius-lg);
+  --lynn-scroll-thickness: 5px;
+  --lynn-scroll-inset: 4px;
+  --lynn-scroll-grab: 14px;
+  --lynn-track-length: 0px;
+  --lynn-thumb-size: 0px;
+  --lynn-thumb-offset: 0px;
+  display: flex;
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  font-family: var(--lynn-font-family);
+}
+.lynn-scroll-area-vertical {
+  flex-direction: column;
+}
+.lynn-scroll-area-horizontal {
+  flex-direction: row;
+}
+.lynn-scroll-area-viewport {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  outline: none;
+}
+.lynn-scroll-area-viewport::-webkit-scrollbar {
+  display: none;
+}
+.lynn-scroll-area-viewport:focus-visible {
+  border-radius: var(--lynn-radius-sm);
+  box-shadow: 0 0 0 2px var(--lynn-color-border-glow);
+}
+.lynn-scroll-area-vertical > .lynn-scroll-area-viewport {
+  overflow-y: auto;
+  overflow-x: hidden;
+  touch-action: pan-y;
+  overscroll-behavior-y: contain;
+}
+.lynn-scroll-area-horizontal > .lynn-scroll-area-viewport {
+  overflow-x: auto;
+  overflow-y: hidden;
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+}
+.lynn-scroll-area-horizontal > .lynn-scroll-area-viewport > .lynn-scroll-area-content {
+  display: inline-flex;
+  min-width: 100%;
+}
+.lynn-scroll-area-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s var(--lynn-ease);
+  z-index: 2;
+  fill: none;
+  stroke-width: var(--lynn-scroll-thickness);
+  stroke-linecap: round;
+  border-top-right-radius: var(--lynn-scroll-radius);
+}
+.lynn-scroll-area:not(.lynn-scroll-area-scrollable) > .lynn-scroll-area-track {
+  display: none;
+}
+.lynn-scroll-area-active > .lynn-scroll-area-track {
+  opacity: 1;
+}
+.lynn-scroll-area-rail {
+  stroke: color-mix(in srgb, var(--lynn-color-text) 7%, transparent);
+}
+.lynn-scroll-area-thumb {
+  stroke: color-mix(in srgb, var(--lynn-color-text) 26%, transparent);
+  stroke-dasharray: var(--lynn-thumb-size) var(--lynn-track-length);
+  stroke-dashoffset: calc(-1 * var(--lynn-thumb-offset));
+  transition: stroke 0.25s var(--lynn-ease), filter 0.25s var(--lynn-ease);
+}
+.lynn-scroll-area-hit {
+  stroke: transparent;
+  stroke-width: var(--lynn-scroll-grab);
+  stroke-dasharray: var(--lynn-thumb-size) var(--lynn-track-length);
+  stroke-dashoffset: calc(-1 * var(--lynn-thumb-offset));
+  pointer-events: stroke;
+  cursor: grab;
+}
+.lynn-scroll-area-hit:hover ~ .lynn-scroll-area-thumb {
+  stroke: color-mix(in srgb, var(--lynn-color-text) 40%, transparent);
+}
+.lynn-scroll-area-dragging .lynn-scroll-area-hit {
+  cursor: grabbing;
+}
+.lynn-scroll-area-dragging .lynn-scroll-area-thumb {
+  stroke: color-mix(in srgb, var(--lynn-color-blue) 78%, transparent);
+  filter: drop-shadow(0 0 5px var(--lynn-color-border-glow));
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-scroll-area-track,
+  .lynn-scroll-area-thumb {
+    transition: none;
+  }
+}
+
+/* src/components/SearchInput/SearchInput.css */
+.lynn-search-input {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  font-family: var(--lynn-font-family);
+}
+.lynn-search-input-expanding {
+  width: auto;
+}
+.lynn-search-input-icon {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--lynn-color-text-muted);
+  font-size: 13px;
+  line-height: 1;
+  pointer-events: none;
+}
+.lynn-search-input-field {
+  width: 100%;
+  padding: 7px 14px 7px 36px;
+  background: var(--lynn-color-surface);
+  border: 1px solid transparent;
+  box-shadow: var(--lynn-shadow-pressed);
+  border-radius: 10px;
+  color: var(--lynn-color-text);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  transition:
+    border-color 0.2s var(--lynn-ease),
+    box-shadow 0.2s var(--lynn-ease),
+    background 0.2s var(--lynn-ease),
+    width 0.2s var(--lynn-ease);
+  -webkit-appearance: none;
+  appearance: none;
+}
+.lynn-search-input-field::-webkit-search-decoration,
+.lynn-search-input-field::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+.lynn-search-input-field::placeholder {
+  color: var(--lynn-color-text-muted);
+}
+.lynn-search-input-field:focus {
+  box-shadow: var(--lynn-shadow-pressed), inset 0 0 0 1px rgba(54, 148, 252, 0.4);
+  background: var(--lynn-color-card);
+}
+.lynn-search-input-field:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.lynn-search-input-expanding .lynn-search-input-field {
+  width: 220px;
+}
+.lynn-search-input-expanding .lynn-search-input-field:focus {
+  width: 280px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-search-input-field {
+    transition:
+      border-color 0.2s var(--lynn-ease),
+      box-shadow 0.2s var(--lynn-ease),
+      background 0.2s var(--lynn-ease);
+  }
+}
+
+/* src/components/Sheen/Sheen.css */
+@keyframes lynn-sheen-sweep {
+  0% {
+    transform: translateX(-120%) skewX(-18deg);
+  }
+  60%, 100% {
+    transform: translateX(320%) skewX(-18deg);
+  }
+}
+.lynn-sheen {
+  position: relative;
+  overflow: hidden;
+}
+.lynn-sheen::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 45%;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--lynn-color-lynn) 55%, transparent),
+      transparent);
+  animation: lynn-sheen-sweep 4.2s ease-in-out infinite;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-sheen::after {
+    animation: none;
+    display: none;
+  }
+}
+
+/* src/components/ShimmerText/ShimmerText.css */
+@keyframes lynn-shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+.lynn-shimmer {
+  background:
+    linear-gradient(
+      90deg,
+      #fff 0%,
+      var(--lynn-color-blue) 30%,
+      var(--lynn-color-lynn) 60%,
+      var(--lynn-color-emerald) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: lynn-shimmer var(--lynn-shimmer-duration, 4s) linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-shimmer {
+    animation: none;
+    background-position: 50% center;
+  }
+}
+
+/* src/components/Skeleton/Skeleton.css */
+@keyframes lynn-skeleton-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+.lynn-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lynn-space-sm);
+  margin-top: var(--lynn-space-xs);
+}
+.lynn-skeleton-row {
+  height: 52px;
+  border-radius: var(--lynn-radius-sm);
+  border: 1px solid var(--lynn-color-border-subtle);
+  background:
+    linear-gradient(
+      90deg,
+      var(--lynn-color-surface) 0%,
+      var(--lynn-color-card) 40%,
+      var(--lynn-color-surface) 80%);
+  background-size: 200% 100%;
+  animation: lynn-skeleton-shimmer 1.4s linear infinite;
+  opacity: 0.75;
+}
+.lynn-skeleton-row-compact {
+  height: 32px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-skeleton-row {
+    animation: none;
+    background-position: 50% 0;
+  }
+}
+
+/* src/components/Sparkle/Sparkle.css */
+@keyframes lynn-sparkle-twinkle {
+  0%, 100% {
+    transform: scale(0.55);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.lynn-sparkle {
+  display: inline-flex;
+  color: var(--lynn-color-lynn);
+  overflow: visible;
+}
+.lynn-sparkle-layer {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: lynn-sparkle-twinkle 2.4s ease-in-out infinite;
+}
+.lynn-sparkle-layer-a {
+  animation-delay: 0s;
+}
+.lynn-sparkle-layer-b {
+  animation-delay: 0.5s;
+}
+.lynn-sparkle-layer-c {
+  animation-delay: 0.9s;
+}
+.lynn-sparkle-custom {
+  display: inline-flex;
+  animation: lynn-sparkle-pulse 2.4s ease-in-out infinite;
+}
+@keyframes lynn-sparkle-pulse {
+  0%, 100% {
+    transform: scale(0.85);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-sparkle-layer,
+  .lynn-sparkle-custom {
+    animation: none;
+  }
+}
+
+/* src/components/Spinner/Spinner.css */
+@keyframes lynn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.lynn-spinner {
+  display: inline-block;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  vertical-align: middle;
+  animation: lynn-spin 0.65s linear infinite;
+}
+.lynn-spinner-sm {
+  width: 11px;
+  height: 11px;
+}
+.lynn-spinner-md {
+  width: 16px;
+  height: 16px;
+}
+.lynn-spinner-lg {
+  width: 24px;
+  height: 24px;
+  border-width: 3px;
+}
+.lynn-spinner-light {
+  border-color: rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+}
+.lynn-spinner-dark {
+  border-color: rgba(0, 0, 0, 0.15);
+  border-top-color: var(--lynn-color-blue);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-spinner {
+    animation: none;
+  }
+}
+
+/* src/components/StepNumber/StepNumber.css */
+.lynn-step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  font-family: var(--lynn-font-family);
+  font-weight: var(--lynn-font-weight-bold);
+  line-height: var(--lynn-line-height-tight);
+  box-sizing: border-box;
+}
+.lynn-step-number-xs {
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+}
+.lynn-step-number-sm {
+  width: 28px;
+  height: 28px;
+  font-size: 13px;
+}
+.lynn-step-number-md {
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+}
+.lynn-step-number-lg {
+  width: 52px;
+  height: 52px;
+  font-size: 20px;
+  font-weight: var(--lynn-font-weight-extrabold);
+}
+.lynn-step-number-gradient {
+  background:
+    linear-gradient(
+      135deg,
+      var(--lynn-step-color),
+      var(--lynn-step-color-2, var(--lynn-step-color)));
+  color: var(--lynn-step-ink);
+  box-shadow: 0 0 0 4px var(--lynn-step-glow);
+}
+.lynn-step-number-tint {
+  background: color-mix(in srgb, var(--lynn-step-color) 15%, transparent);
+  border-color: color-mix(in srgb, var(--lynn-step-color) 25%, transparent);
+  color: var(--lynn-step-color);
+}
+.lynn-step-number-solid {
+  background: var(--lynn-step-color);
+  color: var(--lynn-step-ink);
+}
+.lynn-step-number-color-blue {
+  --lynn-step-color: var(--lynn-color-blue);
+  --lynn-step-color-2: var(--lynn-color-electric-blue);
+  --lynn-step-glow: rgba(54, 148, 252, 0.18);
+  --lynn-step-ink: #fff;
+}
+.lynn-step-number-color-electric-blue {
+  --lynn-step-color: var(--lynn-color-electric-blue);
+  --lynn-step-color-2: var(--lynn-color-indigo);
+  --lynn-step-glow: rgba(2, 90, 251, 0.18);
+  --lynn-step-ink: #fff;
+}
+.lynn-step-number-color-indigo {
+  --lynn-step-color: var(--lynn-color-indigo);
+  --lynn-step-color-2: var(--lynn-color-electric-blue);
+  --lynn-step-glow: rgba(97, 0, 255, 0.18);
+  --lynn-step-ink: #fff;
+}
+.lynn-step-number-color-emerald {
+  --lynn-step-color: var(--lynn-color-emerald);
+  --lynn-step-color-2: var(--lynn-color-teal);
+  --lynn-step-glow: rgba(0, 226, 160, 0.18);
+  --lynn-step-ink: #21212b;
+}
+.lynn-step-number-color-teal {
+  --lynn-step-color: var(--lynn-color-teal);
+  --lynn-step-color-2: var(--lynn-color-emerald);
+  --lynn-step-glow: rgba(54, 234, 208, 0.18);
+  --lynn-step-ink: #21212b;
+}
+.lynn-step-number-color-coral {
+  --lynn-step-color: var(--lynn-color-coral);
+  --lynn-step-glow: rgba(255, 91, 138, 0.18);
+  --lynn-step-ink: #fff;
+}
+.lynn-step-number-color-lynn {
+  --lynn-step-color: var(--lynn-color-lynn);
+  --lynn-step-glow: rgba(185, 143, 255, 0.18);
+  --lynn-step-ink: #21212b;
+}
+
+/* src/components/Stepper/Stepper.css */
+.lynn-stepper {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: var(--lynn-font-family);
+}
+.lynn-stepper-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
+.lynn-stepper-step {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 0 var(--lynn-space-2xl);
+  scroll-margin-top: calc(var(--lynn-nav-height) + var(--lynn-space-xl));
+}
+.lynn-stepper-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.lynn-stepper-line {
+  width: 2px;
+  flex: 1;
+  min-height: 40px;
+  margin-top: var(--lynn-space-md);
+  background:
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--lynn-stepper-line) 40%, transparent),
+      color-mix(in srgb, var(--lynn-stepper-line) 4%, transparent));
+}
+.lynn-stepper-step:last-child .lynn-stepper-line {
+  display: none;
+}
+.lynn-stepper-body {
+  min-width: 0;
+  padding-bottom: var(--lynn-space-lg);
+}
+.lynn-stepper-header {
+  display: flex;
+  align-items: center;
+  padding-top: 10px;
+  margin-bottom: var(--lynn-space-xl);
+}
+.lynn-stepper-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: var(--lynn-font-weight-bold);
+  color: var(--lynn-color-text);
+}
+.lynn-stepper-card {
+  background: var(--lynn-color-card);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-lg);
+  padding: 28px 32px;
+  font-size: var(--lynn-font-size-body);
+  line-height: var(--lynn-line-height-body);
+  color: var(--lynn-color-text-secondary);
+}
+.lynn-stepper-horizontal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lynn-space-xl);
+}
+.lynn-stepper-horizontal .lynn-stepper-step {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 260px;
+  min-width: 0;
+  gap: var(--lynn-space-lg);
+}
+.lynn-stepper-horizontal .lynn-stepper-sidebar {
+  flex-direction: row;
+  align-items: center;
+  align-self: stretch;
+}
+.lynn-stepper-horizontal .lynn-stepper-line {
+  width: auto;
+  height: 2px;
+  min-height: 0;
+  min-width: 40px;
+  margin: 0 0 0 var(--lynn-space-md);
+  background:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--lynn-stepper-line) 40%, transparent),
+      color-mix(in srgb, var(--lynn-stepper-line) 4%, transparent));
+}
+.lynn-stepper-horizontal .lynn-stepper-header {
+  padding-top: 0;
+  margin-bottom: var(--lynn-space-md);
+}
+.lynn-stepper-horizontal .lynn-stepper-title {
+  font-size: 18px;
+}
+.lynn-stepper-color-blue {
+  --lynn-stepper-line: var(--lynn-color-blue);
+}
+.lynn-stepper-color-electric-blue {
+  --lynn-stepper-line: var(--lynn-color-electric-blue);
+}
+.lynn-stepper-color-indigo {
+  --lynn-stepper-line: var(--lynn-color-indigo);
+}
+.lynn-stepper-color-emerald {
+  --lynn-stepper-line: var(--lynn-color-emerald);
+}
+.lynn-stepper-color-teal {
+  --lynn-stepper-line: var(--lynn-color-teal);
+}
+.lynn-stepper-color-coral {
+  --lynn-stepper-line: var(--lynn-color-coral);
+}
+.lynn-stepper-color-lynn {
+  --lynn-stepper-line: var(--lynn-color-lynn);
+}
+@media (max-width: 600px) {
+  .lynn-stepper-vertical .lynn-stepper-step {
+    grid-template-columns: 1fr;
+    gap: var(--lynn-space-lg);
+  }
+  .lynn-stepper-vertical .lynn-stepper-sidebar {
+    flex-direction: row;
+    align-items: center;
+  }
+  .lynn-stepper-vertical .lynn-stepper-line {
+    width: auto;
+    height: 2px;
+    min-height: 0;
+    margin: 0 0 0 var(--lynn-space-md);
+    background:
+      linear-gradient(
+        to right,
+        color-mix(in srgb, var(--lynn-stepper-line) 40%, transparent),
+        color-mix(in srgb, var(--lynn-stepper-line) 4%, transparent));
+  }
+  .lynn-stepper-card {
+    padding: var(--lynn-space-xl);
+  }
+}
+
+/* src/components/Switch/Switch.css */
+.lynn-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lynn-space-sm);
+  font-family: var(--lynn-font-family);
+}
+.lynn-switch-md {
+  --lynn-switch-w: 36px;
+  --lynn-switch-h: 20px;
+  --lynn-switch-thumb: 14px;
+}
+.lynn-switch-sm {
+  --lynn-switch-w: 28px;
+  --lynn-switch-h: 16px;
+  --lynn-switch-thumb: 10px;
+}
+.lynn-switch-track {
+  position: relative;
+  flex-shrink: 0;
+  width: var(--lynn-switch-w);
+  height: var(--lynn-switch-h);
+  padding: 0;
+  background: var(--lynn-color-card);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-pill);
+  cursor: pointer;
+  transition: background 0.2s var(--lynn-ease), border-color 0.2s var(--lynn-ease);
+}
+.lynn-switch-track:hover:not(:disabled) {
+  border-color: var(--lynn-color-border-hover);
+}
+.lynn-switch-track:focus-visible {
+  outline: 2px solid var(--lynn-color-blue);
+  outline-offset: 2px;
+}
+.lynn-switch-thumb {
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  width: var(--lynn-switch-thumb);
+  height: var(--lynn-switch-thumb);
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  transform: translateY(-50%);
+  transition: transform 0.2s var(--lynn-ease);
+}
+.lynn-switch-on .lynn-switch-track {
+  background: var(--lynn-color-blue);
+  border-color: var(--lynn-color-blue);
+}
+.lynn-switch-on .lynn-switch-thumb {
+  transform: translate(calc(var(--lynn-switch-w) - var(--lynn-switch-thumb) - 6px), -50%);
+}
+.lynn-switch-neumorphic.lynn-switch-md {
+  --lynn-switch-w: 48px;
+  --lynn-switch-h: 28px;
+  --lynn-switch-thumb: 20px;
+}
+.lynn-switch-neumorphic.lynn-switch-sm {
+  --lynn-switch-w: 38px;
+  --lynn-switch-h: 22px;
+  --lynn-switch-thumb: 16px;
+}
+.lynn-switch-neumorphic .lynn-switch-track {
+  background: var(--lynn-color-surface);
+  border-color: transparent;
+  box-shadow: var(--lynn-shadow-raised);
+}
+.lynn-switch-neumorphic .lynn-switch-track:hover:not(:disabled) {
+  border-color: transparent;
+}
+.lynn-switch-neumorphic .lynn-switch-thumb {
+  background: var(--lynn-color-card);
+  box-shadow: var(--lynn-shadow-raised);
+  transition:
+    transform 0.2s var(--lynn-ease),
+    box-shadow 0.18s var(--lynn-ease),
+    background 0.2s var(--lynn-ease);
+}
+.lynn-switch-neumorphic.lynn-switch-on .lynn-switch-track {
+  background: var(--lynn-color-blue);
+  border-color: transparent;
+  box-shadow: var(--lynn-shadow-raised);
+}
+.lynn-switch-neumorphic.lynn-switch-on .lynn-switch-thumb {
+  background: #fff;
+}
+.lynn-switch-neumorphic.lynn-switch-pressing .lynn-switch-thumb {
+  box-shadow: var(--lynn-shadow-pressed);
+}
+.lynn-switch-label {
+  font-size: 13px;
+  color: var(--lynn-color-text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+.lynn-switch-on .lynn-switch-label {
+  color: var(--lynn-color-text);
+}
+.lynn-switch-disabled .lynn-switch-track,
+.lynn-switch-disabled .lynn-switch-label {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-switch-track,
+  .lynn-switch-thumb,
+  .lynn-switch-neumorphic .lynn-switch-thumb {
+    transition: none;
+  }
+}
+
+/* src/components/TabPanels/TabPanels.css */
+.lynn-tab-panels {
+  font-family: var(--lynn-font-family);
+}
+.lynn-tab-panels-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.lynn-tab-panels-bar > .lynn-tab-panels-nav {
+  padding: 10px 20px;
+  background: var(--lynn-color-surface);
+  border-bottom: 1px solid var(--lynn-color-border);
+}
+.lynn-tab-panel {
+  padding-top: var(--lynn-space-lg);
+}
+.lynn-tab-panels-bar .lynn-tab-panel {
+  padding: var(--lynn-space-lg) 20px var(--lynn-space-2xl);
+}
+.lynn-tab-panel[hidden] {
+  display: none;
+}
+
+/* src/components/Tabs/Tabs.css */
+.lynn-tabs {
+  display: inline-flex;
+  gap: 2px;
+  font-family: var(--lynn-font-family);
+}
+.lynn-tabs-stretch {
+  display: flex;
+  width: 100%;
+}
+.lynn-tabs-stretch .lynn-tabs-segment {
+  flex: 1;
+  min-width: 0;
+}
+.lynn-tabs-segment {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: none;
+  background: transparent;
+  color: var(--lynn-color-text-secondary);
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background 0.12s var(--lynn-ease),
+    color 0.12s var(--lynn-ease),
+    border-color 0.15s var(--lynn-ease);
+}
+.lynn-tabs-segment:hover:not(:disabled) {
+  color: var(--lynn-color-text);
+}
+.lynn-tabs-segment:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.lynn-tabs-segment:focus-visible {
+  outline: 2px solid var(--lynn-tabs-accent);
+  outline-offset: 1px;
+}
+.lynn-tabs-segment-icon {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+.lynn-tabs-segment-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lynn-tabs-pill {
+  padding: 2px;
+  background: var(--lynn-color-card);
+  border: 1px solid var(--lynn-color-border-subtle);
+  border-radius: var(--lynn-radius-sm);
+}
+.lynn-tabs-pill .lynn-tabs-segment {
+  padding: 4px 8px;
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-semibold);
+  border-radius: calc(var(--lynn-radius-sm) - 2px);
+}
+.lynn-tabs-pill .lynn-tabs-segment-active,
+.lynn-tabs-pill .lynn-tabs-segment-active:hover:not(:disabled) {
+  background: var(--lynn-tabs-accent);
+  color: var(--lynn-tabs-accent-ink);
+}
+.lynn-tabs-elevated {
+  padding: 2px;
+  background: var(--lynn-color-surface);
+  border-radius: var(--lynn-radius-lg);
+}
+.lynn-tabs-elevated .lynn-tabs-segment {
+  padding: 6px 8px;
+  font-size: 11px;
+  font-weight: var(--lynn-font-weight-medium);
+  border-radius: var(--lynn-radius-sm);
+}
+.lynn-tabs-elevated .lynn-tabs-segment:hover:not(:disabled) {
+  background: var(--lynn-color-card);
+}
+.lynn-tabs-elevated .lynn-tabs-segment-active {
+  background: var(--lynn-color-card);
+  color: var(--lynn-color-text);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+.lynn-tabs-underline {
+  display: flex;
+  gap: 0;
+  background: var(--lynn-color-surface);
+  border-bottom: 1px solid var(--lynn-color-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.lynn-tabs-underline::-webkit-scrollbar {
+  display: none;
+}
+.lynn-tabs-underline .lynn-tabs-segment {
+  padding: 9px 12px;
+  font-size: 11px;
+  font-weight: var(--lynn-font-weight-medium);
+  letter-spacing: 0.2px;
+  border-bottom: 2px solid transparent;
+}
+.lynn-tabs-underline .lynn-tabs-segment-active,
+.lynn-tabs-underline .lynn-tabs-segment-active:hover:not(:disabled) {
+  color: var(--lynn-tabs-accent);
+  border-bottom-color: var(--lynn-tabs-accent);
+}
+.lynn-tabs-tone-blue {
+  --lynn-tabs-accent: var(--lynn-color-blue);
+  --lynn-tabs-accent-ink: #fff;
+}
+.lynn-tabs-tone-electric-blue {
+  --lynn-tabs-accent: var(--lynn-color-electric-blue);
+  --lynn-tabs-accent-ink: #fff;
+}
+.lynn-tabs-tone-indigo {
+  --lynn-tabs-accent: var(--lynn-color-indigo);
+  --lynn-tabs-accent-ink: #fff;
+}
+.lynn-tabs-tone-emerald {
+  --lynn-tabs-accent: var(--lynn-color-emerald);
+  --lynn-tabs-accent-ink: #21212b;
+}
+.lynn-tabs-tone-teal {
+  --lynn-tabs-accent: var(--lynn-color-teal);
+  --lynn-tabs-accent-ink: #21212b;
+}
+.lynn-tabs-tone-coral {
+  --lynn-tabs-accent: var(--lynn-color-coral);
+  --lynn-tabs-accent-ink: #fff;
+}
+.lynn-tabs-tone-lynn {
+  --lynn-tabs-accent: var(--lynn-color-lynn);
+  --lynn-tabs-accent-ink: #21212b;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-tabs-segment {
+    transition: none;
+  }
+}
+
+/* src/components/TextField/TextField.css */
+@keyframes lynn-textfield-wave-draw {
+  from {
+    stroke-dashoffset: 241;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.lynn-textfield {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lynn-space-xs);
+  width: 100%;
+  font-family: var(--lynn-font-family);
+}
+.lynn-textfield-shell {
+  position: relative;
+  padding-top: 18px;
+  padding-bottom: 10px;
+}
+.lynn-textfield-input {
+  display: block;
+  width: 100%;
+  height: 34px;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--lynn-color-text);
+  font-family: inherit;
+  font-size: var(--lynn-font-size-body);
+  line-height: 34px;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.lynn-textfield-input::placeholder {
+  color: transparent;
+}
+.lynn-textfield-with-toggle .lynn-textfield-input {
+  padding-right: 34px;
+}
+.lynn-textfield-label {
+  position: absolute;
+  left: 0;
+  top: 18px;
+  font-size: var(--lynn-font-size-body);
+  line-height: 34px;
+  color: var(--lynn-color-text-secondary);
+  pointer-events: none;
+  transform-origin: left center;
+  transition:
+    transform 0.18s var(--lynn-ease),
+    font-size 0.18s var(--lynn-ease),
+    line-height 0.18s var(--lynn-ease),
+    letter-spacing 0.18s var(--lynn-ease),
+    color 0.18s var(--lynn-ease);
+}
+.lynn-textfield-floated .lynn-textfield-label {
+  transform: translateY(-18px);
+  font-size: var(--lynn-font-size-metadata);
+  line-height: 18px;
+  letter-spacing: 0.3px;
+  font-weight: var(--lynn-font-weight-medium);
+}
+.lynn-textfield-focused .lynn-textfield-label {
+  color: var(--lynn-textfield-accent);
+}
+.lynn-textfield-invalid .lynn-textfield-label,
+.lynn-textfield-invalid.lynn-textfield-focused .lynn-textfield-label {
+  color: var(--lynn-color-coral);
+}
+.lynn-textfield-toggle {
+  position: absolute;
+  right: 0;
+  top: 26px;
+  padding: 0;
+  color: var(--lynn-color-text-muted);
+}
+.lynn-textfield-toggle:hover {
+  color: var(--lynn-color-text);
+}
+.lynn-textfield-wave {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 10px;
+  display: block;
+  overflow: visible;
+  pointer-events: none;
+}
+.lynn-textfield-wave-path {
+  fill: none;
+  stroke: var(--lynn-color-border);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 241;
+  stroke-dashoffset: 0;
+  transform: scaleY(0.1);
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transition:
+    transform 0.5s var(--lynn-ease),
+    stroke 0.4s var(--lynn-ease),
+    opacity 0.4s var(--lynn-ease);
+  opacity: 0.85;
+}
+.lynn-textfield-focused .lynn-textfield-wave-path {
+  stroke: var(--lynn-textfield-accent);
+  transform: scaleY(1);
+  opacity: 1;
+  animation: lynn-textfield-wave-draw 0.52s var(--lynn-ease) both;
+}
+.lynn-textfield-invalid .lynn-textfield-wave-path {
+  stroke: var(--lynn-color-coral);
+  transform: scaleY(0.65);
+  opacity: 1;
+}
+.lynn-textfield-invalid.lynn-textfield-focused .lynn-textfield-wave-path {
+  transform: scaleY(1);
+}
+.lynn-textfield-error {
+  margin: 0;
+  font-size: var(--lynn-font-size-metadata);
+  line-height: 1.4;
+  color: var(--lynn-color-coral);
+}
+.lynn-textfield-accent-blue {
+  --lynn-textfield-accent: var(--lynn-color-blue);
+}
+.lynn-textfield-accent-electric-blue {
+  --lynn-textfield-accent: var(--lynn-color-electric-blue);
+}
+.lynn-textfield-accent-indigo {
+  --lynn-textfield-accent: var(--lynn-color-indigo);
+}
+.lynn-textfield-accent-emerald {
+  --lynn-textfield-accent: var(--lynn-color-emerald);
+}
+.lynn-textfield-accent-teal {
+  --lynn-textfield-accent: var(--lynn-color-teal);
+}
+.lynn-textfield-accent-coral {
+  --lynn-textfield-accent: var(--lynn-color-coral);
+}
+.lynn-textfield-accent-lynn {
+  --lynn-textfield-accent: var(--lynn-color-lynn);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-textfield-label {
+    transition: none;
+  }
+  .lynn-textfield-wave-path {
+    transition: none;
+    animation: none;
+  }
+  .lynn-textfield-focused .lynn-textfield-wave-path {
+    animation: none;
+  }
+}
+
+/* src/components/Timeline/Timeline.css */
+.lynn-timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--lynn-font-family);
+}
+.lynn-timeline::before {
+  content: "";
+  position: absolute;
+  left: var(--lynn-timeline-line-left, 15px);
+  top: 12px;
+  bottom: 0;
+  width: 1px;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(54, 148, 252, 0.5),
+      rgba(97, 0, 255, 0.3) 50%,
+      transparent);
+}
+.lynn-phase {
+  position: relative;
+  display: flex;
+  gap: 36px;
+  padding-bottom: 52px;
+  scroll-margin-top: calc(var(--lynn-nav-height) + var(--lynn-space-xl));
+}
+.lynn-phase:last-child {
+  padding-bottom: 0;
+}
+.lynn-phase-dot-slot {
+  display: flex;
+  flex-shrink: 0;
+}
+.lynn-phase-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--lynn-color-bg);
+  flex-shrink: 0;
+  margin-top: var(--lynn-space-sm);
+  position: relative;
+  z-index: 1;
+}
+.lynn-phase-future .lynn-phase-dot {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+.lynn-phase-shipped .lynn-phase-dot {
+  background: var(--lynn-color-emerald);
+  border-color: rgba(0, 226, 160, 0.4);
+}
+.lynn-phase-body {
+  flex: 1;
+  min-width: 0;
+}
+.lynn-phase-header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--lynn-space-md);
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+.lynn-phase-title {
+  font-size: 18px;
+  font-weight: var(--lynn-font-weight-extrabold);
+  letter-spacing: -0.3px;
+  color: var(--lynn-color-text);
+}
+.lynn-phase-period {
+  font-size: var(--lynn-font-size-metadata);
+  font-weight: var(--lynn-font-weight-medium);
+  color: var(--lynn-color-text-muted);
+}
+.lynn-phase-desc {
+  margin: 0 0 var(--lynn-space-lg);
+  max-width: 700px;
+  font-size: 13px;
+  font-weight: var(--lynn-font-weight-regular);
+  line-height: var(--lynn-line-height-body);
+  color: var(--lynn-color-text-secondary);
+}
+.lynn-phase-dep {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 18px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--lynn-color-border);
+  font-size: 11px;
+  font-weight: var(--lynn-font-weight-semibold);
+  color: var(--lynn-color-text-muted);
+}
+.lynn-phase-dep-label {
+  color: var(--lynn-color-text-muted);
+  opacity: 0.65;
+}
+.lynn-phase-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 10px;
+}
+.lynn-roadmap-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: var(--lynn-space-lg) 18px 0 22px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: var(--lynn-radius-sm);
+  scroll-margin-top: calc(var(--lynn-nav-height) + var(--lynn-space-xl));
+  transition:
+    border-color 0.2s var(--lynn-ease),
+    background 0.2s var(--lynn-ease),
+    transform 0.2s var(--lynn-ease);
+}
+.lynn-roadmap-item:hover {
+  background: rgba(255, 255, 255, 0.055);
+  border-color: var(--lynn-color-border-hover);
+  transform: translateY(-1px);
+}
+.lynn-roadmap-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: var(--lynn-space-sm);
+  bottom: var(--lynn-space-sm);
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: var(--lynn-item-accent, rgba(255, 255, 255, 0.15));
+}
+.lynn-roadmap-item-highlight {
+  background: rgba(54, 148, 252, 0.05);
+  border-color: rgba(54, 148, 252, 0.3);
+}
+.lynn-roadmap-item-body {
+  flex: 1;
+  padding-bottom: var(--lynn-space-lg);
+}
+.lynn-roadmap-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lynn-space-sm);
+  margin-bottom: var(--lynn-space-sm);
+}
+.lynn-roadmap-item-name {
+  display: flex;
+  align-items: center;
+  gap: var(--lynn-space-sm);
+  font-size: var(--lynn-font-size-body);
+  font-weight: var(--lynn-font-weight-bold);
+  color: var(--lynn-color-text);
+}
+.lynn-roadmap-item-desc {
+  margin: 0 0 10px;
+  font-size: var(--lynn-font-size-metadata);
+  line-height: 1.6;
+  color: var(--lynn-color-text-secondary);
+}
+.lynn-roadmap-item-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lynn-space-sm);
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.lynn-roadmap-item-tags {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.lynn-roadmap-item-tag {
+  padding: 2px 7px;
+  border-radius: var(--lynn-radius-pill);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-medium);
+  color: var(--lynn-color-text-muted);
+}
+.lynn-roadmap-item-people {
+  display: flex;
+  gap: var(--lynn-space-xs);
+}
+.lynn-roadmap-item-gates {
+  border-top: 1px solid var(--lynn-color-border-subtle);
+  padding: 10px 0 14px;
+}
+.lynn-roadmap-item-gates-label {
+  margin-bottom: var(--lynn-space-sm);
+  font-size: 9px;
+  font-weight: var(--lynn-font-weight-extrabold);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--lynn-color-text-muted);
+}
+.lynn-roadmap-item-gates-rows {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.lynn-roadmap-item-gate {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lynn-space-xs);
+  padding: 3px var(--lynn-space-sm);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-semibold);
+  color: var(--lynn-color-text-muted);
+  white-space: nowrap;
+}
+.lynn-roadmap-item-gate-icon {
+  font-size: 10px;
+  line-height: 1;
+}
+.lynn-roadmap-item-gate-avatars {
+  display: flex;
+  gap: 2px;
+  margin-left: 2px;
+}
+@media (max-width: 640px) {
+  .lynn-phase {
+    gap: var(--lynn-space-lg);
+  }
+  .lynn-phase-cards {
+    grid-template-columns: 1fr;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-roadmap-item {
+    transition: none;
+  }
+  .lynn-roadmap-item:hover {
+    transform: none;
+  }
+}
+
+/* src/components/Toast/Toast.css */
+@keyframes lynn-toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+.lynn-toast {
+  position: fixed;
+  bottom: var(--lynn-space-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lynn-space-md);
+  width: max-content;
+  max-width: min(560px, calc(100% - 32px));
+  padding: 10px 16px;
+  border-radius: var(--lynn-radius-md);
+  font-family: var(--lynn-font-family);
+  font-size: var(--lynn-font-size-metadata);
+  font-weight: var(--lynn-font-weight-medium);
+  line-height: 1.4;
+  text-align: center;
+  word-break: break-word;
+  z-index: 10000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  background: var(--lynn-toast-bg);
+  color: var(--lynn-toast-fg);
+  animation: lynn-toast-in 0.2s var(--lynn-ease);
+}
+.lynn-toast-message {
+  min-width: 0;
+}
+.lynn-toast-action {
+  flex-shrink: 0;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: var(--lynn-font-weight-bold);
+  padding: 3px 10px;
+  border-radius: var(--lynn-radius-pill);
+  cursor: pointer;
+  transition: background 0.15s var(--lynn-ease);
+}
+.lynn-toast-action:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+.lynn-toast-action:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+.lynn-toast-success {
+  --lynn-toast-bg: var(--lynn-color-emerald);
+  --lynn-toast-fg: #21212b;
+}
+.lynn-toast-error {
+  --lynn-toast-bg: var(--lynn-color-coral);
+  --lynn-toast-fg: #fff;
+}
+.lynn-toast-info {
+  --lynn-toast-bg: var(--lynn-color-blue);
+  --lynn-toast-fg: #fff;
+}
+.lynn-toast-success .lynn-toast-action:hover {
+  background: rgba(0, 0, 0, 0.12);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-toast {
+    animation: none;
+  }
+  .lynn-toast-action {
+    transition: none;
+  }
+}
+
+/* src/components/Tooltip/Tooltip.css */
+[data-lynn-tooltip] {
+  position: relative;
+}
+[data-lynn-tooltip]::after {
+  content: attr(data-lynn-tooltip);
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 6px);
+  transform: translateX(-50%) translateY(-2px);
+  background: #1e1e1e;
+  color: #fff;
+  font-family: var(--lynn-font-family);
+  font-size: 11px;
+  font-weight: var(--lynn-font-weight-medium);
+  white-space: nowrap;
+  padding: 4px 8px;
+  border-radius: var(--lynn-radius-xs);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms var(--lynn-ease), transform 120ms var(--lynn-ease);
+  z-index: 10001;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+[data-lynn-tooltip]:hover::after,
+[data-lynn-tooltip]:focus-visible::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+[data-lynn-tooltip-side=right]::after {
+  left: auto;
+  right: 0;
+  transform: translateY(-2px);
+}
+[data-lynn-tooltip-side=right]:hover::after,
+[data-lynn-tooltip-side=right]:focus-visible::after {
+  transform: translateY(0);
+}
+.lynn-tooltip-wrap {
+  display: inline-flex;
+  align-items: center;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-lynn-tooltip]::after {
+    transition: none;
+    transform: translateX(-50%) translateY(0);
+  }
+  [data-lynn-tooltip-side=right]::after {
+    transform: translateY(0);
+  }
+}
+
+/* src/theme/ThemeToggle.css */
+.lynn-theme-toggle .lynn-tabs-segment-icon svg {
+  display: block;
+}
+.lynn-theme-toggle .lynn-tabs-segment {
+  gap: 6px;
+}
+.lynn-theme-toggle .lynn-tabs-segment:not(:has(.lynn-tabs-segment-label)) {
+  padding-left: 6px;
+  padding-right: 6px;
+}
+.lynn-theme-wipe {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10050;
+  will-change: clip-path, opacity;
+  background:
+    linear-gradient(
+      135deg,
+      #1a1a2e 0%,
+      #1e1e1e 60%,
+      #1e1e1e 100%);
+}
+.lynn-theme-wipe[data-lynn-wipe=light] {
+  background:
+    linear-gradient(
+      135deg,
+      #ffe4b5 0%,
+      #fafafa 60%,
+      #f5f5f5 100%);
+}
+.lynn-theme-wipe[data-lynn-wipe=lynn] {
+  background:
+    linear-gradient(
+      135deg,
+      #2a1a4e 0%,
+      #120a24 60%,
+      #0b0d17 100%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lynn-theme-wipe {
+    display: none;
+  }
+}
+
+/* src/styles/index.css */
+/*!
+ * Lynn design tokens
+ * -------------------------------------------------------------
+ * Canonical, `--lynn-` prefixed custom properties for the Lynn design
+ * system (NiCE Designer Suite's own visual identity).
+ *
+ * Provenance:
+ *   - Colors, nav height, and font stack are the real values in the site's
+ *     `theme.css`, cross-checked against `LYNN-DESIGN-SYSTEM.md`.
+ *   - `--lynn-color-surface` is `#2a2a36` (the documented value, and the real
+ *     per-page override used on tools.html / dashboard.html / roadmap.html).
+ *     `theme.css` globally aliases `--surface` to `--card` (`#2f2f3d`); that
+ *     collision is resolved here in favor of the documented two-step ramp.
+ *   - `--lynn-color-border` is `rgba(255,255,255,0.08)` (theme.css's real
+ *     value); the design-system doc's `0.07` is stale.
+ *   - `--lynn-color-border-subtle` is the fainter hairline the plugin calls
+ *     `--border-subtle` (skeleton rows, segmented-control shells, dropdown
+ *     dividers). Lynn's own stylesheets only ever expressed it inline, so it
+ *     is named here rather than re-typed per component.
+ *   - `theme.css` also defines `--amber: #f59e0b`. It is undocumented and
+ *     contradicts Lynn's own "never invent a 7th accent" rule, so it is
+ *     deliberately NOT exposed here or anywhere in this package.
+ *   - The radius and spacing scales are the full scales from the
+ *     design-system doc's tables (theme.css only defines `--radius: 16px`
+ *     and `--radius-sm: 8px`).
+ *
+ * Everything here is prefixed so dropping this stylesheet into a host page
+ * can never clobber that page's own `--blue` / `--card` / `--border`.
+ */
+/*!
+ * Theme modes: `data-lynn-theme="lynn" | "light" | "dark"`
+ * -------------------------------------------------------------
+ * The mechanism ported from the plugin (`styles.css:17-38` base/dark,
+ * `:2034-2047` light, `:5305-5332` site): one attribute redefines the same
+ * `--lynn-color-*` names, so every component's CSS is already theme-aware and
+ * none of them change. `ThemeProvider` writes the attribute onto its
+ * `.lynn-root` wrapper; putting it on `<html>` by hand works identically.
+ *
+ * Only neutrals, surfaces, lines, text and the neumorphic shadow pair differ
+ * between modes - the shadow pair because it is derived from that mode's own
+ * bg/card hues and a light mode genuinely does have a light source where a
+ * dark one does not. The seven accents, the radius/spacing scales and
+ * `--lynn-ease` are deliberately constant across all three - exactly how the
+ * plugin keeps `--accent` stable across its own light/dark modes.
+ *
+ * `:root` above already carries the `lynn` values, so a consumer that never
+ * mounts `ThemeProvider` gets today's look unchanged. The explicit
+ * `[data-lynn-theme='lynn']` block below repeats them so a `lynn` subtree
+ * nested inside a `light`/`dark` one still resolves correctly - inheritance,
+ * not specificity, is what picks a mode.
+ */
+/*!
+ * Lynn typeface: Be Vietnam Pro, weights 300-900, from Google Fonts.
+ * Ported verbatim from the <link> every page of the source site carries.
+ * The build step marks this remote @import external, so it survives into
+ * dist/lynn-ui.css untouched rather than being inlined.
+ */
+/*!
+ * Lynn base layer
+ * -------------------------------------------------------------
+ * Deliberately narrow: this package is a component library, not a page
+ * framework, so it must not restyle a host page's <body>. Everything here is
+ * scoped to `.lynn-root` (an opt-in wrapper) or to the package's own
+ * `lynn-`-prefixed elements.
+ *
+ * Values ported from theme.css's `body` rules.
+ */
+/*!
+ * AccessGate - ported from site-gate.css (the canonical, site-wide copy),
+ * with roadmap.html's hand-rolled `.gate-*` duplicate used only to confirm
+ * the shape. Where the two disagreed, site-gate.css wins:
+ *   - overlay covers the full viewport (roadmap's starts at `top: 60px`);
+ *   - divider is `--border` (roadmap hard-codes a fainter `0.07`);
+ *   - subtitle/cta read the text tokens (roadmap hard-codes `0.5` / `0.45`);
+ *   - input has symmetric 18px padding (roadmap pads 48px on the right for
+ *     a trailing affordance it never renders).
+ *
+ * The `--indigo` -> `--lyra` submit/lock gradient, the 64px 18px-radius lock
+ * tile, the 420px card at 24px radius and the 2px-tracked centered password
+ * field are all verbatim.
+ */
+/*!
+ * Accordion / AccordionItem
+ * Behavior + chevron <- the plugin's `.dev-section-head` /
+ *                       `.dev-section-toggle` / `.dev-section-actions` /
+ *                       `.ed-chevron` (`transform: rotate(90deg)` on
+ *                       `.is-open`, 120ms, 9px glyph) / `.ed-panel`
+ *                       (`styles.css:5902-5936`)
+ * Card chrome        <- faq.html `.faq-item` (`card` surface, 1px border,
+ *                       16px radius, `overflow: hidden`, 30% blue border when
+ *                       open), `.faq-q` (20px/24px header, 16px/700),
+ *                       `.faq-a` (0/24px/20px panel, 14px secondary at 1.75,
+ *                       1px top rule) and `.faq-list` (12px column gap)
+ *
+ * The toggle is the real `Button` at `ghost`, so the only rules here are the
+ * ones that turn it into a full-width header row: the button keeps its own
+ * hover, focus ring and icon-gap behavior.
+ */
+/*!
+ * Alert (callout)
+ * Shape    <- install-guide.html `.note-box` / `.tip-box` / `.warn-box`
+ *             (flex row, 10px gap, icon flex-shrink 0 nudged 1px down,
+ *             10px radius, 14px/16px padding, 0.875rem body at 1.6)
+ * Compact  <- roadmap.html `.callout` (6px radius, 9px/11px padding,
+ *             11px body at 1.55, block `strong` title with a 3px gap)
+ * Tints    <- the union of both files' color sets, one variant per real
+ *             color: `.note-box`/`.callout.blue`, `.tip-box`/`.callout.green`,
+ *             `.callout.amber`, `.callout.orange`, `.callout.purple`.
+ *
+ * Two deliberate corrections to the sources:
+ *   - install-guide's `.warn-box` is amber (`rgba(255,176,32,...)`), an
+ *     accent Lynn does not have. roadmap's `.callout.amber` is *already*
+ *     teal, so `warning` follows that in-repo precedent instead.
+ *   - the sources hard-code `rgba(255,255,255,0.65)` body text. That reads
+ *     as white-on-white in light mode, so the body reads
+ *     `--lynn-color-text-secondary` and only the title keeps its accent.
+ */
+/*!
+ * Avatar - the three real discs on roadmap.html:
+ *   `xs` <- `.gate-av`  (14px, 7px/700, no border)
+ *   `sm` <- `.avatar`   (22px, 8px/700, 1px border)
+ *   `lg` <- `.avatar-lg` (36px, 11px/800, blue -> indigo gradient, white text)
+ *
+ * The source's `rgba(255,255,255,0.08)` fill and 0.4/0.5 text alphas read the
+ * card/text tokens, so the flat disc stays legible in light mode. The
+ * gradient variant keeps white initials at every size - it is a filled
+ * accent surface, not a neutral one.
+ */
+/*!
+ * Badge
+ * Base pill    <- tools.html `.target-badge` (10px/700, 3px 8px, pill)
+ * Tone tints   <- theme.css `.coming-soon-tag` (14% accent background)
+ * Bordered     <- tools.html `.target-figma/.target-chrome/.target-both`
+ *                 (20% accent border)
+ * Status pills <- roadmap.html `.badge.active/.shipped/.next/.planned/
+ *                 .new/.dropped`, ported verbatim
+ * Grades       <- the audit/scoring ramp, rebuilt on Lynn's palette
+ * Lifecycle    <- `beta` / `recommended` / `optional`
+ *
+ * The rgb() triples below are the real accent hexes converted exactly.
+ * Note: tools.html's `.target-both` background reads `rgba(54,226,208,.12)`
+ * while `--teal` is `#36EAD0` = `rgb(54,234,208)`. That two-point green
+ * drift is a typo in the source, corrected here to the real accent value.
+ */
+/*!
+ * Button
+ * Primary  <- index.html  `.btn-primary`
+ * Secondary <- wings-2026.html `.btn-secondary`
+ * Ghost    <- the-suite.html `.roadmap-link`
+ *
+ * Transitions are standardized on `--lynn-ease` per the design system's
+ * hard easing rule; the source's `0.2s`/`0.15s` linear-ish transitions on
+ * `.btn-primary` were the inconsistency this package resolves.
+ */
+/*!
+ * Card
+ * Base + hover lift <- wings-2026.html `.contact-card`
+ *                      (card bg, 1px border, 16px radius, 24px padding,
+ *                       hover translateY(-1px) + 0 12px 28px rgba(0,0,0,.32))
+ * Accent strip      <- wings-2026.html `.contact-card::before` (2px, solid)
+ *                      + tools.html `.suite-card-accent` (2px, two-stop
+ *                      gradient - real pairings only)
+ * Spotlight         <- index.html `.tilt-ready::after`
+ *                      (220px radial at --mx/--my, rgba(255,255,255,.09))
+ * Glass             <- theme.css `.doc-rail`
+ *                      (rgba(47,47,61,.92) + blur(12px) + deep shadow)
+ */
+/*!
+ * Carousel
+ * -------------------------------------------------------------
+ * Glass    <- Card.css `.lynn-card-glass`: the same `blur(12px)` and the
+ *             same literal `rgba(47,47,61,...)` card tint, so Lynn has one
+ *             glass recipe rather than two. The difference here is that the
+ *             tint is a bottom-weighted gradient and the blur is masked to
+ *             the lower half - a screenshot has to stay readable above the
+ *             text, which a flat 0.92 scrim would bury.
+ *             Those tints stay literal-dark in every theme on purpose: the
+ *             scrim's job is contrast for white text over an arbitrary
+ *             image, and a light-mode scrim would not do that job.
+ * Spotlight <- Card.css `.lynn-card-interactive::after`, reading the same
+ *             `--lynn-mx`/`--lynn-my` that `useTiltSpotlight` writes.
+ * Shadow    <- Card.css's glass `0 16px 48px rgba(0,0,0,0.35)`.
+ * CTA       <- the `.lynn-cta-banner-btn` precedent: a consumer component
+ *             may retune a real `Button`'s padding and font-size through
+ *             `className`; `Button` itself has no size prop.
+ */
+/*!
+ * ChangelogEntry
+ * Ported from release-notes.html:
+ *   `.changelog-card`        - `surface` fill, 1px border, 16px radius,
+ *                              `overflow: hidden`
+ *   `.changelog-main`        - grid 220px / 1fr, collapsing to one column at
+ *                              700px where the meta rail becomes a top row
+ *   `.changelog-meta`        - 32px padding, 12px column gap, right hairline
+ *   `.version-badge`         - 20px/800 row
+ *   `.version-latest`        - the `LATEST` pill (rendered by `Badge` at
+ *                              `tone="emerald" bordered`, with the source's
+ *                              uppercase + 1.5px track restored below)
+ *   `.version-date`          - 13px secondary
+ *   `.changelog-content`     - 32px padding
+ *   `.changelog-group`       - 24px bottom margin (0 on the last)
+ *   `.changelog-group-label` - 11px/700 uppercase, 1.5px track
+ *   `.changelog-list`        - 8px-gap column, 14px items at 1.6 with a 5px
+ *                              dot 9px from the top, blue by default, coral
+ *                              for fixes and emerald for improvements
+ *   `.changelog-toggle-row`  - full-width row, 20px/32px padding, 3% white
+ *                              hover, 18px/800 version + 13px date
+ *   `.changelog-toggle-arrow`- rotates 180deg when open
+ *   `.changelog-collapsible` - 1px top rule
+ *
+ * One correction: the source hard-codes `rgba(255,255,255,0.85)` list text,
+ * which reads as white-on-white in light mode, so the items read
+ * `--lynn-color-text` at 85% opacity instead - same look in `lynn`, correct
+ * in all three modes.
+ */
+/*!
+ * CodeBlock / InlineCode
+ * Panel  <- the plugin's `.dev-css` (`styles.css:2510-2524`): monospace at
+ *           11px/1.6 on `surface` in `--text`, 1px subtle hairline, `sm`
+ *           radius, 10px/12px padding, `white-space: pre`,
+ *           `overflow-x: auto`, `max-height: 300px` with `overflow-y: auto`
+ * Inline  <- install-guide.html `code, .inline-code` (0.85em mono, 8% white
+ *           chip, teal, 2px/7px, 5px radius, `white-space: nowrap`)
+ *
+ * Three theme corrections to the sources' hard-coded values:
+ *   - the inline chip's `rgba(255,255,255,0.08)` becomes an 8% mix of the
+ *     mode's own text color, so it stays visible in `light`;
+ *   - install-guide's `#1a1a26` panel fill becomes `--lynn-color-surface`,
+ *     the plugin's own choice, for the same reason;
+ *   - teal on a white surface is unreadable, so in `light` the inline chip's
+ *     text is teal mixed toward that mode's own text color rather than a new
+ *     hand-picked hue. install-guide's own `.code-block` paints the panel's
+ *     code teal too; the panel here follows the plugin's `--text` instead,
+ *     which needs no correction in any mode.
+ */
+/*!
+ * CopyButton
+ * Ported from the plugin's `.btn-icon-label` (`styles.css:939-940`): a 5px
+ * icon/label gap and a non-shrinking, block-displayed glyph, at the small
+ * button scale its clipboard buttons use (`index.tsx:7175-7183`).
+ *
+ * Everything else - fill, radius, hover, focus ring, disabled state - is the
+ * real `Button` underneath.
+ */
+/*!
+ * CtaBanner
+ * `gradient` <- marketplace.html `.mk-cta` (18px-gap wrapping row,
+ *               space-between, `linear-gradient(135deg, rgba(97,0,255,.16),
+ *               rgba(54,148,252,.10))`, 30% indigo border, 16px radius,
+ *               24px/28px padding, 14px secondary text with a 560px cap)
+ * `tinted`   <- the-suite.html / index.html `.sp-marketplace-cta` (16px gap,
+ *               8% `lynn` fill, 22% `lynn` border, 14px radius, 18px/22px
+ *               padding, 13px text at 1.6)
+ * Stacking   <- both files' `@media (max-width: 720px|768px)` rule: column,
+ *               left-aligned
+ *
+ * The CTA is the real `Button`; the only rules here are the pill radius and
+ * the small type both sources' own CTAs use, which `Button`'s `secondary`
+ * variant (a 12px-radius fill) does not carry on its own.
+ */
+/*!
+ * CursorGlow - ported from index.html's `#nice-cursor-glow`, including the
+ * 0.08s linear left/top transition that produces the trailing lag. That
+ * `linear` is deliberate and not a violation of the easing rule: it is a
+ * continuous pointer follow, not a discrete state change - an eased curve
+ * would make the glow rubber-band behind fast cursor movement.
+ */
+/*!
+ * DataTable - ported from dashboard.html's `.table-wrap` block:
+ * a 12px-radius bordered card that scrolls horizontally, a 3%-white sticky
+ * header row of 10px/700 uppercase muted labels, 9px/12px cells at 13px, a
+ * hairline under every row but the last, and a 2.5%-white row hover that also
+ * brightens the text.
+ *
+ * The sort indicator is a real `IconChevronUp`/`IconChevronDown`/
+ * `IconArrowsSort`, swapped by state - no emoji or CSS-content glyphs.
+ *
+ * scoring.html pairs the same table shape with a `.gauge-row` bar cell; a
+ * `ProgressBar` dropped into a cell via `renderCell` gets that treatment from
+ * the `.lynn-progress` rule at the bottom.
+ *
+ * The header and row-hover fills are `color-mix` against `--lynn-color-text`
+ * rather than the source's raw white alphas - the same color in Lynn's own
+ * mode, and still a visible tint in light mode instead of nothing.
+ */
+/*!
+ * DocRail - ported from theme.css's `.doc-rail*` block (lines 159-323):
+ * a fixed 220px glass panel pinned 16px under the nav and 24px from the left,
+ * with a 26x40 edge tab that takes over once it collapses.
+ *
+ * `.lynn-doc-rail-sublink`'s `--lynn-warmth` is the same 0-1 variable the
+ * source calls `--warmth`, driving text alpha, background tint and the inset
+ * left rule together. What sets it is simpler here (see useAnchorWarmth), but
+ * the visual contract is unchanged.
+ *
+ * Every fill the source wrote as a raw white alpha is re-expressed as a
+ * `color-mix` against a theme token, with the source's literal kept above it
+ * as the fallback. In Lynn's own mode the two are the same color
+ * (`--lynn-color-card` at 92% *is* `rgba(47,47,61,0.92)`, `--lynn-color-text`
+ * at 6% *is* `rgba(255,255,255,0.06)`); in light mode the literals would
+ * leave a dark panel with dark text and invisible hover states.
+ */
+/*!
+ * Dropdown - ported from the plugin's `.color-dropdown*` family
+ * (styles.css:2644-2784): trigger + swatch + arrow, an absolutely positioned
+ * `--bg-elevated` popover, an inline filter row, sticky section headers, and
+ * a centered empty state.
+ *
+ * Scaled up from the plugin's 11px panel type to Lynn's 13px body reading,
+ * and the popover is absolute here (the plugin measures and pins its list in
+ * JS because it renders inside a fixed-height Figma iframe).
+ */
+/*!
+ * FeatureCard
+ * `full`    <- the-suite.html `.tool-card` family, verbatim: 16px radius,
+ *              3px `--t-gradient` glow stripe, 28px/20px header with a 52px
+ *              14px-radius gradient tile, 22px/800 name, 13px tagline,
+ *              `.tool-why` quote with a 2px accent left rule, 5px accent
+ *              bullet dots, footer split between neutral tag pills and a
+ *              status badge, hover lift -4px with a 1px accent ring.
+ * `compact` <- tools.html `.suite-card` (14px radius, 20px padding, 2px
+ *              accent strip, bare 22px glyph, 15px/700 name, hover -1px with
+ *              `0 8px 28px` shadow), sharing `.mcp-card`/`.skill-card`'s
+ *              tighter 12.5-13px body type.
+ *
+ * `--lynn-t-color` / `--lynn-t-gradient` are the package-prefixed names for
+ * the site's own per-card `--t-color` / `--t-gradient` variables.
+ *
+ * Substitutions so the card survives light mode, all no-ops in Lynn's own
+ * mode: the hard-coded `#2f2f3d` background and `rgba(255,255,255,0.08)`
+ * border read `--lynn-color-card` / `--lynn-color-border`, and the quote
+ * block's and tag pill's white alphas become `color-mix` against
+ * `--lynn-color-text` with the literal kept above as the fallback.
+ */
+/*!
+ * FeaturePanel
+ * Ported from wings-2026.html:
+ *   `.walk-panel`         - 1px border, 24px radius, 40px padding,
+ *                           `overflow: hidden`, two radial glows
+ *                           (`circle at 12% 0%` 20% indigo and
+ *                           `circle at 92% 100%` 16% emerald, both to
+ *                           `transparent 55%`) over the `card` fill, and a
+ *                           400ms border/transform transition
+ *   `.walk-panel:hover`   - 13% white border, `translateY(-1px)`
+ *   `.walk-panel::before` - 2px top stripe,
+ *                           `linear-gradient(90deg, blue, indigo, emerald)`
+ *   `.walk-badge`         - 11px/700 uppercase pill, 1.5px track,
+ *                           13% `lynn` fill, 6px/14px padding, 18px below
+ *   `.walk-heading`       - 26px/800, -0.5px track, 12px below
+ *   `.walk-body`          - 15px secondary at 1.7, 620px cap, 26px below
+ *   `.walk-actions`       - 14px-gap wrapping row
+ *
+ * The pill is `Badge` at `tone="lynn"` with the source's own type restored
+ * (Badge only uppercases its `status` pills), and the actions are real
+ * `Button`s.
+ */
+/*!
+ * Float - ported from roadmap.html's `@keyframes float` (0/100% translateY(0),
+ * 50% translateY(-6px)).
+ *
+ * The travel distance is the source's exact -6px. The default duration is 6s
+ * (a slower, ambient bob for the general-purpose component); roadmap.html's
+ * single usage runs it at 2.5s on a scroll hint, which callers can restore
+ * with `duration={2.5}`.
+ */
+/*!
+ * Footer - ported from theme.css `.site-footer` / `.footer-top` /
+ * `.footer-logo` / `.footer-nav` / `.footer-nav-col`.
+ */
+/*!
+ * GaugeRing - ported from the plugin's `.score-ring` shell (styles.css:
+ * 1211-1330) and the SVG structure at index.tsx:8224-8259: a 110px box, a
+ * `--bg-elevated` track circle at r=44 / stroke 10, an accent arc clipped by
+ * `stroke-dasharray`, and the whole SVG rotated -90deg so 0% starts at the
+ * top rather than at 3 o'clock.
+ *
+ * The mount animation is this package's addition; the plugin gets the same
+ * effect by ticking its `animScore` counter in JS.
+ */
+/*!
+ * GlowPulse - ported from nice-effects.css's `@keyframes nice-glow-pulse`.
+ * The source's literal `rgba(144,88,255,*)`/`rgba(54,148,252,*)` are the
+ * `lynn` and `blue` accents respectively (the first is a near-duplicate of
+ * `lynn`, not an exact match) - remapped onto the real tokens via
+ * `color-mix()` so the halo re-tints correctly if the accent ever changes,
+ * same approach Parts C/D used for other white/tint-alpha fills.
+ */
+/*!
+ * The animated layers must all carry the SAME number of comma-separated
+ * box-shadow entries at every keyframe stop, in the same order - a keyframe
+ * with fewer layers than its neighbors makes the whole `box-shadow` value
+ * non-interpolable, and the browser just leaves the property at its
+ * unanimated default (`none`) for the entire loop instead of animating it.
+ * That's why 0%/100% carry the same two zero-spread, fully-transparent
+ * placeholders 50% fills in, rather than omitting them.
+ */
+/*!
+ * GradientBackground - ported byte-for-byte from nice-effects.css's
+ * `.nice-gradient-animated`, `.nice-gradient-animated-fast` and
+ * `.nice-gradient-static`, including both keyframe sets and the
+ * reduced-motion block.
+ */
+/*!
+ * Hero - ported from index.html's `.hero` / `.hero-bg` / `.hero-radial` /
+ * `.hero-orb-1..3` / `@keyframes orbFloat` / `.hero-content` /
+ * `.hero-title` / `.hero-subtitle` / `.hero-ctas`, plus lynn.html's
+ * `.hero-eyebrow` (the only real eyebrow on the site).
+ *
+ * The three orb positions, sizes, blur, opacity and negative animation
+ * delays are index.html's exact values.
+ */
+/*!
+ * IconCard
+ * `vertical`   <- index.html `.pillar-card` / `.pillar-icon` / `.pillar-title`
+ *                 / `.pillar-desc`: surface fill, 16px radius, 32px padding,
+ *                 36px block icon with a 20px gap, 20px/700 title, 15px body
+ *                 at 1.65, hover brightens the border only.
+ * `horizontal` <- the-suite.html `.sp-card`: flex row with a 14px gap, 16px
+ *                 radius, 20px padding, 22px icon nudged 2px down, 14px/700
+ *                 title, 13px body at 1.65.
+ *
+ * scoring.html's `.score-card` is the same vertical card center-aligned at a
+ * smaller scale; that drift is not reproduced as a third layout - it is a
+ * `className` away for a caller who wants it.
+ *
+ * `.sp-card`'s `rgba(255,255,255,0.04)` fill and `0.07` border read the card
+ * and border-subtle tokens instead, so the horizontal layout does not turn
+ * into white-on-white in light mode.
+ */
+/*!
+ * Legend
+ * `dot`  <- roadmap.html `.legend` (24px gap, wrapping, centered) with
+ *           `.legend-label` (10px/700, 2px tracked, uppercase, muted),
+ *           `.legend-item` (7px gap, 12px/500 secondary) and `.legend-dot`
+ *           (8px disc).
+ * `pill` <- the-suite.html `.legend-pill` (10px/700, 0.5px tracked,
+ *           uppercase, `4px 10px`, pill radius) + `.legend-desc` (13px).
+ *
+ * The source spells its pill tints out one class per status
+ * (`.legend-pill.active`, `.beta`, `.planned`). Here the caller passes the
+ * color and the 15% background is derived with `color-mix`, which is what
+ * every one of those hand-written pairs was doing by hand. A flat token
+ * background is declared first as the fallback for engines without
+ * `color-mix`.
+ */
+/*!
+ * Lightning - the container/canvas shell that nice-effects.js's `prep()`
+ * used to apply imperatively (position: relative, overflow: hidden, children
+ * lifted to z-index 1), plus nice-effects.css's `.nice-plasma-canvas` /
+ * `.nice-motes-canvas` rules.
+ *
+ * The stage background `#1b1b24` is lynn.html's real `.fx-plasma-stage`
+ * value - slightly deeper than `bg` so the filaments read at full contrast.
+ * It is exposed as `--lynn-lightning-bg` because the animated ring's inner
+ * fill has to be exactly the same color to mask the conic gradient down to a
+ * 2px band.
+ */
+/*!
+ * LiquidFill - ported from nice-effects.css's `.nice-liquid-fx` /
+ * `.nice-liquid-canvas`, plus the container shell that `prep()` used to
+ * apply imperatively. The `filter: url(#lynn-goo)` reference points at the
+ * metaball filter that the component injects once per document.
+ *
+ * The stage background `#1b1b24` is lynn.html's real `.fx-liquid-stage`
+ * value.
+ */
+/*!
+ * Nav - ported from theme.css `.site-nav` / `.nav-logo` / `.logo-*`
+ * and the `.nav-scroll-hidden` transform driven by nice-effects.js's
+ * initScrollHide().
+ *
+ * The source's raw rgba fills are re-expressed as `color-mix` against a
+ * theme token, with the source's literal kept above it as the fallback
+ * (see DocRail.css for the fuller explanation of this pattern). In Lynn's
+ * own mode the two are the same color; in light mode the literals would
+ * leave a dark bar with dark text.
+ */
+/*!
+ * ProgressBar
+ * determinate   <- the plugin's `.progress-bar-bg` / `.progress-bar-fill`
+ *                  (4px track, 2px radius, `width 0.3s ease`)
+ * indeterminate <- the plugin's `.tab-progress-bar::after` and its
+ *                  `tab-progress-slide` keyframe (a 40%-wide bar crossing
+ *                  from -40% to 100% in 1.1s)
+ */
+/*!
+ * PulseDot - ported from roadmap.html's `.phase-dot` shell and
+ * `@keyframes pulse` (box-shadow 0 0 0 0 currentColor -> 0 0 0 6px
+ * transparent, opacity 1 -> 0.7), with the accent-tinted 4px halo from
+ * `.phase-dot.active` / `.phase-dot.next`.
+ */
+/*!
+ * Reveal - ported from index.html's polish-layer `.reveal` / `.reveal.visible`
+ * (translateY(22px) + opacity, 0.55s on the Lynn easing curve).
+ */
+/*!
+ * ScrollArea
+ * -------------------------------------------------------------
+ * A genuinely curved scrollbar. CSS cannot bend a box along an arc, so the
+ * bar is not a box: the overlay is an SVG whose single `d` traces the
+ * container's own rounded-rect perimeter - through the top-right corner, down
+ * the right edge, through the bottom-right corner - and the thumb is one
+ * dash on that path.
+ *
+ * Three paths share the `d` the hook writes:
+ *   .lynn-scroll-area-hit    transparent, wide, the only thing clickable
+ *   .lynn-scroll-area-rail   the faint full-length groove
+ *   .lynn-scroll-area-thumb  the dash, moved by stroke-dashoffset
+ *
+ * Four custom properties drive it, all in px and all written by the hook:
+ *   --lynn-scroll-radius   the container's radius, the curve to trace
+ *   --lynn-track-length    getTotalLength() of the path, the dash gap
+ *   --lynn-thumb-size      clientSize / scrollSize, of the track length
+ *   --lynn-thumb-offset    scrollPos / slack, of the track's leftover length
+ *
+ * The dash pattern is `size gap` with the gap set to the whole track, so the
+ * pattern is longer than the path and exactly one dash can ever be on it; a
+ * *negative* dashoffset is what slides that dash forward, because a positive
+ * one walks the pattern backwards.
+ *
+ * State classes, also from the hook:
+ *   .lynn-scroll-area-scrollable  content actually overflows (bar exists)
+ *   .lynn-scroll-area-active      scrolling, hovered, or mid-drag (bar shown)
+ *   .lynn-scroll-area-dragging    the thumb is captured
+ */
+/*!
+ * SearchInput
+ * Shape  <- tools.html `.nav-search` / `.nav-search-icon`: relatively
+ *           positioned wrapper, 10px radius, `7px 14px 7px 36px` padding, a
+ *           non-interactive 13px glyph pinned 11px from the left, and a
+ *           `rgba(54,148,252,0.4)` focus border.
+ * Width  <- dashboard.html `.search-bar input` fills its container
+ *           (`width: 100%`); tools.html's nav field is 220px and grows to
+ *           280px on focus. That growth is `expandOnFocus`.
+ *
+ * The source's `rgba(255,255,255,0.06)` fill reads `--lynn-color-surface` so
+ * the field stays visible in light mode; the focus tint keeps its literal
+ * blue alpha, which works on both grounds.
+ *
+ * Resting treatment: the flat 1px line is replaced by the shared neumorphic
+ * inset pair (`--lynn-shadow-pressed`), so the field reads as carved into the
+ * surface it sits on. Props and behavior are untouched.
+ */
+/*!
+ * Sheen - ported verbatim from nice-effects.css's `.nice-sheen`/`::after`
+ * (translateX -120% -> 320%, skewX(-18deg), 4.2s ease-in-out infinite).
+ */
+/*!
+ * ShimmerText - ported verbatim from lynn.html's `.hero-title .gradient-word`
+ * and its 4s `@keyframes shimmer` (-200% -> 200% background-position).
+ */
+/*!
+ * Skeleton - ported verbatim from the plugin's `.skeleton-list` /
+ * `.skeleton-row` and its `skeleton-shimmer` keyframe (styles.css:1982-2005).
+ * The gradient reads Lynn's `surface` -> `card` -> `surface` ramp, which is
+ * the same two-surface step the plugin's `--bg-surface` / `--bg-elevated`
+ * pair describes, so the shimmer re-tones itself in every theme mode.
+ */
+/*!
+ * Sparkle - the default glyph is Tabler's `sparkles` icon, split back into
+ * the three diamonds it's built from (one large, two small) so each can
+ * twinkle - scale + opacity, no rotation - on its own staggered delay. A
+ * single rigid rotate (the very first version, and `nice-effects.css`'s
+ * original `.nice-sparkle` before it) reads as a lopsided half-spin on a
+ * shape with no 4-fold symmetry; three independently pulsing layers is what
+ * actually reads as the glyph transforming rather than just spinning.
+ *
+ * `transform-box: fill-box` scopes each path's `transform-origin: center` to
+ * its own bounding box rather than the shared SVG viewport, so each diamond
+ * pulses around its own center instead of the icon's.
+ */
+/*!
+ * Spinner - ported from the plugin's `.spinner` / `.spinner-dark`
+ * (styles.css:2152-2180): a 2px ring whose top edge is opaque, rotating at
+ * 0.65s linear. `md` and `lg` are this package's additions - the plugin only
+ * ever needed the 11px inline size.
+ */
+/*!
+ * StepNumber (numbered circle)
+ * `lg` gradient <- install-guide.html `.step-number-badge` (52px, 50%
+ *                  radius, `linear-gradient(135deg, electric-blue, indigo)`,
+ *                  1.25rem/800 white numerals, `0 0 0 4px rgba(2,90,251,.18)`
+ *                  glow ring)
+ * `sm` tint     <- wings-2026.html `.step-list li::before` (28px, 15% accent
+ *                  disc, accent numerals, 13px/700)
+ * `md` tint     <- scoring.html `.tip-number` (32px, 12% accent disc, 25%
+ *                  accent hairline, accent numerals)
+ * `xs` tint     <- use-cases.html `.step-num` (18px, faint neutral disc)
+ * `solid`       <- marketplace.html `.step-num` (30px flat accent disc, white
+ *                  13px/800 numerals; rendered at `sm`'s 28px)
+ *
+ * Every size reads the same three fills off `--lynn-step-color` /
+ * `--lynn-step-color-2`, set by the color classes at the bottom, so the size
+ * and the fill stay independent.
+ *
+ * The gradient's second stop is only ever a pair that really exists in the
+ * site's own 135deg gradients (`#025AFB -> #6100FF`, `#3694FC -> #025AFB`,
+ * `#36EAD0 -> #00E2A0`, `#6100FF -> #B98FFF`, and two of those reversed).
+ * `coral` has no gradient anywhere on the site, so it deliberately falls back
+ * to its flat disc rather than inventing a partner hue; `lynn` does the same,
+ * because every pair it appears in ends on a tint too light to carry white
+ * numerals.
+ */
+/*!
+ * Stepper
+ * Ported from install-guide.html:
+ *   `.steps-list`        - flex column, 56px gap
+ *   `.step`              - grid 80px / 1fr, 32px column gap
+ *   `.step-sidebar`      - centered flex column holding badge + line
+ *   `.step-line`         - 2px rule, `flex: 1`, 12px top margin, 40px min
+ *                          height, top-to-bottom accent fade (0.4 -> 0.04),
+ *                          hidden on the last step
+ *   `.step-header`       - 10px top padding, 20px bottom margin
+ *   `.step-title`        - 1.5rem/700
+ *   `.step-card`         - `card` surface, 1px border, 16px radius,
+ *                          28px/32px padding
+ *   `@media (max-width: 600px)` - single column, 16px gap, sidebar turns into
+ *                          a row
+ *
+ * The badge itself is `StepNumber` at `lg`, not a copy of
+ * `.step-number-badge`.
+ *
+ * The line's two stops come off `--lynn-stepper-line` so the accent is a
+ * single knob shared with the badge, instead of the source's hard-coded
+ * `rgba(2,90,251,...)` pair.
+ */
+/*!
+ * Switch - no website precedent (the site ships no form controls), so this is
+ * assembled from Lynn's own vocabulary rather than ported: pill radius, the
+ * `card`/`border` off state, a solid blue on state, and `--lynn-ease` on the
+ * only thing that moves.
+ *
+ * The two sizes are set by `--lynn-switch-*` so the track, the thumb and the
+ * travel can never drift out of step.
+ */
+/*!
+ * TabPanels / TabPanel
+ * `bar` chrome <- dashboard.html `.section-nav` (10px/20px padding,
+ *                 `surface` background, 1px bottom border, wrapping row)
+ * Panel        <- dashboard.html `.section-panel` (16px/20px/32px padding,
+ *                 `display: none` until active)
+ *
+ * Only the row *container* and the panel come from the source; the segments
+ * themselves are `Tabs` and are deliberately not restyled here, so the system
+ * has one segmented control rather than two.
+ */
+/*!
+ * Tabs (segmented control)
+ * `pill`      <- the plugin's `.cbf-segmented` / `.cbf-seg-btn` (2px-padded
+ *                elevated shell, solid-accent active segment)
+ * `elevated`  <- the plugin's `.var-section-tabs` / `.var-section-tab`
+ *                (active segment lifts to the card surface with a shadow)
+ * `underline` <- the plugin's `.tabs` / `.tab` (2px accent rule, accent text)
+ *
+ * The active accent is read from `--lynn-tabs-accent`, set by the tone
+ * classes at the bottom, so all three variants share one set of rules.
+ */
+/*!
+ * TextField
+ * -------------------------------------------------------------
+ * The site has no real form controls, so - like `Switch` - this is built
+ * from Lynn's own vocabulary rather than ported: `--lynn-ease` on every
+ * transition, the seven accents as the only focus colors, `text-secondary`
+ * for the resting label and `coral` (Lynn's error accent) for the invalid
+ * state.
+ *
+ * The underline is an SVG sine path, not a border. Two things change on
+ * focus and they are deliberately different mechanisms:
+ *   - `stroke-dashoffset` 100 -> 0 is a one-shot keyframe, so the wave
+ *     visibly draws in left-to-right.
+ *   - `scaleY` 0.1 -> 1 is a transition, so it also reverses smoothly on
+ *     blur rather than snapping flat.
+ *
+ * The 241 in the dash rules is the path's own length in viewBox user units
+ * (`getTotalLength()` on TextField.tsx's `d` is 240.9). Dash math is done in
+ * user space, and the viewBox is a fixed 240 wide however far
+ * `preserveAspectRatio="none"` stretches it, so one constant is correct at
+ * every field width. Two things that look like shortcuts here are not:
+ * `pathLength` is not honored for dashing in Chrome, and
+ * `vector-effect: non-scaling-stroke` moves dashing into screen space, where
+ * no constant can be right - both leave the "solid" wave visibly broken into
+ * chunks.
+ */
+/*!
+ * Timeline / Phase / RoadmapItemCard
+ * Ported from roadmap.html, the site's richest single pattern:
+ *   `.timeline::before` - 1px rule at left 15px, from 50% blue through 30%
+ *                         indigo at the midpoint to transparent
+ *   `.phase`            - 36px gap, 52px bottom padding (0 on the last)
+ *   `.phase-dot`        - 12px disc, 2px `bg`-colored border, 8px top margin
+ *   `.phase-header`     - baseline row, 12px gap; 18px/800 title with a
+ *                         -0.3px track, 12px muted period
+ *   `.phase-desc`       - 13px secondary at 1.65, 700px max width
+ *   `.phase-dep`        - 11px chip with the literal `Requires:` prefix
+ *   `.cards`            - auto-fill grid, 360px min column, 10px gap
+ *   `.card`             - 3% white fill, 7% border, `sm` radius,
+ *                         16px/18px/0/22px padding, 3px left stripe from
+ *                         `--card-color`, 1px hover lift
+ *   `.tag` / `.gates` / `.gate` / `.gate-avatars` - the footer families
+ *
+ * Two substitutions, both to keep one implementation of a shape rather than
+ * two: the pulsing dots are the `PulseDot` component (whose keyframes are the
+ * same `@keyframes pulse` this file's source defines), and both avatar stacks
+ * are the `Avatar` component at `sm` and `xs` - its two smallest sizes were
+ * taken from this very file.
+ *
+ * The card's fills stay as the source's white alphas rather than moving to
+ * `--lynn-color-card`: they are deliberately *translucent* over the phase
+ * background, which is what lets the left stripe and the hover lift read.
+ */
+/*!
+ * Toast - ported from the plugin's `.toast` bar (styles.css:1468-1491) and
+ * its `toast-in` entrance. Two departures from the source:
+ *   - the plugin pins the bar to `left: 12px; right: 12px` (it lives in a
+ *     240px panel) while its own keyframe animates `translateX(-50%)`; here
+ *     the bar is genuinely centered, so the keyframe matches the layout.
+ *   - the three kinds resolve to Lynn's real accents (emerald / coral / blue)
+ *     rather than the plugin's `--success` / `--danger` / `--accent`.
+ */
+/*!
+ * Tooltip - ported from the plugin's `[data-tooltip]` bubble
+ * (styles.css:835-876): a `::after` whose text is `attr()`-read straight off
+ * the target, so there is no second DOM node to position.
+ *
+ * The bubble keeps its own dark ground and white text in every theme mode -
+ * a tooltip is an overlay, not a surface, and the plugin's light mode leaves
+ * `--tooltip-bg` dark for the same reason.
+ */
+/*!
+ * ThemeToggle - everything structural comes from Tabs; this only sizes the
+ * three mode glyphs and keeps an icon-only toggle square.
+ *
+ * Plus the theme wipe's overlay, which is the one element in this package
+ * that no component renders: `themeWipe.ts` appends it to <body> so the whole
+ * document sweeps, including chrome portalled outside ThemeProvider's div.
+ * It is only ever on screen for about 700ms.
+ */
+/*!
+ * lynn-ui - the single stylesheet entry point.
+ * Bundled by scripts/build-css.mjs into dist/lynn-ui.css.
+ *
+ * Order matters: tokens first (every rule below reads --lynn-* vars), then
+ * the remote font, then the base layer, then components alphabetically, then
+ * the theme layer (ThemeToggle only refines Tabs, so it must come after it).
+ */

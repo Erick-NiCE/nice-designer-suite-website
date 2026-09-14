@@ -1,0 +1,120 @@
+/*!
+ * GaugeRing - ported from the plugin's `.score-ring` shell (styles.css:
+ * 1211-1330) and the SVG structure at index.tsx:8224-8259: a 110px box, a
+ * `--bg-elevated` track circle at r=44 / stroke 10, an accent arc clipped by
+ * `stroke-dasharray`, and the whole SVG rotated -90deg so 0% starts at the
+ * top rather than at 3 o'clock.
+ *
+ * The mount animation is this package's addition; the plugin gets the same
+ * effect by ticking its `animScore` counter in JS.
+ */
+
+.lynn-gauge {
+  position: relative;
+  flex-shrink: 0;
+  font-family: var(--lynn-font-family);
+  color: var(--lynn-gauge-accent);
+}
+
+/*
+ * The backing plate: a raised disc exactly the size of the gauge box, sitting
+ * behind the SVG. `surface` rather than `card` so it reads as a separate
+ * layer from the track circle, which is `card`.
+ *
+ * Nothing inside the gauge is focusable today (the root is a
+ * `role="progressbar"`, not a control), so hover is what actually fires;
+ * `:focus-within` is there so a gauge that is ever wrapped around or given a
+ * focusable child imprints for keyboard users too, rather than only for a
+ * mouse.
+ */
+.lynn-gauge-plate {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--lynn-color-surface);
+  box-shadow: var(--lynn-shadow-raised);
+  transition: box-shadow 0.18s var(--lynn-ease);
+}
+
+.lynn-gauge:hover .lynn-gauge-plate,
+.lynn-gauge:focus-within .lynn-gauge-plate {
+  box-shadow: var(--lynn-shadow-pressed);
+}
+
+.lynn-gauge-svg {
+  display: block;
+  /* Above the plate. The plate is absolutely positioned, so the in-flow SVG
+     would otherwise paint underneath it. */
+  position: relative;
+  z-index: 1;
+  transform: rotate(-90deg);
+}
+
+.lynn-gauge-arc {
+  transition: stroke-dashoffset 0.9s var(--lynn-ease);
+}
+
+.lynn-gauge-value {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  pointer-events: none;
+}
+
+.lynn-gauge-num {
+  font-size: 28px;
+  font-weight: var(--lynn-font-weight-bold);
+  line-height: var(--lynn-line-height-tight);
+  color: var(--lynn-gauge-accent);
+}
+
+.lynn-gauge-label {
+  font-size: 9px;
+  font-weight: var(--lynn-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--lynn-color-text-secondary);
+  text-align: center;
+}
+
+/* ---------- tones ---------- */
+.lynn-gauge-tone-blue {
+  --lynn-gauge-accent: var(--lynn-color-blue);
+}
+.lynn-gauge-tone-electric-blue {
+  --lynn-gauge-accent: var(--lynn-color-electric-blue);
+}
+.lynn-gauge-tone-indigo {
+  --lynn-gauge-accent: var(--lynn-color-indigo);
+}
+.lynn-gauge-tone-emerald {
+  --lynn-gauge-accent: var(--lynn-color-emerald);
+}
+.lynn-gauge-tone-teal {
+  --lynn-gauge-accent: var(--lynn-color-teal);
+}
+.lynn-gauge-tone-coral {
+  --lynn-gauge-accent: var(--lynn-color-coral);
+}
+.lynn-gauge-tone-lynn {
+  --lynn-gauge-accent: var(--lynn-color-lynn);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-gauge-arc {
+    /* No sweep - the arc appears at its final length on the first paint. */
+    transition: none;
+  }
+  /* One static state: the plate stays raised, and hover does nothing. */
+  .lynn-gauge-plate {
+    transition: none;
+  }
+  .lynn-gauge:hover .lynn-gauge-plate,
+  .lynn-gauge:focus-within .lynn-gauge-plate {
+    box-shadow: var(--lynn-shadow-raised);
+  }
+}

@@ -1,5 +1,5 @@
 /*!
- * NiCE Designer — effect layer styles (pairs with nice-effects.js)
+ * NiCE Designer - effect layer styles (pairs with nice-effects.js)
  * Applied automatically by the JS; you normally don't touch these.
  */
 
@@ -104,6 +104,67 @@ body.nice-leaving {
   }
 }
 
+/* =========================================================
+   Sparkle / glow-pulse / sheen accents
+   - .nice-sparkle      inline icon glyph, pulses + rotates
+   - .nice-glow-pulse    breathing purple/blue box-shadow halo
+   - .nice-sheen         diagonal light sweep (self-contained, no extra markup)
+   ========================================================= */
+/*
+ * Three separate layers (the icon's own three diamonds, split into their
+ * own <path>s) twinkle - scale + opacity, no rotation - on staggered
+ * delays, rather than the whole glyph spinning as one rigid shape. A single
+ * rotate reads as a lopsided half-spin on a shape with no 4-fold symmetry;
+ * three independently pulsing layers is what actually looks like the glyph
+ * transforming. transform-box: fill-box scopes each path's own center as
+ * its transform-origin instead of the shared SVG viewport's.
+ */
+@keyframes nice-sparkle-twinkle {
+  0%, 100% { transform: scale(0.55); opacity: 0.35; }
+  50%      { transform: scale(1);    opacity: 1;    }
+}
+.nice-sparkle {
+  display: inline-flex;
+  color: #9058ff;
+  overflow: visible;
+}
+.nice-sparkle-layer {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: nice-sparkle-twinkle 2.4s ease-in-out infinite;
+}
+.nice-sparkle-layer-a { animation-delay: 0s; }
+.nice-sparkle-layer-b { animation-delay: 0.5s; }
+.nice-sparkle-layer-c { animation-delay: 0.9s; }
+
+@keyframes nice-glow-pulse {
+  0%, 100% { box-shadow: 0 8px 26px -8px rgba(20,10,60,0.4), 0 0 0 rgba(144,88,255,0); }
+  50%      { box-shadow: 0 8px 26px -8px rgba(20,10,60,0.4), 0 0 34px 6px rgba(144,88,255,0.75), 0 0 60px 12px rgba(54,148,252,0.5); }
+}
+.nice-glow-pulse {
+  animation: nice-glow-pulse 3s ease-in-out infinite;
+}
+
+@keyframes nice-sheen-sweep {
+  0%        { transform: translateX(-120%) skewX(-18deg); }
+  60%, 100% { transform: translateX(320%)  skewX(-18deg); }
+}
+.nice-sheen {
+  position: relative;
+  overflow: hidden;
+}
+.nice-sheen::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 45%;
+  background: linear-gradient(90deg, transparent, rgba(144,88,255,0.55), transparent);
+  animation: nice-sheen-sweep 4.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
 /* Respect reduced-motion preferences */
 @media (prefers-reduced-motion: reduce) {
   body { animation: none; }
@@ -113,4 +174,7 @@ body.nice-leaving {
   .nav-link:hover,
   .nav-link:active { transform: none; }
   .site-nav .nav-links { transition: none; }
+  .nice-sparkle-layer,
+  .nice-glow-pulse { animation: none; }
+  .nice-sheen::after { display: none; }
 }

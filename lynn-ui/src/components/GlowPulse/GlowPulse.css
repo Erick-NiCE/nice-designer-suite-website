@@ -1,0 +1,43 @@
+/*!
+ * GlowPulse - ported from nice-effects.css's `@keyframes nice-glow-pulse`.
+ * The source's literal `rgba(144,88,255,*)`/`rgba(54,148,252,*)` are the
+ * `lynn` and `blue` accents respectively (the first is a near-duplicate of
+ * `lynn`, not an exact match) - remapped onto the real tokens via
+ * `color-mix()` so the halo re-tints correctly if the accent ever changes,
+ * same approach Parts C/D used for other white/tint-alpha fills.
+ */
+
+/*!
+ * The animated layers must all carry the SAME number of comma-separated
+ * box-shadow entries at every keyframe stop, in the same order - a keyframe
+ * with fewer layers than its neighbors makes the whole `box-shadow` value
+ * non-interpolable, and the browser just leaves the property at its
+ * unanimated default (`none`) for the entire loop instead of animating it.
+ * That's why 0%/100% carry the same two zero-spread, fully-transparent
+ * placeholders 50% fills in, rather than omitting them.
+ */
+@keyframes lynn-glow-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 8px 26px -8px rgba(20, 10, 60, 0.4),
+      0 0 0 0 color-mix(in srgb, var(--lynn-color-lynn) 0%, transparent),
+      0 0 0 0 color-mix(in srgb, var(--lynn-color-blue) 0%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 8px 26px -8px rgba(20, 10, 60, 0.4),
+      0 0 34px 6px color-mix(in srgb, var(--lynn-color-lynn) 75%, transparent),
+      0 0 60px 12px color-mix(in srgb, var(--lynn-color-blue) 50%, transparent);
+  }
+}
+
+.lynn-glow-pulse {
+  animation: lynn-glow-pulse 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-glow-pulse {
+    animation: none;
+  }
+}

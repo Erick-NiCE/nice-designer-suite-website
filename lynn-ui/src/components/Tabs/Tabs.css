@@ -1,0 +1,183 @@
+/*!
+ * Tabs (segmented control)
+ * `pill`      <- the plugin's `.cbf-segmented` / `.cbf-seg-btn` (2px-padded
+ *                elevated shell, solid-accent active segment)
+ * `elevated`  <- the plugin's `.var-section-tabs` / `.var-section-tab`
+ *                (active segment lifts to the card surface with a shadow)
+ * `underline` <- the plugin's `.tabs` / `.tab` (2px accent rule, accent text)
+ *
+ * The active accent is read from `--lynn-tabs-accent`, set by the tone
+ * classes at the bottom, so all three variants share one set of rules.
+ */
+
+.lynn-tabs {
+  display: inline-flex;
+  gap: 2px;
+  font-family: var(--lynn-font-family);
+}
+
+.lynn-tabs-stretch {
+  display: flex;
+  width: 100%;
+}
+
+.lynn-tabs-stretch .lynn-tabs-segment {
+  flex: 1;
+  min-width: 0;
+}
+
+.lynn-tabs-segment {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: none;
+  background: transparent;
+  color: var(--lynn-color-text-secondary);
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background 0.12s var(--lynn-ease),
+    color 0.12s var(--lynn-ease),
+    border-color 0.15s var(--lynn-ease);
+}
+
+.lynn-tabs-segment:hover:not(:disabled) {
+  color: var(--lynn-color-text);
+}
+
+.lynn-tabs-segment:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.lynn-tabs-segment:focus-visible {
+  outline: 2px solid var(--lynn-tabs-accent);
+  outline-offset: 1px;
+}
+
+.lynn-tabs-segment-icon {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.lynn-tabs-segment-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- pill ---------- */
+.lynn-tabs-pill {
+  padding: 2px;
+  background: var(--lynn-color-card);
+  border: 1px solid var(--lynn-color-border-subtle);
+  border-radius: var(--lynn-radius-sm);
+}
+
+.lynn-tabs-pill .lynn-tabs-segment {
+  padding: 4px 8px;
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-semibold);
+  border-radius: calc(var(--lynn-radius-sm) - 2px);
+}
+
+.lynn-tabs-pill .lynn-tabs-segment-active,
+.lynn-tabs-pill .lynn-tabs-segment-active:hover:not(:disabled) {
+  background: var(--lynn-tabs-accent);
+  color: var(--lynn-tabs-accent-ink);
+}
+
+/* ---------- elevated ---------- */
+.lynn-tabs-elevated {
+  padding: 2px;
+  background: var(--lynn-color-surface);
+  border-radius: var(--lynn-radius-lg);
+}
+
+.lynn-tabs-elevated .lynn-tabs-segment {
+  padding: 6px 8px;
+  font-size: 11px;
+  font-weight: var(--lynn-font-weight-medium);
+  border-radius: var(--lynn-radius-sm);
+}
+
+.lynn-tabs-elevated .lynn-tabs-segment:hover:not(:disabled) {
+  background: var(--lynn-color-card);
+}
+
+.lynn-tabs-elevated .lynn-tabs-segment-active {
+  background: var(--lynn-color-card);
+  color: var(--lynn-color-text);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* ---------- underline ---------- */
+.lynn-tabs-underline {
+  display: flex;
+  gap: 0;
+  background: var(--lynn-color-surface);
+  border-bottom: 1px solid var(--lynn-color-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.lynn-tabs-underline::-webkit-scrollbar {
+  display: none;
+}
+
+.lynn-tabs-underline .lynn-tabs-segment {
+  padding: 9px 12px;
+  font-size: 11px;
+  font-weight: var(--lynn-font-weight-medium);
+  letter-spacing: 0.2px;
+  border-bottom: 2px solid transparent;
+}
+
+.lynn-tabs-underline .lynn-tabs-segment-active,
+.lynn-tabs-underline .lynn-tabs-segment-active:hover:not(:disabled) {
+  color: var(--lynn-tabs-accent);
+  border-bottom-color: var(--lynn-tabs-accent);
+}
+
+/* ---------- tones ----------
+   `-ink` is the label color the solid `pill` fill needs. The plugin hard-codes
+   `white`, which it can afford because its own accents are all mid-dark
+   blues; Lynn's `emerald` and `teal` are bright enough that white text on
+   them fails contrast, so those two take the dark ink instead. */
+.lynn-tabs-tone-blue {
+  --lynn-tabs-accent: var(--lynn-color-blue);
+  --lynn-tabs-accent-ink: #fff;
+}
+.lynn-tabs-tone-electric-blue {
+  --lynn-tabs-accent: var(--lynn-color-electric-blue);
+  --lynn-tabs-accent-ink: #fff;
+}
+.lynn-tabs-tone-indigo {
+  --lynn-tabs-accent: var(--lynn-color-indigo);
+  --lynn-tabs-accent-ink: #fff;
+}
+.lynn-tabs-tone-emerald {
+  --lynn-tabs-accent: var(--lynn-color-emerald);
+  --lynn-tabs-accent-ink: #21212b;
+}
+.lynn-tabs-tone-teal {
+  --lynn-tabs-accent: var(--lynn-color-teal);
+  --lynn-tabs-accent-ink: #21212b;
+}
+.lynn-tabs-tone-coral {
+  --lynn-tabs-accent: var(--lynn-color-coral);
+  --lynn-tabs-accent-ink: #fff;
+}
+.lynn-tabs-tone-lynn {
+  --lynn-tabs-accent: var(--lynn-color-lynn);
+  --lynn-tabs-accent-ink: #21212b;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-tabs-segment {
+    transition: none;
+  }
+}

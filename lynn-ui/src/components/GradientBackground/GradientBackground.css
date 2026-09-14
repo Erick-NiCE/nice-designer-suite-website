@@ -1,0 +1,85 @@
+/*!
+ * GradientBackground - ported byte-for-byte from nice-effects.css's
+ * `.nice-gradient-animated`, `.nice-gradient-animated-fast` and
+ * `.nice-gradient-static`, including both keyframe sets and the
+ * reduced-motion block.
+ */
+
+@keyframes lynn-gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes lynn-gradient-shift-fast {
+  0% {
+    background-position: 0% 0%;
+  }
+  33% {
+    background-position: 100% 50%;
+  }
+  66% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+.lynn-gradient {
+  position: relative;
+}
+
+.lynn-gradient-animated {
+  background: linear-gradient(
+    135deg,
+    #21212b 0%,
+    #170d40 18%,
+    #0d1f6b 38%,
+    #3694fc 55%,
+    #6100ff 72%,
+    #00e2a0 87%,
+    #21212b 100%
+  );
+  background-size: 400% 400%;
+  animation: lynn-gradient-shift 13s ease infinite;
+}
+
+.lynn-gradient-animated-fast {
+  background: linear-gradient(
+    120deg,
+    #21212b 0%,
+    #6100ff 30%,
+    #3694fc 52%,
+    #00e2a0 74%,
+    #21212b 100%
+  );
+  background-size: 300% 300%;
+  animation: lynn-gradient-shift-fast 8s ease infinite;
+}
+
+.lynn-gradient-static {
+  background: linear-gradient(
+    135deg,
+    #21212b 0%,
+    #170d40 18%,
+    #0d1f6b 38%,
+    #3694fc 55%,
+    #6100ff 72%,
+    #00e2a0 87%,
+    #21212b 100%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-gradient-animated,
+  .lynn-gradient-animated-fast {
+    animation: none;
+  }
+}

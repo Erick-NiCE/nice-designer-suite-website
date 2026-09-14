@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>lynn-ui - components &amp; tokens</title>
+
+  <!-- The real bundled stylesheet, straight out of `npm run build`. -->
+  <link rel="stylesheet" href="../dist/lynn-ui.css" />
+
+  <!--
+    Playground chrome (section shells, token displays, the playground card).
+    Shared verbatim with the embedded mount on the live site's lynn.html, so
+    there is one copy of these rules rather than two that drift.
+  -->
+  <link rel="stylesheet" href="./playground.css" />
+
+  <!-- Lynn's real typeface, loaded exactly the way the site itself loads it. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+
+  <!--
+    No bundler. React, ReactDOM and matter-js come from a CDN ESM build via
+    an import map; everything else is the package's own built output. The
+    `?external=react` on react-dom/client keeps it from pulling a second
+    copy of React (two Reacts = "invalid hook call").
+  -->
+  <script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@18.3.1",
+      "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+      "react-dom": "https://esm.sh/react-dom@18.3.1?external=react",
+      "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?external=react",
+      "scheduler": "https://esm.sh/scheduler@0.23.2",
+      "matter-js": "https://esm.sh/matter-js@0.20.0"
+    }
+  }
+  </script>
+
+  <style>
+    /*
+      Shell-only rules. Everything else the playground needs - section
+      shells, token displays, the playground card - lives in
+      playground.css, which the embedded mount on lynn.html loads too.
+    */
+    /*
+      `body` is deliberately NOT painted from the tokens: it sits outside
+      `.lynn-root`, so `var(--lynn-color-bg)` there would resolve against
+      `:root` - the `lynn` set - and stay dark blue behind a light-mode page.
+      `.lynn-root` already paints itself from the tokens (base.css); all it
+      needs is to fill the viewport.
+    */
+    body {
+      margin: 0;
+    }
+
+    .lynn-root {
+      min-height: 100vh;
+      font-size: var(--lynn-font-size-body);
+      line-height: var(--lynn-line-height-body);
+      transition: background 0.3s var(--lynn-ease), color 0.3s var(--lynn-ease);
+    }
+  </style>
+</head>
+<body>
+  <pre id="docs-error" class="docs-error" hidden></pre>
+  <div id="root"></div>
+
+  <script type="module">
+    // Surface anything that throws during import or render, instead of
+    // leaving a silently blank page.
+    const report = (message) => {
+      const box = document.getElementById('docs-error');
+      box.hidden = false;
+      box.textContent += `${message}\n`;
+    };
+    window.addEventListener('error', (event) => report(event.message));
+    window.addEventListener('unhandledrejection', (event) =>
+      report(String(event.reason))
+    );
+
+    // `app.js` has no side effects: it exports the mount function and this
+    // shell decides where and how the playground lands. `embedded` stays
+    // off here - this page has no nav or rail of its own, so the playground
+    // brings both.
+    import('./app.js')
+      .then(({ mountPlayground }) => mountPlayground('root'))
+      .catch((error) => report(String(error)));
+  </script>
+</body>
+</html>

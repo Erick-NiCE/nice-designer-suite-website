@@ -1,0 +1,133 @@
+/*!
+ * StepNumber (numbered circle)
+ * `lg` gradient <- install-guide.html `.step-number-badge` (52px, 50%
+ *                  radius, `linear-gradient(135deg, electric-blue, indigo)`,
+ *                  1.25rem/800 white numerals, `0 0 0 4px rgba(2,90,251,.18)`
+ *                  glow ring)
+ * `sm` tint     <- wings-2026.html `.step-list li::before` (28px, 15% accent
+ *                  disc, accent numerals, 13px/700)
+ * `md` tint     <- scoring.html `.tip-number` (32px, 12% accent disc, 25%
+ *                  accent hairline, accent numerals)
+ * `xs` tint     <- use-cases.html `.step-num` (18px, faint neutral disc)
+ * `solid`       <- marketplace.html `.step-num` (30px flat accent disc, white
+ *                  13px/800 numerals; rendered at `sm`'s 28px)
+ *
+ * Every size reads the same three fills off `--lynn-step-color` /
+ * `--lynn-step-color-2`, set by the color classes at the bottom, so the size
+ * and the fill stay independent.
+ *
+ * The gradient's second stop is only ever a pair that really exists in the
+ * site's own 135deg gradients (`#025AFB -> #6100FF`, `#3694FC -> #025AFB`,
+ * `#36EAD0 -> #00E2A0`, `#6100FF -> #B98FFF`, and two of those reversed).
+ * `coral` has no gradient anywhere on the site, so it deliberately falls back
+ * to its flat disc rather than inventing a partner hue; `lynn` does the same,
+ * because every pair it appears in ends on a tint too light to carry white
+ * numerals.
+ */
+
+.lynn-step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  font-family: var(--lynn-font-family);
+  font-weight: var(--lynn-font-weight-bold);
+  line-height: var(--lynn-line-height-tight);
+  box-sizing: border-box;
+}
+
+/* ---------- sizes ---------- */
+.lynn-step-number-xs {
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+}
+
+.lynn-step-number-sm {
+  width: 28px;
+  height: 28px;
+  font-size: 13px;
+}
+
+.lynn-step-number-md {
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+}
+
+.lynn-step-number-lg {
+  width: 52px;
+  height: 52px;
+  font-size: 20px;
+  font-weight: var(--lynn-font-weight-extrabold);
+}
+
+/* ---------- fills ---------- */
+.lynn-step-number-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--lynn-step-color),
+    var(--lynn-step-color-2, var(--lynn-step-color))
+  );
+  color: var(--lynn-step-ink);
+  box-shadow: 0 0 0 4px var(--lynn-step-glow);
+}
+
+.lynn-step-number-tint {
+  background: color-mix(in srgb, var(--lynn-step-color) 15%, transparent);
+  border-color: color-mix(in srgb, var(--lynn-step-color) 25%, transparent);
+  color: var(--lynn-step-color);
+}
+
+.lynn-step-number-solid {
+  background: var(--lynn-step-color);
+  color: var(--lynn-step-ink);
+}
+
+/* ---------- colors ----------
+   `-ink` is the numeral color the `gradient` and `solid` fills need. Lynn's
+   `emerald`, `teal` and `lynn` accents are bright enough that white numerals
+   on them fail contrast, so those three take the dark ink instead - the same
+   split `Tabs` makes for its solid active segment. */
+.lynn-step-number-color-blue {
+  --lynn-step-color: var(--lynn-color-blue);
+  --lynn-step-color-2: var(--lynn-color-electric-blue);
+  --lynn-step-glow: rgba(54, 148, 252, 0.18);
+  --lynn-step-ink: #fff;
+}
+.lynn-step-number-color-electric-blue {
+  --lynn-step-color: var(--lynn-color-electric-blue);
+  --lynn-step-color-2: var(--lynn-color-indigo);
+  --lynn-step-glow: rgba(2, 90, 251, 0.18);
+  --lynn-step-ink: #fff;
+}
+.lynn-step-number-color-indigo {
+  --lynn-step-color: var(--lynn-color-indigo);
+  --lynn-step-color-2: var(--lynn-color-electric-blue);
+  --lynn-step-glow: rgba(97, 0, 255, 0.18);
+  --lynn-step-ink: #fff;
+}
+.lynn-step-number-color-emerald {
+  --lynn-step-color: var(--lynn-color-emerald);
+  --lynn-step-color-2: var(--lynn-color-teal);
+  --lynn-step-glow: rgba(0, 226, 160, 0.18);
+  --lynn-step-ink: #21212b;
+}
+.lynn-step-number-color-teal {
+  --lynn-step-color: var(--lynn-color-teal);
+  --lynn-step-color-2: var(--lynn-color-emerald);
+  --lynn-step-glow: rgba(54, 234, 208, 0.18);
+  --lynn-step-ink: #21212b;
+}
+.lynn-step-number-color-coral {
+  --lynn-step-color: var(--lynn-color-coral);
+  --lynn-step-glow: rgba(255, 91, 138, 0.18);
+  --lynn-step-ink: #fff;
+}
+.lynn-step-number-color-lynn {
+  --lynn-step-color: var(--lynn-color-lynn);
+  --lynn-step-glow: rgba(185, 143, 255, 0.18);
+  --lynn-step-ink: #21212b;
+}

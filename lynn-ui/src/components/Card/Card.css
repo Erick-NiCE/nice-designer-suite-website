@@ -1,0 +1,160 @@
+/*!
+ * Card
+ * Base + hover lift <- wings-2026.html `.contact-card`
+ *                      (card bg, 1px border, 16px radius, 24px padding,
+ *                       hover translateY(-1px) + 0 12px 28px rgba(0,0,0,.32))
+ * Accent strip      <- wings-2026.html `.contact-card::before` (2px, solid)
+ *                      + tools.html `.suite-card-accent` (2px, two-stop
+ *                      gradient - real pairings only)
+ * Spotlight         <- index.html `.tilt-ready::after`
+ *                      (220px radial at --mx/--my, rgba(255,255,255,.09))
+ * Glass             <- theme.css `.doc-rail`
+ *                      (rgba(47,47,61,.92) + blur(12px) + deep shadow)
+ */
+
+.lynn-card {
+  position: relative;
+  background: var(--lynn-color-card);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-lg);
+  padding: var(--lynn-space-xl);
+  color: var(--lynn-color-text);
+  overflow: hidden;
+  transition: transform 0.4s var(--lynn-ease),
+    border-color 0.4s var(--lynn-ease), box-shadow 0.4s var(--lynn-ease),
+    background 0.4s var(--lynn-ease);
+}
+
+.lynn-card:hover {
+  border-color: var(--lynn-color-border-hover);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.32);
+}
+
+.lynn-card-glass {
+  background: rgba(47, 47, 61, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- liquid glass ---------- */
+/*
+ * Two soft highlights, painted as extra background *layers* on the card
+ * itself rather than as an overlay element: that puts them above the
+ * translucent tint and below the card's content with no stacking games, and
+ * leaves the DOM of every other card untouched.
+ *
+ * Both layers are oversized (they are wider and taller than the card) and the
+ * animation only moves their background-position, so what drifts is where the
+ * light pools - the highlights never scan across in a straight line. That is
+ * the difference from the two effects Lynn already has: `ShimmerText` slides a
+ * gradient's position linearly across text, and `Sheen` flies a hard-edged
+ * skewed bar over a surface. Neither is a slow, aimless pooling.
+ */
+@keyframes lynn-card-liquid-drift {
+  0%,
+  100% {
+    background-position: 14% 20%, 84% 76%;
+  }
+  50% {
+    background-position: 38% 52%, 54% 30%;
+  }
+}
+
+.lynn-card-glass.lynn-card-liquid {
+  background-image: radial-gradient(
+      closest-side,
+      rgba(255, 255, 255, 0.16) 0%,
+      rgba(255, 255, 255, 0.06) 45%,
+      rgba(255, 255, 255, 0) 100%
+    ),
+    radial-gradient(
+      closest-side,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  background-color: rgba(47, 47, 61, 0.92);
+  background-repeat: no-repeat;
+  background-size: 150% 130%, 120% 110%;
+  background-position: 14% 20%, 84% 76%;
+  animation: lynn-card-liquid-drift 11s ease-in-out infinite;
+}
+
+/* ---------- accent strip ---------- */
+.lynn-card-accent::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--lynn-card-accent-fill);
+  opacity: 0.85;
+  z-index: 2;
+}
+
+/* Real two-stop gradients from tools.html's suite cards. */
+.lynn-card-accent-blue {
+  --lynn-card-accent-fill: linear-gradient(90deg, #3694fc, #025afb);
+}
+.lynn-card-accent-indigo {
+  --lynn-card-accent-fill: linear-gradient(90deg, #6100ff, #b98fff);
+}
+.lynn-card-accent-teal {
+  --lynn-card-accent-fill: linear-gradient(90deg, #36ead0, #00e2a0);
+}
+/* No real gradient pairing exists for these, so they stay solid rather than
+   inventing a second stop. */
+.lynn-card-accent-electric-blue {
+  --lynn-card-accent-fill: var(--lynn-color-electric-blue);
+}
+.lynn-card-accent-emerald {
+  --lynn-card-accent-fill: var(--lynn-color-emerald);
+}
+.lynn-card-accent-coral {
+  --lynn-card-accent-fill: var(--lynn-color-coral);
+}
+.lynn-card-accent-lynn {
+  --lynn-card-accent-fill: var(--lynn-color-lynn);
+}
+
+/* ---------- tilt + spotlight ---------- */
+.lynn-card-interactive {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.lynn-card-interactive::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    220px circle at var(--lynn-mx, 50%) var(--lynn-my, 50%),
+    rgba(255, 255, 255, 0.09) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s var(--lynn-ease);
+  z-index: 1;
+}
+.lynn-card-interactive:hover::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-card {
+    transition: none;
+  }
+  /* The hook already bails out, so nothing sets a transform - this makes the
+     static state explicit for the spotlight overlay too. */
+  .lynn-card-interactive::after,
+  .lynn-card-interactive:hover::after {
+    display: none;
+  }
+  /* The glass keeps its highlights, frozen where the loop starts. */
+  .lynn-card-glass.lynn-card-liquid {
+    animation: none;
+    background-position: 14% 20%, 84% 76%;
+  }
+}

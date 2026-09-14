@@ -1,0 +1,56 @@
+/*!
+ * Avatar - the three real discs on roadmap.html:
+ *   `xs` <- `.gate-av`  (14px, 7px/700, no border)
+ *   `sm` <- `.avatar`   (22px, 8px/700, 1px border)
+ *   `lg` <- `.avatar-lg` (36px, 11px/800, blue -> indigo gradient, white text)
+ *
+ * The source's `rgba(255,255,255,0.08)` fill and 0.4/0.5 text alphas read the
+ * card/text tokens, so the flat disc stays legible in light mode. The
+ * gradient variant keeps white initials at every size - it is a filled
+ * accent surface, not a neutral one.
+ */
+
+.lynn-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--lynn-color-card);
+  font-family: var(--lynn-font-family);
+  color: var(--lynn-color-text-secondary);
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.lynn-avatar-xs {
+  width: 14px;
+  height: 14px;
+  font-size: 7px;
+  font-weight: var(--lynn-font-weight-bold);
+}
+
+.lynn-avatar-sm {
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--lynn-color-border);
+  font-size: 8px;
+  font-weight: var(--lynn-font-weight-bold);
+}
+
+.lynn-avatar-lg {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--lynn-color-border);
+  font-size: 11px;
+  font-weight: var(--lynn-font-weight-extrabold);
+}
+
+.lynn-avatar-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--lynn-color-blue),
+    var(--lynn-color-indigo)
+  );
+  color: #fff;
+}

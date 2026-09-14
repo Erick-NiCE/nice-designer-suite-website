@@ -1,0 +1,211 @@
+/*!
+ * Dropdown - ported from the plugin's `.color-dropdown*` family
+ * (styles.css:2644-2784): trigger + swatch + arrow, an absolutely positioned
+ * `--bg-elevated` popover, an inline filter row, sticky section headers, and
+ * a centered empty state.
+ *
+ * Scaled up from the plugin's 11px panel type to Lynn's 13px body reading,
+ * and the popover is absolute here (the plugin measures and pins its list in
+ * JS because it renders inside a fixed-height Figma iframe).
+ */
+
+.lynn-dropdown {
+  position: relative;
+  width: 100%;
+  font-family: var(--lynn-font-family);
+}
+
+/* ---------- trigger ---------- */
+.lynn-dropdown-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--lynn-space-sm);
+  width: 100%;
+  min-height: 34px;
+  padding: 6px 10px;
+  background: var(--lynn-color-surface);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-sm);
+  color: var(--lynn-color-text);
+  font-family: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s var(--lynn-ease);
+}
+
+.lynn-dropdown-trigger:hover:not(:disabled) {
+  border-color: var(--lynn-color-border-hover);
+}
+
+.lynn-dropdown-open .lynn-dropdown-trigger {
+  border-color: var(--lynn-color-blue);
+}
+
+.lynn-dropdown-trigger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.lynn-dropdown-trigger:focus-visible {
+  outline: 2px solid var(--lynn-color-blue);
+  outline-offset: 1px;
+}
+
+.lynn-dropdown-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1px solid var(--lynn-color-border-hover);
+  flex-shrink: 0;
+}
+
+.lynn-dropdown-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lynn-dropdown-label-placeholder {
+  color: var(--lynn-color-text-muted);
+}
+
+.lynn-dropdown-arrow {
+  flex-shrink: 0;
+  font-size: 9px;
+  opacity: 0.5;
+  transition: transform 0.15s var(--lynn-ease);
+}
+
+.lynn-dropdown-open .lynn-dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+/* ---------- popover ---------- */
+.lynn-dropdown-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--lynn-color-card);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-sm);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  z-index: 200;
+  overflow: hidden;
+}
+
+.lynn-dropdown-search-wrap {
+  padding: 6px;
+  border-bottom: 1px solid var(--lynn-color-border-subtle);
+  flex-shrink: 0;
+}
+
+.lynn-dropdown-search {
+  width: 100%;
+  padding: 6px 8px;
+  background: var(--lynn-color-bg);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-sm);
+  color: var(--lynn-color-text);
+  font-family: inherit;
+  font-size: 12px;
+  outline: none;
+}
+
+.lynn-dropdown-search:focus {
+  border-color: var(--lynn-color-blue);
+}
+
+.lynn-dropdown-search::placeholder {
+  color: var(--lynn-color-text-muted);
+}
+
+.lynn-dropdown-scroll {
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.lynn-dropdown-empty {
+  padding: 14px 8px;
+  font-size: 12px;
+  color: var(--lynn-color-text-muted);
+  text-align: center;
+}
+
+/* ---------- rows ---------- */
+.lynn-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: var(--lynn-space-sm);
+  width: 100%;
+  padding: 7px 10px;
+  border: none;
+  background: transparent;
+  color: var(--lynn-color-text);
+  font-family: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lynn-dropdown-item:hover:not(:disabled),
+.lynn-dropdown-item:focus-visible {
+  background: rgba(54, 148, 252, 0.14);
+  outline: none;
+}
+
+.lynn-dropdown-item-active {
+  background: rgba(54, 148, 252, 0.14);
+  font-weight: var(--lynn-font-weight-semibold);
+}
+
+.lynn-dropdown-item:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.lynn-dropdown-item-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lynn-dropdown-item-hint {
+  flex-shrink: 0;
+  font-family: var(--lynn-font-family-mono);
+  font-size: 11px;
+  color: var(--lynn-color-text-muted);
+}
+
+/* ---------- sections ---------- */
+.lynn-dropdown-section-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 7px 10px 4px;
+  background: var(--lynn-color-card);
+  border-top: 1px solid var(--lynn-color-border-subtle);
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--lynn-color-text-muted);
+}
+
+.lynn-dropdown-section:first-child .lynn-dropdown-section-header {
+  border-top: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-dropdown-trigger,
+  .lynn-dropdown-arrow {
+    transition: none;
+  }
+}

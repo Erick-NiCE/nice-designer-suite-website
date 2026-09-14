@@ -1,0 +1,140 @@
+/*!
+ * DataTable - ported from dashboard.html's `.table-wrap` block:
+ * a 12px-radius bordered card that scrolls horizontally, a 3%-white sticky
+ * header row of 10px/700 uppercase muted labels, 9px/12px cells at 13px, a
+ * hairline under every row but the last, and a 2.5%-white row hover that also
+ * brightens the text.
+ *
+ * The sort indicator is a real `IconChevronUp`/`IconChevronDown`/
+ * `IconArrowsSort`, swapped by state - no emoji or CSS-content glyphs.
+ *
+ * scoring.html pairs the same table shape with a `.gauge-row` bar cell; a
+ * `ProgressBar` dropped into a cell via `renderCell` gets that treatment from
+ * the `.lynn-progress` rule at the bottom.
+ *
+ * The header and row-hover fills are `color-mix` against `--lynn-color-text`
+ * rather than the source's raw white alphas - the same color in Lynn's own
+ * mode, and still a visible tint in light mode instead of nothing.
+ */
+
+.lynn-data-table {
+  overflow-x: auto;
+  background: var(--lynn-color-card);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-md);
+  font-family: var(--lynn-font-family);
+}
+
+.lynn-data-table-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.lynn-data-table-table th {
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  background: color-mix(in srgb, var(--lynn-color-text) 3%, transparent);
+  border-bottom: 1px solid var(--lynn-color-border);
+  color: var(--lynn-color-text-muted);
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-bold);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-align: left;
+  white-space: nowrap;
+  transition: color 0.15s var(--lynn-ease);
+}
+
+.lynn-data-table-table th:hover {
+  color: var(--lynn-color-text);
+}
+
+/* The header's clickable area is a real button, so the sort is reachable by
+   keyboard - the source put the handler on the `th` itself, which is not. */
+.lynn-data-table-sort-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+  user-select: none;
+}
+
+.lynn-data-table-sort-button:focus-visible {
+  outline: 2px solid var(--lynn-color-blue);
+  outline-offset: 2px;
+}
+
+.lynn-data-table-sort-icon {
+  display: inline-flex;
+  margin-left: var(--lynn-space-xs);
+  opacity: 0.4;
+}
+
+.lynn-data-table-asc .lynn-data-table-sort-icon,
+.lynn-data-table-desc .lynn-data-table-sort-icon {
+  opacity: 1;
+}
+
+.lynn-data-table-asc,
+.lynn-data-table-desc {
+  color: var(--lynn-color-text);
+}
+
+/* ---------- body ---------- */
+.lynn-data-table-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--lynn-color-border-subtle);
+  color: var(--lynn-color-text-secondary);
+  vertical-align: middle;
+}
+
+.lynn-data-table-table tr:last-child td {
+  border-bottom: none;
+}
+
+.lynn-data-table-table tbody tr:hover td {
+  background: color-mix(in srgb, var(--lynn-color-text) 3%, transparent);
+  color: var(--lynn-color-text);
+}
+
+.lynn-data-table-empty {
+  padding: 28px 12px;
+  color: var(--lynn-color-text-muted);
+  text-align: center;
+}
+
+/* ---------- alignment ---------- */
+.lynn-data-table-left {
+  text-align: left;
+}
+.lynn-data-table-center {
+  text-align: center;
+}
+.lynn-data-table-right {
+  text-align: right;
+}
+
+/* ---------- cells carrying another component ---------- */
+/* scoring.html's `.gauge-row`: the bar takes the cell's width but never
+   collapses to nothing in a narrow column. */
+.lynn-data-table-table td .lynn-progress {
+  min-width: 90px;
+}
+
+/* A `Badge` cell should not stretch the row's line height. */
+.lynn-data-table-table td .lynn-badge {
+  vertical-align: middle;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-data-table-table th {
+    transition: none;
+  }
+}

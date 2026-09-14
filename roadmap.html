@@ -9,9 +9,64 @@
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <link rel="stylesheet" href="site-gate.css" />
-  <script src="site-gate.js" defer></script>
-  <script src="nice-effects.js?v=9" defer></script>
+  <script src="nice-effects.js?v=11" defer></script>
+  <!--
+    ===== lynn-ui: the site chrome, as React components =====
+    The access gate, the nav and (on pages that have them) the footer and the
+    doc rail all come from lynn-ui now - see the single #lynn-app-root mount
+    script at the end of <body>. site-gate.css / site-gate.js are gone with
+    them; `AccessGate` is the same screen and the mount script re-runs the
+    same client-side code check. This page also carries its own second,
+    roadmap-only `AccessGate` - see the mount script for both.
+
+    Three things are needed, and none of them affect the rest of the page:
+      1. dist/lynn-ui.css - the package's built stylesheet. Everything in it
+         is either a `--lynn-*` custom property or a `.lynn-*` class, so it
+         cannot collide with this page's own tokens/classes.
+      2. the import map  - React, ReactDOM and matter-js as CDN ESM.
+         `?external=react` on react-dom stops a second copy of React being
+         pulled in ("invalid hook call"). matter-js is in the map because
+         dist/index.js is one barrel that also reaches LiquidFill.
+      3. `.lynn-mount` - the chrome renders through portals into placeholder
+         divs left where the old markup was. `display: contents` means those
+         placeholders generate no box, so the sticky nav and the footer's
+         margin still resolve against <body> exactly as before.
+  -->
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@18.3.1",
+      "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+      "react-dom": "https://esm.sh/react-dom@18.3.1?external=react",
+      "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?external=react",
+      "scheduler": "https://esm.sh/scheduler@0.23.2",
+      "matter-js": "https://esm.sh/matter-js@0.20.0"
+    }
+  }
+  </script>
+  <style>.lynn-mount { display: contents; }</style>
+
+  <!--
+    The gate used to be static markup covered by blocking CSS, so it was up
+    before first paint. React arrives as ESM from a CDN, so the component
+    can only mount a tick later - hold the page back until it does, or a
+    locked visitor reads the whole page in the gap. Costs nothing once the
+    session is unlocked (the class is never added), and a 4s failsafe means
+    a CDN that never answers leaves a readable page rather than a blank one.
+  -->
+  <style>html.lynn-gate-pending body { visibility: hidden; }</style>
+  <script>
+    (function () {
+      try {
+        if (sessionStorage.getItem('nice-site-access') === '1') return;
+      } catch (e) { /* blocked storage: fall through and gate */ }
+      var root = document.documentElement;
+      root.classList.add('lynn-gate-pending');
+      setTimeout(function () { root.classList.remove('lynn-gate-pending'); }, 4000);
+    })();
+  </script>
+
   <style>
     :root {
       /* page-specific tokens */
@@ -245,6 +300,9 @@
 
     /* ========================================================
        TOOL DETAIL CARDS
+       (dead CSS - this page never actually used `.tools-grid` /
+       `.tool-card` markup, so nothing here needed removal for the
+       lynn-ui migration; left as-is.)
     ======================================================== */
     .tools-grid {
       display: grid;
@@ -393,258 +451,18 @@
       margin: 0 auto;
     }
 
-    /* Legend */
-    .legend {
-      display: flex;
-      gap: 24px;
-      margin-bottom: 56px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-    .legend-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-right: 4px;
-    }
-    .legend-item {
-      display: flex; align-items: center;
-      gap: 7px; font-size: 12px;
-      color: var(--text-sec); font-weight: 500;
-    }
-    .legend-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-    }
-
-    /* Timeline */
-    .timeline {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-    }
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 15px; top: 12px; bottom: 0;
-      width: 1px;
-      background: linear-gradient(to bottom,
-        rgba(54,148,252,0.5),
-        rgba(97,0,255,0.3) 50%,
-        transparent
-      );
-    }
-
-    /* Phase */
-    .phase { display: flex; gap: 36px; padding-bottom: 52px; position: relative; }
-    .phase:last-child { padding-bottom: 0; }
-
-    .phase-dot {
-      width: 12px; height: 12px;
-      border-radius: 50%;
-      border: 2px solid var(--bg);
-      flex-shrink: 0; margin-top: 8px;
-      position: relative; z-index: 1;
-    }
-    .phase-dot.active {
-      background: var(--blue);
-      box-shadow: 0 0 0 4px rgba(54,148,252,0.25);
-      animation: pulse 2s ease infinite;
-      color: var(--blue);
-    }
-    .phase-dot.next {
-      background: var(--emerald);
-      box-shadow: 0 0 0 4px rgba(0,226,160,0.2);
-      animation: pulse 2.5s ease infinite;
-      color: var(--emerald);
-    }
-    .phase-dot.future {
-      background: rgba(255,255,255,0.15);
-      border-color: rgba(255,255,255,0.1);
-    }
-    .phase-dot.shipped {
-      background: var(--emerald);
-      border-color: rgba(0,226,160,0.4);
-    }
-
-    .phase-body { flex: 1; min-width: 0; }
-
-    .phase-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; }
-    .phase-title  {
-      font-size: 18px; font-weight: 800;
-      color: white; letter-spacing: -0.3px;
-    }
-    .phase-period { font-size: 12px; color: var(--text-muted); font-weight: 500; }
-
-    .phase-desc {
-      font-size: 13px; color: var(--text-sec);
-      margin-bottom: 16px; line-height: 1.65;
-      max-width: 700px; font-weight: 400;
-    }
-
-    .phase-dep {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 11px; color: var(--text-muted); font-weight: 600;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 6px; padding: 3px 10px; margin-bottom: 18px;
-    }
-    .phase-dep::before {
-      content: 'Requires:';
-      color: rgba(255,255,255,0.2);
-    }
-
-    /* Cards grid */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-      gap: 10px;
-    }
-
-    .card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: var(--radius-sm);
-      padding: 16px 18px 0 22px;
-      position: relative;
-      display: flex; flex-direction: column;
-      transition: border-color 0.2s, background 0.2s, transform 0.2s;
-    }
-    .card:hover {
-      background: rgba(255,255,255,0.055);
-      border-color: rgba(255,255,255,0.12);
-      transform: translateY(-1px);
-    }
-    .card::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 8px; bottom: 8px;
-      width: 3px;
-      border-radius: 0 2px 2px 0;
-      background: var(--card-color, rgba(255,255,255,0.15));
-    }
-    .card.highlight {
-      border-color: rgba(54,148,252,0.3);
-      background: rgba(54,148,252,0.05);
-    }
-
-    .card-body { flex: 1; padding-bottom: 16px; }
-    .card-top {
-      display: flex; align-items: center;
-      justify-content: space-between; margin-bottom: 8px;
-    }
-    .card-name {
-      font-size: 14px; font-weight: 700;
-      color: white; display: flex; align-items: center; gap: 8px;
-    }
-    .card-desc {
-      font-size: 12px; color: var(--text-sec);
-      line-height: 1.6; margin-bottom: 10px;
-    }
-
-    /* Badges */
-    .badge {
-      font-size: 9px; font-weight: 800;
-      letter-spacing: 0.6px; text-transform: uppercase;
-      padding: 3px 8px; border-radius: 100px;
-    }
-    .badge.active  { background: rgba(54,148,252,0.2);   color: #6ab4ff; }
-    .badge.shipped { background: rgba(0,226,160,0.15);   color: #00E2A0; }
-    .badge.next    { background: rgba(0,226,160,0.12);   color: #00E2A0; }
-    .badge.planned { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); }
-    .badge.new     { background: rgba(97,0,255,0.2);     color: #b98fff; }
-    .badge.dropped { background: rgba(255,91,138,0.15);  color: #ff8ab0; }
-
-    /* Callouts */
-    .callout {
-      border-radius: 6px; padding: 9px 11px;
-      font-size: 11px; line-height: 1.55; margin-bottom: 10px;
-    }
-    .callout strong { display: block; font-weight: 700; margin-bottom: 3px; }
-    .callout.blue   { background: rgba(54,148,252,0.08);  border: 1px solid rgba(54,148,252,0.2);  color: rgba(167,208,254,0.9); }
-    .callout.blue   strong { color: #6ab4ff; }
-    .callout.green  { background: rgba(0,226,160,0.07);   border: 1px solid rgba(0,226,160,0.2);   color: rgba(172,247,243,0.9); }
-    .callout.green  strong { color: #00E2A0; }
-    .callout.orange { background: rgba(255,91,138,0.07);  border: 1px solid rgba(255,91,138,0.2);  color: rgba(243,177,196,0.9); }
-    .callout.orange strong { color: #ff8ab0; }
-    .callout.purple { background: rgba(97,0,255,0.1);     border: 1px solid rgba(97,0,255,0.25);   color: rgba(185,143,255,0.9); }
-    .callout.purple strong { color: #b98fff; }
-    .callout.amber  { background: rgba(54,234,208,0.07);  border: 1px solid rgba(54,234,208,0.2);  color: rgba(172,247,243,0.9); }
-    .callout.amber  strong { color: #36EAD0; }
-
-    /* Card footer */
-    .card-footer {
-      display: flex; align-items: center;
-      justify-content: space-between;
-      gap: 8px; flex-wrap: wrap; margin-bottom: 14px;
-    }
-    .card-tags { display: flex; gap: 5px; flex-wrap: wrap; }
-    .tag {
-      font-size: 10px; padding: 2px 7px;
-      border-radius: 100px;
-      background: rgba(255,255,255,0.05);
-      color: rgba(255,255,255,0.3);
-      border: 1px solid rgba(255,255,255,0.06);
-      font-weight: 500;
-    }
-
-    /* People */
-    .people { display: flex; gap: 4px; }
-    .avatar {
-      width: 22px; height: 22px; border-radius: 50%;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.1);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 8px; font-weight: 700; color: rgba(255,255,255,0.5);
-    }
-
-    /* Gates */
-    .gates {
-      border-top: 1px solid rgba(255,255,255,0.05);
-      padding: 10px 0 14px;
-    }
-    .gates-label {
-      font-size: 9px; font-weight: 800;
-      text-transform: uppercase; letter-spacing: 1.5px;
-      color: rgba(255,255,255,0.2); margin-bottom: 8px;
-    }
-    .gates-rows { display: flex; flex-direction: column; gap: 5px; }
-    .gates-row  { display: flex; gap: 5px; flex-wrap: wrap; }
-    .gate {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-size: 10px; font-weight: 600;
-      padding: 3px 8px;
-      border-radius: 6px;
-      border: 1px solid rgba(255,255,255,0.07);
-      color: rgba(255,255,255,0.35);
-      background: rgba(255,255,255,0.03);
-      white-space: nowrap;
-    }
-    .gate-icon { font-size: 10px; }
-    .gate-avatars { display: flex; gap: 2px; margin-left: 2px; }
-    .gate-av {
-      width: 14px; height: 14px; border-radius: 50%;
-      background: rgba(255,255,255,0.08);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 7px; font-weight: 700;
-      color: rgba(255,255,255,0.4);
-    }
-
-    /* Tool color vars for roadmap cards */
-    .audit   { --card-color: #3694FC; }
-    .convert { --card-color: #00E2A0; }
-    .handoff { --card-color: #B98FFF; }
-    .parity  { --card-color: #36EAD0; }
-    .qa      { --card-color: #FF5B8A; }
-    .tokens  { --card-color: #ACF7F3; }
-    .editor  { --card-color: #025AFB; }
-    .magic   { --card-color: #6100FF; }
-    .infra   { --card-color: rgba(255,255,255,0.2); }
-    .mcp     { --card-color: #00E2A0; }
-    .dash    { --card-color: #36EAD0; }
-    .exec    { --card-color: #B98FFF; }
+    /* Legend, Timeline/Phase, and the cards/badges/callouts/gates/avatars
+       inside each phase are lynn-ui <Legend>, <Timeline>/<Phase> and
+       <RoadmapItemCard> now (see the mount script at the end of <body>) -
+       so the `.legend*` / `.timeline*` / `.phase*` / `.cards` / `.card*` /
+       `.badge*` / `.callout*` / `.gates*` / `.gate*` / `.avatar` /
+       `.people` / `.tag` CSS that used to style that markup, plus the
+       per-tool `--card-color` variable block, has gone with it -
+       `.lynn-legend*` / `.lynn-timeline*` / `.lynn-phase*` /
+       `.lynn-roadmap-item*` / `.lynn-badge*` / `.lynn-alert*` /
+       `.lynn-avatar*` in lynn-ui.css is the same design, with each item's
+       accent color passed as the component's own `accentColor` prop
+       instead of a CSS custom property on the card. */
 
     /* ========================================================
        STAKEHOLDERS KEY
@@ -673,14 +491,10 @@
     .person-name { font-size: 13px; font-weight: 600; color: white; margin-bottom: 2px; }
     .person-role { font-size: 11px; color: var(--text-muted); }
 
-    .avatar-lg {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--blue), var(--indigo));
-      border: 1px solid rgba(255,255,255,0.1);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 11px; font-weight: 800; color: white;
-      flex-shrink: 0;
-    }
+    /* The people list's `.avatar-lg` discs are lynn-ui <Avatar size="lg">
+       now (see the mount script), so the standalone `.avatar-lg` rule that
+       used to style them has gone with it - `.lynn-avatar-lg` in
+       lynn-ui.css is the same gradient disc. */
 
     /* ========================================================
        FOOTER NOTE
@@ -720,37 +534,14 @@
 </head>
 <body>
 
-  <!-- SITE-WIDE ACCESS GATE (see site-gate.css / site-gate.js) -->
-  <div id="nice-site-gate">
-    <div class="sg-card">
-      <div class="sg-lock">🔒</div>
-      <div class="sg-title">NiCE Designer Site Login</div>
-      <div class="sg-subtitle">This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.</div>
-      <div class="sg-input-wrap">
-        <input id="nice-site-gate-input" type="password" placeholder="Enter code" autocomplete="off" />
-      </div>
-      <div class="sg-error" id="nice-site-gate-error"></div>
-      <button id="nice-site-gate-btn" type="button">Unlock</button>
-      <div class="sg-divider"></div>
-      <div class="sg-cta">
-        Don't have the code?<br>
-        <strong>Reach out to Erick Mathews on Teams</strong> to request access.
-        <br>
-        <a class="sg-teams-btn" href="https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com" target="_blank" rel="noopener">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H8a2 2 0 00-2 2v2H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2h2a2 2 0 002-2V4a2 2 0 00-2-2zM4 20V8h12v12H4zm16-4h-2V8a2 2 0 00-2-2H8V4h12v12z" fill="currentColor"/></svg>
-          Message on Teams
-        </a>
-      </div>
-    </div>
-  </div>
+  <!-- lynn-ui chrome. One React root, one ThemeProvider (see the mount
+       script at the end of <body>); the two access gates render inside it,
+       everything else portals into the `.lynn-mount` placeholders below. -->
+  <div id="lynn-app-root"></div>
 
-  <!-- NAV -->
-  <nav class="site-nav" id="site-nav">
-    <a href="./index.html" class="nav-logo">
-      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span><span class="logo-suite"> Suite</span>
-    </a>
-    <span class="nav-download is-disabled" aria-disabled="true">Download<span class="coming-soon-tag">Coming soon!</span></span>
-  </nav>
+  <!-- NAV (lynn-ui <Nav>) + DOC RAIL (lynn-ui <DocRail>, position: fixed) -->
+  <div id="lynn-nav-root" class="lynn-mount"></div>
+  <div id="lynn-docrail-root" class="lynn-mount"></div>
 
   <!-- ================================================================
        HERO
@@ -770,7 +561,7 @@
         A suite of focused design-system tools. Each serves one goal. Together they cover the full design and code lifecycle for SOL and Lyra.
       </p>
       <div class="hero-pills">
-        <span class="hero-pill">One Suite</span>
+        <span class="hero-pill nice-sheen">One Suite</span>
         <span class="hero-pill">Figma + Chrome</span>
         <span class="hero-pill">SOL &amp; Lyra</span>
         <span class="hero-pill">MCP Powered</span>
@@ -790,403 +581,12 @@
       <p class="section-desc">Each phase must complete before the next begins. Every tool ships with documentation, video, testing, and stakeholder review cleared.</p>
     </div>
 
-    <div class="legend reveal">
-      <span class="legend-label">Status</span>
-      <div class="legend-item"><div class="legend-dot" style="background:#00E2A0"></div> Shipped</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#3694FC"></div> Active</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#00E2A0"></div> Up Next</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#B98FFF"></div> New</div>
-      <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.2)"></div> Planned</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#FF5B8A"></div> Dropped</div>
-    </div>
+    <!-- lynn-ui <Legend variant="dot"> -->
+    <div id="lynn-legend-root" class="lynn-mount"></div>
 
-    <div class="timeline">
+    <!-- lynn-ui <Timeline> containing <Phase> containing <RoadmapItemCard> -->
+    <div id="lynn-timeline-root"></div>
 
-      <!-- Phase 0 -->
-      <div class="phase reveal">
-        <div class="phase-dot active"></div>
-        <div class="phase-body">
-          <div class="phase-header">
-            <div class="phase-title">Phase 0 &ndash; Foundation and Alignment</div>
-            <div class="phase-period">Now &nbsp; Q2 2026</div>
-          </div>
-          <p class="phase-desc">Establish architecture, priorities, and stakeholder alignment before any tool ships. Strategic reviews, executive briefing, and training planning all happen here.</p>
-          <div class="cards">
-
-            <div class="card infra reveal">
-              <div class="card-body">
-                <div class="card-top">
-                  <div class="card-name"><span>🗺️</span> Roadmap Review</div>
-                  <span class="badge active">Active</span>
-                </div>
-                <div class="card-desc">Reid, Bill, and Simone review the roadmap. Validate scope, sequencing, and priorities before development commitments are made.</div>
-                <div class="card-footer">
-                  <div class="card-tags"><span class="tag">Roadmap</span><span class="tag">Priorities</span></div>
-                  <div class="people">
-                    <div class="avatar">Re</div><div class="avatar">Bi</div><div class="avatar">Si</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card infra reveal">
-              <div class="card-body">
-                <div class="card-top">
-                  <div class="card-name"><span>👥</span> Separation Review</div>
-                  <span class="badge active">Active</span>
-                </div>
-                <div class="card-desc">Simone and Bill review the code separation plan, validate tool boundaries, and confirm which tool gets priority resourcing first.</div>
-                <div class="card-footer">
-                  <div class="card-tags"><span class="tag">Architecture</span></div>
-                  <div class="people"><div class="avatar">Si</div><div class="avatar">Bi</div></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card infra reveal">
-              <div class="card-body">
-                <div class="card-top">
-                  <div class="card-name"><span>🔧</span> Code Separation</div>
-                  <span class="badge active">Active</span>
-                </div>
-                <div class="card-desc">Refactor all capabilities out of the monolithic <code>code.ts</code> into self-contained tool modules. Shared utilities and token definitions stay in a common layer.</div>
-                <div class="card-footer">
-                  <div class="card-tags"><span class="tag">Figma</span><span class="tag">Chrome</span><span class="tag">Self-contained</span></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card infra reveal">
-              <div class="card-body">
-                <div class="card-top">
-                  <div class="card-name"><span>🗂️</span> New Menu System</div>
-                  <span class="badge active">Active</span>
-                </div>
-                <div class="card-desc">Replace the tab-based UI with a top-level tool selector. Each tool has its own entry point and feels like a distinct product inside the same plugin shell.</div>
-                <div class="card-footer">
-                  <div class="card-tags"><span class="tag">UI / UX</span><span class="tag">Both platforms</span></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card reveal" style="--card-color:#B98FFF;">
-              <div class="card-body">
-                <div class="card-top">
-                  <div class="card-name"><span>🎓</span> Training and Rollout Planning</div>
-                  <span class="badge active">Active</span>
-                </div>
-                <div class="card-desc">Megan, Rohit, and Simone establish the rollout plan for training UX teams on each tool, covering sequencing, format, and UX process integration.</div>
-                <div class="card-footer">
-                  <div class="card-tags"><span class="tag">Training</span><span class="tag">Rollout</span></div>
-                  <div class="people"><div class="avatar">Me</div><div class="avatar">Rh</div><div class="avatar">Si</div></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card reveal" style="--card-color:#B98FFF;">
-              <div class="card-body">
-                <div class="card-top">
-                  <div class="card-name"><span>📣</span> Executive Alignment</div>
-                  <span class="badge active">Active</span>
-                </div>
-                <div class="card-desc">Brief Mike on the full roadmap plan. Mike communicates to Itay how NiCE Designer fits their AI transformation strategy before public rollout begins.</div>
-                <div class="card-footer">
-                  <div class="card-tags"><span class="tag">Executive</span><span class="tag">AI Transformation</span></div>
-                  <div class="people"><div class="avatar">Mi</div><div class="avatar">It</div></div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <!-- Phase 1 -->
-      <div class="phase reveal">
-        <div class="phase-dot shipped"></div>
-        <div class="phase-body">
-          <div class="phase-header">
-            <div class="phase-title">Phase 1 &ndash; Audit and Storybook</div>
-            <div class="phase-period">Q3 2026</div>
-          </div>
-          <div class="phase-dep">Phase 0 complete</div>
-          <p class="phase-desc">Shipped Audit as the first standalone tool with an MCP server running live against Storybook. The Compliance Dashboard gained auto-submit so every audit result posts publicly without manual steps.</p>
-          <div class="cards">
-
-            <div class="card audit highlight reveal">
-              <div class="card-body">
-                <div class="card-top">
-                  <div class="card-name"><span>🔍</span> Audit</div>
-                  <span class="badge shipped">Shipped</span>
-                </div>
-                <div class="card-desc">Scans a Figma frame or live page for compliance. Read-only, surfaces issues by dimension and severity.</div>
-                <div class="callout blue"><strong>🎯 Launch goal</strong>Compliance visible alongside component docs in Storybook. The definitive reference for how SOL and Lyra are applied.</div>
-                <div class="callout green"><strong>⚙️ Code component awareness</strong>Recognizes actual rendered components, not just token values. Flags wrong component usage for a pattern.</div>
-                <div class="card-footer">
-                  <div class="card-tags"><span class="tag">Figma</span><span class="tag">Chrome</span><span class="tag">Storybook</span></div>
-                  <div class="people"><div class="avatar">Yo</div><div class="avatar">Ro</div></div>
-                </div>
-              </div>
-              <div class="gates">
-                <div class="gates-label">Required before ship</div>
-                <div class="gates-rows">
-                  <div class="gates-row">
-                    <div class="gate"><span class="gate-icon">📄</span> Docs<div class="gate-avatars"><div class="gate-av">Li</div><div class="gate-av">Si</div></div></div>
-                    <div class="gate"><span class="gate-icon">🎬</span> Video<div class="gate-avatars"><div class="gate-av">An</div></div></div>
-                    <div class="gate"><span class="gate-icon">🧪</span> Testing</div>
-                  </div>
-                  <div class="gates-row">
-                    <div class="gate"><span class="gate-icon">👁</span> UX Review<div class="gate-avatars"><div class="gate-av">Me</div><div class="gate-av">Rh</div></div></div>
-                    <div class="gate"><span class="gate-icon">🏗</span> DS Align<div class="gate-avatars"><div class="gate-av">Sc</div><div class="gate-av">Ra</div><div class="gate-av">As</div></div></div>
-                    <div class="gate"><span class="gate-icon">📊</span> Dashboard</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card mcp reveal">
-              <div class="card-body">
-                <div class="card-top">
-                  <div class="card-name"><span>🔌</span> MCP Storybook</div>
-                  <span class="badge shipped">Shipped</span>
-                </div>
-                <div class="card-desc">Extends the MCP server to connect to a live Storybook instance. Runs compliance checks against rendered stories in real time.</div>
-                <div class="callout green"><strong>How it works</strong>Watches the Storybook dev server, instruments each story via content script, and streams audit results back to Audit and Convert.</div>
-                <div class="card-footer">
-                  <div class="card-tags"><span class="tag">MCP server</span><span class="tag">Storybook</span></div>
-                  <div class="people"><div class="avatar">Yo</div><div class="avatar">Ro</div></div>
-                </div>
-              </div>
-              <div class="gates">
-                <div class="gates-label">Required before ship</div>
-                <div class="gates-rows">
-                  <div class="gates-row">
-                    <div class="gate"><span class="gate-icon">📄</span> Docs<div class="gate-avatars"><div class="gate-av">Li</div><div class="gate-av">Si</div></div></div>
-                    <div class="gate"><span class="gate-icon">🎬</span> Video<div class="gate-avatars"><div class="gate-av">An</div></div></div>
-                    <div class="gate"><span class="gate-icon">🧪</span> Testing</div>
-                  </div>
-                  <div class="gates-row">
-                    <div class="gate"><span class="gate-icon">🔧</span> Dev Review<div class="gate-avatars"><div class="gate-av">Co</div><div class="gate-av">Ri</div></div></div>
-                    <div class="gate"><span class="gate-icon">🏗</span> DS Align<div class="gate-avatars"><div class="gate-av">Sc</div><div class="gate-av">Ra</div><div class="gate-av">As</div></div></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card dash reveal">
-              <div class="card-body">
-                <div class="card-top">
-                  <div class="card-name"><span>📊</span> Compliance Dashboard</div>
-                  <span class="badge shipped">Shipped</span>
-                </div>
-                <div class="card-desc">The existing dashboard that aggregates audit results and posts them live. This phase automated the pipeline end to end.</div>
-                <div class="callout purple"><strong>Auto-submit pipeline</strong>Audit results automatically submitted on every run. The GitHub HTML is updated and committed without any manual steps.</div>
-                <div class="callout amber"><strong>Unblocked</strong>Audit shipped and MCP Storybook integration live.</div>
-                <div class="card-footer">
-                  <div class="card-tags"><span class="tag">Existing</span><span class="tag">Auto-submit</span><span class="tag">GitHub HTML</span></div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <!-- Phase 2 -->
-      <div class="phase reveal">
-        <div class="phase-dot active"></div>
-        <div class="phase-body">
-          <div class="phase-header">
-            <div class="phase-title">Phase 2 &ndash; Core Tools</div>
-            <div class="phase-period">Q3 &ndash; Q4 2026</div>
-          </div>
-          <div class="phase-dep">Phase 1 shipped</div>
-          <p class="phase-desc">Shipped Spec Mode (formerly Handoff) and Design System (formerly Tokens, now with live Storybook component browsing folded in). Convert shipped as a beta, then was dropped entirely - see its card below for what replaced it. Dev-centric tools got a review with Colton and Richard. DS-touching tools were reviewed with Scott, Randy, and Ashadeepa before release.</p>
-          <div class="cards">
-
-            <div class="card convert reveal">
-              <div class="card-body">
-                <div class="card-top">
-                  <div class="card-name"><span>⚡</span> Convert <span style="font-weight:400;opacity:.5;">(dropped)</span></div>
-                  <span class="badge dropped">Dropped</span>
-                </div>
-                <div class="card-desc">Retired rather than shipped to GA. For SOL &rarr; Lyra conversion work, we now recommend <a href="https://claude.ai/design/p/019dda40-58d9-795b-92eb-5ee83bf676e4" target="_blank" rel="noopener">Claude Design</a> alongside the <a href="https://ndlr.netlify.app/#/erick-mathews/uncategorized" target="_blank" rel="noopener">official Lyra design system reference</a>, instead of a dedicated in-app tool.</div>
-                <div class="card-footer">
-                  <div class="card-tags"><span class="tag">Recommend Claude Design instead</span><span class="tag">Official Lyra reference</span></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card handoff reveal">
-              <div class="card-body">
-                <div class="card-top">
-                  <div class="card-name"><span>📐</span> Spec Mode <span style="font-weight:400;opacity:.5;">(was Handoff)</span></div>
-                  <span class="badge shipped">Shipped</span>
-                </div>
-                <div class="card-desc">Extracts production CSS, developer spec sheets, and full token exports from any selected Figma node or inspected browser element.</div>
-                <div class="card-footer">
-                  <div class="card-tags"><span class="tag">Figma</span><span class="tag">Chrome</span><span class="tag">Dev-facing</span></div>
-                </div>
-              </div>
-              <div class="gates">
-                <div class="gates-label">Required before ship</div>
-                <div class="gates-rows">
-                  <div class="gates-row">
-                    <div class="gate"><span class="gate-icon">📄</span> Docs<div class="gate-avatars"><div class="gate-av">Li</div><div class="gate-av">Si</div></div></div>
-                    <div class="gate"><span class="gate-icon">🎬</span> Video<div class="gate-avatars"><div class="gate-av">An</div></div></div>
-                    <div class="gate"><span class="gate-icon">🧪</span> Testing</div>
-                  </div>
-                  <div class="gates-row">
-                    <div class="gate"><span class="gate-icon">👁</span> UX Review<div class="gate-avatars"><div class="gate-av">Me</div><div class="gate-av">Rh</div></div></div>
-                    <div class="gate"><span class="gate-icon">🔧</span> Dev Review<div class="gate-avatars"><div class="gate-av">Co</div><div class="gate-av">Ri</div></div></div>
-                    <div class="gate"><span class="gate-icon">🏗</span> DS Align<div class="gate-avatars"><div class="gate-av">Sc</div><div class="gate-av">Ra</div><div class="gate-av">As</div></div></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card tokens reveal">
-              <div class="card-body">
-                <div class="card-top">
-                  <div class="card-name"><span>🪙</span> Design System <span style="font-weight:400;opacity:.5;">(was Tokens)</span></div>
-                  <span class="badge shipped">Shipped</span>
-                </div>
-                <div class="card-desc">Grew beyond token promotion: browse every SOL &amp; Lyra token plus live component previews synced straight from Storybook, with Angular &amp; React props, variants, and states.</div>
-                <div class="card-footer">
-                  <div class="card-tags"><span class="tag">Figma</span><span class="tag">Chrome</span><span class="tag">Storybook</span><span class="tag">DS team</span></div>
-                </div>
-              </div>
-              <div class="gates">
-                <div class="gates-label">Required before ship</div>
-                <div class="gates-rows">
-                  <div class="gates-row">
-                    <div class="gate"><span class="gate-icon">📄</span> Docs<div class="gate-avatars"><div class="gate-av">Li</div><div class="gate-av">Si</div></div></div>
-                    <div class="gate"><span class="gate-icon">🎬</span> Video<div class="gate-avatars"><div class="gate-av">An</div></div></div>
-                    <div class="gate"><span class="gate-icon">🧪</span> Testing</div>
-                  </div>
-                  <div class="gates-row">
-                    <div class="gate"><span class="gate-icon">👁</span> UX Review<div class="gate-avatars"><div class="gate-av">Me</div><div class="gate-av">Rh</div></div></div>
-                    <div class="gate"><span class="gate-icon">🏗</span> DS Align<div class="gate-avatars"><div class="gate-av">Sc</div><div class="gate-av">Ra</div><div class="gate-av">As</div></div></div>
-                    <div class="gate"><span class="gate-icon">📊</span> Dashboard</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <!-- Phase 3 -->
-      <div class="phase reveal">
-        <div class="phase-dot future"></div>
-        <div class="phase-body">
-          <div class="phase-header">
-            <div class="phase-title">Phase 3 &ndash; Advanced Tools</div>
-            <div class="phase-period">Q4 2026 &ndash; Q1 2027</div>
-          </div>
-          <div class="phase-dep">Phase 2 shipped</div>
-          <p class="phase-desc">Editor and its Magic effects shipped; QA's checks and Parity's cross-client comparison both landed inside Frontend Audit rather than as standalone tools - see the notes on each card below. What's left in this phase: Editor's component-swap panel.</p>
-          <div class="cards">
-
-            <div class="card parity reveal">
-              <div class="card-body">
-                <div class="card-top">
-                  <div class="card-name"><span>⚖️</span> Parity <span style="font-weight:400;opacity:.5;">(merged, not standalone)</span></div>
-                  <span class="badge shipped">Shipped</span>
-                </div>
-                <div class="card-desc">Didn't ship as its own tool - the cross-client comparison (diff a Figma artboard against the live implementing page, push artboard styles as CSS overrides) is now a feature inside Frontend Audit instead, reached via Supercharge.</div>
-                <div class="card-footer">
-                  <div class="card-tags"><span class="tag">Figma + Chrome</span><span class="tag">Merged into Audit</span></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card qa reveal">
-              <div class="card-body">
-                <div class="card-top">
-                  <div class="card-name"><span>🧪</span> QA <span style="font-weight:400;opacity:.5;">(merged, not standalone)</span></div>
-                  <span class="badge shipped">Shipped</span>
-                </div>
-                <div class="card-desc">Didn't ship as its own tool - split into two homes instead. Colorblind simulation and tap-target highlighting became part of Frontend Audit's accessibility pass; dark mode, scrollbar styling, and hover/focus overlays became part of Frontend Editor's Magic effects.</div>
-                <div class="card-footer">
-                  <div class="card-tags"><span class="tag">Chrome only</span><span class="tag">Merged into Audit + Editor</span></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card editor reveal">
-              <div class="card-body">
-                <div class="card-top">
-                  <div class="card-name"><span>🎨</span> Editor</div>
-                  <span class="badge shipped">Shipped</span>
-                </div>
-                <div class="card-desc">Visual editor for live pages in Chrome. Figma-like layer panel, edit history, and real-time style overrides. Now includes Magic effects (below) built in.</div>
-                <div class="callout orange"><strong>Component panel (in progress)</strong>Draggable panel of insertable code components from the design system. Click any element to replace it with a compliant one. Instant, visual, and reversible.</div>
-                <div class="card-footer">
-                  <div class="card-tags"><span class="tag">Chrome only</span><span class="tag">Layer panel</span><span class="tag">History</span></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card magic reveal">
-              <div class="card-body">
-                <div class="card-top">
-                  <div class="card-name"><span>✨</span> Magic <span style="font-weight:400;opacity:.5;">(part of Editor, not standalone)</span></div>
-                  <span class="badge shipped">Shipped</span>
-                </div>
-                <div class="card-desc">Shipped as a feature inside Frontend Editor rather than its own tool: one-click dark mode, hover glow, liquid/plasma effects, and other instant visual tweaks - no setup, no separate workflow.</div>
-                <div class="card-footer">
-                  <div class="card-tags"><span class="tag">Figma</span><span class="tag">Chrome</span><span class="tag">Part of Editor</span></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card reveal" style="--card-color:#64748b;">
-              <div class="card-body">
-                <div class="card-top">
-                  <div class="card-name"><span>🔗</span> NDLR <span style="font-weight:400;opacity:.5;">(Nice Designer Link Repo)</span></div>
-                  <span class="badge active">Beta</span>
-                </div>
-                <div class="card-desc">A shared home for every designer's project file links, organized by project. Lives as an external link on Home next to Documentation, gated behind Settings &rarr; Enable beta features.</div>
-                <div class="card-footer">
-                  <div class="card-tags"><span class="tag">Figma</span><span class="tag">Chrome</span><span class="tag">External link</span><span class="tag">Beta</span></div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <!-- Phase 4 -->
-      <div class="phase reveal">
-        <div class="phase-dot shipped"></div>
-        <div class="phase-body">
-          <div class="phase-header">
-            <div class="phase-title">Phase 4 &ndash; NiCE Designer Suite</div>
-            <div class="phase-period">Shipped Aug 2026 &mdash; ahead of schedule</div>
-          </div>
-          <div class="phase-dep">Shipped early - didn't wait on Editor's component panel</div>
-          <p class="phase-desc">Packaged every shipped tool under one install with a unified entry point, shared MCP server, and suite-level branding. Each tool remains independently usable. Convert was dropped and Parity folded into Audit before this shipped, so the final lineup is leaner than originally planned: four tools, not six.</p>
-          <div class="cards">
-            <div class="card reveal" style="--card-color: #3694FC;">
-              <div class="card-body">
-                <div class="card-top">
-                  <div class="card-name"><span>📦</span> NiCE Designer Bundle</div>
-                  <span class="badge shipped">Shipped</span>
-                </div>
-                <div class="card-desc">Audit, Editor, Spec Mode, and Design System install under one entry point. Shared MCP server on <code>127.0.0.1:7331</code>, unified branding, single plugin entry point. Install once, use any tool.</div>
-                <div class="card-footer">
-                  <div class="card-tags"><span class="tag">4 tools</span><span class="tag">Shared MCP</span><span class="tag">One install</span></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
   </section>
 
   <div class="divider"></div>
@@ -1199,28 +599,14 @@
       <div class="section-label">People</div>
       <h2 class="section-title">Stakeholder <span>index</span></h2>
     </div>
-    <div class="stakeholders-grid reveal">
-      <div class="person-entry"><div class="avatar-lg">Re</div><div><div class="person-name">Reid</div><div class="person-role">Roadmap review</div></div></div>
-      <div class="person-entry"><div class="avatar-lg">Bi</div><div><div class="person-name">Bill</div><div class="person-role">Roadmap and separation review</div></div></div>
-      <div class="person-entry"><div class="avatar-lg">Si</div><div><div class="person-name">Simone</div><div class="person-role">Roadmap, docs, training</div></div></div>
-      <div class="person-entry"><div class="avatar-lg">Li</div><div><div class="person-name">Lihi</div><div class="person-role">Documentation lead</div></div></div>
-      <div class="person-entry"><div class="avatar-lg">An</div><div><div class="person-name">Andrew</div><div class="person-role">Video recording per tool</div></div></div>
-      <div class="person-entry"><div class="avatar-lg">Me</div><div><div class="person-name">Megan</div><div class="person-role">UX review and training rollout</div></div></div>
-      <div class="person-entry"><div class="avatar-lg">Rh</div><div><div class="person-name">Rohit</div><div class="person-role">UX review and training rollout</div></div></div>
-      <div class="person-entry"><div class="avatar-lg">Yo</div><div><div class="person-name">Yoav</div><div class="person-role">Audit and MCP engineering</div></div></div>
-      <div class="person-entry"><div class="avatar-lg">Ro</div><div><div class="person-name">Ron</div><div class="person-role">Audit and MCP engineering</div></div></div>
-      <div class="person-entry"><div class="avatar-lg">Co</div><div><div class="person-name">Colton</div><div class="person-role">Dev review, dev-centric tools</div></div></div>
-      <div class="person-entry"><div class="avatar-lg">Ri</div><div><div class="person-name">Richard</div><div class="person-role">Dev review, dev-centric tools</div></div></div>
-      <div class="person-entry"><div class="avatar-lg">Sc</div><div><div class="person-name">Scott</div><div class="person-role">DS and frontend alignment</div></div></div>
-      <div class="person-entry"><div class="avatar-lg">Ra</div><div><div class="person-name">Randy</div><div class="person-role">DS and frontend alignment</div></div></div>
-      <div class="person-entry"><div class="avatar-lg">As</div><div><div class="person-name">Ashadeepa</div><div class="person-role">DS and frontend alignment</div></div></div>
-      <div class="person-entry"><div class="avatar-lg">Mi</div><div><div class="person-name">Mike</div><div class="person-role">Executive briefing</div></div></div>
-      <div class="person-entry"><div class="avatar-lg">It</div><div><div class="person-name">Itay</div><div class="person-role">AI transformation (via Mike)</div></div></div>
-    </div>
+    <!-- Each entry's `.avatar-lg` disc is a lynn-ui <Avatar size="lg"> now
+         (see the mount script); the row itself stays this page's own
+         markup, portalled in as a group. -->
+    <div class="stakeholders-grid reveal" id="lynn-stakeholders-root"></div>
   </section>
 
   <div class="footer-note reveal">
-    <strong>Architecture note:</strong> All tools share the same MCP server and token definitions in <code>src/tokens.ts</code>. Each tool is self-contained but draws from a common layer. The MCP server doubles as the Storybook live checker from Phase 1 onward. Gate icons: 📄 Docs, 🎬 Video, 🧪 Testing, 👁 UX Review, 🔧 Dev Review, 🏗 DS Alignment, 📊 Dashboard. These appear only where applicable per tool.
+    <strong>Architecture note:</strong> All tools share the same MCP server and token definitions in <code>src/tokens.ts</code>. Each tool is self-contained but draws from a common layer. The MCP server doubles as the Storybook live checker from Phase 1 onward. Gate icons: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2"/><path d="M9 9l1 0"/><path d="M9 13l6 0"/><path d="M9 17l6 0"/></svg> Docs, <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M4 6a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2l0 -12"/><path d="M8 4l0 16"/><path d="M16 4l0 16"/><path d="M4 8l4 0"/><path d="M4 16l4 0"/><path d="M4 12l16 0"/><path d="M16 8l4 0"/><path d="M16 16l4 0"/></svg> Video, <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M20 8.04l-12.122 12.124a2.857 2.857 0 1 1 -4.041 -4.04l12.122 -12.124"/><path d="M7 13h8"/><path d="M19 15l1.5 1.6a2 2 0 1 1 -3 0l1.5 -1.6"/><path d="M15 3l6 6"/></svg> Testing, <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/></svg> UX Review, <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5"/></svg> Dev Review, <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M6 21h6"/><path d="M9 21v-18l-6 6h18"/><path d="M9 3l10 6"/><path d="M17 9v4a2 2 0 1 1 -2 2"/></svg> DS Alignment, <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M3 13a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -6"/><path d="M15 9a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -10"/><path d="M9 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -14"/><path d="M4 20h14"/></svg> Dashboard. These appear only where applicable per tool.
   </div>
 
   <script>
@@ -1238,153 +624,6 @@
       el.style.transitionDelay = (i % 6) * 0.04 + 's';
       observer.observe(el);
     });
-  </script>
-
-  <!-- ACCESS GATE -->
-  <style>
-    #access-gate {
-      position: fixed; top: 60px; left: 0; right: 0; bottom: 0; z-index: 9999;
-      background: #21212B;
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Be Vietnam Pro', -apple-system, sans-serif;
-    }
-    #access-gate.unlocked {
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.4s ease;
-    }
-    .gate-card {
-      width: 100%; max-width: 420px; margin: 24px;
-      background: #2f2f3d;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 24px;
-      padding: 48px 40px 40px;
-      text-align: center;
-    }
-    .gate-lock {
-      width: 64px; height: 64px; border-radius: 18px;
-      background: linear-gradient(135deg, #6100FF, #B98FFF);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 28px; margin: 0 auto 24px;
-      box-shadow: 0 8px 32px rgba(97,0,255,0.35);
-    }
-    .gate-title {
-      font-size: 22px; font-weight: 800; color: #fff;
-      letter-spacing: -0.3px; margin-bottom: 8px;
-    }
-    .gate-subtitle {
-      font-size: 14px; color: rgba(255,255,255,0.5);
-      line-height: 1.6; margin-bottom: 32px;
-    }
-    .gate-input-wrap { position: relative; margin-bottom: 12px; }
-    #gate-input {
-      width: 100%; padding: 14px 48px 14px 18px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 12px;
-      color: #fff; font-size: 16px; font-family: inherit;
-      outline: none; letter-spacing: 2px; text-align: center;
-      transition: border-color 0.2s;
-      box-sizing: border-box;
-    }
-    #gate-input:focus { border-color: #6100FF; }
-    #gate-input.error { border-color: #FF5B8A; animation: shake 0.35s ease; }
-    @keyframes shake {
-      0%,100% { transform: translateX(0); }
-      20%      { transform: translateX(-6px); }
-      40%      { transform: translateX(6px); }
-      60%      { transform: translateX(-4px); }
-      80%      { transform: translateX(4px); }
-    }
-    .gate-error {
-      font-size: 12px; color: #FF5B8A; margin-bottom: 12px;
-      min-height: 18px; transition: opacity 0.2s;
-    }
-    #gate-btn {
-      width: 100%; padding: 14px;
-      background: linear-gradient(135deg, #6100FF, #B98FFF);
-      border: none; border-radius: 12px;
-      color: #fff; font-size: 15px; font-weight: 700;
-      font-family: inherit; cursor: pointer;
-      transition: opacity 0.2s, transform 0.15s;
-      margin-bottom: 28px;
-    }
-    #gate-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-    #gate-btn:active { transform: translateY(0); }
-    .gate-divider {
-      height: 1px;
-      background: rgba(255,255,255,0.07);
-      margin-bottom: 24px;
-    }
-    .gate-cta {
-      font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.6;
-    }
-    .gate-cta strong { color: rgba(255,255,255,0.75); font-weight: 600; }
-    .gate-teams-btn {
-      display: inline-flex; align-items: center; gap: 7px;
-      margin-top: 12px; padding: 9px 18px;
-      background: rgba(97,0,255,0.12);
-      border: 1px solid rgba(97,0,255,0.3);
-      border-radius: 100px; text-decoration: none;
-      color: #B98FFF; font-size: 12px; font-weight: 600;
-      font-family: inherit; cursor: pointer;
-      transition: background 0.2s, border-color 0.2s;
-    }
-    .gate-teams-btn:hover {
-      background: rgba(97,0,255,0.22);
-      border-color: rgba(185,143,255,0.5);
-    }
-  </style>
-
-  <div id="access-gate">
-    <div class="gate-card">
-      <div class="gate-lock">🔒</div>
-      <div class="gate-title">Roadmap Access Required</div>
-      <div class="gate-subtitle">This is a separate lock from the site-wide login - it's specifically for NiCE Designer stakeholders reviewing the product roadmap. Enter the roadmap access code to continue.</div>
-      <div class="gate-input-wrap">
-        <input id="gate-input" type="password" placeholder="Enter code" autocomplete="off" />
-      </div>
-      <div class="gate-error" id="gate-error"></div>
-      <button id="gate-btn" onclick="checkCode()">Unlock</button>
-      <div class="gate-divider"></div>
-      <div class="gate-cta">
-        Don't have the code?<br>
-        <strong>Reach out to Erick Mathews on Teams</strong> to request access.
-        <br>
-        <a class="gate-teams-btn" href="https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com" target="_blank" rel="noopener">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H8a2 2 0 00-2 2v2H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2h2a2 2 0 002-2V4a2 2 0 00-2-2zM4 20V8h12v12H4zm16-4h-2V8a2 2 0 00-2-2H8V4h12v12z" fill="currentColor"/></svg>
-          Message on Teams
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    (function() {
-      if (sessionStorage.getItem('nice-roadmap-access') === '1') {
-        document.getElementById('access-gate').style.display = 'none';
-      }
-    })();
-
-    document.getElementById('gate-input').addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') checkCode();
-    });
-
-    function checkCode() {
-      const val = document.getElementById('gate-input').value.trim().toLowerCase();
-      const input = document.getElementById('gate-input');
-      const errEl = document.getElementById('gate-error');
-      if (val === 'dex') {
-        sessionStorage.setItem('nice-roadmap-access', '1');
-        const gate = document.getElementById('access-gate');
-        gate.classList.add('unlocked');
-        setTimeout(() => gate.style.display = 'none', 420);
-      } else {
-        input.classList.add('error');
-        errEl.textContent = 'Incorrect code. Contact Erick Mathews on Teams for access.';
-        setTimeout(() => input.classList.remove('error'), 400);
-        input.value = '';
-      }
-    }
   </script>
 
 
@@ -1463,42 +702,51 @@
     });
     document.addEventListener('mouseleave', function() { glow.style.opacity = '0'; });
 
-    // Apply tilt + spotlight to cards
+    // Apply tilt + spotlight to cards. `.lynn-roadmap-item` is the lynn-ui
+    // component that replaced `.card` on this page; it mounts after this
+    // script runs, so `polish()` is exposed below for the mount script to
+    // call with it (the dataset guard makes a second pass a no-op).
     var SELECTORS = [
-      '.tool-card', '.skill-card', '.phase-block', '.case-card',
-      '.pillar', '.step-card', '.score-card', '.sp-card',
-      '.stat-card', '.doc-card', '.dl-card',
-      '.faq-item', '.checklist-item', '.tool-mini', '.gate-card',
+      '.tool-card', '.lynn-feature-card', '.skill-card', '.phase-block',
+      '.case-card', '.pillar', '.step-card', '.score-card', '.sp-card',
+      '.lynn-icon-card', '.sp-callout-card', '.stat-card', '.doc-card',
+      '.dl-card', '.faq-item', '.checklist-item', '.tool-mini', '.gate-card',
       '.score-band', '.audit-cat', '.workflow-card', '.case-scenario'
     ].join(', ');
 
-    document.querySelectorAll(SELECTORS).forEach(function(card) {
-      card.classList.add('tilt-ready');
+    function polish(cards) {
+      cards.forEach(function(card) {
+        if (card.dataset.nicePolished === '1') return;
+        card.dataset.nicePolished = '1';
+        card.classList.add('tilt-ready');
 
-      card.addEventListener('mousemove', function(e) {
-        var r = card.getBoundingClientRect();
-        var x = (e.clientX - r.left) / r.width;
-        var y = (e.clientY - r.top) / r.height;
-        // Spotlight CSS vars
-        card.style.setProperty('--mx', (x * 100) + '%');
-        card.style.setProperty('--my', (y * 100) + '%');
-        // 3D tilt (gentle, max 7deg)
-        var tx = (y - 0.5) * -8;
-        var ty = (x - 0.5) * 8;
-        card.style.transform = 'perspective(900px) rotateX(' + tx + 'deg) rotateY(' + ty + 'deg) translateZ(3px)';
-        card.style.transition = 'transform 0.07s ease';
-        // Glow border hint
-        card.style.boxShadow = '0 8px 32px rgba(0,0,0,0.35), 0 0 0 1px rgba(54,148,252,0.18)';
-      });
+        card.addEventListener('mousemove', function(e) {
+          var r = card.getBoundingClientRect();
+          var x = (e.clientX - r.left) / r.width;
+          var y = (e.clientY - r.top) / r.height;
+          // Spotlight CSS vars
+          card.style.setProperty('--mx', (x * 100) + '%');
+          card.style.setProperty('--my', (y * 100) + '%');
+          // 3D tilt (gentle, max 7deg)
+          var tx = (y - 0.5) * -8;
+          var ty = (x - 0.5) * 8;
+          card.style.transform = 'perspective(900px) rotateX(' + tx + 'deg) rotateY(' + ty + 'deg) translateZ(3px)';
+          card.style.transition = 'transform 0.07s ease';
+          // Glow border hint
+          card.style.boxShadow = '0 8px 32px rgba(0,0,0,0.35), 0 0 0 1px rgba(54,148,252,0.18)';
+        });
 
-      card.addEventListener('mouseleave', function() {
-        card.style.transform = '';
-        card.style.transition = 'transform 0.45s cubic-bezier(0.23,1,0.32,1)';
-        card.style.boxShadow = '';
-        card.style.setProperty('--mx', '50%');
-        card.style.setProperty('--my', '50%');
+        card.addEventListener('mouseleave', function() {
+          card.style.transform = '';
+          card.style.transition = 'transform 0.45s cubic-bezier(0.23,1,0.32,1)';
+          card.style.boxShadow = '';
+          card.style.setProperty('--mx', '50%');
+          card.style.setProperty('--my', '50%');
+        });
       });
-    });
+    }
+
+    polish([].slice.call(document.querySelectorAll(SELECTORS)));
 
     // Magnetic effect on primary action buttons
     document.querySelectorAll('.nav-cta, .btn-primary, .cta-btn').forEach(function(btn) {
@@ -1528,45 +776,742 @@
       });
     }, { threshold: 0.05, rootMargin: '0px 0px -24px 0px' });
 
-    document.querySelectorAll('.reveal').forEach(function(el, i) {
-      // Stagger siblings in same parent
-      el.dataset.polishDelay = (i % 6) * 55;
-      ro.observe(el);
-    });
+    function observeReveal(els) {
+      els.forEach(function(el, i) {
+        // Stagger siblings in same parent
+        el.dataset.polishDelay = (i % 6) * 55;
+        ro.observe(el);
+      });
+    }
+
+    observeReveal([].slice.call(document.querySelectorAll('.reveal')));
+
+    // Handed to the lynn-ui mount script, whose cards do not exist yet.
+    window.NicePolish = { polish: polish, observeReveal: observeReveal };
   })();
   </script>
 
-  <script>
+  <!--
+    ===== lynn-ui mount =====
+    One createRoot, one ThemeProvider, one <App>: the site-wide access gate,
+    the roadmap-only access gate, the nav, the doc rail, the footer, the
+    status legend, the phase timeline (with every card, badge, callout, gate
+    and avatar it contains) and the stakeholder index. Keeping them in a
+    single root is what keeps the theme in sync between them - separate
+    roots would each get their own provider and drift apart.
+
+    Anything that belongs elsewhere in the document is placed with
+    createPortal into a placeholder rather than rendered here: a footer
+    rendered next to the nav would sit at the top of the page, and a nav
+    rendered inside a wrapper could not be sticky.
+  -->
+  <script type="module">
+    import { createElement as h, Fragment, useEffect, useState } from 'react';
+    import { createPortal } from 'react-dom';
+    import { createRoot } from 'react-dom/client';
+    import {
+      AccessGate,
+      Alert,
+      Avatar,
+      DocRail,
+      Footer,
+      Legend,
+      Nav,
+      Phase,
+      RoadmapItemCard,
+      ThemeProvider,
+      ThemeToggle,
+      Timeline,
+      useLynnTheme,
+    } from './lynn-ui/dist/index.js';
+
+    const PAGE = 'roadmap.html';
+
+    /* ---- the two real gates, ported from site-gate.js and the page's own
+       inline `checkCode()` -------------------------------------------------
+       Same session keys, same passwords, same message, same Teams link.
+       Still a soft deterrent, not security - both checks are client-side
+       and readable right here, exactly as they were before. */
+    const SITE_GATE_KEY = 'nice-site-access';
+    const SITE_GATE_PASSWORD = 'niceux';
+    const ROADMAP_GATE_KEY = 'nice-roadmap-access';
+    const ROADMAP_GATE_PASSWORD = 'dex';
+    const GATE_ERROR = 'Incorrect code. Contact Erick Mathews on Teams for access.';
+    const TEAMS_HREF = 'https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com';
+
+    /* ---- doc rail ------------------------------------------------------- */
+    const RAIL_KEY = 'nice-doc-rail-collapsed';
+    const DOC_PAGES = (window.NiceEffects && window.NiceEffects.docPages) || [];
+    const railPages = DOC_PAGES.map((page) => ({
+      href: './' + page.href,
+      label: page.label,
+    }));
+    const railGroups = (DOC_PAGES.find((page) => page.href === PAGE) || {}).groups || [];
+
+    /* ---- footer --------------------------------------------------------- */
+    const FOOTER_COLUMNS = [
+      {
+        title: 'Product',
+        links: [
+          { label: 'Overview', href: './index.html' },
+          { label: 'Install Guide', href: './install-guide.html' },
+          { label: 'Claude Skills', href: './claude-skills.html' },
+          { label: 'The Suite', href: './the-suite.html' },
+        ],
+      },
+      {
+        title: 'Learn',
+        links: [
+          { label: 'Use Cases', href: './use-cases.html' },
+          { label: 'Scoring', href: './scoring.html' },
+          { label: 'Dashboard', href: './dashboard.html' },
+          { label: 'Roadmap', href: './roadmap.html', active: true },
+        ],
+      },
+      {
+        title: 'Reference',
+        links: [
+          { label: 'Release Notes', href: './release-notes.html' },
+          { label: 'FAQ', href: './faq.html' },
+          { label: 'Tools', href: './tools.html' },
+          { label: 'Marketplace', href: './marketplace.html' },
+          { label: 'Lynn', href: './lynn.html' },
+        ],
+      },
+    ];
+
+    /* ---- content helpers ------------------------------------------------ */
+    /* A few strings carry inline <strong>/<a> from the source. They are
+       authored right here in this file - not user input - so keeping them
+       as markup is both safe and far more legible than nesting createElement
+       three deep for a link. */
+    const rich = (html) => h('span', { dangerouslySetInnerHTML: { __html: html } });
+
+    /* The source's icons are Tabler-style outline glyphs, given here as
+       their raw <path> list so each one stays byte-identical to the markup
+       it replaces. */
+    const glyph = (size, paths, style) =>
+      h('svg', {
+        width: size,
+        height: size,
+        viewBox: '0 0 24 24',
+        fill: 'none',
+        stroke: 'currentColor',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
+        'aria-hidden': true,
+        style,
+        dangerouslySetInnerHTML: { __html: paths },
+      });
+
+    /* ---- the seven gate icons, reused across many cards' `gates` ------- */
+    const gDocs = () => glyph(12, '<path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2"/><path d="M9 9l1 0"/><path d="M9 13l6 0"/><path d="M9 17l6 0"/>');
+    const gVideo = () => glyph(12, '<path d="M4 6a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2l0 -12"/><path d="M8 4l0 16"/><path d="M16 4l0 16"/><path d="M4 8l4 0"/><path d="M4 16l4 0"/><path d="M4 12l16 0"/><path d="M16 8l4 0"/><path d="M16 16l4 0"/>');
+    const gTesting = () => glyph(12, '<path d="M20 8.04l-12.122 12.124a2.857 2.857 0 1 1 -4.041 -4.04l12.122 -12.124"/><path d="M7 13h8"/><path d="M19 15l1.5 1.6a2 2 0 1 1 -3 0l1.5 -1.6"/><path d="M15 3l6 6"/>');
+    const gUxReview = () => glyph(12, '<path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/>');
+    const gDsAlign = () => glyph(12, '<path d="M6 21h6"/><path d="M9 21v-18l-6 6h18"/><path d="M9 3l10 6"/><path d="M17 9v4a2 2 0 1 1 -2 2"/>');
+    const gDashboard = () => glyph(12, '<path d="M3 13a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -6"/><path d="M15 9a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -10"/><path d="M9 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -14"/><path d="M4 20h14"/>');
+    const gDevReview = () => glyph(12, '<path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5"/>');
+
+    /* ---- card name icons (16px), one per roadmap item ------------------- */
+    const iRoadmapReview = glyph(16, '<path d="M3 7l6 -3l6 3l6 -3v13l-6 3l-6 -3l-6 3v-13"/><path d="M9 4v13"/><path d="M15 7v13"/>', { flexShrink: 0 });
+    const iSeparationReview = glyph(16, '<path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0 -3 -3.85"/>', { flexShrink: 0 });
+    const iCodeSeparation = glyph(16, '<path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5"/>', { flexShrink: 0 });
+    const iNewMenu = glyph(16, '<path d="M9 3h3l2 2h5a2 2 0 0 1 2 2v7a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2"/><path d="M17 16v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2h2"/>', { flexShrink: 0 });
+    const iTraining = glyph(16, '<path d="M22 9l-10 -4l-10 4l10 4l10 -4v6"/><path d="M6 10.6v5.4a6 3 0 0 0 12 0v-5.4"/>', { flexShrink: 0 });
+    const iExec = glyph(16, '<path d="M18 8a3 3 0 0 1 0 6"/><path d="M10 8v11a1 1 0 0 1 -1 1h-1a1 1 0 0 1 -1 -1v-5"/><path d="M12 8l4.524 -3.77a.9 .9 0 0 1 1.476 .692v12.156a.9 .9 0 0 1 -1.476 .692l-4.524 -3.77h-8a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h8"/>', { flexShrink: 0 });
+    const iAudit = glyph(16, '<path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6 -6"/>', { flexShrink: 0 });
+    const iMcpStorybook = glyph(16, '<path d="M9.785 6l8.215 8.215l-2.054 2.054a5.81 5.81 0 1 1 -8.215 -8.215l2.054 -2.054"/><path d="M4 20l3.5 -3.5"/><path d="M15 4l-3.5 3.5"/><path d="M20 9l-3.5 3.5"/>', { flexShrink: 0 });
+    const iDash = glyph(16, '<path d="M3 13a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -6"/><path d="M15 9a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -10"/><path d="M9 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -14"/><path d="M4 20h14"/>', { flexShrink: 0 });
+    const iConvert = glyph(16, '<path d="M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11"/>', { flexShrink: 0 });
+    const iHandoff = glyph(16, '<path d="M17 3l4 4l-14 14l-4 -4l14 -14"/><path d="M16 7l-1.5 -1.5"/><path d="M13 10l-1.5 -1.5"/><path d="M10 13l-1.5 -1.5"/><path d="M7 16l-1.5 -1.5"/>', { flexShrink: 0 });
+    const iTokens = glyph(16, '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M14.8 9a2 2 0 0 0 -1.8 -1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1 -1.8 -1"/><path d="M12 7v10"/>', { flexShrink: 0 });
+    const iParity = glyph(16, '<path d="M7 20l10 0"/><path d="M6 6l6 -1l6 1"/><path d="M12 3l0 17"/><path d="M9 12l-3 -6l-3 6a3 3 0 0 0 6 0"/><path d="M21 12l-3 -6l-3 6a3 3 0 0 0 6 0"/>', { flexShrink: 0 });
+    const iQa = glyph(16, '<path d="M20 8.04l-12.122 12.124a2.857 2.857 0 1 1 -4.041 -4.04l12.122 -12.124"/><path d="M7 13h8"/><path d="M19 15l1.5 1.6a2 2 0 1 1 -3 0l1.5 -1.6"/><path d="M15 3l6 6"/>', { flexShrink: 0 });
+    const iEditor = glyph(16, '<path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25"/><path d="M7.5 10.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M11.5 7.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M15.5 10.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>', { flexShrink: 0 });
+    const iMagic = glyph(16, '<path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/>', { flexShrink: 0 });
+    const iNdlr = glyph(16, '<path d="M9 15l6 -6"/><path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464"/><path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463"/>', { flexShrink: 0 });
+    const iBundle = glyph(16, '<path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5"/><path d="M12 12l8 -4.5"/><path d="M12 12l0 9"/><path d="M12 12l-8 -4.5"/><path d="M16 5.25l-8 4.5"/>', { flexShrink: 0 });
+
+    /* ---- the two callout icons ------------------------------------------ */
+    const cLaunchGoal = glyph(13, '<path d="M11 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M12 7a5 5 0 1 0 5 5"/><path d="M13 3.055a9 9 0 1 0 7.941 7.945"/><path d="M15 6v3h3l3 -3h-3v-3l-3 3"/><path d="M15 9l-3 3"/>');
+    const cCodeAwareness = glyph(13, '<path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065"/><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/>');
+
+    /* ---- the sixteen stakeholders ---------------------------------------- */
+    const STAKEHOLDERS = [
+      { initials: 'Re', name: 'Reid', role: 'Roadmap review' },
+      { initials: 'Bi', name: 'Bill', role: 'Roadmap and separation review' },
+      { initials: 'Si', name: 'Simone', role: 'Roadmap, docs, training' },
+      { initials: 'Li', name: 'Lihi', role: 'Documentation lead' },
+      { initials: 'An', name: 'Andrew', role: 'Video recording per tool' },
+      { initials: 'Me', name: 'Megan', role: 'UX review and training rollout' },
+      { initials: 'Rh', name: 'Rohit', role: 'UX review and training rollout' },
+      { initials: 'Yo', name: 'Yoav', role: 'Audit and MCP engineering' },
+      { initials: 'Ro', name: 'Ron', role: 'Audit and MCP engineering' },
+      { initials: 'Co', name: 'Colton', role: 'Dev review, dev-centric tools' },
+      { initials: 'Ri', name: 'Richard', role: 'Dev review, dev-centric tools' },
+      { initials: 'Sc', name: 'Scott', role: 'DS and frontend alignment' },
+      { initials: 'Ra', name: 'Randy', role: 'DS and frontend alignment' },
+      { initials: 'As', name: 'Ashadeepa', role: 'DS and frontend alignment' },
+      { initials: 'Mi', name: 'Mike', role: 'Executive briefing' },
+      { initials: 'It', name: 'Itay', role: 'AI transformation (via Mike)' },
+    ];
+
+    /* ---- the status legend ---------------------------------------------- */
+    const LEGEND_ITEMS = [
+      { swatch: '#00E2A0', label: 'Shipped' },
+      { swatch: '#3694FC', label: 'Active' },
+      { swatch: '#00E2A0', label: 'Up Next' },
+      { swatch: '#B98FFF', label: 'New' },
+      { swatch: 'rgba(255,255,255,0.2)', label: 'Planned' },
+      { swatch: '#FF5B8A', label: 'Dropped' },
+    ];
+
+    /* ---- the roadmap's five phases, each with its RoadmapItemCards ------ */
+    const PHASES = [
+      {
+        status: 'active',
+        title: 'Phase 0 – Foundation and Alignment',
+        period: h(Fragment, null, 'Now   Q2 2026'),
+        description: 'Establish architecture, priorities, and stakeholder alignment before any tool ships. Strategic reviews, executive briefing, and training planning all happen here.',
+        items: [
+          {
+            icon: iRoadmapReview,
+            name: 'Roadmap Review',
+            status: 'Active',
+            statusVariant: 'active',
+            description: 'Reid, Bill, and Simone review the roadmap. Validate scope, sequencing, and priorities before development commitments are made.',
+            tags: ['Roadmap', 'Priorities'],
+            people: ['Re', 'Bi', 'Si'],
+          },
+          {
+            icon: iSeparationReview,
+            name: 'Separation Review',
+            status: 'Active',
+            statusVariant: 'active',
+            description: 'Simone and Bill review the code separation plan, validate tool boundaries, and confirm which tool gets priority resourcing first.',
+            tags: ['Architecture'],
+            people: ['Si', 'Bi'],
+          },
+          {
+            icon: iCodeSeparation,
+            name: 'Code Separation',
+            status: 'Active',
+            statusVariant: 'active',
+            description: rich('Refactor all capabilities out of the monolithic <code>code.ts</code> into self-contained tool modules. Shared utilities and token definitions stay in a common layer.'),
+            tags: ['Figma', 'Chrome', 'Self-contained'],
+          },
+          {
+            icon: iNewMenu,
+            name: 'New Menu System',
+            status: 'Active',
+            statusVariant: 'active',
+            description: 'Replace the tab-based UI with a top-level tool selector. Each tool has its own entry point and feels like a distinct product inside the same plugin shell.',
+            tags: ['UI / UX', 'Both platforms'],
+          },
+          {
+            icon: iTraining,
+            accentColor: '#B98FFF',
+            name: 'Training and Rollout Planning',
+            status: 'Active',
+            statusVariant: 'active',
+            description: 'Megan, Rohit, and Simone establish the rollout plan for training UX teams on each tool, covering sequencing, format, and UX process integration.',
+            tags: ['Training', 'Rollout'],
+            people: ['Me', 'Rh', 'Si'],
+          },
+          {
+            icon: iExec,
+            accentColor: '#B98FFF',
+            name: 'Executive Alignment',
+            status: 'Active',
+            statusVariant: 'active',
+            description: 'Brief Mike on the full roadmap plan. Mike communicates to Itay how NiCE Designer fits their AI transformation strategy before public rollout begins.',
+            tags: ['Executive', 'AI Transformation'],
+            people: ['Mi', 'It'],
+          },
+        ],
+      },
+      {
+        status: 'shipped',
+        title: 'Phase 1 – Audit and Storybook',
+        period: 'Q3 2026',
+        dependency: 'Phase 0 complete',
+        description: 'Shipped Audit as the first standalone tool with an MCP server running live against Storybook. The Compliance Dashboard gained auto-submit so every audit result posts publicly without manual steps.',
+        items: [
+          {
+            icon: iAudit,
+            accentColor: '#3694FC',
+            highlight: true,
+            name: 'Audit',
+            status: 'Shipped',
+            statusVariant: 'shipped',
+            description: 'Scans a Figma frame or live page for compliance. Read-only, surfaces issues by dimension and severity.',
+            callouts: [
+              { variant: 'info', icon: cLaunchGoal, title: 'Launch goal', text: 'Compliance visible alongside component docs in Storybook. The definitive reference for how SOL and Lyra are applied.' },
+              { variant: 'success', icon: cCodeAwareness, title: 'Code component awareness', text: 'Recognizes actual rendered components, not just token values. Flags wrong component usage for a pattern.' },
+            ],
+            tags: ['Figma', 'Chrome', 'Storybook'],
+            people: ['Yo', 'Ro'],
+            gates: [
+              { icon: gDocs(), label: 'Docs', people: ['Li', 'Si'] },
+              { icon: gVideo(), label: 'Video', people: ['An'] },
+              { icon: gTesting(), label: 'Testing' },
+              { icon: gUxReview(), label: 'UX Review', people: ['Me', 'Rh'] },
+              { icon: gDsAlign(), label: 'DS Align', people: ['Sc', 'Ra', 'As'] },
+              { icon: gDashboard(), label: 'Dashboard' },
+            ],
+          },
+          {
+            icon: iMcpStorybook,
+            accentColor: '#00E2A0',
+            name: 'MCP Storybook',
+            status: 'Shipped',
+            statusVariant: 'shipped',
+            description: 'Extends the MCP server to connect to a live Storybook instance. Runs compliance checks against rendered stories in real time.',
+            callouts: [
+              { variant: 'success', title: 'How it works', text: 'Watches the Storybook dev server, instruments each story via content script, and streams audit results back to Audit and Convert.' },
+            ],
+            tags: ['MCP server', 'Storybook'],
+            people: ['Yo', 'Ro'],
+            gates: [
+              { icon: gDocs(), label: 'Docs', people: ['Li', 'Si'] },
+              { icon: gVideo(), label: 'Video', people: ['An'] },
+              { icon: gTesting(), label: 'Testing' },
+              { icon: gDevReview(), label: 'Dev Review', people: ['Co', 'Ri'] },
+              { icon: gDsAlign(), label: 'DS Align', people: ['Sc', 'Ra', 'As'] },
+            ],
+          },
+          {
+            icon: iDash,
+            accentColor: '#36EAD0',
+            name: 'Compliance Dashboard',
+            status: 'Shipped',
+            statusVariant: 'shipped',
+            description: 'The existing dashboard that aggregates audit results and posts them live. This phase automated the pipeline end to end.',
+            callouts: [
+              { variant: 'purple', title: 'Auto-submit pipeline', text: 'Audit results automatically submitted on every run. The GitHub HTML is updated and committed without any manual steps.' },
+              { variant: 'warning', title: 'Unblocked', text: 'Audit shipped and MCP Storybook integration live.' },
+            ],
+            tags: ['Existing', 'Auto-submit', 'GitHub HTML'],
+          },
+        ],
+      },
+      {
+        status: 'active',
+        title: 'Phase 2 – Core Tools',
+        period: h(Fragment, null, 'Q3 – Q4 2026'),
+        dependency: 'Phase 1 shipped',
+        description: 'Shipped Spec Mode (formerly Handoff) and Design System (formerly Tokens, now with live Storybook component browsing folded in). Convert shipped as a beta, then was dropped entirely - see its card below for what replaced it. Dev-centric tools got a review with Colton and Richard. DS-touching tools were reviewed with Scott, Randy, and Ashadeepa before release.',
+        items: [
+          {
+            icon: iConvert,
+            accentColor: '#00E2A0',
+            name: h(Fragment, null, 'Convert ', h('span', { style: { fontWeight: 400, opacity: 0.5 } }, '(dropped)')),
+            status: 'Dropped',
+            statusVariant: 'dropped',
+            description: rich('Retired rather than shipped to GA. For SOL → Lyra conversion work, we now recommend <a href="https://claude.ai/design/p/019dda40-58d9-795b-92eb-5ee83bf676e4" target="_blank" rel="noopener">Claude Design</a> alongside the <a href="https://ndlr.netlify.app/#/erick-mathews/uncategorized" target="_blank" rel="noopener">official Lyra design system reference</a>, instead of a dedicated in-app tool.'),
+            tags: ['Recommend Claude Design instead', 'Official Lyra reference'],
+          },
+          {
+            icon: iHandoff,
+            accentColor: '#B98FFF',
+            name: h(Fragment, null, 'Spec Mode ', h('span', { style: { fontWeight: 400, opacity: 0.5 } }, '(was Handoff)')),
+            status: 'Shipped',
+            statusVariant: 'shipped',
+            description: 'Extracts production CSS, developer spec sheets, and full token exports from any selected Figma node or inspected browser element.',
+            tags: ['Figma', 'Chrome', 'Dev-facing'],
+            gates: [
+              { icon: gDocs(), label: 'Docs', people: ['Li', 'Si'] },
+              { icon: gVideo(), label: 'Video', people: ['An'] },
+              { icon: gTesting(), label: 'Testing' },
+              { icon: gUxReview(), label: 'UX Review', people: ['Me', 'Rh'] },
+              { icon: gDevReview(), label: 'Dev Review', people: ['Co', 'Ri'] },
+              { icon: gDsAlign(), label: 'DS Align', people: ['Sc', 'Ra', 'As'] },
+            ],
+          },
+          {
+            icon: iTokens,
+            accentColor: '#ACF7F3',
+            name: h(Fragment, null, 'Design System ', h('span', { style: { fontWeight: 400, opacity: 0.5 } }, '(was Tokens)')),
+            status: 'Shipped',
+            statusVariant: 'shipped',
+            description: 'Grew beyond token promotion: browse every SOL & Lyra token plus live component previews synced straight from Storybook, with Angular & React props, variants, and states.',
+            tags: ['Figma', 'Chrome', 'Storybook', 'DS team'],
+            gates: [
+              { icon: gDocs(), label: 'Docs', people: ['Li', 'Si'] },
+              { icon: gVideo(), label: 'Video', people: ['An'] },
+              { icon: gTesting(), label: 'Testing' },
+              { icon: gUxReview(), label: 'UX Review', people: ['Me', 'Rh'] },
+              { icon: gDsAlign(), label: 'DS Align', people: ['Sc', 'Ra', 'As'] },
+              { icon: gDashboard(), label: 'Dashboard' },
+            ],
+          },
+        ],
+      },
+      {
+        status: 'future',
+        title: 'Phase 3 – Advanced Tools',
+        period: h(Fragment, null, 'Q4 2026 – Q1 2027'),
+        dependency: 'Phase 2 shipped',
+        description: "Editor and its Magic effects shipped; QA's checks and Parity's cross-client comparison both landed inside Frontend Audit rather than as standalone tools - see the notes on each card below. What's left in this phase: Editor's component-swap panel.",
+        items: [
+          {
+            icon: iParity,
+            accentColor: '#36EAD0',
+            name: h(Fragment, null, 'Parity ', h('span', { style: { fontWeight: 400, opacity: 0.5 } }, '(merged, not standalone)')),
+            status: 'Shipped',
+            statusVariant: 'shipped',
+            description: "Didn't ship as its own tool - the cross-client comparison (diff a Figma artboard against the live implementing page, push artboard styles as CSS overrides) is now a feature inside Frontend Audit instead, reached via Supercharge.",
+            tags: ['Figma + Chrome', 'Merged into Audit'],
+          },
+          {
+            icon: iQa,
+            accentColor: '#FF5B8A',
+            name: h(Fragment, null, 'QA ', h('span', { style: { fontWeight: 400, opacity: 0.5 } }, '(merged, not standalone)')),
+            status: 'Shipped',
+            statusVariant: 'shipped',
+            description: "Didn't ship as its own tool - split into two homes instead. Colorblind simulation and tap-target highlighting became part of Frontend Audit's accessibility pass; dark mode, scrollbar styling, and hover/focus overlays became part of Frontend Editor's Magic effects.",
+            tags: ['Chrome only', 'Merged into Audit + Editor'],
+          },
+          {
+            icon: iEditor,
+            accentColor: '#025AFB',
+            name: 'Editor',
+            status: 'Shipped',
+            statusVariant: 'shipped',
+            description: 'Visual editor for live pages in Chrome. Figma-like layer panel, edit history, and real-time style overrides. Now includes Magic effects (below) built in.',
+            callouts: [
+              { variant: 'danger', title: 'Component panel (in progress)', text: 'Draggable panel of insertable code components from the design system. Click any element to replace it with a compliant one. Instant, visual, and reversible.' },
+            ],
+            tags: ['Chrome only', 'Layer panel', 'History'],
+          },
+          {
+            icon: iMagic,
+            accentColor: '#6100FF',
+            name: h(Fragment, null, 'Magic ', h('span', { style: { fontWeight: 400, opacity: 0.5 } }, '(part of Editor, not standalone)')),
+            status: 'Shipped',
+            statusVariant: 'shipped',
+            description: 'Shipped as a feature inside Frontend Editor rather than its own tool: one-click dark mode, hover glow, liquid/plasma effects, and other instant visual tweaks - no setup, no separate workflow.',
+            tags: ['Figma', 'Chrome', 'Part of Editor'],
+          },
+          {
+            icon: iNdlr,
+            accentColor: '#64748b',
+            name: h(Fragment, null, 'NDLR ', h('span', { style: { fontWeight: 400, opacity: 0.5 } }, '(Nice Designer Link Repo)')),
+            status: 'Beta',
+            statusVariant: 'active',
+            description: 'A shared home for every designer’s project file links, organized by project. Lives as an external link on Home next to Documentation, gated behind Settings → Enable beta features.',
+            tags: ['Figma', 'Chrome', 'External link', 'Beta'],
+          },
+        ],
+      },
+      {
+        status: 'shipped',
+        title: 'Phase 4 – NiCE Designer Suite',
+        period: 'Shipped Aug 2026 — ahead of schedule',
+        dependency: "Shipped early - didn't wait on Editor's component panel",
+        description: 'Packaged every shipped tool under one install with a unified entry point, shared MCP server, and suite-level branding. Each tool remains independently usable. Convert was dropped and Parity folded into Audit before this shipped, so the final lineup is leaner than originally planned: four tools, not six.',
+        items: [
+          {
+            icon: iBundle,
+            accentColor: '#3694FC',
+            name: 'NiCE Designer Bundle',
+            status: 'Shipped',
+            statusVariant: 'shipped',
+            description: rich('Audit, Editor, Spec Mode, and Design System install under one entry point. Shared MCP server on <code>127.0.0.1:7331</code>, unified branding, single plugin entry point. Install once, use any tool.'),
+            tags: ['4 tools', 'Shared MCP', 'One install'],
+          },
+        ],
+      },
+    ];
+
+    /* ThemeProvider stamps `data-lynn-theme` on its own wrapper div, but the
+       portalled chrome and cards live outside that div - so mirror the
+       attribute onto <html>, where the same `[data-lynn-theme]` rules in
+       lynn-ui.css apply to the whole document. */
+    function ThemeBridge() {
+      const { theme } = useLynnTheme();
+      useEffect(() => {
+        document.documentElement.setAttribute('data-lynn-theme', theme);
+      }, [theme]);
+      return null;
+    }
+
+    function portal(node, id) {
+      const host = document.getElementById(id);
+      return host ? createPortal(node, host) : null;
+    }
+
+    /* The nav's single action slot, unchanged from the markup it replaces:
+       the disabled Download pill plus its "Coming soon!" tag. */
+    const downloadPill = (key) =>
+      h(
+        'span',
+        { key, className: 'nav-download is-disabled', 'aria-disabled': 'true' },
+        'Download',
+        h('span', { className: 'coming-soon-tag' }, 'Coming soon!')
+      );
+
+    function renderItem(item) {
+      const {
+        icon,
+        name,
+        description,
+        status,
+        statusVariant,
+        callouts = [],
+        tags,
+        people,
+        gates,
+        accentColor,
+        highlight,
+      } = item;
+
+      const nameNode = icon != null ? h(Fragment, null, icon, ' ', name) : name;
+
+      return h(
+        RoadmapItemCard,
+        {
+          key: typeof name === 'string' ? name : item.description,
+          name: nameNode,
+          description,
+          status,
+          statusVariant,
+          tags,
+          people,
+          gates,
+          accentColor,
+          highlight,
+        },
+        callouts.length > 0
+          ? callouts.map((callout, index) =>
+              h(
+                Alert,
+                {
+                  key: index,
+                  variant: callout.variant,
+                  icon: callout.icon,
+                  title: callout.title,
+                  compact: true,
+                },
+                callout.text
+              )
+            )
+          : null
+      );
+    }
+
+    function App() {
+      const [siteUnlocked, setSiteUnlocked] = useState(() => {
+        try {
+          return sessionStorage.getItem(SITE_GATE_KEY) === '1';
+        } catch (e) {
+          return false;
+        }
+      });
+      const [roadmapUnlocked, setRoadmapUnlocked] = useState(() => {
+        try {
+          return sessionStorage.getItem(ROADMAP_GATE_KEY) === '1';
+        } catch (e) {
+          return false;
+        }
+      });
+      const [siteError, setSiteError] = useState(undefined);
+      const [roadmapError, setRoadmapError] = useState(undefined);
+      const [railCollapsed, setRailCollapsed] = useState(() => {
+        try {
+          return localStorage.getItem(RAIL_KEY) === '1';
+        } catch (e) {
+          return false;
+        }
+      });
+
+      useEffect(() => {
+        // The chrome is up; let the page paint (see the gate-pending guard
+        // in <head>). This only unhides the page - it has nothing to do
+        // with which gate is unlocked; both gates render as their own
+        // full-screen overlays once mounted.
+        document.documentElement.classList.remove('lynn-gate-pending');
+
+        const cards = [].slice.call(document.querySelectorAll('.lynn-roadmap-item'));
+        if (window.NicePolish) {
+          window.NicePolish.polish(cards);
+          window.NicePolish.observeReveal(
+            cards.filter((card) => card.classList.contains('reveal'))
+          );
+        }
+      }, []);
+
+      // Cmd+K / Ctrl+K opens the rail and focuses its filter box.
+      useEffect(() => {
+        function onKeyDown(event) {
+          if (event.key !== 'k' && event.key !== 'K') return;
+          if (!(event.metaKey || event.ctrlKey)) return;
+          event.preventDefault();
+          setRail(false);
+          const input = document.querySelector('.lynn-doc-rail-search');
+          if (input) {
+            input.focus();
+            input.select();
+          }
+        }
+        document.addEventListener('keydown', onKeyDown);
+        return () => document.removeEventListener('keydown', onKeyDown);
+      }, []);
+
+      const checkSiteCode = (code) => {
+        if (code === SITE_GATE_PASSWORD) {
+          try {
+            sessionStorage.setItem(SITE_GATE_KEY, '1');
+          } catch (e) { /* unwritable store just means no persistence */ }
+          setSiteError(undefined);
+          setSiteUnlocked(true);
+        } else {
+          setSiteError(GATE_ERROR);
+        }
+      };
+
+      const checkRoadmapCode = (code) => {
+        if (code === ROADMAP_GATE_PASSWORD) {
+          try {
+            sessionStorage.setItem(ROADMAP_GATE_KEY, '1');
+          } catch (e) { /* unwritable store just means no persistence */ }
+          setRoadmapError(undefined);
+          setRoadmapUnlocked(true);
+        } else {
+          setRoadmapError(GATE_ERROR);
+        }
+      };
+
+      const setRail = (collapsed) => {
+        setRailCollapsed(collapsed);
+        try {
+          localStorage.setItem(RAIL_KEY, collapsed ? '1' : '0');
+        } catch (e) { /* no persistence, still collapses for this visit */ }
+      };
+
+      return h(
+        Fragment,
+        null,
+        h(ThemeBridge, { key: 'theme-bridge' }),
+        h(AccessGate, {
+          key: 'gate-site',
+          title: 'NiCE Designer Site Login',
+          subtitle:
+            'This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.',
+          onSubmit: checkSiteCode,
+          error: siteError,
+          unlocked: siteUnlocked,
+          ctaText: h(
+            Fragment,
+            null,
+            "Don't have the code?",
+            h('br'),
+            h('strong', null, 'Reach out to Erick Mathews on Teams'),
+            ' to request access.'
+          ),
+          ctaHref: TEAMS_HREF,
+        }),
+        siteUnlocked
+          ? h(AccessGate, {
+              key: 'gate-roadmap',
+              title: 'Roadmap Access Required',
+              subtitle:
+                "This is a separate lock from the site-wide login - it's specifically for NiCE Designer stakeholders reviewing the product roadmap. Enter the roadmap access code to continue.",
+              onSubmit: checkRoadmapCode,
+              error: roadmapError,
+              unlocked: roadmapUnlocked,
+              ctaText: h(
+                Fragment,
+                null,
+                "Don't have the code?",
+                h('br'),
+                h('strong', null, 'Reach out to Erick Mathews on Teams'),
+                ' to request access.'
+              ),
+              ctaHref: TEAMS_HREF,
+            })
+          : null,
+        portal(
+          h(Nav, {
+            logoHref: './index.html',
+            cta: h(Fragment, null, [
+              h(ThemeToggle, { key: 'theme', showLabels: false }),
+              downloadPill('download'),
+            ]),
+          }),
+          'lynn-nav-root'
+        ),
+        portal(
+          h(DocRail, {
+            mode: 'pages',
+            pages: railPages,
+            groups: railGroups,
+            activeHref: './' + PAGE,
+            searchable: true,
+            collapsed: railCollapsed,
+            onToggle: setRail,
+          }),
+          'lynn-docrail-root'
+        ),
+        portal(
+          h(Legend, { label: 'Status', variant: 'dot', items: LEGEND_ITEMS, className: 'reveal' }),
+          'lynn-legend-root'
+        ),
+        portal(
+          h(
+            Timeline,
+            null,
+            PHASES.map((phase) =>
+              h(
+                Phase,
+                {
+                  key: phase.title,
+                  status: phase.status,
+                  title: phase.title,
+                  period: phase.period,
+                  description: phase.description,
+                  dependency: phase.dependency,
+                  className: 'reveal',
+                },
+                phase.items.map(renderItem)
+              )
+            )
+          ),
+          'lynn-timeline-root'
+        ),
+        portal(
+          h(
+            Fragment,
+            null,
+            STAKEHOLDERS.map((person) =>
+              h(
+                'div',
+                { className: 'person-entry', key: person.initials },
+                h(Avatar, { initials: person.initials, size: 'lg', ariaLabel: person.name }),
+                h(
+                  'div',
+                  null,
+                  h('div', { className: 'person-name' }, person.name),
+                  h('div', { className: 'person-role' }, person.role)
+                )
+              )
+            )
+          ),
+          'lynn-stakeholders-root'
+        ),
+        portal(h(Footer, { columns: FOOTER_COLUMNS }), 'lynn-footer-root')
+      );
+    }
+
+    createRoot(document.getElementById('lynn-app-root')).render(
+      h(ThemeProvider, { defaultTheme: 'lynn' }, h(App))
+    );
   </script>
 
-  <footer class="site-footer">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="footer-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></div>
-      </div>
-      <nav class="footer-nav">
-        <div class="footer-nav-col">
-          <a href="./index.html">Overview</a>
-          <a href="./install-guide.html">Install Guide</a>
-          <a href="./claude-skills.html">Claude Skills</a>
-          <a href="./the-suite.html">The Suite</a>
-        </div>
-        <div class="footer-nav-col">
-          <a href="./use-cases.html">Use Cases</a>
-          <a href="./scoring.html">Scoring</a>
-          <a href="./dashboard.html">Dashboard</a>
-          <a href="./roadmap.html" class="active">Roadmap</a>
-        </div>
-        <div class="footer-nav-col">
-          <a href="./release-notes.html">Release Notes</a>
-          <a href="./faq.html">FAQ</a>
-          <a href="./tools.html">Tools</a>
-          <a href="./marketplace.html">Marketplace</a>
-          <a href="./lynn.html">Lynn</a>
-        </div>
-      </nav>
-    </div>
-  </footer>
+  <!-- FOOTER (lynn-ui <Footer>) -->
+  <div id="lynn-footer-root" class="lynn-mount"></div>
 
 </body>
 </html>

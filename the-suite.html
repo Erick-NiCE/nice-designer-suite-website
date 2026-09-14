@@ -11,8 +11,62 @@
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <link rel="stylesheet" href="site-gate.css" />
-  <script src="site-gate.js" defer></script>
+  <!--
+    ===== lynn-ui: the site chrome, as React components =====
+    The access gate, the nav and (on pages that have them) the footer and the
+    doc rail all come from lynn-ui now - see the single #lynn-app-root mount
+    script at the end of <body>. site-gate.css / site-gate.js are gone with
+    them; `AccessGate` is the same screen and the mount script re-runs the
+    same client-side code check.
+
+    Three things are needed, and none of them affect the rest of the page:
+      1. dist/lynn-ui.css - the package's built stylesheet. Everything in it
+         is either a `--lynn-*` custom property or a `.lynn-*` class, so it
+         cannot collide with this page's own tokens/classes.
+      2. the import map  - React, ReactDOM and matter-js as CDN ESM.
+         `?external=react` on react-dom stops a second copy of React being
+         pulled in ("invalid hook call"). matter-js is in the map because
+         dist/index.js is one barrel that also reaches LiquidFill.
+      3. `.lynn-mount` - the chrome renders through portals into placeholder
+         divs left where the old markup was. `display: contents` means those
+         placeholders generate no box, so the sticky nav and the footer's
+         margin still resolve against <body> exactly as before.
+  -->
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@18.3.1",
+      "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+      "react-dom": "https://esm.sh/react-dom@18.3.1?external=react",
+      "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?external=react",
+      "scheduler": "https://esm.sh/scheduler@0.23.2",
+      "matter-js": "https://esm.sh/matter-js@0.20.0"
+    }
+  }
+  </script>
+  <style>.lynn-mount { display: contents; }</style>
+
+  <!--
+    The gate used to be static markup covered by blocking CSS, so it was up
+    before first paint. React arrives as ESM from a CDN, so the component
+    can only mount a tick later - hold the page back until it does, or a
+    locked visitor reads the whole page in the gap. Costs nothing once the
+    session is unlocked (the class is never added), and a 4s failsafe means
+    a CDN that never answers leaves a readable page rather than a blank one.
+  -->
+  <style>html.lynn-gate-pending body { visibility: hidden; }</style>
+  <script>
+    (function () {
+      try {
+        if (sessionStorage.getItem('nice-site-access') === '1') return;
+      } catch (e) { /* blocked storage: fall through and gate */ }
+      var root = document.documentElement;
+      root.classList.add('lynn-gate-pending');
+      setTimeout(function () { root.classList.remove('lynn-gate-pending'); }, 4000);
+    })();
+  </script>
+
   <style>
     :root {
       --bg-card: #2f2f3d; /* page-specific card shade */
@@ -174,139 +228,12 @@
       }
     }
 
-    /* ---- TOOL CARDS ---- */
-    .tool-card {
-      position: relative;
-      border-radius: 16px;
-      overflow: hidden;
-      background: #2f2f3d;
-      border: 1px solid rgba(255,255,255,0.08);
-      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-    }
-    .tool-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 0 1px var(--t-color);
-      border-color: var(--t-color);
-    }
-    .tool-card-glow {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: var(--t-gradient);
-    }
-    .tool-card-header {
-      padding: 28px 28px 20px;
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-    }
-    .tool-icon-wrap {
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
-      background: var(--t-gradient);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      flex-shrink: 0;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-    }
-    .tool-name-wrap { flex: 1; }
-    .tool-name {
-      font-size: 22px;
-      font-weight: 800;
-      color: white;
-      letter-spacing: -0.3px;
-      margin-bottom: 4px;
-    }
-    .tool-tagline {
-      font-size: 13px;
-      color: rgba(255,255,255,0.6);
-      font-weight: 400;
-    }
-    .tool-card-body { padding: 0 28px 28px; }
-    .tool-why {
-      font-size: 14px;
-      line-height: 1.6;
-      color: rgba(255,255,255,0.85);
-      background: rgba(255,255,255,0.04);
-      border-left: 2px solid var(--t-color);
-      padding: 10px 14px;
-      border-radius: 0 8px 8px 0;
-      margin-bottom: 20px;
-    }
-    .tool-why strong {
-      color: var(--t-color);
-      font-weight: 700;
-    }
-    .tool-handles-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--t-color);
-      margin-bottom: 12px;
-    }
-    .tool-handles {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-    .tool-handles li {
-      font-size: 13px;
-      color: rgba(255,255,255,0.6);
-      padding-left: 16px;
-      position: relative;
-      line-height: 1.5;
-    }
-    .tool-handles li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 7px;
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--t-color);
-    }
-    .tool-card-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-top: 16px;
-      border-top: 1px solid rgba(255,255,255,0.08);
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .tool-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-    .tool-tag {
-      font-size: 10px;
-      font-weight: 600;
-      padding: 3px 9px;
-      border-radius: 100px;
-      background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.3);
-      border: 1px solid rgba(255,255,255,0.08);
-      letter-spacing: 0.3px;
-    }
-    .tool-status {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: 100px;
-    }
-    .tool-status.active  { background: rgba(54,148,252,0.15); color: #6ab4ff; }
-    .tool-status.next    { background: rgba(0,226,160,0.12);  color: #00E2A0; }
-    .tool-status.planned { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.35); }
-    .tool-status.new     { background: rgba(97,0,255,0.2); color: #b98fff; }
-    .tool-status.beta    { background: rgba(245,158,11,0.15); color: #f59e0b; }
+    /* The tool cards are lynn-ui's <FeatureCard density="full"> now (see the
+       mount script at the end of <body>), so the `.tool-card*` / `.tool-why`
+       / `.tool-handles*` / `.tool-tag` / `.tool-status*` CSS that used to
+       live here has gone with the markup - `.lynn-feature-card*` in
+       lynn-ui.css is the same design, reading `--lynn-t-color` /
+       `--lynn-t-gradient` where this read `--t-color` / `--t-gradient`. */
 
     /* ---- STATUS LEGEND ---- */
     .legend-section {
@@ -400,7 +327,7 @@
       border-radius: 24px; padding: 52px 48px;
     }
     /* Plasma lightning + edge motes are applied by nice-effects.js
-       (NiceEffects.lightning) — its canvases and child stacking are
+       (NiceEffects.lightning) - its canvases and child stacking are
        handled by nice-effects.css and the module itself. */
 
     /* Header matches the tool cards: icon square + name + tagline */
@@ -418,7 +345,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      color: #fff;
       flex-shrink: 0;
       box-shadow: 0 8px 24px rgba(0,0,0,0.3);
     }
@@ -443,17 +370,15 @@
       display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
       gap: 16px; margin-bottom: 32px;
     }
-    .sp-card {
-      display: flex; gap: 14px;
-      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 16px; padding: 20px;
-    }
-    .sp-card-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
-    .sp-card-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px; }
-    .sp-card-desc { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.65; }
-    .sp-card-desc a { color: #3694FC; text-decoration: none; }
-    .sp-card-desc a:hover { text-decoration: underline; }
-    .sp-card-desc code { background: rgba(255,255,255,0.08); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+    /* The `.sp-card`s are lynn-ui <IconCard layout="horizontal"> now, which
+       is a verbatim port of the layout/padding/type below - so only these
+       three descendant rules are still this page's business, retargeted at
+       the component's own class. (IconCard paints `--lynn-color-card` where
+       `.sp-card` painted a translucent white, which is the one deliberate
+       difference.) */
+    .lynn-icon-card-desc a { color: #3694FC; text-decoration: none; }
+    .lynn-icon-card-desc a:hover { text-decoration: underline; }
+    .lynn-icon-card-desc code { background: rgba(255,255,255,0.08); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
     .sp-tools-note {
       display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
       padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.07);
@@ -475,30 +400,18 @@
       background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
       border-radius: 16px; padding: 18px 20px;
     }
-    .sp-marketplace-item-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+    .sp-marketplace-item-icon { width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px; color: #B98FFF; }
     .sp-marketplace-item-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px; }
     .sp-marketplace-item-author { font-weight: 500; color: #B98FFF; font-size: 12px; }
     .sp-marketplace-item-desc { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.65; }
-    .sp-marketplace-cta {
-      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
-      gap: 16px; margin-top: 24px; padding: 18px 22px;
-      background: rgba(185,143,255,0.08); border: 1px solid rgba(185,143,255,0.22);
-      border-radius: 14px;
-    }
-    .sp-marketplace-cta-text { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.6; }
-    .sp-marketplace-cta-text strong { color: #fff; }
-    .sp-marketplace-cta-btn {
-      display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0;
-      font-size: 13px; font-weight: 700; color: #fff; text-decoration: none;
-      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16);
-      padding: 9px 16px; border-radius: 100px; transition: background 0.2s, border-color 0.2s;
-    }
-    .sp-marketplace-cta-btn:hover { background: rgba(185,143,255,0.18); border-color: rgba(185,143,255,0.4); }
+    /* `.sp-marketplace-cta` is lynn-ui <CtaBanner variant="tinted"> now - a
+       verbatim port of the panel that used to be styled here, including the
+       24px top margin it needs in this section. */
+    .lynn-cta-banner-tinted { margin-top: 24px; }
     @media (max-width: 768px) {
       .superpowers-section { padding: 0 20px 60px; }
       .sp-inner { padding: 32px 24px; }
       .sp-grid { grid-template-columns: 1fr; }
-      .sp-marketplace-cta { flex-direction: column; align-items: flex-start; }
     }
 
     /* ---- SCROLL REVEAL ---- */
@@ -516,38 +429,15 @@
 </head>
 <body>
 
-  <!-- SITE-WIDE ACCESS GATE (see site-gate.css / site-gate.js) -->
-  <div id="nice-site-gate">
-    <div class="sg-card">
-      <div class="sg-lock">🔒</div>
-      <div class="sg-title">NiCE Designer Site Login</div>
-      <div class="sg-subtitle">This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.</div>
-      <div class="sg-input-wrap">
-        <input id="nice-site-gate-input" type="password" placeholder="Enter code" autocomplete="off" />
-      </div>
-      <div class="sg-error" id="nice-site-gate-error"></div>
-      <button id="nice-site-gate-btn" type="button">Unlock</button>
-      <div class="sg-divider"></div>
-      <div class="sg-cta">
-        Don't have the code?<br>
-        <strong>Reach out to Erick Mathews on Teams</strong> to request access.
-        <br>
-        <a class="sg-teams-btn" href="https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com" target="_blank" rel="noopener">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H8a2 2 0 00-2 2v2H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2h2a2 2 0 002-2V4a2 2 0 00-2-2zM4 20V8h12v12H4zm16-4h-2V8a2 2 0 00-2-2H8V4h12v12z" fill="currentColor"/></svg>
-          Message on Teams
-        </a>
-      </div>
-    </div>
-  </div>
+  <!-- lynn-ui chrome. One React root, one ThemeProvider (see the mount
+       script at the end of <body>); the gate renders inside it, everything
+       else portals into the `.lynn-mount` placeholders below. -->
+  <div id="lynn-app-root"></div>
 
-  <!-- NAV -->
-  <!-- NAV -->
-  <nav class="site-nav" id="site-nav">
-    <a href="./index.html" class="nav-logo">
-      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span><span class="logo-suite"> Suite</span>
-    </a>
-    <span class="nav-download is-disabled" aria-disabled="true">Download<span class="coming-soon-tag">Coming soon!</span></span>
-  </nav>
+  <!-- NAV (lynn-ui <Nav>) + DOC RAIL (lynn-ui <DocRail>, position: fixed) -->
+  <div id="lynn-nav-root" class="lynn-mount"></div>
+  <div id="lynn-docrail-root" class="lynn-mount"></div>
+
 
   <!-- HERO -->
   <section class="hero">
@@ -562,7 +452,7 @@
       </h1>
       <p class="hero-subtitle">Each tool is self-contained, focused on a single job, and designed to feel like its own product. They share a common MCP server and token layer underneath.</p>
       <div class="hero-pills">
-        <span class="hero-pill">Figma Plugin</span>
+        <span class="hero-pill nice-sheen">Figma Plugin</span>
         <span class="hero-pill">Chrome Extension</span>
         <span class="hero-pill">MCP Server</span>
         <span class="hero-pill">SOL &amp; Lyra</span>
@@ -577,132 +467,9 @@
       <h2 class="section-title">Everything in the Suite</h2>
     </div>
 
-    <div class="tools-grid">
-
-      <!-- Frontend Audit -->
-      <div class="tool-card reveal" id="tool-audit" style="--t-color:#3694FC; --t-gradient: linear-gradient(135deg,#3694FC,#025AFB); animation-delay:0.05s">
-        <div class="tool-card-glow"></div>
-        <div class="tool-card-header">
-          <div class="tool-icon-wrap">🔍</div>
-          <div class="tool-name-wrap">
-            <div class="tool-name">Frontend Audit</div>
-            <div class="tool-tagline">Is this compliant and accessible?</div>
-          </div>
-        </div>
-        <div class="tool-card-body">
-          <p class="tool-why"><strong>Why use it:</strong> You need one defensible number for whether a page or frame is compliant and accessible - plus the ranked list of exactly what's dragging it down - instead of running separate design and a11y checks and reconciling them yourself.</p>
-          <div class="tool-handles-label">What it handles</div>
-          <ul class="tool-handles">
-            <li>One score for design-system compliance and accessibility, merged into a single pass</li>
-            <li>Filter by Design System, Accessibility, or Accessibility (Full)</li>
-            <li>Colorblind simulation &amp; small tap-target overlay (Chrome)</li>
-            <li>Live component checks via Storybook integration</li>
-            <li>Cross-client parity check — diff a Figma artboard against the live page (via Supercharge)</li>
-            <li>Severity-ranked report you can fix from, right in the panel</li>
-          </ul>
-          <div class="tool-card-footer">
-            <div class="tool-tags">
-              <span class="tool-tag">Figma</span>
-              <span class="tool-tag">Chrome</span>
-              <span class="tool-tag">Storybook</span>
-              <span class="tool-tag">Read-only</span>
-            </div>
-            <span class="tool-status active">Live</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Frontend Editor -->
-      <div class="tool-card reveal" id="tool-editor" style="--t-color:#025AFB; --t-gradient: linear-gradient(135deg,#025AFB,#6100FF); animation-delay:0.10s">
-        <div class="tool-card-glow"></div>
-        <div class="tool-card-header">
-          <div class="tool-icon-wrap">🎨</div>
-          <div class="tool-name-wrap">
-            <div class="tool-name">Frontend Editor</div>
-            <div class="tool-tagline">Design directly in the browser</div>
-          </div>
-        </div>
-        <div class="tool-card-body">
-          <p class="tool-why"><strong>Why use it:</strong> You want to try a style change on a real, live page - not a code branch, not a static mockup - and see it hold up immediately, with a full undo if it doesn't.</p>
-          <div class="tool-handles-label">What it handles</div>
-          <ul class="tool-handles">
-            <li>Familiar layer panel for any live page</li>
-            <li>Real-time style overrides without touching code</li>
-            <li>Magic effects — dark mode, hover glow, liquid/plasma &amp; more, one click</li>
-            <li>Full edit history with undo &amp; redo</li>
-          </ul>
-          <div class="tool-card-footer">
-            <div class="tool-tags">
-              <span class="tool-tag">Chrome only</span>
-              <span class="tool-tag">Layer panel</span>
-              <span class="tool-tag">Magic effects</span>
-              <span class="tool-tag">History</span>
-            </div>
-            <span class="tool-status active">Live</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Spec Mode -->
-      <div class="tool-card reveal" id="tool-handoff" style="--t-color:#B98FFF; --t-gradient: linear-gradient(135deg,#6100FF,#B98FFF); animation-delay:0.15s">
-        <div class="tool-card-glow"></div>
-        <div class="tool-card-header">
-          <div class="tool-icon-wrap">📐</div>
-          <div class="tool-name-wrap">
-            <div class="tool-name">Spec Mode</div>
-            <div class="tool-tagline">Give me the code</div>
-          </div>
-        </div>
-        <div class="tool-card-body">
-          <p class="tool-why"><strong>Why use it:</strong> Engineering asked for the exact CSS on a component, and you don't want to hand-measure a Figma frame or reverse-engineer computed styles off a live element yourself.</p>
-          <div class="tool-handles-label">What it handles</div>
-          <ul class="tool-handles">
-            <li>Select and inspect any element, in Figma or on a live page</li>
-            <li>Production CSS with Lyra tokens substituted automatically</li>
-            <li>Spacing, type, color &amp; radius values in one view</li>
-            <li>Copy-ready output, formatted for dev use</li>
-          </ul>
-          <div class="tool-card-footer">
-            <div class="tool-tags">
-              <span class="tool-tag">Figma</span>
-              <span class="tool-tag">Chrome</span>
-              <span class="tool-tag">Dev-facing</span>
-            </div>
-            <span class="tool-status active">Live</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Design System -->
-      <div class="tool-card reveal" id="tool-designSystem" style="--t-color:#36EAD0; --t-gradient: linear-gradient(135deg,#36EAD0,#00E2A0); animation-delay:0.20s">
-        <div class="tool-card-glow"></div>
-        <div class="tool-card-header">
-          <div class="tool-icon-wrap">🪙</div>
-          <div class="tool-name-wrap">
-            <div class="tool-name">Design System</div>
-            <div class="tool-tagline">Tokens &amp; components, browsable</div>
-          </div>
-        </div>
-        <div class="tool-card-body">
-          <p class="tool-why"><strong>Why use it:</strong> Before you invent a new value or component, you need to know what already exists in SOL or Lyra - and see it rendered, not just listed as a hex code.</p>
-          <div class="tool-handles-label">What it handles</div>
-          <ul class="tool-handles">
-            <li>Browse every SOL &amp; Lyra token — color, type, spacing &amp; radius</li>
-            <li>Live component previews, straight from Storybook (Chrome)</li>
-            <li>Angular &amp; React props, variants &amp; states</li>
-            <li>Sync pulls the whole SOL/Lyra library in one click</li>
-          </ul>
-          <div class="tool-card-footer">
-            <div class="tool-tags">
-              <span class="tool-tag">Figma</span>
-              <span class="tool-tag">Chrome</span>
-              <span class="tool-tag">Storybook</span>
-            </div>
-            <span class="tool-status active">Live</span>
-          </div>
-        </div>
-      </div>
-
+    <!-- The four tool cards: lynn-ui <FeatureCard density="full"> (see the
+         mount script at the end of <body>). -->
+    <div class="tools-grid" id="lynn-tools-root"></div>
     </div>
   </section>
 
@@ -725,43 +492,15 @@
   <section class="superpowers-section reveal">
     <div class="sp-inner">
       <div class="sp-header">
-        <div class="sp-icon">⚡</div>
+        <div class="sp-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11"/></svg></div>
         <div class="sp-name-wrap">
           <div class="sp-name">Supercharge</div>
           <div class="sp-tagline">Some features need a little more</div>
         </div>
       </div>
       <p class="sp-sub">The Figma plugin and Chrome extension work great on their own. But certain features unlock only when you connect to Claude via the local MCP server. We call this <strong>Supercharge</strong> - Claude acting as the brain while the plugin and extension act as the hands.</p>
-      <div class="sp-grid">
-        <div class="sp-card">
-          <div class="sp-card-icon">🔗</div>
-          <div class="sp-card-body">
-            <div class="sp-card-title">What is Supercharge?</div>
-            <div class="sp-card-desc">Supercharge is the connection between Claude and NiCE Designer's tools. Start the local MCP server, connect Claude Desktop, and Claude can drive both Figma and Chrome simultaneously using natural language - running multi-step workflows that neither tool could do alone.</div>
-          </div>
-        </div>
-        <div class="sp-card">
-          <div class="sp-card-icon">🎯</div>
-          <div class="sp-card-body">
-            <div class="sp-card-title">What requires Supercharge?</div>
-            <div class="sp-card-desc">Any workflow that spans both clients: Figma-to-Chrome parity checks (via Audit), pushing an artboard's styles to a live page, SOL &rarr; Lyra conversion work done directly with Claude, and all 11 Claude skills. Single-client audit features work standalone.</div>
-          </div>
-        </div>
-        <div class="sp-card">
-          <div class="sp-card-icon">🚀</div>
-          <div class="sp-card-body">
-            <div class="sp-card-title">Getting started</div>
-            <div class="sp-card-desc">Install the MCP server from the download package, run <code>node src/index.js</code> in the <code>packages/mcp-server/</code> folder, and connect Claude Desktop. See the <a href="./install-guide.html">Install Guide</a> for the full setup walkthrough.</div>
-          </div>
-        </div>
-        <div class="sp-card">
-          <div class="sp-card-icon">🛍️</div>
-          <div class="sp-card-body">
-            <div class="sp-card-title">The Marketplace</div>
-            <div class="sp-card-desc"><strong>Why use it:</strong> to get capability the core team hasn't built yet - or to publish your own. Skills and tools built by contributors outside the core NiCE Designer team, added the same way a plugin gets added to an app - same install, independent author. It's the front tab in Supercharge whenever it has anything in it. Check a card's byline before you rely on it. See the <a href="./marketplace.html">Marketplace page</a> for the full list and how to submit.</div>
-          </div>
-        </div>
-      </div>
+      <!-- lynn-ui <IconCard layout="horizontal"> x4 -->
+      <div class="sp-grid" id="lynn-sp-cards-root"></div>
       <div class="sp-tools-note">
         <span class="sp-note-label">Requires Supercharge:</span>
         <span class="sp-tag">Parity checks</span>
@@ -774,60 +513,27 @@
       <div class="sp-marketplace-listing">
         <div class="sp-marketplace-listing-label">Currently in the Marketplace</div>
         <div class="sp-marketplace-item">
-          <div class="sp-marketplace-item-icon">📊</div>
+          <svg class="sp-marketplace-item-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 13a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -6"/><path d="M15 9a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -10"/><path d="M9 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -14"/><path d="M4 20h14"/></svg>
           <div class="sp-marketplace-item-body">
             <div class="sp-marketplace-item-title">ux-eval <span class="sp-marketplace-item-author">by Bill Bangs</span></div>
             <div class="sp-marketplace-item-desc">"Is this ready for dev?" - answers all ten prioritization questions against real evidence, then states pass / pass-with-conditions / not-yet, with the reasoning attached.</div>
           </div>
         </div>
         <div class="sp-marketplace-item">
-          <div class="sp-marketplace-item-icon">🦊</div>
+          <svg class="sp-marketplace-item-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873l-6.158 -3.245"/></svg>
           <div class="sp-marketplace-item-body">
             <div class="sp-marketplace-item-title">north-star-fox <span class="sp-marketplace-item-author">by Janet Gonzales</span></div>
             <div class="sp-marketplace-item-desc">Scores a CXone AI design, screen, or JIRA ticket against the twelve NiCE AI design tenets, plus Lyra Foundations and NiCE Brand adherence.</div>
           </div>
         </div>
       </div>
-      <div class="sp-marketplace-cta">
-        <span class="sp-marketplace-cta-text">Built a skill or tool of your own? <strong>Reach out to Erick Mathews on Teams</strong> to get it added to the Marketplace.</span>
-        <a class="sp-marketplace-cta-btn" href="https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com" target="_blank" rel="noopener">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H8a2 2 0 00-2 2v2H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2h2a2 2 0 002-2V4a2 2 0 00-2-2zM4 20V8h12v12H4zm16-4h-2V8a2 2 0 00-2-2H8V4h12v12z" fill="currentColor"/></svg>
-          Message on Teams
-        </a>
-      </div>
+      <!-- lynn-ui <CtaBanner variant="tinted"> -->
+      <div id="lynn-sp-cta-root" class="lynn-mount"></div>
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="footer-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></div>
-      </div>
-      <nav class="footer-nav">
-        <div class="footer-nav-col">
-          <a href="./index.html">Overview</a>
-          <a href="./install-guide.html">Install Guide</a>
-          <a href="./claude-skills.html">Claude Skills</a>
-          <a href="./the-suite.html" class="active">The Suite</a>
-        </div>
-        <div class="footer-nav-col">
-          <a href="./use-cases.html">Use Cases</a>
-          <a href="./scoring.html">Scoring</a>
-          <a href="./dashboard.html">Dashboard</a>
-          <a href="./roadmap.html">Roadmap</a>
-        </div>
-        <div class="footer-nav-col">
-          <a href="./release-notes.html">Release Notes</a>
-          <a href="./faq.html">FAQ</a>
-          <a href="./tools.html">Tools</a>
-          <a href="./marketplace.html">Marketplace</a>
-          <a href="./lynn.html">Lynn</a>
-        </div>
-      </nav>
-    </div>
-  </footer>
+  <!-- FOOTER (lynn-ui <Footer>) -->
+  <div id="lynn-footer-root" class="lynn-mount"></div>
 
   <script>
     // Scroll reveal via IntersectionObserver
@@ -925,42 +631,53 @@
     });
     document.addEventListener('mouseleave', function() { glow.style.opacity = '0'; });
 
-    // Apply tilt + spotlight to cards
+    // Apply tilt + spotlight to cards. `.lynn-feature-card` /
+    // `.lynn-icon-card` are the lynn-ui components that replaced
+    // `.tool-card` / `.sp-card` on this page; they mount after this script
+    // runs, so `polish()` is exposed below for the mount script to call with
+    // them (the dataset guard makes a second pass over an already-wired card
+    // a no-op).
     var SELECTORS = [
-      '.tool-card', '.skill-card', '.phase-block', '.case-card',
-      '.pillar', '.step-card', '.score-card', '.sp-card',
-      '.sp-callout-card', '.stat-card', '.doc-card', '.dl-card',
-      '.faq-item', '.checklist-item', '.tool-mini', '.gate-card',
+      '.tool-card', '.lynn-feature-card', '.skill-card', '.phase-block',
+      '.case-card', '.pillar', '.step-card', '.score-card', '.sp-card',
+      '.lynn-icon-card', '.sp-callout-card', '.stat-card', '.doc-card',
+      '.dl-card', '.faq-item', '.checklist-item', '.tool-mini', '.gate-card',
       '.score-band', '.audit-cat', '.workflow-card', '.case-scenario'
     ].join(', ');
 
-    document.querySelectorAll(SELECTORS).forEach(function(card) {
-      card.classList.add('tilt-ready');
+    function polish(cards) {
+      cards.forEach(function(card) {
+        if (card.dataset.nicePolished === '1') return;
+        card.dataset.nicePolished = '1';
+        card.classList.add('tilt-ready');
 
-      card.addEventListener('mousemove', function(e) {
-        var r = card.getBoundingClientRect();
-        var x = (e.clientX - r.left) / r.width;
-        var y = (e.clientY - r.top) / r.height;
-        // Spotlight CSS vars
-        card.style.setProperty('--mx', (x * 100) + '%');
-        card.style.setProperty('--my', (y * 100) + '%');
-        // 3D tilt (gentle, max 7deg)
-        var tx = (y - 0.5) * -8;
-        var ty = (x - 0.5) * 8;
-        card.style.transform = 'perspective(900px) rotateX(' + tx + 'deg) rotateY(' + ty + 'deg) translateZ(3px)';
-        card.style.transition = 'transform 0.07s ease';
-        // Glow border hint
-        card.style.boxShadow = '0 8px 32px rgba(0,0,0,0.35), 0 0 0 1px rgba(54,148,252,0.18)';
-      });
+        card.addEventListener('mousemove', function(e) {
+          var r = card.getBoundingClientRect();
+          var x = (e.clientX - r.left) / r.width;
+          var y = (e.clientY - r.top) / r.height;
+          // Spotlight CSS vars
+          card.style.setProperty('--mx', (x * 100) + '%');
+          card.style.setProperty('--my', (y * 100) + '%');
+          // 3D tilt (gentle, max 7deg)
+          var tx = (y - 0.5) * -8;
+          var ty = (x - 0.5) * 8;
+          card.style.transform = 'perspective(900px) rotateX(' + tx + 'deg) rotateY(' + ty + 'deg) translateZ(3px)';
+          card.style.transition = 'transform 0.07s ease';
+          // Glow border hint
+          card.style.boxShadow = '0 8px 32px rgba(0,0,0,0.35), 0 0 0 1px rgba(54,148,252,0.18)';
+        });
 
-      card.addEventListener('mouseleave', function() {
-        card.style.transform = '';
-        card.style.transition = 'transform 0.45s cubic-bezier(0.23,1,0.32,1)';
-        card.style.boxShadow = '';
-        card.style.setProperty('--mx', '50%');
-        card.style.setProperty('--my', '50%');
+        card.addEventListener('mouseleave', function() {
+          card.style.transform = '';
+          card.style.transition = 'transform 0.45s cubic-bezier(0.23,1,0.32,1)';
+          card.style.boxShadow = '';
+          card.style.setProperty('--mx', '50%');
+          card.style.setProperty('--my', '50%');
+        });
       });
-    });
+    }
+
+    polish([].slice.call(document.querySelectorAll(SELECTORS)));
 
     // Magnetic effect on primary action buttons
     document.querySelectorAll('.nav-cta, .btn-primary, .cta-btn').forEach(function(btn) {
@@ -990,23 +707,28 @@
       });
     }, { threshold: 0.05, rootMargin: '0px 0px -24px 0px' });
 
-    document.querySelectorAll('.reveal').forEach(function(el, i) {
-      // Stagger siblings in same parent
-      el.dataset.polishDelay = (i % 6) * 55;
-      ro.observe(el);
-    });
+    function observeReveal(els) {
+      els.forEach(function(el, i) {
+        // Stagger siblings in same parent
+        el.dataset.polishDelay = (i % 6) * 55;
+        ro.observe(el);
+      });
+    }
+
+    observeReveal([].slice.call(document.querySelectorAll('.reveal')));
+
+    // Handed to the lynn-ui mount script, whose cards do not exist yet.
+    window.NicePolish = { polish: polish, observeReveal: observeReveal };
   })();
   </script>
 
   <!-- Reusable canvas effects (Matter.js is the physics engine for the liquid) -->
   <script src="https://cdn.jsdelivr.net/npm/matter-js@0.19.0/build/matter.min.js"></script>
-  <script src="nice-effects.js?v=9"></script>
+  <script src="nice-effects.js?v=11"></script>
   <script>
-    // Liquid fill on each tool card, tinted with the card's accent color.
-    document.querySelectorAll('.tool-card').forEach(function (card) {
-      var color = getComputedStyle(card).getPropertyValue('--t-color').trim() || '#3694FC';
-      NiceEffects.liquidFill(card, { color: color });
-    });
+    // The liquid fill on each tool card moved into the lynn-ui mount script:
+    // the cards are <FeatureCard>s now, so they do not exist at this point
+    // and their accent lives in `--lynn-t-color` rather than `--t-color`.
 
     // Plasma-ball lightning + floating edge motes on the Supercharge panel.
     var sp = document.querySelector('.superpowers-section .sp-inner');
@@ -1015,7 +737,456 @@
     }
   </script>
 
-  <script>
+  <!--
+    ===== lynn-ui mount =====
+    One createRoot, one ThemeProvider, one <App>: the access gate, the nav,
+    the doc rail, the footer, the four tool cards, the four Supercharge cards
+    and the Marketplace CTA. Keeping them in a single root is what keeps the
+    theme in sync between them - separate roots would each get their own
+    provider and drift apart.
+
+    Anything that belongs elsewhere in the document is placed with
+    createPortal into a placeholder rather than rendered here: a footer
+    rendered next to the nav would sit at the top of the page, and a nav
+    rendered inside a 60px wrapper could not be sticky. The two card grids
+    portal into the page's own `.tools-grid` / `.sp-grid` containers, so the
+    cards stay real grid children.
+  -->
+  <script type="module">
+    import { createElement as h, Fragment, useEffect, useState } from 'react';
+    import { createPortal } from 'react-dom';
+    import { createRoot } from 'react-dom/client';
+    import {
+      AccessGate,
+      CtaBanner,
+      DocRail,
+      FeatureCard,
+      Footer,
+      IconCard,
+      Nav,
+      ThemeProvider,
+      ThemeToggle,
+      useLynnTheme,
+    } from './lynn-ui/dist/index.js';
+
+    const PAGE = 'the-suite.html';
+
+    /* ---- the real gate, ported from site-gate.js ------------------------ */
+    /* Same session key, same password, same message, same Teams link. Still
+       a soft deterrent, not security - the check is client-side and readable
+       right here, exactly as it was in site-gate.js. */
+    const GATE_KEY = 'nice-site-access';
+    const GATE_PASSWORD = 'niceux';
+    const GATE_ERROR = 'Incorrect code. Contact Erick Mathews on Teams for access.';
+    const TEAMS_HREF = 'https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com';
+
+    /* ---- doc rail ------------------------------------------------------- */
+    /* The page table is read straight off nice-effects.js (which publishes
+       its own DOC_PAGES as NiceEffects.docPages) rather than hand-copied, so
+       adding a section anchor there still updates this rail. Every entry
+       goes into the switcher, `standalone` ones included - that flag only
+       decides whether a page's *own* rail is sections-only (wings-2026.html
+       is the one that sets it), which is exactly what buildDocRail() did.
+       Collapse state shares nice-effects.js's own localStorage key, which is
+       also the one embed.js stashes. */
+    const RAIL_KEY = 'nice-doc-rail-collapsed';
+    const DOC_PAGES = (window.NiceEffects && window.NiceEffects.docPages) || [];
+    const railPages = DOC_PAGES.map((page) => ({
+      href: './' + page.href,
+      label: page.label,
+    }));
+    const railGroups = (DOC_PAGES.find((page) => page.href === PAGE) || {}).groups || [];
+
+    /* ---- footer --------------------------------------------------------- */
+    const FOOTER_COLUMNS = [
+      {
+        title: 'Product',
+        links: [
+          { label: 'Overview', href: './index.html' },
+          { label: 'Install Guide', href: './install-guide.html' },
+          { label: 'Claude Skills', href: './claude-skills.html' },
+          { label: 'The Suite', href: './the-suite.html', active: true },
+        ],
+      },
+      {
+        title: 'Learn',
+        links: [
+          { label: 'Use Cases', href: './use-cases.html' },
+          { label: 'Scoring', href: './scoring.html' },
+          { label: 'Dashboard', href: './dashboard.html' },
+          { label: 'Roadmap', href: './roadmap.html' },
+        ],
+      },
+      {
+        title: 'Reference',
+        links: [
+          { label: 'Release Notes', href: './release-notes.html' },
+          { label: 'FAQ', href: './faq.html' },
+          { label: 'Tools', href: './tools.html' },
+          { label: 'Marketplace', href: './marketplace.html' },
+          { label: 'Lynn', href: './lynn.html' },
+        ],
+      },
+    ];
+
+    /* ---- content helpers ------------------------------------------------ */
+    /* A few strings carry inline <strong>/<code>/<a> from the source. They
+       are authored right here in this file - not user input - so keeping
+       them as markup is both safe and far more legible than nesting
+       createElement three deep for a bold clause. */
+    const rich = (html) => h('span', { dangerouslySetInnerHTML: { __html: html } });
+
+    /* The source's icons are Tabler-style outline glyphs, given here as
+       their raw <path> list so each one stays byte-identical to the markup
+       it replaces. */
+    const glyph = (size, paths, style) =>
+      h('svg', {
+        width: size,
+        height: size,
+        viewBox: '0 0 24 24',
+        fill: 'none',
+        stroke: 'currentColor',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
+        'aria-hidden': true,
+        style,
+        dangerouslySetInnerHTML: { __html: paths },
+      });
+
+    /* ---- the four tools ------------------------------------------------- */
+    /* `accentColor` / `iconGradient` are the `--t-color` / `--t-gradient`
+       each card used to set inline; FeatureCard forwards them as
+       `--lynn-t-color` / `--lynn-t-gradient`. The `reveal` className and the
+       matching animation-delay are the page's own scroll-in, re-registered
+       from the mount effect below. */
+    const TOOLS = [
+      {
+        id: 'tool-audit',
+        accentColor: '#3694FC',
+        iconGradient: 'linear-gradient(135deg,#3694FC,#025AFB)',
+        delay: '0.05s',
+        icon: glyph(26, '<path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6 -6"/>'),
+        name: 'Frontend Audit',
+        tagline: 'Is this compliant and accessible?',
+        whyText: rich("<strong>Why use it:</strong> You need one defensible number for whether a page or frame is compliant and accessible - plus the ranked list of exactly what's dragging it down - instead of running separate design and a11y checks and reconciling them yourself."),
+        bullets: [
+          'One score for design-system compliance and accessibility, merged into a single pass',
+          'Filter by Design System, Accessibility, or Accessibility (Full)',
+          'Colorblind simulation & small tap-target overlay (Chrome)',
+          'Live component checks via Storybook integration',
+          'Cross-client parity check - diff a Figma artboard against the live page (via Supercharge)',
+          'Severity-ranked report you can fix from, right in the panel',
+        ],
+        tags: ['Figma', 'Chrome', 'Storybook', 'Read-only'],
+      },
+      {
+        id: 'tool-editor',
+        accentColor: '#025AFB',
+        iconGradient: 'linear-gradient(135deg,#025AFB,#6100FF)',
+        delay: '0.10s',
+        icon: glyph(26, '<path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25"/><path d="M7.5 10.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M11.5 7.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M15.5 10.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>'),
+        name: 'Frontend Editor',
+        tagline: 'Design directly in the browser',
+        whyText: rich("<strong>Why use it:</strong> You want to try a style change on a real, live page - not a code branch, not a static mockup - and see it hold up immediately, with a full undo if it doesn't."),
+        bullets: [
+          'Familiar layer panel for any live page',
+          'Real-time style overrides without touching code',
+          'Magic effects - dark mode, hover glow, liquid/plasma & more, one click',
+          'Full edit history with undo & redo',
+        ],
+        tags: ['Chrome only', 'Layer panel', 'Magic effects', 'History'],
+      },
+      {
+        id: 'tool-handoff',
+        accentColor: '#B98FFF',
+        iconGradient: 'linear-gradient(135deg,#6100FF,#B98FFF)',
+        delay: '0.15s',
+        icon: glyph(26, '<path d="M17 3l4 4l-14 14l-4 -4l14 -14"/><path d="M16 7l-1.5 -1.5"/><path d="M13 10l-1.5 -1.5"/><path d="M10 13l-1.5 -1.5"/><path d="M7 16l-1.5 -1.5"/>'),
+        name: 'Spec Mode',
+        tagline: 'Give me the code',
+        whyText: rich("<strong>Why use it:</strong> Engineering asked for the exact CSS on a component, and you don't want to hand-measure a Figma frame or reverse-engineer computed styles off a live element yourself."),
+        bullets: [
+          'Select and inspect any element, in Figma or on a live page',
+          'Production CSS with Lyra tokens substituted automatically',
+          'Spacing, type, color & radius values in one view',
+          'Copy-ready output, formatted for dev use',
+        ],
+        tags: ['Figma', 'Chrome', 'Dev-facing'],
+      },
+      {
+        id: 'tool-designSystem',
+        accentColor: '#36EAD0',
+        iconGradient: 'linear-gradient(135deg,#36EAD0,#00E2A0)',
+        delay: '0.20s',
+        icon: glyph(26, '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M14.8 9a2 2 0 0 0 -1.8 -1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1 -1.8 -1"/><path d="M12 7v10"/>'),
+        name: 'Design System',
+        tagline: 'Tokens & components, browsable',
+        whyText: rich('<strong>Why use it:</strong> Before you invent a new value or component, you need to know what already exists in SOL or Lyra - and see it rendered, not just listed as a hex code.'),
+        bullets: [
+          'Browse every SOL & Lyra token - color, type, spacing & radius',
+          'Live component previews, straight from Storybook (Chrome)',
+          'Angular & React props, variants & states',
+          'Sync pulls the whole SOL/Lyra library in one click',
+        ],
+        tags: ['Figma', 'Chrome', 'Storybook'],
+      },
+    ];
+
+    /* ---- the four Supercharge cards ------------------------------------- */
+    /* `.sp-card-icon` tinted its glyph `#B98FFF`; IconCard's icon slot
+       inherits `currentColor`, so the tint rides on the svg itself. */
+    const SP_ICON_STYLE = { color: '#B98FFF' };
+    const SP_CARDS = [
+      {
+        icon: glyph(22, '<path d="M9 15l6 -6"/><path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464"/><path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463"/>', SP_ICON_STYLE),
+        title: 'What is Supercharge?',
+        description: "Supercharge is the connection between Claude and NiCE Designer's tools. Start the local MCP server, connect Claude Desktop, and Claude can drive both Figma and Chrome simultaneously using natural language - running multi-step workflows that neither tool could do alone.",
+      },
+      {
+        icon: glyph(22, '<path d="M11 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M12 7a5 5 0 1 0 5 5"/><path d="M13 3.055a9 9 0 1 0 7.941 7.945"/><path d="M15 6v3h3l3 -3h-3v-3l-3 3"/><path d="M15 9l-3 3"/>', SP_ICON_STYLE),
+        title: 'What requires Supercharge?',
+        description: "Any workflow that spans both clients: Figma-to-Chrome parity checks (via Audit), pushing an artboard's styles to a live page, SOL → Lyra conversion work done directly with Claude, and all 11 Claude skills. Single-client audit features work standalone.",
+      },
+      {
+        icon: glyph(22, '<path d="M4 13a8 8 0 0 1 7 7a6 6 0 0 0 3 -5a9 9 0 0 0 6 -8a3 3 0 0 0 -3 -3a9 9 0 0 0 -8 6a6 6 0 0 0 -5 3"/><path d="M7 14a6 6 0 0 0 -3 6a6 6 0 0 0 6 -3"/><path d="M14 9a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>', SP_ICON_STYLE),
+        title: 'Getting started',
+        description: rich('Install the MCP server from the download package, run <code>node src/index.js</code> in the <code>packages/mcp-server/</code> folder, and connect Claude Desktop. See the <a href="./install-guide.html">Install Guide</a> for the full setup walkthrough.'),
+      },
+      {
+        icon: glyph(22, '<path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304"/><path d="M9 11v-5a3 3 0 0 1 6 0v5"/>', SP_ICON_STYLE),
+        title: 'The Marketplace',
+        description: rich("<strong>Why use it:</strong> to get capability the core team hasn't built yet - or to publish your own. Skills and tools built by contributors outside the core NiCE Designer team, added the same way a plugin gets added to an app - same install, independent author. It's the front tab in Supercharge whenever it has anything in it. Check a card's byline before you rely on it. See the <a href=\"./marketplace.html\">Marketplace page</a> for the full list and how to submit."),
+      },
+    ];
+
+    /* The Teams glyph the CTA pill carries, unchanged from the markup. */
+    const teamsIcon = h('svg', {
+      width: 14,
+      height: 14,
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      xmlns: 'http://www.w3.org/2000/svg',
+      'aria-hidden': true,
+      dangerouslySetInnerHTML: {
+        __html: '<path d="M20 2H8a2 2 0 00-2 2v2H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2h2a2 2 0 002-2V4a2 2 0 00-2-2zM4 20V8h12v12H4zm16-4h-2V8a2 2 0 00-2-2H8V4h12v12z" fill="currentColor"/>',
+      },
+    });
+
+    /* The nav's single action slot, unchanged from the markup it replaces:
+       the disabled Download pill plus its "Coming soon!" tag. `nav-download`
+       / `coming-soon-tag` are theme.css classes, so it keeps its exact look.
+       If a live version label is ever wanted here, `data-latest-label` is
+       the attribute downloads.js looks for - no page on the site sets it on
+       this pill today. */
+    const downloadPill = (key) =>
+      h(
+        'span',
+        { key, className: 'nav-download is-disabled', 'aria-disabled': 'true' },
+        'Download',
+        h('span', { className: 'coming-soon-tag' }, 'Coming soon!')
+      );
+
+    /* ThemeProvider stamps `data-lynn-theme` on its own wrapper div, but the
+       portalled chrome and cards live outside that div - so mirror the
+       attribute onto <html>, where the same `[data-lynn-theme]` rules in
+       lynn-ui.css apply to the whole document. */
+    function ThemeBridge() {
+      const { theme } = useLynnTheme();
+      useEffect(() => {
+        document.documentElement.setAttribute('data-lynn-theme', theme);
+      }, [theme]);
+      return null;
+    }
+
+    function portal(node, id) {
+      const host = document.getElementById(id);
+      return host ? createPortal(node, host) : null;
+    }
+
+    function App() {
+      const [unlocked, setUnlocked] = useState(() => {
+        try {
+          return sessionStorage.getItem(GATE_KEY) === '1';
+        } catch (e) {
+          return false;
+        }
+      });
+      const [error, setError] = useState(undefined);
+      const [railCollapsed, setRailCollapsed] = useState(() => {
+        try {
+          return localStorage.getItem(RAIL_KEY) === '1';
+        } catch (e) {
+          return false;
+        }
+      });
+
+      useEffect(() => {
+        // The chrome is up; let the page paint (see the gate-pending guard
+        // in <head>).
+        document.documentElement.classList.remove('lynn-gate-pending');
+
+        const cards = [].slice.call(
+          document.querySelectorAll('.lynn-feature-card, .lynn-icon-card')
+        );
+        // The tilt/spotlight hover and the scroll-in the page's own polish
+        // script used to wire onto the static cards. Both were applied
+        // before these existed, so hand them over now.
+        if (window.NicePolish) {
+          window.NicePolish.polish(cards);
+          window.NicePolish.observeReveal(
+            cards.filter((card) => card.classList.contains('reveal'))
+          );
+        }
+
+        // Liquid fill on each tool card, tinted with the card's own accent -
+        // the pass that used to read `--t-color` off `.tool-card`.
+        if (window.NiceEffects) {
+          document.querySelectorAll('.lynn-feature-card').forEach((card) => {
+            const color =
+              getComputedStyle(card).getPropertyValue('--lynn-t-color').trim() ||
+              '#3694FC';
+            window.NiceEffects.liquidFill(card, { color });
+          });
+        }
+
+        // The cards used to be static markup, so the browser could honour a
+        // `#tool-handoff` deep link on load. They render a tick later now,
+        // by which time that jump has already failed - so re-run it.
+        const hash = location.hash.slice(1);
+        if (hash) {
+          const target = document.getElementById(hash);
+          if (target) target.scrollIntoView();
+        }
+      }, []);
+
+      // Cmd+K / Ctrl+K opens the rail and focuses its filter box - the
+      // shortcut buildDocRail() used to own.
+      useEffect(() => {
+        function onKeyDown(event) {
+          if (event.key !== 'k' && event.key !== 'K') return;
+          if (!(event.metaKey || event.ctrlKey)) return;
+          event.preventDefault();
+          setRail(false);
+          const input = document.querySelector('.lynn-doc-rail-search');
+          if (input) {
+            input.focus();
+            input.select();
+          }
+        }
+        document.addEventListener('keydown', onKeyDown);
+        return () => document.removeEventListener('keydown', onKeyDown);
+      }, []);
+
+      const checkCode = (code) => {
+        if (code === GATE_PASSWORD) {
+          try {
+            sessionStorage.setItem(GATE_KEY, '1');
+          } catch (e) { /* unwritable store just means no persistence */ }
+          setError(undefined);
+          setUnlocked(true);
+        } else {
+          setError(GATE_ERROR);
+        }
+      };
+
+      const setRail = (collapsed) => {
+        setRailCollapsed(collapsed);
+        try {
+          localStorage.setItem(RAIL_KEY, collapsed ? '1' : '0');
+        } catch (e) { /* no persistence, still collapses for this visit */ }
+      };
+
+      return h(
+        Fragment,
+        null,
+        h(ThemeBridge, { key: 'theme-bridge' }),
+        h(AccessGate, {
+          key: 'gate',
+          title: 'NiCE Designer Site Login',
+          subtitle:
+            'This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.',
+          onSubmit: checkCode,
+          error,
+          unlocked,
+          ctaText: h(
+            Fragment,
+            null,
+            "Don't have the code?",
+            h('br'),
+            h('strong', null, 'Reach out to Erick Mathews on Teams'),
+            ' to request access.'
+          ),
+          ctaHref: TEAMS_HREF,
+        }),
+        portal(
+          h(Nav, {
+            logoHref: './index.html',
+            cta: h(Fragment, null, [
+              h(ThemeToggle, { key: 'theme', showLabels: false }),
+              downloadPill('download'),
+            ]),
+          }),
+          'lynn-nav-root'
+        ),
+        portal(
+          h(DocRail, {
+            mode: 'pages',
+            pages: railPages,
+            groups: railGroups,
+            activeHref: './' + PAGE,
+            searchable: true,
+            collapsed: railCollapsed,
+            onToggle: setRail,
+          }),
+          'lynn-docrail-root'
+        ),
+        portal(
+          h(
+            Fragment,
+            null,
+            TOOLS.map(({ delay, ...tool }) =>
+              h(FeatureCard, {
+                ...tool,
+                key: tool.id,
+                density: 'full',
+                status: 'Live',
+                statusVariant: 'active',
+                className: 'reveal',
+                style: { animationDelay: delay },
+              })
+            )
+          ),
+          'lynn-tools-root'
+        ),
+        portal(
+          h(
+            Fragment,
+            null,
+            SP_CARDS.map((card) =>
+              h(IconCard, { ...card, key: card.title, layout: 'horizontal' })
+            )
+          ),
+          'lynn-sp-cards-root'
+        ),
+        portal(
+          h(CtaBanner, {
+            variant: 'tinted',
+            text: rich('Built a skill or tool of your own? <strong>Reach out to Erick Mathews on Teams</strong> to get it added to the Marketplace.'),
+            ctaLabel: 'Message on Teams',
+            ctaHref: TEAMS_HREF,
+            ctaTarget: '_blank',
+            ctaIcon: teamsIcon,
+          }),
+          'lynn-sp-cta-root'
+        ),
+        portal(h(Footer, { columns: FOOTER_COLUMNS }), 'lynn-footer-root')
+      );
+    }
+
+    createRoot(document.getElementById('lynn-app-root')).render(
+      h(ThemeProvider, { defaultTheme: 'lynn' }, h(App))
+    );
   </script>
 
 </body>

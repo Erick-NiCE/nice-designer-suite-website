@@ -1,18 +1,18 @@
 /*!
- * NiCE Designer — reusable canvas effects
+ * NiCE Designer - reusable canvas effects
  * -------------------------------------------------------------
  * Two drop-in visual effects, each applied to any container with
  * a single call. Designed to be portable into the NiCE Designer
- * plugin later — no framework, no build step.
+ * plugin later - no framework, no build step.
  *
  *   NiceEffects.liquidFill(container, { color });
  *   NiceEffects.lightning(container, { color });
  *
- * liquidFill  — on hover, a pool of small particles (Matter.js physics)
+ * liquidFill  - on hover, a pool of small particles (Matter.js physics)
  *               fills the container in `color` and sloshes with the cursor.
  *               Requires Matter.js to be loaded on the page.
  *
- * lightning   — a plasma-ball effect: filaments in `color` radiate from a
+ * lightning   - a plasma-ball effect: filaments in `color` radiate from a
  *               central electrode, flicker, and bend toward the cursor.
  *               Optional floating light motes drift around the edges.
  *
@@ -421,7 +421,7 @@
   }
 
   // theme.css sets `body { overflow-x: hidden }`, which per spec forces
-  // overflow-y to compute as `auto` too — so on this site `body`, not the
+  // overflow-y to compute as `auto` too - so on this site `body`, not the
   // viewport, is the actual scroll container. Read whichever one moved.
   function currentScrollY() {
     return document.body.scrollTop || document.documentElement.scrollTop || global.scrollY || 0;
@@ -430,7 +430,7 @@
   /* ---------- doc rail (left nav for documentation pages) ---------- */
   // Every page except the homepage gets a floating left rail linking to
   // every documentation page, with the current page marked active. A page
-  // can list its own in-page sections via `groups` — those only render
+  // can list its own in-page sections via `groups` - those only render
   // (as an indented sub-list, jumping to `#id` on click) while you're
   // actually on that page.
   var SKILL_ITEMS = [
@@ -481,6 +481,13 @@
           { id: 'fx-magnetic', label: 'Magnetic Buttons' },
           { id: 'fx-plasma', label: 'Plasma & Motes' },
           { id: 'fx-liquid', label: 'Liquid Fill' }
+        ] },
+        // The lynn-ui React playground. Only the section wrapper is a real
+        // element at DOMContentLoaded (the 46 per-component demos inside it
+        // are rendered by React, and have their own in-section DocRail), so
+        // this rail links to the section and stops there.
+        { label: 'Interactive Components', items: [
+          { id: 'lynn-playground', label: 'Live Component Playground' }
         ] }
       ]
     },
@@ -549,11 +556,11 @@
       href: 'release-notes.html', label: 'Release Notes',
       groups: [
         { label: 'Versions', items: [
-          { id: 'release-v11-2', label: 'v11.2 — August 2026' },
-          { id: 'release-v11-1', label: 'v11.1 — August 2026' },
-          { id: 'release-v10', label: 'v10 — June 2026' },
-          { id: 'release-v9', label: 'v9 — May 2026' },
-          { id: 'release-v8', label: 'v8 — April 2026' }
+          { id: 'release-v11-2', label: 'v11.2 - August 2026' },
+          { id: 'release-v11-1', label: 'v11.1 - August 2026' },
+          { id: 'release-v10', label: 'v10 - June 2026' },
+          { id: 'release-v9', label: 'v9 - May 2026' },
+          { id: 'release-v8', label: 'v8 - April 2026' }
         ] }
       ]
     },
@@ -643,6 +650,15 @@
   function buildDocRail() {
     var path = global.location.pathname.split('/').pop() || 'index.html';
     if (DOC_RAIL_SKIP[path]) return null;
+
+    // Pages migrated to lynn-ui render their whole chrome - nav, footer,
+    // access gate and (where they have one) the doc rail - from a single
+    // React root mounted on #lynn-app-root. Building a second, vanilla rail
+    // there would stack one fixed 220px panel exactly on top of the other,
+    // so the presence of that element is the opt-out. Everything else in
+    // this file (liquid fill, lightning, flip reveal, anchor warmth on a
+    // vanilla rail) still runs on those pages.
+    if (document.getElementById('lynn-app-root')) return null;
 
     var current = null;
     for (var i = 0; i < DOC_PAGES.length; i++) {
@@ -843,10 +859,246 @@
     document.addEventListener('scroll', schedule, { passive: true, capture: true });
   }
 
+  /* ---------- flip-grid image reveal (site-wide, zero markup) ---------- */
+  /*
+   * Every real picture on the site reveals itself the first time it scrolls
+   * into view: a small grid of tiles, each holding its own slice of the
+   * image, flips in from edge-on (rotateY 90deg -> 0) with a per-tile delay
+   * keyed to row + column, so the reveal reads as one diagonal wave rather
+   * than every tile moving together.
+   *
+   * Two deliberate implementation choices:
+   *
+   *   1. The overlay is built as a `position: fixed` layer appended to
+   *      `<body>`, never as a wrapper around the <img>. Some of this site's
+   *      images are rendered by React (the homepage carousel), and inserting
+   *      a wrapper between a React-owned node and its React-owned parent is
+   *      exactly what makes React's later `removeChild` throw. This touches
+   *      nothing but the image's own inline `opacity`, which it restores.
+   *   2. Because it is `fixed`, one shared rAF loop re-syncs every live
+   *      overlay to its image's current rect - so the tiles stay glued to
+   *      the picture even if the page is scrolling (or a carousel track is
+   *      sliding) while they animate.
+   *
+   * The overlay is `pointer-events: none` throughout and is removed from the
+   * DOM when the animation ends, so nothing is left behind to swallow a
+   * click on the image.
+   */
+  var FLIP_DURATION = 420;   // ms, one tile's flip
+  var FLIP_STAGGER = 50;     // ms per (row + column) step
+  var FLIP_MIN_W = 100;      // px: narrower than this is an icon, not a picture
+  var FLIP_MIN_H = 48;       // px: shorter than this is a logo or a badge
+  var FLIP_Z = 50;           // under the nav (100) and the doc rail (90)
+
+  function ensureFlipStyles() {
+    if (document.getElementById('nice-flip-styles')) return;
+    var style = document.createElement('style');
+    style.id = 'nice-flip-styles';
+    style.textContent =
+      '@keyframes nice-flip-in{' +
+        'from{transform:perspective(760px) rotateY(90deg);opacity:0}' +
+        '55%{opacity:1}' +
+        'to{transform:perspective(760px) rotateY(0deg);opacity:1}' +
+      '}' +
+      '.nice-flip-grid{position:fixed;pointer-events:none;overflow:hidden;' +
+        'z-index:' + FLIP_Z + ';contain:strict}' +
+      '.nice-flip-tile{position:absolute;pointer-events:none;' +
+        'background-repeat:no-repeat;backface-visibility:hidden;' +
+        'transform-origin:50% 50%;' +
+        'animation:nice-flip-in ' + FLIP_DURATION + 'ms cubic-bezier(0.23,1,0.32,1) both}';
+    document.head.appendChild(style);
+  }
+
+  // One loop for every overlay currently on screen; it stops itself the
+  // moment the last one is removed.
+  var flipLive = [];
+  var flipRaf = 0;
+
+  function flipSync() {
+    flipRaf = 0;
+    for (var i = 0; i < flipLive.length; i++) {
+      var entry = flipLive[i];
+      var r = entry.img.getBoundingClientRect();
+      entry.wrap.style.left = r.left + 'px';
+      entry.wrap.style.top = r.top + 'px';
+    }
+    if (flipLive.length) flipRaf = requestAnimationFrame(flipSync);
+  }
+
+  function flipStart(entry) {
+    flipLive.push(entry);
+    if (!flipRaf) flipRaf = requestAnimationFrame(flipSync);
+  }
+
+  function flipStop(entry) {
+    var at = flipLive.indexOf(entry);
+    if (at !== -1) flipLive.splice(at, 1);
+    if (!flipLive.length && flipRaf) {
+      cancelAnimationFrame(flipRaf);
+      flipRaf = 0;
+    }
+  }
+
+  // 12-16 tiles, shaped to the picture: a wide banner gets a long shallow
+  // grid, a portrait shot a tall narrow one. Tile count stays low on purpose
+  // - the wave reads from the stagger, not from the number of cells.
+  function flipGridFor(aspect) {
+    if (aspect >= 2.2) return { cols: 6, rows: 2 };
+    if (aspect >= 1.2) return { cols: 5, rows: 3 };
+    if (aspect >= 0.8) return { cols: 4, rows: 4 };
+    return { cols: 3, rows: 5 };
+  }
+
+  // Where the bitmap actually lands inside the element's box, so each tile
+  // can carry the correct slice. `background-size: cover` would size to the
+  // *tile*, not to the picture, so the object-fit math is done here once.
+  function flipPaintedBox(img, w, h) {
+    var nw = img.naturalWidth || w;
+    var nh = img.naturalHeight || h;
+    var fit = 'fill';
+    try { fit = getComputedStyle(img).objectFit || 'fill'; } catch (e) {}
+    if (fit !== 'cover' && fit !== 'contain') return { w: w, h: h, x: 0, y: 0 };
+    var scale = fit === 'cover'
+      ? Math.max(w / nw, h / nh)
+      : Math.min(w / nw, h / nh);
+    var pw = nw * scale;
+    var ph = nh * scale;
+    return { w: pw, h: ph, x: (w - pw) / 2, y: (h - ph) / 2 };
+  }
+
+  function flipReveal(img) {
+    var rect = img.getBoundingClientRect();
+    // Logos, inline icons and anything not laid out get no treatment at all.
+    if (rect.width < FLIP_MIN_W || rect.height < FLIP_MIN_H) return;
+
+    var src = img.currentSrc || img.src;
+    if (!src) return;
+
+    var grid = flipGridFor(rect.width / rect.height);
+    var paint = flipPaintedBox(img, rect.width, rect.height);
+    var tileW = rect.width / grid.cols;
+    var tileH = rect.height / grid.rows;
+
+    var wrap = document.createElement('div');
+    wrap.className = 'nice-flip-grid';
+    wrap.setAttribute('aria-hidden', 'true');
+    wrap.style.left = rect.left + 'px';
+    wrap.style.top = rect.top + 'px';
+    wrap.style.width = rect.width + 'px';
+    wrap.style.height = rect.height + 'px';
+    // A rounded picture's tiles must not spill square corners.
+    try { wrap.style.borderRadius = getComputedStyle(img).borderRadius; } catch (e) {}
+
+    var last = 0;
+    for (var r = 0; r < grid.rows; r++) {
+      for (var c = 0; c < grid.cols; c++) {
+        var x = c * tileW;
+        var y = r * tileH;
+        var delay = (r + c) * FLIP_STAGGER;
+        if (delay > last) last = delay;
+        var tile = document.createElement('div');
+        tile.className = 'nice-flip-tile';
+        tile.style.left = x + 'px';
+        tile.style.top = y + 'px';
+        // The 0.6px overrun closes the hairline seams that otherwise show
+        // between neighbouring tiles mid-rotation.
+        tile.style.width = (tileW + 0.6) + 'px';
+        tile.style.height = (tileH + 0.6) + 'px';
+        tile.style.backgroundImage = 'url("' + src.replace(/"/g, '\\"') + '")';
+        tile.style.backgroundSize = paint.w + 'px ' + paint.h + 'px';
+        tile.style.backgroundPosition = (paint.x - x) + 'px ' + (paint.y - y) + 'px';
+        tile.style.animationDelay = delay + 'ms';
+        wrap.appendChild(tile);
+      }
+    }
+
+    // Hide the real image for the duration, preserving whatever inline
+    // opacity the page had already set on it.
+    var prevOpacity = img.style.opacity;
+    img.style.opacity = '0';
+    document.body.appendChild(wrap);
+
+    var entry = { img: img, wrap: wrap };
+    flipStart(entry);
+
+    global.setTimeout(function () {
+      flipStop(entry);
+      img.style.opacity = prevOpacity;
+      if (wrap.parentNode) wrap.parentNode.removeChild(wrap);
+    }, last + FLIP_DURATION + 40);
+  }
+
+  function initFlipReveal() {
+    if (!('IntersectionObserver' in global)) return;
+
+    // Reduced motion: no tiles, no overlay, nothing to remove - the picture
+    // simply appears, which is the documented fallback.
+    var reduce = !!(global.matchMedia &&
+      global.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    if (reduce) return;
+
+    ensureFlipStyles();
+
+    var io = new global.IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var img = entry.target;
+        io.unobserve(img);              // fires once, not on every pass
+        img.dataset.niceFlip = 'done';
+        // A lazy image may still be decoding when it scrolls in; without
+        // naturalWidth the slice math has nothing to work from.
+        if (img.complete && img.naturalWidth) flipReveal(img);
+        else img.addEventListener('load', function () { flipReveal(img); }, { once: true });
+      });
+    }, { threshold: 0.15 });
+
+    function consider(img) {
+      if (img.dataset.niceFlip) return;
+      // The homepage carousel layers a glass scrim and live title text over
+      // its image inside its own card; a body-level overlay would paint over
+      // that chrome and blink the title out for the duration, so those
+      // images keep the carousel's own entrance instead.
+      if (img.closest && img.closest('.lynn-carousel')) return;
+      img.dataset.niceFlip = 'watching';
+      io.observe(img);
+    }
+
+    function scan(root) {
+      if (!root || root.nodeType !== 1) return;
+      if (root.tagName === 'IMG') consider(root);
+      var found = root.querySelectorAll ? root.querySelectorAll('img') : [];
+      for (var i = 0; i < found.length; i++) consider(found[i]);
+    }
+
+    scan(document.body);
+
+    // Images that arrive later - a React island mounting, a lightbox
+    // opening - get the same treatment without the page asking.
+    if ('MutationObserver' in global) {
+      new global.MutationObserver(function (records) {
+        records.forEach(function (record) {
+          for (var i = 0; i < record.addedNodes.length; i++) {
+            scan(record.addedNodes[i]);
+          }
+        });
+      }).observe(document.body, { childList: true, subtree: true });
+    }
+  }
+
   ready(function () {
     buildDocRail();
     initScrollHide();
+    initFlipReveal();
   });
 
-  global.NiceEffects = { liquidFill: liquidFill, lightning: lightning };
+  // `docPages` / `docRailSkip` are published so the lynn-ui `DocRail` mount
+  // on a migrated page can read the very same page table this file builds
+  // its vanilla rail from, rather than a hand-copied duplicate that would
+  // drift the moment a section anchor is added here.
+  global.NiceEffects = {
+    liquidFill: liquidFill,
+    lightning: lightning,
+    docPages: DOC_PAGES,
+    docRailSkip: DOC_RAIL_SKIP
+  };
 })(window);

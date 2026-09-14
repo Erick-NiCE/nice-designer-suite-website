@@ -1,0 +1,103 @@
+/*!
+ * PulseDot - ported from roadmap.html's `.phase-dot` shell and
+ * `@keyframes pulse` (box-shadow 0 0 0 0 currentColor -> 0 0 0 6px
+ * transparent, opacity 1 -> 0.7), with the accent-tinted 4px halo from
+ * `.phase-dot.active` / `.phase-dot.next`.
+ */
+
+@keyframes lynn-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 currentColor;
+    opacity: 1;
+  }
+  50% {
+    box-shadow: 0 0 0 6px transparent;
+    opacity: 0.7;
+  }
+}
+
+.lynn-pulse-dot-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lynn-space-sm);
+  font-family: var(--lynn-font-family);
+}
+
+.lynn-pulse-dot-label {
+  font-size: var(--lynn-font-size-metadata);
+  font-weight: var(--lynn-font-weight-semibold);
+  color: var(--lynn-color-text-secondary);
+}
+
+.lynn-pulse-dot {
+  display: inline-block;
+  width: var(--lynn-pulse-size, 12px);
+  height: var(--lynn-pulse-size, 12px);
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: currentColor;
+  animation: lynn-pulse var(--lynn-pulse-duration, 2s) ease infinite;
+}
+
+/* ---------- neumorphic variant ---------- */
+/*
+ * The plate is the status light's housing: a raised disc of `surface` with
+ * the shared neumorphic pair, padded so the dot sits in the middle of it
+ * rather than filling it. The ring-pulse is dropped here - a ring thrown from
+ * inside a recessed housing reads as a bug - and replaced by an in-place
+ * breath on the same `--lynn-pulse-duration`, so the dot still says "live".
+ */
+@keyframes lynn-pulse-breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.lynn-pulse-dot-plate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: var(--lynn-space-sm);
+  border-radius: 50%;
+  background: var(--lynn-color-surface);
+  box-shadow: var(--lynn-shadow-raised);
+}
+
+.lynn-pulse-dot-plated {
+  animation: lynn-pulse-breathe var(--lynn-pulse-duration, 2s) ease infinite;
+}
+
+.lynn-pulse-dot-blue {
+  color: var(--lynn-color-blue);
+}
+.lynn-pulse-dot-electric-blue {
+  color: var(--lynn-color-electric-blue);
+}
+.lynn-pulse-dot-indigo {
+  color: var(--lynn-color-indigo);
+}
+.lynn-pulse-dot-emerald {
+  color: var(--lynn-color-emerald);
+}
+.lynn-pulse-dot-teal {
+  color: var(--lynn-color-teal);
+}
+.lynn-pulse-dot-coral {
+  color: var(--lynn-color-coral);
+}
+.lynn-pulse-dot-lynn {
+  color: var(--lynn-color-lynn);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-pulse-dot {
+    animation: none;
+    opacity: 1;
+  }
+}

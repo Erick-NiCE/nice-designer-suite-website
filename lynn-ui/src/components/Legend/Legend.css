@@ -1,0 +1,82 @@
+/*!
+ * Legend
+ * `dot`  <- roadmap.html `.legend` (24px gap, wrapping, centered) with
+ *           `.legend-label` (10px/700, 2px tracked, uppercase, muted),
+ *           `.legend-item` (7px gap, 12px/500 secondary) and `.legend-dot`
+ *           (8px disc).
+ * `pill` <- the-suite.html `.legend-pill` (10px/700, 0.5px tracked,
+ *           uppercase, `4px 10px`, pill radius) + `.legend-desc` (13px).
+ *
+ * The source spells its pill tints out one class per status
+ * (`.legend-pill.active`, `.beta`, `.planned`). Here the caller passes the
+ * color and the 15% background is derived with `color-mix`, which is what
+ * every one of those hand-written pairs was doing by hand. A flat token
+ * background is declared first as the fallback for engines without
+ * `color-mix`.
+ */
+
+.lynn-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--lynn-space-xl);
+  font-family: var(--lynn-font-family);
+}
+
+.lynn-legend-label {
+  margin-right: var(--lynn-space-xs);
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-bold);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--lynn-color-text-muted);
+}
+
+.lynn-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: var(--lynn-font-size-metadata);
+  font-weight: var(--lynn-font-weight-medium);
+  color: var(--lynn-color-text-secondary);
+}
+
+/* ---------- dot ---------- */
+.lynn-legend-dot {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--lynn-legend-swatch);
+}
+
+/* ---------- pill ---------- */
+.lynn-legend-pill {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: var(--lynn-radius-pill);
+  background: var(--lynn-color-card);
+  background: color-mix(in srgb, var(--lynn-legend-swatch) 15%, transparent);
+  color: var(--lynn-legend-swatch);
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-bold);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.lynn-legend-desc {
+  font-size: 13px;
+  font-weight: var(--lynn-font-weight-regular);
+  color: var(--lynn-color-text-secondary);
+}
+
+/* The pill variant pairs a key with prose, so the gap inside an item widens
+   and the gap between them narrows relative to the bare dot row. */
+.lynn-legend-variant-pill {
+  gap: var(--lynn-space-lg);
+}
+
+.lynn-legend-variant-pill .lynn-legend-item {
+  gap: var(--lynn-space-sm);
+}

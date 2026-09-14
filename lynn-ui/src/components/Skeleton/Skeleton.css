@@ -1,0 +1,51 @@
+/*!
+ * Skeleton - ported verbatim from the plugin's `.skeleton-list` /
+ * `.skeleton-row` and its `skeleton-shimmer` keyframe (styles.css:1982-2005).
+ * The gradient reads Lynn's `surface` -> `card` -> `surface` ramp, which is
+ * the same two-surface step the plugin's `--bg-surface` / `--bg-elevated`
+ * pair describes, so the shimmer re-tones itself in every theme mode.
+ */
+
+@keyframes lynn-skeleton-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+.lynn-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lynn-space-sm);
+  margin-top: var(--lynn-space-xs);
+}
+
+.lynn-skeleton-row {
+  height: 52px;
+  border-radius: var(--lynn-radius-sm);
+  border: 1px solid var(--lynn-color-border-subtle);
+  background: linear-gradient(
+    90deg,
+    var(--lynn-color-surface) 0%,
+    var(--lynn-color-card) 40%,
+    var(--lynn-color-surface) 80%
+  );
+  background-size: 200% 100%;
+  animation: lynn-skeleton-shimmer 1.4s linear infinite;
+  opacity: 0.75;
+}
+
+.lynn-skeleton-row-compact {
+  height: 32px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-skeleton-row {
+    animation: none;
+    /* Hold the sweep mid-row so the placeholder still reads as a gradient
+       rather than freezing on the off-canvas start frame. */
+    background-position: 50% 0;
+  }
+}

@@ -1,0 +1,108 @@
+/*!
+ * SearchInput
+ * Shape  <- tools.html `.nav-search` / `.nav-search-icon`: relatively
+ *           positioned wrapper, 10px radius, `7px 14px 7px 36px` padding, a
+ *           non-interactive 13px glyph pinned 11px from the left, and a
+ *           `rgba(54,148,252,0.4)` focus border.
+ * Width  <- dashboard.html `.search-bar input` fills its container
+ *           (`width: 100%`); tools.html's nav field is 220px and grows to
+ *           280px on focus. That growth is `expandOnFocus`.
+ *
+ * The source's `rgba(255,255,255,0.06)` fill reads `--lynn-color-surface` so
+ * the field stays visible in light mode; the focus tint keeps its literal
+ * blue alpha, which works on both grounds.
+ *
+ * Resting treatment: the flat 1px line is replaced by the shared neumorphic
+ * inset pair (`--lynn-shadow-pressed`), so the field reads as carved into the
+ * surface it sits on. Props and behavior are untouched.
+ */
+
+.lynn-search-input {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  font-family: var(--lynn-font-family);
+}
+
+.lynn-search-input-expanding {
+  width: auto;
+}
+
+.lynn-search-input-icon {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--lynn-color-text-muted);
+  font-size: 13px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.lynn-search-input-field {
+  width: 100%;
+  padding: 7px 14px 7px 36px;
+  background: var(--lynn-color-surface);
+  /* The 1px line is kept as a transparent border so the field's box - and so
+     the icon's 11px offset and the 220/280px widths - are unchanged; what
+     draws the edge now is the inset pair, not the line. */
+  border: 1px solid transparent;
+  box-shadow: var(--lynn-shadow-pressed);
+  border-radius: 10px;
+  color: var(--lynn-color-text);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  transition:
+    border-color 0.2s var(--lynn-ease),
+    box-shadow 0.2s var(--lynn-ease),
+    background 0.2s var(--lynn-ease),
+    width 0.2s var(--lynn-ease);
+  /* Safari draws its own rounded search chrome and a clear button that
+     ignores the border radius. */
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.lynn-search-input-field::-webkit-search-decoration,
+.lynn-search-input-field::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.lynn-search-input-field::placeholder {
+  color: var(--lynn-color-text-muted);
+}
+
+/* Focus deepens the carve rather than switching treatments: the same inset
+   pair plus one extra 1px inset ring in the source's focus blue, which is
+   where the old `border-color` tint went. */
+.lynn-search-input-field:focus {
+  box-shadow: var(--lynn-shadow-pressed),
+    inset 0 0 0 1px rgba(54, 148, 252, 0.4);
+  background: var(--lynn-color-card);
+}
+
+.lynn-search-input-field:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.lynn-search-input-expanding .lynn-search-input-field {
+  width: 220px;
+}
+
+.lynn-search-input-expanding .lynn-search-input-field:focus {
+  width: 280px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-search-input-field {
+    /* The focus treatment still changes; only the width animation is motion. */
+    transition:
+      border-color 0.2s var(--lynn-ease),
+      box-shadow 0.2s var(--lynn-ease),
+      background 0.2s var(--lynn-ease);
+  }
+}

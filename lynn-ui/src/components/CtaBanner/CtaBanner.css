@@ -1,0 +1,89 @@
+/*!
+ * CtaBanner
+ * `gradient` <- marketplace.html `.mk-cta` (18px-gap wrapping row,
+ *               space-between, `linear-gradient(135deg, rgba(97,0,255,.16),
+ *               rgba(54,148,252,.10))`, 30% indigo border, 16px radius,
+ *               24px/28px padding, 14px secondary text with a 560px cap)
+ * `tinted`   <- the-suite.html / index.html `.sp-marketplace-cta` (16px gap,
+ *               8% `lynn` fill, 22% `lynn` border, 14px radius, 18px/22px
+ *               padding, 13px text at 1.6)
+ * Stacking   <- both files' `@media (max-width: 720px|768px)` rule: column,
+ *               left-aligned
+ *
+ * The CTA is the real `Button`; the only rules here are the pill radius and
+ * the small type both sources' own CTAs use, which `Button`'s `secondary`
+ * variant (a 12px-radius fill) does not carry on its own.
+ */
+
+.lynn-cta-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  font-family: var(--lynn-font-family);
+  color: var(--lynn-color-text-secondary);
+}
+
+.lynn-cta-banner-text {
+  line-height: 1.6;
+}
+
+.lynn-cta-banner-text strong {
+  color: var(--lynn-color-text);
+  font-weight: var(--lynn-font-weight-bold);
+}
+
+.lynn-cta-banner > .lynn-cta-banner-btn {
+  flex-shrink: 0;
+  border-radius: var(--lynn-radius-pill);
+}
+
+/* ---------- gradient ---------- */
+.lynn-cta-banner-gradient {
+  gap: 18px;
+  padding: var(--lynn-space-xl) 28px;
+  border-radius: var(--lynn-radius-lg);
+  background: linear-gradient(
+    135deg,
+    rgba(97, 0, 255, 0.16),
+    rgba(54, 148, 252, 0.1)
+  );
+  border: 1px solid rgba(97, 0, 255, 0.3);
+  font-size: var(--lynn-font-size-body);
+}
+
+.lynn-cta-banner-gradient .lynn-cta-banner-text {
+  max-width: 560px;
+}
+
+.lynn-cta-banner-gradient > .lynn-cta-banner-btn {
+  padding: 11px 20px;
+  font-size: var(--lynn-font-size-body);
+}
+
+/* ---------- tinted ---------- */
+.lynn-cta-banner-tinted {
+  gap: var(--lynn-space-lg);
+  padding: 18px 22px;
+  border-radius: 14px;
+  background: rgba(185, 143, 255, 0.08);
+  border: 1px solid rgba(185, 143, 255, 0.22);
+  font-size: 13px;
+}
+
+.lynn-cta-banner-tinted > .lynn-cta-banner-btn {
+  padding: 9px var(--lynn-space-lg);
+  font-size: 13px;
+}
+
+.lynn-cta-banner-tinted > .lynn-cta-banner-btn:hover {
+  background: rgba(185, 143, 255, 0.18);
+  border-color: rgba(185, 143, 255, 0.4);
+}
+
+@media (max-width: 720px) {
+  .lynn-cta-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

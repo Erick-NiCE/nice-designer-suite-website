@@ -1,0 +1,262 @@
+/*!
+ * FeatureCard
+ * `full`    <- the-suite.html `.tool-card` family, verbatim: 16px radius,
+ *              3px `--t-gradient` glow stripe, 28px/20px header with a 52px
+ *              14px-radius gradient tile, 22px/800 name, 13px tagline,
+ *              `.tool-why` quote with a 2px accent left rule, 5px accent
+ *              bullet dots, footer split between neutral tag pills and a
+ *              status badge, hover lift -4px with a 1px accent ring.
+ * `compact` <- tools.html `.suite-card` (14px radius, 20px padding, 2px
+ *              accent strip, bare 22px glyph, 15px/700 name, hover -1px with
+ *              `0 8px 28px` shadow), sharing `.mcp-card`/`.skill-card`'s
+ *              tighter 12.5-13px body type.
+ *
+ * `--lynn-t-color` / `--lynn-t-gradient` are the package-prefixed names for
+ * the site's own per-card `--t-color` / `--t-gradient` variables.
+ *
+ * Substitutions so the card survives light mode, all no-ops in Lynn's own
+ * mode: the hard-coded `#2f2f3d` background and `rgba(255,255,255,0.08)`
+ * border read `--lynn-color-card` / `--lynn-color-border`, and the quote
+ * block's and tag pill's white alphas become `color-mix` against
+ * `--lynn-color-text` with the literal kept above as the fallback.
+ */
+
+.lynn-feature-card {
+  position: relative;
+  overflow: hidden;
+  background: var(--lynn-color-card);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-lg);
+  font-family: var(--lynn-font-family);
+  transition:
+    transform 0.3s var(--lynn-ease),
+    box-shadow 0.3s var(--lynn-ease),
+    border-color 0.3s var(--lynn-ease);
+}
+
+.lynn-feature-card-full:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.4),
+    0 0 0 1px var(--lynn-t-color);
+  border-color: var(--lynn-t-color);
+}
+
+.lynn-feature-card-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--lynn-t-gradient);
+}
+
+/* ---------- header ---------- */
+.lynn-feature-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--lynn-space-lg);
+  padding: 28px 28px 20px;
+}
+
+.lynn-feature-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--lynn-t-gradient);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  font-size: 24px;
+}
+
+.lynn-feature-card-name-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.lynn-feature-card-name {
+  margin-bottom: var(--lynn-space-xs);
+  font-size: 22px;
+  font-weight: var(--lynn-font-weight-extrabold);
+  letter-spacing: -0.3px;
+  color: var(--lynn-color-text);
+}
+
+.lynn-feature-card-tagline {
+  font-size: 13px;
+  font-weight: var(--lynn-font-weight-regular);
+  color: var(--lynn-color-text-secondary);
+}
+
+/* ---------- body ---------- */
+.lynn-feature-card-body {
+  padding: 0 28px 28px;
+}
+
+.lynn-feature-card-why {
+  margin: 0 0 20px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--lynn-color-text) 4%, transparent);
+  border-left: 2px solid var(--lynn-t-color);
+  border-radius: 0 var(--lynn-radius-sm) var(--lynn-radius-sm) 0;
+  font-size: var(--lynn-font-size-body);
+  line-height: 1.6;
+  color: var(--lynn-color-text);
+}
+
+.lynn-feature-card-why strong {
+  color: var(--lynn-t-color);
+  font-weight: var(--lynn-font-weight-bold);
+}
+
+.lynn-feature-card-bullets-label {
+  margin-bottom: var(--lynn-space-md);
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-bold);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--lynn-t-color);
+}
+
+.lynn-feature-card-bullets {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lynn-space-sm);
+  margin: 0 0 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.lynn-feature-card-bullets li {
+  position: relative;
+  padding-left: var(--lynn-space-lg);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--lynn-color-text-secondary);
+}
+
+.lynn-feature-card-bullets li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--lynn-t-color);
+}
+
+/* ---------- footer ---------- */
+.lynn-feature-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--lynn-space-sm);
+  padding-top: var(--lynn-space-lg);
+  border-top: 1px solid var(--lynn-color-border);
+}
+
+.lynn-feature-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.lynn-feature-card-tag {
+  padding: 3px 9px;
+  background: rgba(255, 255, 255, 0.06);
+  background: color-mix(in srgb, var(--lynn-color-text) 6%, transparent);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-pill);
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-semibold);
+  letter-spacing: 0.3px;
+  color: var(--lynn-color-text-muted);
+  white-space: nowrap;
+}
+
+/* ---------- compact: tools.html's grid scale ---------- */
+.lynn-feature-card-compact {
+  border-radius: 14px;
+  transition:
+    transform 0.2s var(--lynn-ease),
+    box-shadow 0.2s var(--lynn-ease),
+    border-color 0.2s var(--lynn-ease),
+    background 0.2s var(--lynn-ease);
+}
+
+.lynn-feature-card-compact:hover {
+  transform: translateY(-1px);
+  border-color: var(--lynn-color-border-hover);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
+}
+
+.lynn-feature-card-compact .lynn-feature-card-glow {
+  height: 2px;
+}
+
+.lynn-feature-card-compact .lynn-feature-card-header {
+  /* The compact card stacks its glyph above the name instead of beside it -
+     `.suite-card-icon` is a bare 22px glyph with a 12px gap, no tile. */
+  flex-direction: column;
+  gap: var(--lynn-space-md);
+  padding: 20px 20px var(--lynn-space-md);
+}
+
+.lynn-feature-card-compact .lynn-feature-card-icon {
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  font-size: 22px;
+}
+
+.lynn-feature-card-compact .lynn-feature-card-name {
+  margin-bottom: 6px;
+  font-size: 15px;
+  font-weight: var(--lynn-font-weight-bold);
+  letter-spacing: normal;
+}
+
+.lynn-feature-card-compact .lynn-feature-card-tagline {
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.lynn-feature-card-compact .lynn-feature-card-body {
+  padding: 0 20px 20px;
+}
+
+.lynn-feature-card-compact .lynn-feature-card-why {
+  margin-bottom: 14px;
+  font-size: 12.5px;
+}
+
+.lynn-feature-card-compact .lynn-feature-card-bullets {
+  margin-bottom: 14px;
+}
+
+.lynn-feature-card-compact .lynn-feature-card-bullets li {
+  font-size: 12.5px;
+}
+
+.lynn-feature-card-compact .lynn-feature-card-footer {
+  padding-top: var(--lynn-space-md);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-feature-card {
+    transition: none;
+  }
+  .lynn-feature-card-full:hover,
+  .lynn-feature-card-compact:hover {
+    /* Keep the ring and the shadow - only the lift is motion. */
+    transform: none;
+  }
+}

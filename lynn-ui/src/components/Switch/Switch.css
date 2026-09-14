@@ -1,0 +1,168 @@
+/*!
+ * Switch - no website precedent (the site ships no form controls), so this is
+ * assembled from Lynn's own vocabulary rather than ported: pill radius, the
+ * `card`/`border` off state, a solid blue on state, and `--lynn-ease` on the
+ * only thing that moves.
+ *
+ * The two sizes are set by `--lynn-switch-*` so the track, the thumb and the
+ * travel can never drift out of step.
+ */
+
+.lynn-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lynn-space-sm);
+  font-family: var(--lynn-font-family);
+}
+
+.lynn-switch-md {
+  --lynn-switch-w: 36px;
+  --lynn-switch-h: 20px;
+  --lynn-switch-thumb: 14px;
+}
+
+.lynn-switch-sm {
+  --lynn-switch-w: 28px;
+  --lynn-switch-h: 16px;
+  --lynn-switch-thumb: 10px;
+}
+
+.lynn-switch-track {
+  position: relative;
+  flex-shrink: 0;
+  width: var(--lynn-switch-w);
+  height: var(--lynn-switch-h);
+  padding: 0;
+  background: var(--lynn-color-card);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-pill);
+  cursor: pointer;
+  transition:
+    background 0.2s var(--lynn-ease),
+    border-color 0.2s var(--lynn-ease);
+}
+
+.lynn-switch-track:hover:not(:disabled) {
+  border-color: var(--lynn-color-border-hover);
+}
+
+.lynn-switch-track:focus-visible {
+  outline: 2px solid var(--lynn-color-blue);
+  outline-offset: 2px;
+}
+
+.lynn-switch-thumb {
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  width: var(--lynn-switch-thumb);
+  height: var(--lynn-switch-thumb);
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  transform: translateY(-50%);
+  transition: transform 0.2s var(--lynn-ease);
+}
+
+.lynn-switch-on .lynn-switch-track {
+  background: var(--lynn-color-blue);
+  border-color: var(--lynn-color-blue);
+}
+
+.lynn-switch-on .lynn-switch-thumb {
+  /* Track width, minus the thumb, minus the 2px inset on both sides. */
+  transform: translate(
+      calc(var(--lynn-switch-w) - var(--lynn-switch-thumb) - 6px),
+      -50%
+    );
+}
+
+/* ---------- neumorphic variant ---------- */
+/*
+ * The track is an extruded pill and the thumb a disc lifted off it, both from
+ * the shared `--lynn-shadow-raised`/`--lynn-shadow-pressed` pair - no new
+ * shadow values are introduced here.
+ *
+ * Judgement call: this variant runs one step larger than the flat one at each
+ * size. The shared tokens are a 6-7px offset / 14-16px blur pair, which on a
+ * 36x20 pill spills past the shape and reads as a halo instead of an edge.
+ * The scale lives on the same three `--lynn-switch-*` vars the flat variant
+ * uses, so travel, thumb and track stay in step, and the default variant's
+ * documented 36x20 / 28x16 sizes are untouched.
+ */
+.lynn-switch-neumorphic.lynn-switch-md {
+  --lynn-switch-w: 48px;
+  --lynn-switch-h: 28px;
+  --lynn-switch-thumb: 20px;
+}
+
+.lynn-switch-neumorphic.lynn-switch-sm {
+  --lynn-switch-w: 38px;
+  --lynn-switch-h: 22px;
+  --lynn-switch-thumb: 16px;
+}
+
+.lynn-switch-neumorphic .lynn-switch-track {
+  background: var(--lynn-color-surface);
+  border-color: transparent;
+  box-shadow: var(--lynn-shadow-raised);
+}
+
+.lynn-switch-neumorphic .lynn-switch-track:hover:not(:disabled) {
+  border-color: transparent;
+}
+
+.lynn-switch-neumorphic .lynn-switch-thumb {
+  background: var(--lynn-color-card);
+  box-shadow: var(--lynn-shadow-raised);
+  transition:
+    transform 0.2s var(--lynn-ease),
+    box-shadow 0.18s var(--lynn-ease),
+    background 0.2s var(--lynn-ease);
+}
+
+/* On: the track keeps its extrusion and takes the accent, and the thumb goes
+   white so it still reads as the lit element on a blue pill. */
+.lynn-switch-neumorphic.lynn-switch-on .lynn-switch-track {
+  background: var(--lynn-color-blue);
+  border-color: transparent;
+  box-shadow: var(--lynn-shadow-raised);
+}
+
+.lynn-switch-neumorphic.lynn-switch-on .lynn-switch-thumb {
+  background: #fff;
+}
+
+/* The tactile flourish: for ~180ms after a toggle the thumb is pushed in,
+   then it settles back into whichever resting state it just moved to. */
+.lynn-switch-neumorphic.lynn-switch-pressing .lynn-switch-thumb {
+  box-shadow: var(--lynn-shadow-pressed);
+}
+
+.lynn-switch-label {
+  font-size: 13px;
+  color: var(--lynn-color-text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.lynn-switch-on .lynn-switch-label {
+  color: var(--lynn-color-text);
+}
+
+.lynn-switch-disabled .lynn-switch-track,
+.lynn-switch-disabled .lynn-switch-label {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-switch-track,
+  .lynn-switch-thumb,
+  /* Specificity match for the neumorphic thumb's own transition. */
+  .lynn-switch-neumorphic .lynn-switch-thumb {
+    transition: none;
+  }
+  /* The indent still happens - it is a 180ms state, not travel - it just
+     arrives and leaves instantly rather than easing. */
+}

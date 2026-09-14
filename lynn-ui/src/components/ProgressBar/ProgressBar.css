@@ -1,0 +1,90 @@
+/*!
+ * ProgressBar
+ * determinate   <- the plugin's `.progress-bar-bg` / `.progress-bar-fill`
+ *                  (4px track, 2px radius, `width 0.3s ease`)
+ * indeterminate <- the plugin's `.tab-progress-bar::after` and its
+ *                  `tab-progress-slide` keyframe (a 40%-wide bar crossing
+ *                  from -40% to 100% in 1.1s)
+ */
+
+@keyframes lynn-progress-slide {
+  0% {
+    left: -40%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.lynn-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  font-family: var(--lynn-font-family);
+}
+
+.lynn-progress-track {
+  position: relative;
+  height: 4px;
+  background: var(--lynn-color-card);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.lynn-progress-fill {
+  height: 100%;
+  width: 0;
+  background: var(--lynn-progress-accent);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.lynn-progress-indeterminate .lynn-progress-fill {
+  position: absolute;
+  top: 0;
+  left: -40%;
+  width: 40%;
+  transition: none;
+  animation: lynn-progress-slide 1.1s ease-in-out infinite;
+}
+
+.lynn-progress-label {
+  font-size: var(--lynn-font-size-metadata);
+  color: var(--lynn-color-text-secondary);
+}
+
+/* ---------- tones ---------- */
+.lynn-progress-tone-blue {
+  --lynn-progress-accent: var(--lynn-color-blue);
+}
+.lynn-progress-tone-electric-blue {
+  --lynn-progress-accent: var(--lynn-color-electric-blue);
+}
+.lynn-progress-tone-indigo {
+  --lynn-progress-accent: var(--lynn-color-indigo);
+}
+.lynn-progress-tone-emerald {
+  --lynn-progress-accent: var(--lynn-color-emerald);
+}
+.lynn-progress-tone-teal {
+  --lynn-progress-accent: var(--lynn-color-teal);
+}
+.lynn-progress-tone-coral {
+  --lynn-progress-accent: var(--lynn-color-coral);
+}
+.lynn-progress-tone-lynn {
+  --lynn-progress-accent: var(--lynn-color-lynn);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-progress-fill {
+    transition: none;
+  }
+  .lynn-progress-indeterminate .lynn-progress-fill {
+    /* Stop the travel but keep a visible bar, parked at the start of the
+       track, so the "still loading" signal survives. */
+    animation: none;
+    left: 0;
+  }
+}

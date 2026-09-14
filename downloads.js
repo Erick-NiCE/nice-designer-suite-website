@@ -1,7 +1,7 @@
 // ─── Keep download links in sync with the latest release ────────────────────
 //
 // version.json (repo root) is the single source of truth for "what's the
-// latest build" — the same file the NiCE Designer Chrome extension's own
+// latest build" - the same file the NiCE Designer Chrome extension's own
 // "check for updates" button reads. Rather than hand-editing a version
 // number and a .zip filename into every page on every release, pages mark
 // the elements that need updating and this script fills them in on load:
@@ -17,7 +17,7 @@
 //                             badge under the download button).
 //
 // If the fetch fails (offline preview, version.json not deployed yet), the
-// hardcoded fallback already in the HTML is left alone — this only upgrades
+// hardcoded fallback already in the HTML is left alone - this only upgrades
 // it, never breaks it.
 (function () {
   var VERSION_URL = 'https://erick-nice.github.io/nice-designer-suite-website/version.json';

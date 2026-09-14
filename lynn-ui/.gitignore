@@ -1,0 +1,7 @@
+node_modules/
+*.tsbuildinfo
+npm-debug.log*
+
+# dist/ is committed on purpose: lynn.html loads it directly at runtime and
+# this repo has no build step in its deploy (static files only, see
+# .nojekyll at the repo root). Run `npm run build` before committing changes.

@@ -1,0 +1,108 @@
+/*!
+ * IconCard
+ * `vertical`   <- index.html `.pillar-card` / `.pillar-icon` / `.pillar-title`
+ *                 / `.pillar-desc`: surface fill, 16px radius, 32px padding,
+ *                 36px block icon with a 20px gap, 20px/700 title, 15px body
+ *                 at 1.65, hover brightens the border only.
+ * `horizontal` <- the-suite.html `.sp-card`: flex row with a 14px gap, 16px
+ *                 radius, 20px padding, 22px icon nudged 2px down, 14px/700
+ *                 title, 13px body at 1.65.
+ *
+ * scoring.html's `.score-card` is the same vertical card center-aligned at a
+ * smaller scale; that drift is not reproduced as a third layout - it is a
+ * `className` away for a caller who wants it.
+ *
+ * `.sp-card`'s `rgba(255,255,255,0.04)` fill and `0.07` border read the card
+ * and border-subtle tokens instead, so the horizontal layout does not turn
+ * into white-on-white in light mode.
+ */
+
+.lynn-icon-card {
+  border-radius: var(--lynn-radius-lg);
+  font-family: var(--lynn-font-family);
+  transition: border-color 0.2s var(--lynn-ease);
+}
+
+.lynn-icon-card-main {
+  min-width: 0;
+}
+
+.lynn-icon-card-title {
+  color: var(--lynn-color-text);
+}
+
+.lynn-icon-card-desc {
+  color: var(--lynn-color-text-secondary);
+}
+
+.lynn-icon-card-footer {
+  margin-top: var(--lynn-space-lg);
+  padding-top: var(--lynn-space-md);
+  border-top: 1px solid var(--lynn-color-border);
+}
+
+/* ---------- vertical ---------- */
+.lynn-icon-card-vertical {
+  padding: var(--lynn-space-2xl);
+  background: var(--lynn-color-surface);
+  border: 1px solid var(--lynn-color-border);
+}
+
+.lynn-icon-card-vertical:hover {
+  border-color: var(--lynn-color-border-hover);
+}
+
+.lynn-icon-card-vertical .lynn-icon-card-icon {
+  display: block;
+  margin-bottom: 20px;
+  font-size: 36px;
+  line-height: 1;
+}
+
+.lynn-icon-card-vertical .lynn-icon-card-title {
+  margin-bottom: var(--lynn-space-md);
+  font-size: 20px;
+  font-weight: var(--lynn-font-weight-bold);
+}
+
+.lynn-icon-card-vertical .lynn-icon-card-desc {
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+/* ---------- horizontal ---------- */
+.lynn-icon-card-horizontal {
+  display: flex;
+  gap: 14px;
+  padding: 20px;
+  background: var(--lynn-color-card);
+  border: 1px solid var(--lynn-color-border-subtle);
+}
+
+.lynn-icon-card-horizontal:hover {
+  border-color: var(--lynn-color-border);
+}
+
+.lynn-icon-card-horizontal .lynn-icon-card-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.lynn-icon-card-horizontal .lynn-icon-card-title {
+  margin-bottom: 6px;
+  font-size: var(--lynn-font-size-body);
+  font-weight: var(--lynn-font-weight-bold);
+}
+
+.lynn-icon-card-horizontal .lynn-icon-card-desc {
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-icon-card {
+    transition: none;
+  }
+}

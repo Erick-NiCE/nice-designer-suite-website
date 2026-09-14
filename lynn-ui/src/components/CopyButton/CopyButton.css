@@ -1,0 +1,20 @@
+/*!
+ * CopyButton
+ * Ported from the plugin's `.btn-icon-label` (`styles.css:939-940`): a 5px
+ * icon/label gap and a non-shrinking, block-displayed glyph, at the small
+ * button scale its clipboard buttons use (`index.tsx:7175-7183`).
+ *
+ * Everything else - fill, radius, hover, focus ring, disabled state - is the
+ * real `Button` underneath.
+ */
+
+.lynn-copy-button {
+  gap: 5px;
+  padding: 9px 16px;
+  font-size: 13px;
+}
+
+.lynn-copy-button svg {
+  flex-shrink: 0;
+  display: block;
+}

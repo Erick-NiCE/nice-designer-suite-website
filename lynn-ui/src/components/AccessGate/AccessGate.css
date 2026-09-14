@@ -1,0 +1,239 @@
+/*!
+ * AccessGate - ported from site-gate.css (the canonical, site-wide copy),
+ * with roadmap.html's hand-rolled `.gate-*` duplicate used only to confirm
+ * the shape. Where the two disagreed, site-gate.css wins:
+ *   - overlay covers the full viewport (roadmap's starts at `top: 60px`);
+ *   - divider is `--border` (roadmap hard-codes a fainter `0.07`);
+ *   - subtitle/cta read the text tokens (roadmap hard-codes `0.5` / `0.45`);
+ *   - input has symmetric 18px padding (roadmap pads 48px on the right for
+ *     a trailing affordance it never renders).
+ *
+ * The `--indigo` -> `--lyra` submit/lock gradient, the 64px 18px-radius lock
+ * tile, the 420px card at 24px radius and the 2px-tracked centered password
+ * field are all verbatim.
+ */
+
+.lynn-access-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--lynn-color-bg);
+  font-family: var(--lynn-font-family);
+}
+
+.lynn-access-gate-unlocked {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.lynn-access-gate-card {
+  width: 100%;
+  max-width: 420px;
+  margin: var(--lynn-space-xl);
+  padding: 48px 40px 40px;
+  background: var(--lynn-color-card);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-xl);
+  text-align: center;
+}
+
+.lynn-access-gate-lock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto var(--lynn-space-xl);
+  border-radius: 18px;
+  background: linear-gradient(
+    135deg,
+    var(--lynn-color-indigo),
+    var(--lynn-color-lynn)
+  );
+  box-shadow: 0 8px 32px rgba(97, 0, 255, 0.35);
+  color: #fff;
+}
+
+.lynn-access-gate-title {
+  margin-bottom: var(--lynn-space-sm);
+  font-size: 22px;
+  font-weight: var(--lynn-font-weight-extrabold);
+  letter-spacing: -0.3px;
+  color: var(--lynn-color-text);
+}
+
+.lynn-access-gate-subtitle {
+  margin-bottom: var(--lynn-space-2xl);
+  font-size: var(--lynn-font-size-body);
+  line-height: 1.6;
+  color: var(--lynn-color-text-secondary);
+}
+
+.lynn-access-gate-input-wrap {
+  position: relative;
+  margin-bottom: var(--lynn-space-md);
+}
+
+.lynn-access-gate-input {
+  width: 100%;
+  padding: 14px 18px;
+  background: var(--lynn-color-surface);
+  border: 1px solid var(--lynn-color-border-hover);
+  border-radius: var(--lynn-radius-md);
+  color: var(--lynn-color-text);
+  font-family: inherit;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s var(--lynn-ease);
+}
+
+.lynn-access-gate-input::placeholder {
+  color: var(--lynn-color-text-muted);
+  letter-spacing: normal;
+}
+
+.lynn-access-gate-input:focus {
+  border-color: var(--lynn-color-indigo);
+}
+
+.lynn-access-gate-input-error {
+  border-color: var(--lynn-color-coral);
+}
+
+@keyframes lynn-access-gate-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+.lynn-access-gate-input-shake {
+  animation: lynn-access-gate-shake 0.35s var(--lynn-ease);
+}
+
+.lynn-access-gate-error {
+  min-height: 18px;
+  margin-bottom: var(--lynn-space-md);
+  font-size: var(--lynn-font-size-metadata);
+  color: var(--lynn-color-coral);
+  transition: opacity 0.2s var(--lynn-ease);
+}
+
+.lynn-access-gate-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lynn-space-sm);
+  width: 100%;
+  margin-bottom: 28px;
+  padding: 14px;
+  border: none;
+  border-radius: var(--lynn-radius-md);
+  background: linear-gradient(
+    135deg,
+    var(--lynn-color-indigo),
+    var(--lynn-color-lynn)
+  );
+  color: #fff;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: var(--lynn-font-weight-bold);
+  cursor: pointer;
+  transition:
+    opacity 0.2s var(--lynn-ease),
+    transform 0.15s var(--lynn-ease);
+}
+
+.lynn-access-gate-submit:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.lynn-access-gate-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.lynn-access-gate-submit:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+.lynn-access-gate-divider {
+  height: 1px;
+  margin-bottom: var(--lynn-space-xl);
+  background: var(--lynn-color-border);
+}
+
+.lynn-access-gate-cta {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--lynn-color-text-secondary);
+}
+
+.lynn-access-gate-cta strong {
+  color: var(--lynn-color-text);
+  font-weight: var(--lynn-font-weight-semibold);
+}
+
+.lynn-access-gate-cta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: var(--lynn-space-md);
+  padding: 9px 18px;
+  background: rgba(97, 0, 255, 0.12);
+  border: 1px solid rgba(97, 0, 255, 0.3);
+  border-radius: var(--lynn-radius-pill);
+  color: var(--lynn-color-lynn);
+  font-family: inherit;
+  font-size: var(--lynn-font-size-metadata);
+  font-weight: var(--lynn-font-weight-semibold);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.2s var(--lynn-ease),
+    border-color 0.2s var(--lynn-ease);
+}
+
+.lynn-access-gate-cta-link:hover {
+  background: rgba(97, 0, 255, 0.22);
+  border-color: rgba(185, 143, 255, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-access-gate-unlocked,
+  .lynn-access-gate-input,
+  .lynn-access-gate-error,
+  .lynn-access-gate-submit,
+  .lynn-access-gate-cta-link {
+    transition: none;
+  }
+  .lynn-access-gate-submit:hover:not(:disabled) {
+    transform: none;
+  }
+  /* The shake is the only signal that a wrong code was rejected, so it is
+     replaced rather than dropped: the coral border stays and the field
+     flashes its tint once instead of moving. */
+  .lynn-access-gate-input-shake {
+    animation: none;
+    background: rgba(255, 91, 138, 0.12);
+  }
+}

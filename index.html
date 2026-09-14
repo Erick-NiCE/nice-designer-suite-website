@@ -13,7 +13,22 @@
   <script src="embed.js"></script>
   <link rel="stylesheet" href="site-gate.css" />
   <script src="site-gate.js" defer></script>
-  <script src="nice-effects.js?v=9" defer></script>
+  <script src="nice-effects.js?v=11" defer></script>
+
+  <!-- lynn-ui: powers the "Featured" carousel below -->
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@18.3.1",
+      "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+      "react-dom": "https://esm.sh/react-dom@18.3.1?external=react",
+      "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?external=react",
+      "scheduler": "https://esm.sh/scheduler@0.23.2",
+      "matter-js": "https://esm.sh/matter-js@0.20.0"
+    }
+  }
+  </script>
   <style>
     /* ========== HERO ========== */
     .hero {
@@ -426,7 +441,7 @@
   <!-- SITE-WIDE ACCESS GATE (see site-gate.css / site-gate.js) -->
   <div id="nice-site-gate">
     <div class="sg-card">
-      <div class="sg-lock">🔒</div>
+      <div class="sg-lock"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6" /><path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" /><path d="M8 11v-4a4 4 0 1 1 8 0v4" /></svg></div>
       <div class="sg-title">NiCE Designer Site Login</div>
       <div class="sg-subtitle">This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.</div>
       <div class="sg-input-wrap">
@@ -471,11 +486,60 @@
         A Figma plugin and Chrome extension that audits design system compliance, applies token fixes, and connects to Claude via MCP for AI-assisted design work. Built for SOL and Lyra.
       </p>
       <div class="hero-ctas">
-        <span id="hero-download" class="btn-primary is-disabled" aria-disabled="true" data-latest-label>Download v11.1</span>
+        <span id="hero-download" class="btn-primary is-disabled" aria-disabled="true"><span class="hero-download-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6" /></svg></span><span data-latest-label>Download v11.1</span></span>
         <span class="coming-soon-tag">Coming soon!</span>
       </div>
-      <span class="hero-badge" data-latest-when>v11.1 &middot; August 2026</span>
+      <span class="hero-badge nice-sheen" data-latest-when>v11.1 &middot; August 2026</span>
     </div>
+  </div>
+
+  <!-- FEATURED PAGES -->
+  <div class="page-section" style="padding-bottom: 0;">
+    <div class="section-label">Featured</div>
+    <h2 class="section-title">Start here</h2>
+    <p class="section-subtitle">The most-used pages on the site, one swipe or drag away.</p>
+    <div id="featured-carousel-root" style="max-width: 900px; margin: 0 auto;"></div>
+    <script type="module">
+      import { createElement as h } from 'react';
+      import { createRoot } from 'react-dom/client';
+      import { Carousel, ThemeProvider } from './lynn-ui/dist/index.js';
+
+      const slides = [
+        {
+          image: './images/featured-lynn.png',
+          title: 'Lynn Design System',
+          tagline: 'Tokens, motion, and the live component playground.',
+          ctaLabel: 'Explore Lynn',
+          ctaHref: './lynn.html',
+        },
+        {
+          image: './images/featured-install-guide.png',
+          title: 'Install Guide',
+          tagline: 'Chrome extension, Claude Desktop, and the Figma plugin.',
+          ctaLabel: 'Get set up',
+          ctaHref: './install-guide.html',
+        },
+        {
+          image: './images/featured-marketplace.png',
+          title: 'The Marketplace',
+          tagline: 'Community skills and tools, installed the same way.',
+          ctaLabel: 'Browse skills',
+          ctaHref: './marketplace.html',
+        },
+        {
+          image: './images/featured-faq.png',
+          title: 'FAQ',
+          tagline: 'How the tools work, and how to get set up.',
+          ctaLabel: 'Read the FAQ',
+          ctaHref: './faq.html',
+        },
+      ];
+
+      const root = document.getElementById('featured-carousel-root');
+      createRoot(root).render(
+        h(ThemeProvider, { defaultTheme: 'lynn' }, h(Carousel, { slides }))
+      );
+    </script>
   </div>
 
   <!-- WHAT CAN IT DO -->

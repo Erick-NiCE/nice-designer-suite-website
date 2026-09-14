@@ -1,5 +1,5 @@
 /*!
- * NiCE Designer — embed mode layout
+ * NiCE Designer - embed mode layout
  * -------------------------------------------------------------
  * Reshapes any page on this site to read well inside the NiCE
  * Designer app's docs pane (Chrome extension side panel, ~340-480px
@@ -20,15 +20,23 @@
  */
 
 /* ── Site chrome the pane replaces ───────────────────────────────────────── */
+/* The `.lynn-*` half of each pair is the lynn-ui React component that has
+   replaced the hand-rolled markup on a migrated page; both are listed while
+   the site is part-migrated. */
 html.nice-embed .site-nav,
+html.nice-embed .lynn-nav,
 html.nice-embed .site-footer,
-html.nice-embed #nice-site-gate {
+html.nice-embed .lynn-footer,
+html.nice-embed #nice-site-gate,
+html.nice-embed .lynn-access-gate {
   display: none !important;
 }
 
 html.nice-embed body {
   /* No sticky 60px nav to sit under any more. */
   --nav-h: 0px;
+  /* Same, for the lynn-ui components' own copy of the token. */
+  --lynn-nav-height: 0px;
   /* The pane frame owns the scrollbar gutter; let content use the full width. */
   overflow-x: hidden;
 }
@@ -85,7 +93,7 @@ html.nice-embed .sp-sub {
   max-width: none !important;
 }
 
-/* Trim the generous desktop vertical rhythm — a 400px-wide column needs far
+/* Trim the generous desktop vertical rhythm - a 400px-wide column needs far
    less breathing room between sections than a 1200px one. */
 html.nice-embed section {
   padding-top: 32px !important;
@@ -127,8 +135,9 @@ html.nice-embed pre {
 /* On desktop the rail is a fixed 220px sidebar at left: 24px. That would eat
    half the pane, so in embed mode it becomes a full-width overlay sheet,
    default-collapsed (embed.js seeds the rail's own collapse key). The expand
-   tab and ⌘K/Ctrl+K still open it — see buildDocRail in nice-effects.js. */
-html.nice-embed .doc-rail {
+   tab and ⌘K/Ctrl+K still open it - see buildDocRail in nice-effects.js. */
+html.nice-embed .doc-rail,
+html.nice-embed .lynn-doc-rail {
   top: auto !important;
   bottom: 0 !important;
   left: 0 !important;
@@ -141,13 +150,15 @@ html.nice-embed .doc-rail {
   box-shadow: 0 -12px 32px rgba(0, 0, 0, 0.45) !important;
 }
 /* The desktop collapsed state slides the rail sideways; here it slides down. */
-html.nice-embed .doc-rail.doc-rail-collapsed {
+html.nice-embed .doc-rail.doc-rail-collapsed,
+html.nice-embed .lynn-doc-rail.lynn-doc-rail-collapsed {
   transform: translateY(100%) !important;
   opacity: 0 !important;
   pointer-events: none !important;
 }
 /* Reposition the expand tab from the left edge to a bottom-right pill. */
-html.nice-embed .doc-rail-expand {
+html.nice-embed .doc-rail-expand,
+html.nice-embed .lynn-doc-rail-expand {
   top: auto !important;
   bottom: 16px !important;
   left: auto !important;

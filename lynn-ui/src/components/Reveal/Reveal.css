@@ -1,0 +1,23 @@
+/*!
+ * Reveal - ported from index.html's polish-layer `.reveal` / `.reveal.visible`
+ * (translateY(22px) + opacity, 0.55s on the Lynn easing curve).
+ */
+
+.lynn-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.55s var(--lynn-ease), transform 0.55s var(--lynn-ease);
+}
+
+.lynn-reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

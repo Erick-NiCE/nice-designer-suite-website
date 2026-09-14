@@ -1,0 +1,41 @@
+/*!
+ * Lynn base layer
+ * -------------------------------------------------------------
+ * Deliberately narrow: this package is a component library, not a page
+ * framework, so it must not restyle a host page's <body>. Everything here is
+ * scoped to `.lynn-root` (an opt-in wrapper) or to the package's own
+ * `lynn-`-prefixed elements.
+ *
+ * Values ported from theme.css's `body` rules.
+ */
+
+.lynn-root {
+  font-family: var(--lynn-font-family);
+  background: var(--lynn-color-bg);
+  color: var(--lynn-color-text);
+  overflow-x: hidden;
+}
+
+/* Every lynn- element gets the same box model the source site relies on. */
+[class^='lynn-'],
+[class*=' lynn-'],
+[class^='lynn-']::before,
+[class^='lynn-']::after,
+[class*=' lynn-']::before,
+[class*=' lynn-']::after {
+  box-sizing: border-box;
+}
+
+/* Used by Footer's column headings, which are real landmarks in the markup
+   but have no visible counterpart in the source site's footer. */
+.lynn-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

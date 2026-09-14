@@ -3,15 +3,54 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NiCE Designer — Tool Catalog</title>
+  <title>NiCE Designer - Tool Catalog</title>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="theme.css?v=10" />
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <link rel="stylesheet" href="site-gate.css" />
-  <script src="site-gate.js" defer></script>
-  <script src="nice-effects.js?v=9" defer></script>
+  <script src="nice-effects.js?v=11" defer></script>
+
+  <!--
+    ===== lynn-ui: the site chrome, as React components =====
+    Same pattern as the-suite.html / release-notes.html / 404.html - see the
+    single #lynn-app-root mount script at the end of <body>. site-gate.css /
+    site-gate.js are gone with the static gate; `AccessGate` is the same
+    screen and the mount script re-runs the same client-side code check.
+  -->
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@18.3.1",
+      "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+      "react-dom": "https://esm.sh/react-dom@18.3.1?external=react",
+      "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?external=react",
+      "scheduler": "https://esm.sh/scheduler@0.23.2",
+      "matter-js": "https://esm.sh/matter-js@0.20.0"
+    }
+  }
+  </script>
+  <style>.lynn-mount { display: contents; }</style>
+
+  <!--
+    The gate used to be static markup covered by blocking CSS, so it was up
+    before first paint. React arrives as ESM from a CDN, so the component
+    can only mount a tick later - hold the page back until it does, or a
+    locked visitor reads the whole page in the gap.
+  -->
+  <style>html.lynn-gate-pending body { visibility: hidden; }</style>
+  <script>
+    (function () {
+      try {
+        if (sessionStorage.getItem('nice-site-access') === '1') return;
+      } catch (e) { /* blocked storage: fall through and gate */ }
+      var root = document.documentElement;
+      root.classList.add('lynn-gate-pending');
+      setTimeout(function () { root.classList.remove('lynn-gate-pending'); }, 4000);
+    })();
+  </script>
+
   <style>
     :root {
       /* page-specific tokens */
@@ -55,8 +94,13 @@
     /* ---- CONTENT ---- */
     .content {
       flex: 1; min-width: 0;
-      padding: 48px 56px 100px;
-      max-width: 960px;
+      /* 292px left clears lynn-ui's fixed 220px DocRail (24px from the left
+         edge, 24px gap) - see the mount script at the end of <body>. */
+      padding: 48px 56px 100px 292px;
+      max-width: 1252px;
+    }
+    @media (max-width: 1100px) {
+      .content { padding-left: 56px; }
     }
 
     /* ---- SECTION ---- */
@@ -97,110 +141,56 @@
       gap: 12px;
     }
 
-    /* ---- SUITE TOOL CARD ---- */
-    .suite-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 14px; padding: 20px;
-      transition: all 0.2s; cursor: default;
-      position: relative; overflow: hidden;
-    }
-    .suite-card:hover {
-      border-color: rgba(255,255,255,0.13);
-      background: var(--bg-card2);
-      transform: translateY(-1px);
-      box-shadow: 0 8px 28px rgba(0,0,0,0.3);
-    }
-    .suite-card-accent {
-      position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    }
-    .suite-card-icon {
-      font-size: 22px; margin-bottom: 12px;
-    }
-    .suite-card-name {
-      font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px;
-    }
-    .suite-card-desc {
-      font-size: 13px; color: var(--sec); line-height: 1.65; margin-bottom: 14px;
-    }
-    .suite-card-tags {
-      display: flex; flex-wrap: wrap; gap: 6px;
-    }
-    .suite-tag {
-      font-size: 10px; font-weight: 600; padding: 3px 8px;
-      border-radius: 100px; background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.08);
-    }
-    .sp-required {
-      font-size: 10px; font-weight: 700; padding: 3px 8px;
-      border-radius: 100px;
-      background: rgba(185,143,255,0.12); color: var(--lyra);
-      border: 1px solid rgba(185,143,255,0.2);
-    }
+    /* ---- SUITE TOOL CARD ----
+       `.suite-card` is lynn-ui's <FeatureCard density="compact"> now (see the
+       mount script at the end of <body>), so the old `.suite-card*` /
+       `.suite-tag` markup-specific CSS has gone with it - `.lynn-feature-card
+       -compact*` in lynn-ui.css is the same design. `.sp-required` was unused
+       dead CSS (no matching markup on this page) and is gone with it too. */
 
-    /* ---- MCP TOOL CARD ---- */
-    .mcp-card {
-      background: rgba(255,255,255,0.025);
-      border: 1px solid var(--border);
-      border-radius: 12px; padding: 16px 18px;
-      transition: all 0.18s;
-    }
-    .mcp-card:hover {
-      background: rgba(255,255,255,0.045);
-      border-color: rgba(255,255,255,0.11);
-    }
-    .mcp-card-top {
+    /* ---- MCP TOOL CARD ----
+       `.mcp-card` is a small Card + Badge composite now (see the mount
+       script) - `.mcp-card`/`.mcp-card-top`/`.mcp-name`/`.target-badge`* /
+       `.mcp-desc`/`.mcp-returns` are replaced by `.lynn-card`,
+       `.lynn-mcp-card-top`, `code`, `Badge` (`tone="blue"|"emerald"|"teal"`
+       + `bordered`) and `.lynn-mcp-desc`/`.lynn-mcp-why` below. */
+    .lynn-mcp-card-top {
       display: flex; align-items: center;
       justify-content: space-between; gap: 8px;
       margin-bottom: 8px; flex-wrap: wrap;
     }
-    .mcp-name {
-      font-family: 'SF Mono','Fira Code',monospace;
-      font-size: 12px; font-weight: 600; color: #fff; letter-spacing: 0.3px;
+    .lynn-mcp-card-top code {
+      font-size: 12px; font-weight: 600; letter-spacing: 0.3px;
     }
-    .target-badge {
-      font-size: 10px; font-weight: 700; padding: 2px 8px;
-      border-radius: 100px; white-space: nowrap; flex-shrink: 0;
-    }
-    .target-figma  { background: rgba(54,148,252,0.15); color: #3694FC; border: 1px solid rgba(54,148,252,0.2); }
-    .target-chrome { background: rgba(0,226,160,0.12);  color: #00E2A0; border: 1px solid rgba(0,226,160,0.2); }
-    .target-both   { background: rgba(54,226,208,0.12); color: #36EAD0; border: 1px solid rgba(54,226,208,0.2); }
-    .mcp-desc {
+    .lynn-mcp-desc {
       font-size: 12.5px; color: rgba(255,255,255,0.52); line-height: 1.65;
     }
-    .mcp-returns {
+    .lynn-mcp-why {
       margin-top: 8px; font-size: 11px; color: rgba(255,255,255,0.28);
     }
-    .mcp-returns strong { color: rgba(255,255,255,0.4); }
+    .lynn-mcp-why strong { color: rgba(255,255,255,0.4); }
 
-    /* ---- SKILL CARD ---- */
-    .skill-card {
-      background: rgba(255,255,255,0.025);
-      border: 1px solid var(--border);
-      border-radius: 12px; padding: 18px;
-      border-left: 3px solid var(--lyra);
-      transition: all 0.18s;
-    }
-    .skill-card:hover {
-      background: rgba(255,255,255,0.04);
-      border-color: rgba(185,143,255,0.3);
-    }
-    .skill-card-top {
+    /* ---- SKILL CARD ----
+       `.skill-card` is a Card + Badge composite too, keeping the left accent
+       rule the old `.skill-card` painted (`border-left: 3px solid --lyra`),
+       since lynn-ui's `Card` only offers a top accent strip. */
+    .lynn-skill-card { border-left: 3px solid var(--lyra); }
+    .lynn-skill-card-top {
       display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
     }
-    .skill-name {
+    .lynn-skill-card-top .lynn-skill-name {
       font-size: 13.5px; font-weight: 700; color: #fff;
     }
-    .skill-targets {
+    .lynn-skill-card-top .lynn-skill-targets {
       display: flex; gap: 4px; margin-left: auto; flex-wrap: wrap;
     }
-    .skill-desc {
+    .lynn-skill-desc {
       font-size: 12.5px; color: var(--sec); line-height: 1.65; margin-bottom: 10px;
     }
-    .skill-triggers {
+    .lynn-skill-triggers {
       font-size: 11px; color: rgba(255,255,255,0.3); font-style: italic;
     }
-    .skill-triggers strong { color: rgba(255,255,255,0.4); font-style: normal; }
+    .lynn-skill-triggers strong { color: rgba(255,255,255,0.4); font-style: normal; }
 
     /* ---- INLINE CODE ---- */
     code {
@@ -236,37 +226,14 @@
 </head>
 <body>
 
-  <!-- SITE-WIDE ACCESS GATE (see site-gate.css / site-gate.js) -->
-  <div id="nice-site-gate">
-    <div class="sg-card">
-      <div class="sg-lock">🔒</div>
-      <div class="sg-title">NiCE Designer Site Login</div>
-      <div class="sg-subtitle">This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.</div>
-      <div class="sg-input-wrap">
-        <input id="nice-site-gate-input" type="password" placeholder="Enter code" autocomplete="off" />
-      </div>
-      <div class="sg-error" id="nice-site-gate-error"></div>
-      <button id="nice-site-gate-btn" type="button">Unlock</button>
-      <div class="sg-divider"></div>
-      <div class="sg-cta">
-        Don't have the code?<br>
-        <strong>Reach out to Erick Mathews on Teams</strong> to request access.
-        <br>
-        <a class="sg-teams-btn" href="https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com" target="_blank" rel="noopener">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H8a2 2 0 00-2 2v2H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2h2a2 2 0 002-2V4a2 2 0 00-2-2zM4 20V8h12v12H4zm16-4h-2V8a2 2 0 00-2-2H8V4h12v12z" fill="currentColor"/></svg>
-          Message on Teams
-        </a>
-      </div>
-    </div>
-  </div>
+  <!-- lynn-ui chrome. One React root, one ThemeProvider (see the mount
+       script at the end of <body>); the gate renders inside it, the nav and
+       doc rail portal into the `.lynn-mount` placeholders below. -->
+  <div id="lynn-app-root"></div>
 
-  <!-- NAV -->
-  <nav class="site-nav" id="site-nav">
-    <a href="./index.html" class="nav-logo">
-      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span><span class="logo-suite"> Suite</span>
-    </a>
-    <span class="nav-download is-disabled" aria-disabled="true">Download<span class="coming-soon-tag">Coming soon!</span></span>
-  </nav>
+  <!-- NAV (lynn-ui <Nav>) + DOC RAIL (lynn-ui <DocRail>, position: fixed) -->
+  <div id="lynn-nav-root" class="lynn-mount"></div>
+  <div id="lynn-docrail-root" class="lynn-mount"></div>
 
   <!-- TOOL SEARCH -->
   <div class="tools-toolbar">
@@ -288,28 +255,16 @@
       <section class="tool-section" id="suite">
         <p class="section-eyebrow">The Suite</p>
         <h2 class="section-title">4 product tools</h2>
-        <p class="section-desc">The high-level tools that make up NiCE Designer. Each one is available in the Figma plugin, Chrome extension, or both — and some unlock additional capabilities when connected via Supercharge. Parity's cross-client comparison is now a feature inside Frontend Audit rather than its own tool. Convert has been dropped entirely — for SOL &rarr; Lyra conversion work, use <a href="https://claude.ai/design/p/019dda40-58d9-795b-92eb-5ee83bf676e4" target="_blank" rel="noopener">Claude Design</a> alongside the <a href="https://ndlr.netlify.app/#/erick-mathews/uncategorized" target="_blank" rel="noopener">official Lyra design system reference</a> instead.</p>
+        <p class="section-desc">The high-level tools that make up NiCE Designer. Each one is available in the Figma plugin, Chrome extension, or both - and some unlock additional capabilities when connected via Supercharge. Parity's cross-client comparison is now a feature inside Frontend Audit rather than its own tool. Convert has been dropped entirely - for SOL &rarr; Lyra conversion work, use <a href="https://claude.ai/design/p/019dda40-58d9-795b-92eb-5ee83bf676e4" target="_blank" rel="noopener">Claude Design</a> alongside the <a href="https://ndlr.netlify.app/#/erick-mathews/uncategorized" target="_blank" rel="noopener">official Lyra design system reference</a> instead.</p>
 
         <div class="subsection" id="suite-audit">
           <div class="subsection-label">
             <span class="sub-dot" style="background:#3694FC"></span>
             <span style="color:#3694FC">Frontend Audit</span>
-            <span class="subsection-note">Read-only — Figma + Chrome</span>
+            <span class="subsection-note">Read-only - Figma + Chrome</span>
           </div>
           <div class="tool-grid">
-            <div class="suite-card" data-search="audit compliance score lyra sol colors text spacing radius components accessibility a11y wcag parity">
-              <div class="suite-card-accent" style="background:linear-gradient(90deg,#3694FC,#025AFB)"></div>
-              <div class="suite-card-icon">🔍</div>
-              <div class="suite-card-name">Frontend Audit</div>
-              <div class="suite-card-desc">One score for design-system compliance and accessibility. Audits color, typography, spacing, radius, components, and WCAG issues in a single pass, with colorblind simulation and tap-target overlays on Chrome, plus a cross-client parity check that diffs a Figma artboard against the live page via Supercharge — filtered and ranked by severity so you know what to fix first.</div>
-              <div class="suite-card-tags">
-                <span class="suite-tag">Figma</span>
-                <span class="suite-tag">Chrome</span>
-                <span class="suite-tag">Storybook</span>
-                <span class="suite-tag">Parity</span>
-                <span class="suite-tag">Read-only</span>
-              </div>
-            </div>
+            <div class="lynn-mount" id="lynn-grid-suite-audit"></div>
           </div>
         </div>
 
@@ -317,21 +272,10 @@
           <div class="subsection-label">
             <span class="sub-dot" style="background:#3694FC"></span>
             <span style="color:#3694FC">Frontend Editor</span>
-            <span class="subsection-note">In-context — Chrome only</span>
+            <span class="subsection-note">In-context - Chrome only</span>
           </div>
           <div class="tool-grid">
-            <div class="suite-card" data-search="editor browser layer panel magic effects dark mode liquid plasma undo redo history chrome">
-              <div class="suite-card-accent" style="background:linear-gradient(90deg,#3694FC,#025AFB)"></div>
-              <div class="suite-card-icon">🎨</div>
-              <div class="suite-card-name">Frontend Editor</div>
-              <div class="suite-card-desc">Design directly in the browser: a familiar layer panel for any live page, real-time style overrides with no code, Magic effects (dark mode, hover glow, liquid/plasma & more), and full edit history with undo &amp; redo.</div>
-              <div class="suite-card-tags">
-                <span class="suite-tag">Chrome only</span>
-                <span class="suite-tag">Layer panel</span>
-                <span class="suite-tag">Magic effects</span>
-                <span class="suite-tag">History</span>
-              </div>
-            </div>
+            <div class="lynn-mount" id="lynn-grid-suite-editor"></div>
           </div>
         </div>
 
@@ -339,20 +283,10 @@
           <div class="subsection-label">
             <span class="sub-dot" style="background:#B98FFF"></span>
             <span style="color:#B98FFF">Spec Mode</span>
-            <span class="subsection-note">Read-only — Figma + Chrome</span>
+            <span class="subsection-note">Read-only - Figma + Chrome</span>
           </div>
           <div class="tool-grid">
-            <div class="suite-card" data-search="spec mode handoff developer css tokens export figma chrome dev-facing">
-              <div class="suite-card-accent" style="background:linear-gradient(90deg,#6100FF,#B98FFF)"></div>
-              <div class="suite-card-icon">📐</div>
-              <div class="suite-card-name">Spec Mode</div>
-              <div class="suite-card-desc">Select and inspect any element, in Figma or on a live page, and get production CSS with Lyra tokens substituted in automatically — spacing, type, color, and radius in one copy-ready view.</div>
-              <div class="suite-card-tags">
-                <span class="suite-tag">Figma</span>
-                <span class="suite-tag">Chrome</span>
-                <span class="suite-tag">Dev-facing</span>
-              </div>
-            </div>
+            <div class="lynn-mount" id="lynn-grid-suite-handoff"></div>
           </div>
         </div>
 
@@ -360,20 +294,10 @@
           <div class="subsection-label">
             <span class="sub-dot" style="background:#36EAD0"></span>
             <span style="color:#36EAD0">Design System</span>
-            <span class="subsection-note">Read-only — Figma + Chrome</span>
+            <span class="subsection-note">Read-only - Figma + Chrome</span>
           </div>
           <div class="tool-grid">
-            <div class="suite-card" data-search="design system tokens components storybook lyra sol export json css candidates promote">
-              <div class="suite-card-accent" style="background:linear-gradient(90deg,#36EAD0,#00E2A0)"></div>
-              <div class="suite-card-icon">🪙</div>
-              <div class="suite-card-name">Design System</div>
-              <div class="suite-card-desc">Browse every SOL and Lyra token — color, type, spacing, and radius — plus live component previews pulled straight from Storybook on Chrome, with Angular and React props, variants, and states. One-click sync pulls the whole library.</div>
-              <div class="suite-card-tags">
-                <span class="suite-tag">Figma</span>
-                <span class="suite-tag">Chrome</span>
-                <span class="suite-tag">Storybook</span>
-              </div>
-            </div>
+            <div class="lynn-mount" id="lynn-grid-suite-designSystem"></div>
           </div>
         </div>
 
@@ -398,21 +322,7 @@
             <span class="subsection-note">Confirm Claude can actually see Figma and Chrome before anything else runs.</span>
           </div>
           <div class="tool-grid">
-            <div class="mcp-card" data-search="list_targets see what is connected connect">
-              <div class="mcp-card-top"><code class="mcp-name">list_targets</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Lists which clients — Figma, Chrome, or both — are live on the MCP hub right now.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Stops you from waiting on a tool that was never going to reach anything. Always the cheapest first call.</p>
-            </div>
-            <div class="mcp-card" data-search="get_diagnostics troubleshoot the connection connect">
-              <div class="mcp-card-top"><code class="mcp-name">get_diagnostics</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Full health report on the bridge: this process, the hub, connected sessions, recent drop-outs, and a plain-English next step.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Turns "it just does not work" into a specific thing to click. Run it the moment a tool says nothing is connected.</p>
-            </div>
-            <div class="mcp-card" data-search="check_libraries check the design library is linked connect">
-              <div class="mcp-card-top"><code class="mcp-name">check_libraries</code><span class="target-badge target-figma">Figma only</span></div>
-              <p class="mcp-desc">Verifies the SOL or Lyra library is actually linked to the open Figma file.</p>
-              <p class="mcp-returns"><strong>Why:</strong> A missing library silently makes every conversion fall back to bundled values. This catches that before you convert anything.</p>
-            </div>
+            <div class="lynn-mount" id="lynn-grid-mcp-connect"></div>
           </div>
         </div>
 
@@ -421,39 +331,10 @@
           <div class="subsection-label">
             <span class="sub-dot" style="background:#3694FC"></span>
             <span style="color:#3694FC">Choose what to work on</span>
-            <span class="subsection-note">Set the scope — a whole page, one artboard, or a single inspected element.</span>
+            <span class="subsection-note">Set the scope - a whole page, one artboard, or a single inspected element.</span>
           </div>
           <div class="tool-grid">
-            <div class="mcp-card" data-search="get_selection_info what is selected right now scope">
-              <div class="mcp-card-top"><code class="mcp-name">get_selection_info</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Reports the selected Figma layer or the inspected Chrome element, so scope is explicit rather than assumed.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Guarantees the audit or fix lands on the thing you meant. No silent whole-page conversions when you wanted one button.</p>
-            </div>
-            <div class="mcp-card" data-search="select_page reset scope to the whole page scope">
-              <div class="mcp-card-top"><code class="mcp-name">select_page</code><span class="target-badge target-chrome">Chrome only</span></div>
-              <p class="mcp-desc">Clears the inspected element so audits and fixes cover the entire page again.</p>
-              <p class="mcp-returns"><strong>Why:</strong> One call to zoom back out after drilling into a component.</p>
-            </div>
-            <div class="mcp-card" data-search="start_inspect start element picking scope">
-              <div class="mcp-card-top"><code class="mcp-name">start_inspect</code><span class="target-badge target-chrome">Chrome only</span></div>
-              <p class="mcp-desc">Turns on the extension's inspect mode so the next element you click becomes the scope.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Point at the thing you care about instead of describing it in words.</p>
-            </div>
-            <div class="mcp-card" data-search="stop_inspect stop element picking scope">
-              <div class="mcp-card-top"><code class="mcp-name">stop_inspect</code><span class="target-badge target-chrome">Chrome only</span></div>
-              <p class="mcp-desc">Leaves inspect mode without changing the current selection.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Gets the picking cursor out of your way so you can use the page normally.</p>
-            </div>
-            <div class="mcp-card" data-search="focus_node jump to a layer in figma scope">
-              <div class="mcp-card-top"><code class="mcp-name">focus_node</code><span class="target-badge target-figma">Figma only</span></div>
-              <p class="mcp-desc">Scrolls to and selects a specific node id on the Figma canvas.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Every audit row becomes clickable — go straight from "issue #14" to the actual layer.</p>
-            </div>
-            <div class="mcp-card" data-search="screenshot_page screenshot what you are looking at scope">
-              <div class="mcp-card-top"><code class="mcp-name">screenshot_page</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Captures the current page or artboard as an image Claude can look at directly.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Lets Claude judge things a token audit cannot see — visual hierarchy, crowding, whether it simply looks wrong.</p>
-            </div>
+            <div class="lynn-mount" id="lynn-grid-mcp-scope"></div>
           </div>
         </div>
 
@@ -465,61 +346,7 @@
             <span class="subsection-note">Read your current state. The audits return a gauge plus the issue list behind it.</span>
           </div>
           <div class="tool-grid">
-            <div class="mcp-card" data-search="run_full_audit full compliance score measure">
-              <div class="mcp-card-top"><code class="mcp-name">run_full_audit</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Audits colors, typography, spacing, radius, components and accessibility in one pass and returns an overall 0–100 score with per-domain issue counts.</p>
-              <p class="mcp-returns"><strong>Why:</strong> One number you can put in front of a stakeholder, plus the exact list of what is dragging it down.</p>
-            </div>
-            <div class="mcp-card" data-search="lyra_compliance_report lyra readiness report measure">
-              <div class="mcp-card-top"><code class="mcp-name">lyra_compliance_report</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">A full audit plus the accessibility pass, pinned to Lyra, formatted as a report rather than a raw issue dump.</p>
-              <p class="mcp-returns"><strong>Why:</strong> The artifact to paste into a design review or a ticket — score, gauge, and the top offenders, already prose.</p>
-            </div>
-            <div class="mcp-card" data-search="audit_colors score the colors measure">
-              <div class="mcp-card-top"><code class="mcp-name">audit_colors</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Classifies every fill and stroke as on-token, bound to the wrong design system, or a raw value with no binding.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Tells you not just how many colors are off but how many are one click from being right — so you know whether this is ten minutes of work or a week.</p>
-            </div>
-            <div class="mcp-card" data-search="audit_text_styles score the typography measure">
-              <div class="mcp-card-top"><code class="mcp-name">audit_text_styles</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Matches every text node on family, size and weight together, and names the role-equivalent token it should be using.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Catches the sneaky case — right size, wrong family — that eyeballing a design never finds.</p>
-            </div>
-            <div class="mcp-card" data-search="audit_spacing score the spacing measure">
-              <div class="mcp-card-top"><code class="mcp-name">audit_spacing</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Finds padding, gap and margin values that are off-scale, or on-scale but not bound to a variable.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Surfaces the "looks fine, breaks on theme change" class of problem, which is most of what fails in handoff.</p>
-            </div>
-            <div class="mcp-card" data-search="audit_radius score the corner radii measure">
-              <div class="mcp-card-top"><code class="mcp-name">audit_radius</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Finds corner radii that are off-scale or unbound, reading the real per-corner binding slots.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Radius drift is the fastest way a page stops looking like the system. This is the cheapest audit to act on.</p>
-            </div>
-            <div class="mcp-card" data-search="audit_components score the components measure">
-              <div class="mcp-card-top"><code class="mcp-name">audit_components</code><span class="target-badge target-figma">Figma only</span></div>
-              <p class="mcp-desc">Finds instances from the wrong library or from no library, and names a 1:1 replacement where one exists.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Detached and off-system components are what make a file un-maintainable. This is the list to fix first.</p>
-            </div>
-            <div class="mcp-card" data-search="audit_accessibility score accessibility measure">
-              <div class="mcp-card-top"><code class="mcp-name">audit_accessibility</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">WCAG-oriented scan: contrast, tap targets, small text, ARIA, alt text, labels, focus outlines, heading order, landmarks.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Errors and warnings split out separately, so you can see what is a genuine blocker versus what is polish.</p>
-            </div>
-            <div class="mcp-card" data-search="scan_variables list the variables in use measure">
-              <div class="mcp-card-top"><code class="mcp-name">scan_variables</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Enumerates every variable currently bound in the scope, and every property that should be bound but is not.</p>
-              <p class="mcp-returns"><strong>Why:</strong> The raw data behind the spacing and radius scores, if you want to reason about bindings yourself.</p>
-            </div>
-            <div class="mcp-card" data-search="get_audit_filters see what the score ignores measure">
-              <div class="mcp-card-top"><code class="mcp-name">get_audit_filters</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Returns the user's active audit filters — which issue classes are currently excluded from the score.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Keeps the score honest. A 96 with contrast checks switched off is not a 96, and this is how you find out.</p>
-            </div>
-            <div class="mcp-card" data-search="set_audit_filters change what the score ignores measure">
-              <div class="mcp-card-top"><code class="mcp-name">set_audit_filters</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Turns individual issue classes in or out of scope for the score.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Lets you park issues that are genuinely out of scope for this project without them nagging in every audit.</p>
-            </div>
+            <div class="lynn-mount" id="lynn-grid-mcp-measure"></div>
           </div>
         </div>
 
@@ -531,56 +358,7 @@
             <span class="subsection-note">Whole-page and whole-frame conversions. Dry-run by default, and they report the score they moved.</span>
           </div>
           <div class="tool-grid">
-            <div class="mcp-card" data-search="convert_page_to_lyra convert the whole page to lyra fix-bulk">
-              <div class="mcp-card-top"><code class="mcp-name">convert_page_to_lyra</code><span class="target-badge target-chrome">Chrome only</span></div>
-              <p class="mcp-desc">Runs every applicable fixer across a live page and returns a before/after score delta.</p>
-              <p class="mcp-returns"><strong>Why:</strong> The single biggest jump in score you can get in one call — and you see exactly how many points it bought.</p>
-            </div>
-            <div class="mcp-card" data-search="migrate_to_lyra convert the whole frame to lyra fix-bulk">
-              <div class="mcp-card-top"><code class="mcp-name">migrate_to_lyra</code><span class="target-badge target-figma">Figma only</span></div>
-              <p class="mcp-desc">The Figma equivalent: applies the selected fixer families across a frame and reports the score delta.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Migrates a whole artboard without hand-picking rows, with a before/after gauge to show your team.</p>
-            </div>
-            <div class="mcp-card" data-search="convert_colors apply color tokens fix-bulk">
-              <div class="mcp-card-top"><code class="mcp-name">convert_colors</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Binds the chosen color tokens to the listed fills and strokes.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Reports how many of the original color issues it actually resolved, so a partial fix never gets reported as a win.</p>
-            </div>
-            <div class="mcp-card" data-search="convert_text_styles apply typography tokens fix-bulk">
-              <div class="mcp-card-top"><code class="mcp-name">convert_text_styles</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Applies the matching type token to the given text nodes, or to every eligible one.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Type is the most visible domain — this is the change people notice, and it comes with a resolved-count.</p>
-            </div>
-            <div class="mcp-card" data-search="fix_spacing bind spacing tokens fix-bulk">
-              <div class="mcp-card-top"><code class="mcp-name">fix_spacing</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Binds spacing variables to off-scale or unbound padding, gap and margin values.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Usually the highest-yield, lowest-risk fix in the set — values barely move, but the score does.</p>
-            </div>
-            <div class="mcp-card" data-search="fix_radius bind radius tokens fix-bulk">
-              <div class="mcp-card-top"><code class="mcp-name">fix_radius</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Binds radius variables to off-scale or unbound corner radii.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Small visual change, large consistency gain, and it takes one call.</p>
-            </div>
-            <div class="mcp-card" data-search="fix_accessibility apply accessibility fixes fix-bulk">
-              <div class="mcp-card-top"><code class="mcp-name">fix_accessibility</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Applies the automated remediation for a specific accessibility issue type on a node.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Clears the mechanical a11y failures — labels, alt text, tap targets — so human attention goes to the judgement calls.</p>
-            </div>
-            <div class="mcp-card" data-search="convert_component swap a component for its system twin fix-bulk">
-              <div class="mcp-card-top"><code class="mcp-name">convert_component</code><span class="target-badge target-figma">Figma only</span></div>
-              <p class="mcp-desc">Replaces one instance with the equivalent component from the target design system.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Gets you a real library instance — inheriting future updates — instead of a look-alike that drifts.</p>
-            </div>
-            <div class="mcp-card" data-search="convert_mode switch light / dark mode fix-bulk">
-              <div class="mcp-card-top"><code class="mcp-name">convert_mode</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Re-binds the scope to the light or dark tokens of the given system.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Produces a genuine dark variant built from tokens, not an inverted screenshot.</p>
-            </div>
-            <div class="mcp-card" data-search="generate_multi_system duplicate into the other system fix-bulk">
-              <div class="mcp-card-top"><code class="mcp-name">generate_multi_system</code><span class="target-badge target-figma">Figma only</span></div>
-              <p class="mcp-desc">Copies the selection and converts the copy to the other design system, leaving the original untouched.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Side-by-side SOL and Lyra versions for a migration pitch, with zero risk to the original.</p>
-            </div>
+            <div class="lynn-mount" id="lynn-grid-mcp-fix-bulk"></div>
           </div>
         </div>
 
@@ -592,46 +370,7 @@
             <span class="subsection-note">Surgical, per-property edits with a clean one-click revert for each.</span>
           </div>
           <div class="tool-grid">
-            <div class="mcp-card" data-search="apply_single_color set one color fix-one">
-              <div class="mcp-card-top"><code class="mcp-name">apply_single_color</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Applies one color token — or a raw hex via customHex — to a single fill or stroke.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Try a value in one call and undo it in one call. This is the lane for "just make this blue".</p>
-            </div>
-            <div class="mcp-card" data-search="apply_single_text set one text style fix-one">
-              <div class="mcp-card-top"><code class="mcp-name">apply_single_text</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Applies one type token — or a raw size via customFontSize — to a single text node.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Iterate on one heading without touching the other forty.</p>
-            </div>
-            <div class="mcp-card" data-search="apply_single_spacing set one spacing value fix-one">
-              <div class="mcp-card-top"><code class="mcp-name">apply_single_spacing</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Applies one spacing token — or a raw number via customValue — to a single property.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Nudge one gap by hand when the token scale genuinely does not have the right step.</p>
-            </div>
-            <div class="mcp-card" data-search="apply_single_radius set one corner radius fix-one">
-              <div class="mcp-card-top"><code class="mcp-name">apply_single_radius</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Applies one radius token — or a raw number via customValue — to a single corner or all four.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Fix the one card whose corners are wrong, without a page-wide pass.</p>
-            </div>
-            <div class="mcp-card" data-search="revert_single_color undo that one color fix-one">
-              <div class="mcp-card-top"><code class="mcp-name">revert_single_color</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Restores the snapshot captured when that exact fill or stroke was changed.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Per-row undo that survives other edits — no losing four good changes to walk back a fifth.</p>
-            </div>
-            <div class="mcp-card" data-search="revert_single_text undo that one text style fix-one">
-              <div class="mcp-card-top"><code class="mcp-name">revert_single_text</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Restores the snapshot captured when that text node was changed.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Try a type token, dislike it, put it back exactly as it was.</p>
-            </div>
-            <div class="mcp-card" data-search="revert_single_spacing undo that one spacing value fix-one">
-              <div class="mcp-card-top"><code class="mcp-name">revert_single_spacing</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Restores the snapshot captured when that spacing property was changed.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Reverses a single nudge without disturbing the rest of the layout.</p>
-            </div>
-            <div class="mcp-card" data-search="revert_single_radius undo that one corner radius fix-one">
-              <div class="mcp-card-top"><code class="mcp-name">revert_single_radius</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Restores the snapshot captured when that radius was changed.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Reverses a single radius edit cleanly.</p>
-            </div>
+            <div class="lynn-mount" id="lynn-grid-mcp-fix-one"></div>
           </div>
         </div>
 
@@ -643,21 +382,7 @@
             <span class="subsection-note">Step back out of any bulk change without leaving the conversation.</span>
           </div>
           <div class="tool-grid">
-            <div class="mcp-card" data-search="undo_last_conversion undo the last bulk change undo">
-              <div class="mcp-card-top"><code class="mcp-name">undo_last_conversion</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Rolls back the most recent bulk conversion in one call.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Lets you run a big conversion to see what it does, knowing the exit is one sentence away.</p>
-            </div>
-            <div class="mcp-card" data-search="get_conversion_history list every change made undo">
-              <div class="mcp-card-top"><code class="mcp-name">get_conversion_history</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Returns the ordered history of applied changes with the current position in it.</p>
-              <p class="mcp-returns"><strong>Why:</strong> A written record of what this session actually touched — useful for a changelog or a handoff note.</p>
-            </div>
-            <div class="mcp-card" data-search="revert_to_history_index rewind to an earlier point undo">
-              <div class="mcp-card-top"><code class="mcp-name">revert_to_history_index</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Steps the design back to a chosen entry in the history.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Explore aggressively, then land on whichever version was best — not just the last one.</p>
-            </div>
+            <div class="lynn-mount" id="lynn-grid-mcp-undo"></div>
           </div>
         </div>
 
@@ -669,26 +394,7 @@
             <span class="subsection-note">Chrome only. Inject CSS, flip dark mode, and switch on accessibility overlays.</span>
           </div>
           <div class="tool-grid">
-            <div class="mcp-card" data-search="apply_css_overrides inject css rules restyle">
-              <div class="mcp-card-top"><code class="mcp-name">apply_css_overrides</code><span class="target-badge target-chrome">Chrome only</span></div>
-              <p class="mcp-desc">Injects selector-scoped CSS declarations into the live page.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Restyle anything on a page you do not own, and see the result immediately. Pass clear:true so re-runs replace rather than stack.</p>
-            </div>
-            <div class="mcp-card" data-search="clear_css_overrides remove injected css restyle">
-              <div class="mcp-card-top"><code class="mcp-name">clear_css_overrides</code><span class="target-badge target-chrome">Chrome only</span></div>
-              <p class="mcp-desc">Strips every override this session injected, returning the page to its shipped styling.</p>
-              <p class="mcp-returns"><strong>Why:</strong> A clean baseline in one call, so an experiment never contaminates the next audit.</p>
-            </div>
-            <div class="mcp-card" data-search="polish_page page view toggles restyle">
-              <div class="mcp-card-top"><code class="mcp-name">polish_page</code><span class="target-badge target-chrome">Chrome only</span></div>
-              <p class="mcp-desc">Toggles dark-mode simulation, token-styled scrollbars, and positional hover overlays.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Dark mode without a build, on any page — the fastest way to find out what breaks.</p>
-            </div>
-            <div class="mcp-card" data-search="a11y_overlay accessibility overlays restyle">
-              <div class="mcp-card-top"><code class="mcp-name">a11y_overlay</code><span class="target-badge target-chrome">Chrome only</span></div>
-              <p class="mcp-desc">Toggles small-tap-target highlighting, non-token color flagging, and colorblind simulation.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Makes accessibility problems visible on screen, which is far more persuasive in a review than a list of counts.</p>
-            </div>
+            <div class="lynn-mount" id="lynn-grid-mcp-restyle"></div>
           </div>
         </div>
 
@@ -700,36 +406,7 @@
             <span class="subsection-note">Turn a design into CSS, tokens, and specs a developer can paste in.</span>
           </div>
           <div class="tool-grid">
-            <div class="mcp-card" data-search="extract_dev_details spec sheet for one element handoff">
-              <div class="mcp-card-top"><code class="mcp-name">extract_dev_details</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Size, fills, strokes, typography, auto-layout and CSS for the current selection.</p>
-              <p class="mcp-returns"><strong>Why:</strong> The handoff spec a developer asks for, without a screenshot-and-annotate round trip.</p>
-            </div>
-            <div class="mcp-card" data-search="extract_all_css export the whole thing as css handoff">
-              <div class="mcp-card-top"><code class="mcp-name">extract_all_css</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Emits a CSS document covering every node in scope.</p>
-              <p class="mcp-returns"><strong>Why:</strong> A real starting point for implementation rather than a pile of values to retype.</p>
-            </div>
-            <div class="mcp-card" data-search="extract_token_css export css custom properties handoff">
-              <div class="mcp-card-top"><code class="mcp-name">extract_token_css</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Emits the design system's tokens as CSS custom properties.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Drop it into a stylesheet and the rest of the exported CSS resolves against real tokens.</p>
-            </div>
-            <div class="mcp-card" data-search="export_design_tokens export the token palettes handoff">
-              <div class="mcp-card-top"><code class="mcp-name">export_design_tokens</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Returns the color, type, spacing and radius palettes for SOL or Lyra in either mode.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Lets Claude propose real token names instead of guessing at them from memory.</p>
-            </div>
-            <div class="mcp-card" data-search="sync_storybook_components sync components from storybook handoff">
-              <div class="mcp-card-top"><code class="mcp-name">sync_storybook_components</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Pulls the live component inventory from a Storybook instance into the plugin.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Component audits start matching what engineering actually shipped, not last quarter's library.</p>
-            </div>
-            <div class="mcp-card" data-search="get_storybook_sync_status storybook sync status handoff">
-              <div class="mcp-card-top"><code class="mcp-name">get_storybook_sync_status</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Reports when the last sync ran and how many components it brought in.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Tells you whether a component audit is trustworthy or built on stale data.</p>
-            </div>
+            <div class="lynn-mount" id="lynn-grid-mcp-handoff"></div>
           </div>
         </div>
 
@@ -738,14 +415,10 @@
           <div class="subsection-label">
             <span class="sub-dot" style="background:#14b8a6"></span>
             <span style="color:#14b8a6">Decide &amp; review</span>
-            <span class="subsection-note">Judgement calls — is this good enough to move to the next step?</span>
+            <span class="subsection-note">Judgement calls - is this good enough to move to the next step?</span>
           </div>
           <div class="tool-grid">
-            <div class="mcp-card" data-search="run_ux_eval ten-question ux eval decide">
-              <div class="mcp-card-top"><code class="mcp-name">run_ux_eval</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Assembles a live audit, the design and ticket links, and the 10-question prioritisation framework — then hands the judgement to Claude.</p>
-              <p class="mcp-returns"><strong>Why:</strong> The answer to "is this ready for dev?" argued on reach, real pain and opportunity cost — not just on whether the tokens are clean.</p>
-            </div>
+            <div class="lynn-mount" id="lynn-grid-mcp-decide"></div>
           </div>
         </div>
 
@@ -757,16 +430,7 @@
             <span class="subsection-note">Check whether a newer MCP server build is available, and pull it in.</span>
           </div>
           <div class="tool-grid">
-            <div class="mcp-card" data-search="check_for_updates check for a newer server build maintain">
-              <div class="mcp-card-top"><code class="mcp-name">check_for_updates</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Fetches origin and reports whether the local MCP server checkout is behind, with the commit list and version numbers.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Know there is an update before running it, instead of finding out a feature is missing after the fact.</p>
-            </div>
-            <div class="mcp-card" data-search="install_update pull and install the latest build maintain">
-              <div class="mcp-card-top"><code class="mcp-name">install_update</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Fast-forwards the local checkout to origin and runs npm install for whatever changed. Only works from a git checkout, and only when the working tree is clean.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Gets new tools and fixes onto disk in one call — though the running process still needs a restart to actually load them, which the response always states.</p>
-            </div>
+            <div class="lynn-mount" id="lynn-grid-mcp-maintain"></div>
           </div>
         </div>
 
@@ -778,11 +442,7 @@
             <span class="subsection-note">Raw access for anything the tools above do not cover yet.</span>
           </div>
           <div class="tool-grid">
-            <div class="mcp-card" data-search="call_plugin send a raw plugin message escape">
-              <div class="mcp-card-top"><code class="mcp-name">call_plugin</code><span class="target-badge target-both">Figma + Chrome</span></div>
-              <p class="mcp-desc">Forwards any raw UIMessage straight to the plugin, bypassing the typed tools.</p>
-              <p class="mcp-returns"><strong>Why:</strong> Reaches plugin capability that has no tool yet. Powerful, unvalidated — use it when nothing else fits.</p>
-            </div>
+            <div class="lynn-mount" id="lynn-grid-mcp-escape"></div>
           </div>
         </div>
 
@@ -797,7 +457,7 @@
       <section class="tool-section" id="skills">
         <p class="section-eyebrow">Claude Skills</p>
         <h2 class="section-title">11 skills</h2>
-        <p class="section-desc">Skills are context files (SKILL.md) that give Claude a playbook for a specific workflow. Load a skill by saying "load the [skill-name] skill" in Claude chat — then Claude uses the right MCP tools in the right sequence. All skills require Supercharge.</p>
+        <p class="section-desc">Skills are context files (SKILL.md) that give Claude a playbook for a specific workflow. Load a skill by saying "load the [skill-name] skill" in Claude chat - then Claude uses the right MCP tools in the right sequence. All skills require Supercharge.</p>
 
         <!-- SCORE & TRIAGE -->
         <div class="subsection" id="skills-measure">
@@ -807,24 +467,7 @@
             <span class="subsection-note">Turn a pile of issues into a ranked list of what to do first.</span>
           </div>
           <div class="tool-grid">
-            <div class="skill-card" id="skill-a11y-triage" data-search="a11y-triage accessibility triage measure">
-              <div class="skill-card-top">
-                <div class="skill-name">a11y-triage</div>
-                <div class="skill-targets"><span class="target-badge target-both">Figma + Chrome</span></div>
-              </div>
-              <p class="skill-desc">Ranks accessibility issues by severity × reach and returns a top-N action list. Converts an unreadable issue dump into three things to fix this afternoon.</p>
-              <p class="skill-triggers"><strong>Answers:</strong> "I have hundreds of a11y issues — where do I actually start?"</p>
-            </div>
-
-            <div class="skill-card" id="skill-manual-fixes-checklist" data-search="manual-fixes-checklist manual-fixes checklist measure">
-              <div class="skill-card-top">
-                <div class="skill-name">manual-fixes-checklist</div>
-                <div class="skill-targets"><span class="target-badge target-both">Figma + Chrome</span></div>
-              </div>
-              <p class="skill-desc">Audits, dry-runs every fixer, then reports only what survives — grouped and prioritised. An honest to-do list for the last mile to 100%, so nobody promises a score the tools cannot reach.</p>
-              <p class="skill-triggers"><strong>Answers:</strong> "What is left for a human after the auto-fixers have run?"</p>
-            </div>
-
+            <div class="lynn-mount" id="lynn-grid-skills-measure"></div>
           </div>
         </div>
 
@@ -836,15 +479,7 @@
             <span class="subsection-note">Set expectations and scope before anything gets rewritten.</span>
           </div>
           <div class="tool-grid">
-            <div class="skill-card" id="skill-lyra-visual-patterns" data-search="lyra-visual-patterns lyra visual patterns convert">
-              <div class="skill-card-top">
-                <div class="skill-name">lyra-visual-patterns</div>
-                <div class="skill-targets"><span class="target-badge target-both">Figma + Chrome</span></div>
-              </div>
-              <p class="skill-desc">Reference for Lyra page chrome, surfaces, tables, panels, nav, chips and AI affordances in light and dark. Load it before any conversion and you know what you are going to get — no surprise redesigns.</p>
-              <p class="skill-triggers"><strong>Answers:</strong> "What is a correctly-converted Lyra page supposed to look like?"</p>
-            </div>
-
+            <div class="lynn-mount" id="lynn-grid-skills-convert"></div>
           </div>
         </div>
 
@@ -856,24 +491,7 @@
             <span class="subsection-note">Produce the spec or the CSS a developer can build from.</span>
           </div>
           <div class="tool-grid">
-            <div class="skill-card" id="skill-figma-element-css" data-search="figma-element-css figma element → css handoff">
-              <div class="skill-card-top">
-                <div class="skill-name">figma-element-css</div>
-                <div class="skill-targets"><span class="target-badge target-figma">Figma only</span></div>
-              </div>
-              <p class="skill-desc">Turns the selected Figma node into production CSS with Lyra tokens substituted where they match. Output that survives a theme change, instead of hard-coded hex and px.</p>
-              <p class="skill-triggers"><strong>Answers:</strong> "What is the CSS for this layer?"</p>
-            </div>
-
-            <div class="skill-card" id="skill-browser-element-specs" data-search="browser-element-specs browser element → spec sheet handoff">
-              <div class="skill-card-top">
-                <div class="skill-name">browser-element-specs</div>
-                <div class="skill-targets"><span class="target-badge target-chrome">Chrome only</span></div>
-              </div>
-              <p class="skill-desc">Pulls computed CSS for the inspected element and annotates every raw value with its nearest token. A spec a developer can act on, not just a description of what is there.</p>
-              <p class="skill-triggers"><strong>Answers:</strong> "What are the design specs of this element on the page?"</p>
-            </div>
-
+            <div class="lynn-mount" id="lynn-grid-skills-handoff"></div>
           </div>
         </div>
 
@@ -885,24 +503,7 @@
             <span class="subsection-note">Compare what was designed against what actually shipped.</span>
           </div>
           <div class="tool-grid">
-            <div class="skill-card" id="skill-figma-chrome-parity" data-search="figma-chrome-parity figma ↔ chrome parity parity">
-              <div class="skill-card-top">
-                <div class="skill-name">figma-chrome-parity</div>
-                <div class="skill-targets"><span class="target-badge target-both">Both required</span></div>
-              </div>
-              <p class="skill-desc">Aligns Figma layers to page elements by name and diffs colors, type, spacing, radius and shadows. Ends the "it looks off but I cannot say why" review with a per-property drift table.</p>
-              <p class="skill-triggers"><strong>Answers:</strong> "Does the live site actually match the Figma?"</p>
-            </div>
-
-            <div class="skill-card" id="skill-artboard-to-page" data-search="artboard-to-page artboard → live page parity">
-              <div class="skill-card-top">
-                <div class="skill-name">artboard-to-page</div>
-                <div class="skill-targets"><span class="target-badge target-both">Both required</span></div>
-              </div>
-              <p class="skill-desc">Maps artboard styling onto page selectors and applies it as CSS overrides after you confirm the mapping. Demo a redesign on the real product in minutes, with no branch and no build.</p>
-              <p class="skill-triggers"><strong>Answers:</strong> "Can we make this real page look like this artboard?"</p>
-            </div>
-
+            <div class="lynn-mount" id="lynn-grid-skills-parity"></div>
           </div>
         </div>
 
@@ -914,15 +515,7 @@
             <span class="subsection-note">Catch what only breaks in the real browser.</span>
           </div>
           <div class="tool-grid">
-            <div class="skill-card" id="skill-dark-mode-parity" data-search="dark-mode-parity dark-mode parity qa">
-              <div class="skill-card-top">
-                <div class="skill-name">dark-mode-parity</div>
-                <div class="skill-targets"><span class="target-badge target-chrome">Chrome only</span></div>
-              </div>
-              <p class="skill-desc">Audits colors in light, simulates dark, audits again, and always restores the baseline. Only the delta — what breaks in dark and what breaks in light. No re-reading the full audit.</p>
-              <p class="skill-triggers"><strong>Answers:</strong> "Does this page work in dark mode, or only in light?"</p>
-            </div>
-
+            <div class="lynn-mount" id="lynn-grid-skills-qa"></div>
           </div>
         </div>
 
@@ -934,15 +527,7 @@
             <span class="subsection-note">Feed what you learn back into the system itself.</span>
           </div>
           <div class="tool-grid">
-            <div class="skill-card" id="skill-token-candidates" data-search="token-candidates token candidates system">
-              <div class="skill-card-top">
-                <div class="skill-name">token-candidates</div>
-                <div class="skill-targets"><span class="target-badge target-both">Figma + Chrome</span></div>
-              </div>
-              <p class="skill-desc">Groups recurring raw values across all four domains and ranks the ones worth promoting. Fixes the cause once upstream instead of the same symptom on thirty screens.</p>
-              <p class="skill-triggers"><strong>Answers:</strong> "Which of these custom values should just become Lyra tokens?"</p>
-            </div>
-
+            <div class="lynn-mount" id="lynn-grid-skills-system"></div>
           </div>
         </div>
 
@@ -951,18 +536,10 @@
           <div class="subsection-label">
             <span class="sub-dot" style="background:#14b8a6"></span>
             <span style="color:#14b8a6">Decide &amp; review</span>
-            <span class="subsection-note">Pass, fail, or not-yet — with the reasoning written down.</span>
+            <span class="subsection-note">Pass, fail, or not-yet - with the reasoning written down.</span>
           </div>
           <div class="tool-grid">
-            <div class="skill-card" id="skill-ux-eval" data-search="ux-eval ten-question ux eval decide">
-              <div class="skill-card-top">
-                <div class="skill-name">ux-eval</div>
-                <div class="skill-targets"><span class="target-badge target-both">Figma + Chrome</span></div>
-              </div>
-              <p class="skill-desc">Answers all ten prioritisation questions against real evidence, then states pass / pass-with-conditions / not-yet. A defensible verdict with the reasoning attached — the thing you can actually take to a VP.</p>
-              <p class="skill-triggers"><strong>Answers:</strong> "Is this good enough to move to the next step, or to dev?" <span style="color:rgba(255,255,255,0.35);font-style:normal;">— by Bill Bangs</span></p>
-            </div>
-
+            <div class="lynn-mount" id="lynn-grid-skills-decide"></div>
           </div>
         </div>
 
@@ -974,15 +551,7 @@
             <span class="subsection-note">Real context on NICE and its products, so design work is grounded instead of generic.</span>
           </div>
           <div class="tool-grid">
-            <div class="skill-card" id="skill-nice-product-knowledge" data-search="nice-product-knowledge nice product knowledge knowledge">
-              <div class="skill-card-top">
-                <div class="skill-name">nice-product-knowledge</div>
-                <div class="skill-targets"><span class="target-badge target-both">Figma + Chrome</span></div>
-              </div>
-              <p class="skill-desc">Sourced reference on NICE the company and its product lines (CXone Mpower, Enlighten AI, Actimize, Evidencentral) — compiled from public material with citations. Design decisions grounded in what the real product and its real users are, instead of generic SaaS assumptions.</p>
-              <p class="skill-triggers"><strong>Answers:</strong> "What does this NICE product actually do, and who uses it?"</p>
-            </div>
-
+            <div class="lynn-mount" id="lynn-grid-skills-knowledge"></div>
           </div>
         </div>
 
@@ -1032,56 +601,540 @@
     glow.style.opacity = '1';
   });
 
-  document.querySelectorAll('.suite-card, .mcp-card, .skill-card').forEach(function(card) {
-    card.addEventListener('mousemove', function(e) {
-      var r = card.getBoundingClientRect();
-      var x = (e.clientX - r.left) / r.width;
-      var y = (e.clientY - r.top) / r.height;
-      card.style.setProperty('--mx', (x * 100) + '%');
-      card.style.setProperty('--my', (y * 100) + '%');
-      var tx = (y - 0.5) * -7;
-      var ty = (x - 0.5) * 7;
-      card.style.transform = 'perspective(800px) rotateX(' + tx + 'deg) rotateY(' + ty + 'deg) translateZ(3px)';
-      card.style.transition = 'transform .07s ease';
+  // `.mcp-card` / `.skill-card` are lynn-ui <Card interactive> now (mount
+  // script at the end of <body>) - that component's own useTiltSpotlight
+  // hook gives them this exact tilt, so they no longer need wiring here.
+  // The 4 suite tool cards are <FeatureCard>, which has no built-in tilt;
+  // `polish()` reproduces it for those, exposed as `window.NicePolish` for
+  // the mount script to call once the cards exist (a tick after this runs).
+  function polish(cards) {
+    cards.forEach(function(card) {
+      if (card.dataset.nicePolished === '1') return;
+      card.dataset.nicePolished = '1';
+      card.addEventListener('mousemove', function(e) {
+        var r = card.getBoundingClientRect();
+        var x = (e.clientX - r.left) / r.width;
+        var y = (e.clientY - r.top) / r.height;
+        card.style.setProperty('--mx', (x * 100) + '%');
+        card.style.setProperty('--my', (y * 100) + '%');
+        var tx = (y - 0.5) * -7;
+        var ty = (x - 0.5) * 7;
+        card.style.transform = 'perspective(800px) rotateX(' + tx + 'deg) rotateY(' + ty + 'deg) translateZ(3px)';
+        card.style.transition = 'transform .07s ease';
+      });
+      card.addEventListener('mouseleave', function() {
+        card.style.transform = '';
+        card.style.transition = 'transform .4s cubic-bezier(.23,1,.32,1)';
+      });
     });
-    card.addEventListener('mouseleave', function() {
-      card.style.transform = '';
-      card.style.transition = 'transform .4s cubic-bezier(.23,1,.32,1)';
-    });
-  });
+  }
+  window.NicePolish = { polish: polish };
   </script>
 
-  <script>
-  </script>
+  <!-- FOOTER (lynn-ui <Footer>) -->
+  <div id="lynn-footer-root" class="lynn-mount"></div>
 
-  <footer class="site-footer">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="footer-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></div>
-      </div>
-      <nav class="footer-nav">
-        <div class="footer-nav-col">
-          <a href="./index.html">Overview</a>
-          <a href="./install-guide.html">Install Guide</a>
-          <a href="./claude-skills.html">Claude Skills</a>
-          <a href="./the-suite.html">The Suite</a>
-        </div>
-        <div class="footer-nav-col">
-          <a href="./use-cases.html">Use Cases</a>
-          <a href="./scoring.html">Scoring</a>
-          <a href="./dashboard.html">Dashboard</a>
-          <a href="./roadmap.html">Roadmap</a>
-        </div>
-        <div class="footer-nav-col">
-          <a href="./release-notes.html">Release Notes</a>
-          <a href="./faq.html">FAQ</a>
-          <a href="./tools.html" class="active">Tools</a>
-          <a href="./marketplace.html">Marketplace</a>
-          <a href="./lynn.html">Lynn</a>
-        </div>
-      </nav>
-    </div>
-  </footer>
+  <!-- ===== lynn-ui mount =====
+       One createRoot, one ThemeProvider: the access gate, the nav, the doc
+       rail, the footer, and the suite/mcp/skill card grids. Kept in a single
+       root so the theme stays in sync between them. Anything that belongs
+       elsewhere in the document (nav, doc rail, footer, each subsection's
+       card grid) is placed with createPortal into the matching placeholder,
+       exactly as the-suite.html does it. -->
+  <script type="module">
+    import { createElement as h, Fragment, useEffect, useState } from 'react';
+    import { createPortal } from 'react-dom';
+    import { createRoot } from 'react-dom/client';
+    import {
+      AccessGate,
+      Badge,
+      Card,
+      DocRail,
+      FeatureCard,
+      Footer,
+      Nav,
+      ThemeProvider,
+      ThemeToggle,
+      useLynnTheme,
+    } from './lynn-ui/dist/index.js';
+
+    const PAGE = 'tools.html';
+
+    /* ---- the real gate, ported from site-gate.js ------------------------ */
+    const GATE_KEY = 'nice-site-access';
+    const GATE_PASSWORD = 'niceux';
+    const GATE_ERROR = 'Incorrect code. Contact Erick Mathews on Teams for access.';
+    const TEAMS_HREF = 'https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com';
+
+    /* ---- doc rail ------------------------------------------------------- */
+    const RAIL_KEY = 'nice-doc-rail-collapsed';
+    const DOC_PAGES = (window.NiceEffects && window.NiceEffects.docPages) || [];
+    const railPages = DOC_PAGES.map((page) => ({
+      href: './' + page.href,
+      label: page.label,
+    }));
+    const railGroups = (DOC_PAGES.find((page) => page.href === PAGE) || {}).groups || [];
+
+    /* ---- footer ----------------------------------------------------------*/
+    const FOOTER_COLUMNS = [
+      {
+        title: 'Product',
+        links: [
+          { label: 'Overview', href: './index.html' },
+          { label: 'Install Guide', href: './install-guide.html' },
+          { label: 'Claude Skills', href: './claude-skills.html' },
+          { label: 'The Suite', href: './the-suite.html' },
+        ],
+      },
+      {
+        title: 'Learn',
+        links: [
+          { label: 'Use Cases', href: './use-cases.html' },
+          { label: 'Scoring', href: './scoring.html' },
+          { label: 'Dashboard', href: './dashboard.html' },
+          { label: 'Roadmap', href: './roadmap.html' },
+        ],
+      },
+      {
+        title: 'Reference',
+        links: [
+          { label: 'Release Notes', href: './release-notes.html' },
+          { label: 'FAQ', href: './faq.html' },
+          { label: 'Tools', href: './tools.html', active: true },
+          { label: 'Marketplace', href: './marketplace.html' },
+          { label: 'Lynn', href: './lynn.html' },
+        ],
+      },
+    ];
+
+    /* ---- the nav's single action slot, unchanged from the markup it
+       replaces: the disabled Download pill plus its "Coming soon!" tag. ---- */
+    const downloadPill = (key) =>
+      h(
+        'span',
+        { key, className: 'nav-download is-disabled', 'aria-disabled': 'true' },
+        'Download',
+        h('span', { className: 'coming-soon-tag' }, 'Coming soon!')
+      );
+
+    /* ---- target badge: figma=blue, chrome=emerald, both=teal, all bordered,
+       exactly matching the `.target-figma`/`.target-chrome`/`.target-both`
+       pairs this replaces. ------------------------------------------------ */
+    function targetBadge(tone, label, key) {
+      return h(Badge, { key: key || 'target', tone, bordered: true }, label);
+    }
+
+    /* ---- card data, ported 1:1 from the static markup it replaces -------- */
+        const SUITE_SECTIONS = {
+          "suite-audit": [
+            {
+              ds: "audit compliance score lyra sol colors text spacing radius components accessibility a11y wcag parity",
+              iconPaths: "<path d=\"M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0\"/><path d=\"M21 21l-6 -6\"/>",
+              iconGradient: "linear-gradient(90deg,#3694FC,#025AFB)",
+              accentColor: "#3694FC",
+              name: "Frontend Audit",
+              desc: "One score for design-system compliance and accessibility. Audits color, typography, spacing, radius, components, and WCAG issues in a single pass, with colorblind simulation and tap-target overlays on Chrome, plus a cross-client parity check that diffs a Figma artboard against the live page via Supercharge - filtered and ranked by severity so you know what to fix first.",
+              tags: ["Figma","Chrome","Storybook","Parity","Read-only"],
+            },
+          ],
+          "suite-editor": [
+            {
+              ds: "editor browser layer panel magic effects dark mode liquid plasma undo redo history chrome",
+              iconPaths: "<path d=\"M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25\"/><path d=\"M7.5 10.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0\"/><path d=\"M11.5 7.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0\"/><path d=\"M15.5 10.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0\"/>",
+              iconGradient: "linear-gradient(90deg,#3694FC,#025AFB)",
+              accentColor: "#3694FC",
+              name: "Frontend Editor",
+              desc: "Design directly in the browser: a familiar layer panel for any live page, real-time style overrides with no code, Magic effects (dark mode, hover glow, liquid/plasma & more), and full edit history with undo & redo.",
+              tags: ["Chrome only","Layer panel","Magic effects","History"],
+            },
+          ],
+          "suite-handoff": [
+            {
+              ds: "spec mode handoff developer css tokens export figma chrome dev-facing",
+              iconPaths: "<path d=\"M17 3l4 4l-14 14l-4 -4l14 -14\"/><path d=\"M16 7l-1.5 -1.5\"/><path d=\"M13 10l-1.5 -1.5\"/><path d=\"M10 13l-1.5 -1.5\"/><path d=\"M7 16l-1.5 -1.5\"/>",
+              iconGradient: "linear-gradient(90deg,#6100FF,#B98FFF)",
+              accentColor: "#B98FFF",
+              name: "Spec Mode",
+              desc: "Select and inspect any element, in Figma or on a live page, and get production CSS with Lyra tokens substituted in automatically - spacing, type, color, and radius in one copy-ready view.",
+              tags: ["Figma","Chrome","Dev-facing"],
+            },
+          ],
+          "suite-designSystem": [
+            {
+              ds: "design system tokens components storybook lyra sol export json css candidates promote",
+              iconPaths: "<path d=\"M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0\"/><path d=\"M14.8 9a2 2 0 0 0 -1.8 -1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1 -1.8 -1\"/><path d=\"M12 7v10\"/>",
+              iconGradient: "linear-gradient(90deg,#36EAD0,#00E2A0)",
+              accentColor: "#36EAD0",
+              name: "Design System",
+              desc: "Browse every SOL and Lyra token - color, type, spacing, and radius - plus live component previews pulled straight from Storybook on Chrome, with Angular and React props, variants, and states. One-click sync pulls the whole library.",
+              tags: ["Figma","Chrome","Storybook"],
+            },
+          ],
+        };
+
+        const MCP_SECTIONS = {
+          "mcp-connect": [
+            { ds: "list_targets see what is connected connect", name: "list_targets", tone: "teal", targetLabel: "Figma + Chrome", desc: "Lists which clients - Figma, Chrome, or both - are live on the MCP hub right now.", why: "Stops you from waiting on a tool that was never going to reach anything. Always the cheapest first call." },
+            { ds: "get_diagnostics troubleshoot the connection connect", name: "get_diagnostics", tone: "teal", targetLabel: "Figma + Chrome", desc: "Full health report on the bridge: this process, the hub, connected sessions, recent drop-outs, and a plain-English next step.", why: "Turns \"it just does not work\" into a specific thing to click. Run it the moment a tool says nothing is connected." },
+            { ds: "check_libraries check the design library is linked connect", name: "check_libraries", tone: "blue", targetLabel: "Figma only", desc: "Verifies the SOL or Lyra library is actually linked to the open Figma file.", why: "A missing library silently makes every conversion fall back to bundled values. This catches that before you convert anything." },
+          ],
+          "mcp-scope": [
+            { ds: "get_selection_info what is selected right now scope", name: "get_selection_info", tone: "teal", targetLabel: "Figma + Chrome", desc: "Reports the selected Figma layer or the inspected Chrome element, so scope is explicit rather than assumed.", why: "Guarantees the audit or fix lands on the thing you meant. No silent whole-page conversions when you wanted one button." },
+            { ds: "select_page reset scope to the whole page scope", name: "select_page", tone: "emerald", targetLabel: "Chrome only", desc: "Clears the inspected element so audits and fixes cover the entire page again.", why: "One call to zoom back out after drilling into a component." },
+            { ds: "start_inspect start element picking scope", name: "start_inspect", tone: "emerald", targetLabel: "Chrome only", desc: "Turns on the extension's inspect mode so the next element you click becomes the scope.", why: "Point at the thing you care about instead of describing it in words." },
+            { ds: "stop_inspect stop element picking scope", name: "stop_inspect", tone: "emerald", targetLabel: "Chrome only", desc: "Leaves inspect mode without changing the current selection.", why: "Gets the picking cursor out of your way so you can use the page normally." },
+            { ds: "focus_node jump to a layer in figma scope", name: "focus_node", tone: "blue", targetLabel: "Figma only", desc: "Scrolls to and selects a specific node id on the Figma canvas.", why: "Every audit row becomes clickable - go straight from \"issue #14\" to the actual layer." },
+            { ds: "screenshot_page screenshot what you are looking at scope", name: "screenshot_page", tone: "teal", targetLabel: "Figma + Chrome", desc: "Captures the current page or artboard as an image Claude can look at directly.", why: "Lets Claude judge things a token audit cannot see - visual hierarchy, crowding, whether it simply looks wrong." },
+          ],
+          "mcp-measure": [
+            { ds: "run_full_audit full compliance score measure", name: "run_full_audit", tone: "teal", targetLabel: "Figma + Chrome", desc: "Audits colors, typography, spacing, radius, components and accessibility in one pass and returns an overall 0–100 score with per-domain issue counts.", why: "One number you can put in front of a stakeholder, plus the exact list of what is dragging it down." },
+            { ds: "lyra_compliance_report lyra readiness report measure", name: "lyra_compliance_report", tone: "teal", targetLabel: "Figma + Chrome", desc: "A full audit plus the accessibility pass, pinned to Lyra, formatted as a report rather than a raw issue dump.", why: "The artifact to paste into a design review or a ticket - score, gauge, and the top offenders, already prose." },
+            { ds: "audit_colors score the colors measure", name: "audit_colors", tone: "teal", targetLabel: "Figma + Chrome", desc: "Classifies every fill and stroke as on-token, bound to the wrong design system, or a raw value with no binding.", why: "Tells you not just how many colors are off but how many are one click from being right - so you know whether this is ten minutes of work or a week." },
+            { ds: "audit_text_styles score the typography measure", name: "audit_text_styles", tone: "teal", targetLabel: "Figma + Chrome", desc: "Matches every text node on family, size and weight together, and names the role-equivalent token it should be using.", why: "Catches the sneaky case - right size, wrong family - that eyeballing a design never finds." },
+            { ds: "audit_spacing score the spacing measure", name: "audit_spacing", tone: "teal", targetLabel: "Figma + Chrome", desc: "Finds padding, gap and margin values that are off-scale, or on-scale but not bound to a variable.", why: "Surfaces the \"looks fine, breaks on theme change\" class of problem, which is most of what fails in handoff." },
+            { ds: "audit_radius score the corner radii measure", name: "audit_radius", tone: "teal", targetLabel: "Figma + Chrome", desc: "Finds corner radii that are off-scale or unbound, reading the real per-corner binding slots.", why: "Radius drift is the fastest way a page stops looking like the system. This is the cheapest audit to act on." },
+            { ds: "audit_components score the components measure", name: "audit_components", tone: "blue", targetLabel: "Figma only", desc: "Finds instances from the wrong library or from no library, and names a 1:1 replacement where one exists.", why: "Detached and off-system components are what make a file un-maintainable. This is the list to fix first." },
+            { ds: "audit_accessibility score accessibility measure", name: "audit_accessibility", tone: "teal", targetLabel: "Figma + Chrome", desc: "WCAG-oriented scan: contrast, tap targets, small text, ARIA, alt text, labels, focus outlines, heading order, landmarks.", why: "Errors and warnings split out separately, so you can see what is a genuine blocker versus what is polish." },
+            { ds: "scan_variables list the variables in use measure", name: "scan_variables", tone: "teal", targetLabel: "Figma + Chrome", desc: "Enumerates every variable currently bound in the scope, and every property that should be bound but is not.", why: "The raw data behind the spacing and radius scores, if you want to reason about bindings yourself." },
+            { ds: "get_audit_filters see what the score ignores measure", name: "get_audit_filters", tone: "teal", targetLabel: "Figma + Chrome", desc: "Returns the user's active audit filters - which issue classes are currently excluded from the score.", why: "Keeps the score honest. A 96 with contrast checks switched off is not a 96, and this is how you find out." },
+            { ds: "set_audit_filters change what the score ignores measure", name: "set_audit_filters", tone: "teal", targetLabel: "Figma + Chrome", desc: "Turns individual issue classes in or out of scope for the score.", why: "Lets you park issues that are genuinely out of scope for this project without them nagging in every audit." },
+          ],
+          "mcp-fix-bulk": [
+            { ds: "convert_page_to_lyra convert the whole page to lyra fix-bulk", name: "convert_page_to_lyra", tone: "emerald", targetLabel: "Chrome only", desc: "Runs every applicable fixer across a live page and returns a before/after score delta.", why: "The single biggest jump in score you can get in one call - and you see exactly how many points it bought." },
+            { ds: "migrate_to_lyra convert the whole frame to lyra fix-bulk", name: "migrate_to_lyra", tone: "blue", targetLabel: "Figma only", desc: "The Figma equivalent: applies the selected fixer families across a frame and reports the score delta.", why: "Migrates a whole artboard without hand-picking rows, with a before/after gauge to show your team." },
+            { ds: "convert_colors apply color tokens fix-bulk", name: "convert_colors", tone: "teal", targetLabel: "Figma + Chrome", desc: "Binds the chosen color tokens to the listed fills and strokes.", why: "Reports how many of the original color issues it actually resolved, so a partial fix never gets reported as a win." },
+            { ds: "convert_text_styles apply typography tokens fix-bulk", name: "convert_text_styles", tone: "teal", targetLabel: "Figma + Chrome", desc: "Applies the matching type token to the given text nodes, or to every eligible one.", why: "Type is the most visible domain - this is the change people notice, and it comes with a resolved-count." },
+            { ds: "fix_spacing bind spacing tokens fix-bulk", name: "fix_spacing", tone: "teal", targetLabel: "Figma + Chrome", desc: "Binds spacing variables to off-scale or unbound padding, gap and margin values.", why: "Usually the highest-yield, lowest-risk fix in the set - values barely move, but the score does." },
+            { ds: "fix_radius bind radius tokens fix-bulk", name: "fix_radius", tone: "teal", targetLabel: "Figma + Chrome", desc: "Binds radius variables to off-scale or unbound corner radii.", why: "Small visual change, large consistency gain, and it takes one call." },
+            { ds: "fix_accessibility apply accessibility fixes fix-bulk", name: "fix_accessibility", tone: "teal", targetLabel: "Figma + Chrome", desc: "Applies the automated remediation for a specific accessibility issue type on a node.", why: "Clears the mechanical a11y failures - labels, alt text, tap targets - so human attention goes to the judgement calls." },
+            { ds: "convert_component swap a component for its system twin fix-bulk", name: "convert_component", tone: "blue", targetLabel: "Figma only", desc: "Replaces one instance with the equivalent component from the target design system.", why: "Gets you a real library instance - inheriting future updates - instead of a look-alike that drifts." },
+            { ds: "convert_mode switch light / dark mode fix-bulk", name: "convert_mode", tone: "teal", targetLabel: "Figma + Chrome", desc: "Re-binds the scope to the light or dark tokens of the given system.", why: "Produces a genuine dark variant built from tokens, not an inverted screenshot." },
+            { ds: "generate_multi_system duplicate into the other system fix-bulk", name: "generate_multi_system", tone: "blue", targetLabel: "Figma only", desc: "Copies the selection and converts the copy to the other design system, leaving the original untouched.", why: "Side-by-side SOL and Lyra versions for a migration pitch, with zero risk to the original." },
+          ],
+          "mcp-fix-one": [
+            { ds: "apply_single_color set one color fix-one", name: "apply_single_color", tone: "teal", targetLabel: "Figma + Chrome", desc: "Applies one color token - or a raw hex via customHex - to a single fill or stroke.", why: "Try a value in one call and undo it in one call. This is the lane for \"just make this blue\"." },
+            { ds: "apply_single_text set one text style fix-one", name: "apply_single_text", tone: "teal", targetLabel: "Figma + Chrome", desc: "Applies one type token - or a raw size via customFontSize - to a single text node.", why: "Iterate on one heading without touching the other forty." },
+            { ds: "apply_single_spacing set one spacing value fix-one", name: "apply_single_spacing", tone: "teal", targetLabel: "Figma + Chrome", desc: "Applies one spacing token - or a raw number via customValue - to a single property.", why: "Nudge one gap by hand when the token scale genuinely does not have the right step." },
+            { ds: "apply_single_radius set one corner radius fix-one", name: "apply_single_radius", tone: "teal", targetLabel: "Figma + Chrome", desc: "Applies one radius token - or a raw number via customValue - to a single corner or all four.", why: "Fix the one card whose corners are wrong, without a page-wide pass." },
+            { ds: "revert_single_color undo that one color fix-one", name: "revert_single_color", tone: "teal", targetLabel: "Figma + Chrome", desc: "Restores the snapshot captured when that exact fill or stroke was changed.", why: "Per-row undo that survives other edits - no losing four good changes to walk back a fifth." },
+            { ds: "revert_single_text undo that one text style fix-one", name: "revert_single_text", tone: "teal", targetLabel: "Figma + Chrome", desc: "Restores the snapshot captured when that text node was changed.", why: "Try a type token, dislike it, put it back exactly as it was." },
+            { ds: "revert_single_spacing undo that one spacing value fix-one", name: "revert_single_spacing", tone: "teal", targetLabel: "Figma + Chrome", desc: "Restores the snapshot captured when that spacing property was changed.", why: "Reverses a single nudge without disturbing the rest of the layout." },
+            { ds: "revert_single_radius undo that one corner radius fix-one", name: "revert_single_radius", tone: "teal", targetLabel: "Figma + Chrome", desc: "Restores the snapshot captured when that radius was changed.", why: "Reverses a single radius edit cleanly." },
+          ],
+          "mcp-undo": [
+            { ds: "undo_last_conversion undo the last bulk change undo", name: "undo_last_conversion", tone: "teal", targetLabel: "Figma + Chrome", desc: "Rolls back the most recent bulk conversion in one call.", why: "Lets you run a big conversion to see what it does, knowing the exit is one sentence away." },
+            { ds: "get_conversion_history list every change made undo", name: "get_conversion_history", tone: "teal", targetLabel: "Figma + Chrome", desc: "Returns the ordered history of applied changes with the current position in it.", why: "A written record of what this session actually touched - useful for a changelog or a handoff note." },
+            { ds: "revert_to_history_index rewind to an earlier point undo", name: "revert_to_history_index", tone: "teal", targetLabel: "Figma + Chrome", desc: "Steps the design back to a chosen entry in the history.", why: "Explore aggressively, then land on whichever version was best - not just the last one." },
+          ],
+          "mcp-restyle": [
+            { ds: "apply_css_overrides inject css rules restyle", name: "apply_css_overrides", tone: "emerald", targetLabel: "Chrome only", desc: "Injects selector-scoped CSS declarations into the live page.", why: "Restyle anything on a page you do not own, and see the result immediately. Pass clear:true so re-runs replace rather than stack." },
+            { ds: "clear_css_overrides remove injected css restyle", name: "clear_css_overrides", tone: "emerald", targetLabel: "Chrome only", desc: "Strips every override this session injected, returning the page to its shipped styling.", why: "A clean baseline in one call, so an experiment never contaminates the next audit." },
+            { ds: "polish_page page view toggles restyle", name: "polish_page", tone: "emerald", targetLabel: "Chrome only", desc: "Toggles dark-mode simulation, token-styled scrollbars, and positional hover overlays.", why: "Dark mode without a build, on any page - the fastest way to find out what breaks." },
+            { ds: "a11y_overlay accessibility overlays restyle", name: "a11y_overlay", tone: "emerald", targetLabel: "Chrome only", desc: "Toggles small-tap-target highlighting, non-token color flagging, and colorblind simulation.", why: "Makes accessibility problems visible on screen, which is far more persuasive in a review than a list of counts." },
+          ],
+          "mcp-handoff": [
+            { ds: "extract_dev_details spec sheet for one element handoff", name: "extract_dev_details", tone: "teal", targetLabel: "Figma + Chrome", desc: "Size, fills, strokes, typography, auto-layout and CSS for the current selection.", why: "The handoff spec a developer asks for, without a screenshot-and-annotate round trip." },
+            { ds: "extract_all_css export the whole thing as css handoff", name: "extract_all_css", tone: "teal", targetLabel: "Figma + Chrome", desc: "Emits a CSS document covering every node in scope.", why: "A real starting point for implementation rather than a pile of values to retype." },
+            { ds: "extract_token_css export css custom properties handoff", name: "extract_token_css", tone: "teal", targetLabel: "Figma + Chrome", desc: "Emits the design system's tokens as CSS custom properties.", why: "Drop it into a stylesheet and the rest of the exported CSS resolves against real tokens." },
+            { ds: "export_design_tokens export the token palettes handoff", name: "export_design_tokens", tone: "teal", targetLabel: "Figma + Chrome", desc: "Returns the color, type, spacing and radius palettes for SOL or Lyra in either mode.", why: "Lets Claude propose real token names instead of guessing at them from memory." },
+            { ds: "sync_storybook_components sync components from storybook handoff", name: "sync_storybook_components", tone: "teal", targetLabel: "Figma + Chrome", desc: "Pulls the live component inventory from a Storybook instance into the plugin.", why: "Component audits start matching what engineering actually shipped, not last quarter's library." },
+            { ds: "get_storybook_sync_status storybook sync status handoff", name: "get_storybook_sync_status", tone: "teal", targetLabel: "Figma + Chrome", desc: "Reports when the last sync ran and how many components it brought in.", why: "Tells you whether a component audit is trustworthy or built on stale data." },
+          ],
+          "mcp-decide": [
+            { ds: "run_ux_eval ten-question ux eval decide", name: "run_ux_eval", tone: "teal", targetLabel: "Figma + Chrome", desc: "Assembles a live audit, the design and ticket links, and the 10-question prioritisation framework - then hands the judgement to Claude.", why: "The answer to \"is this ready for dev?\" argued on reach, real pain and opportunity cost - not just on whether the tokens are clean." },
+          ],
+          "mcp-maintain": [
+            { ds: "check_for_updates check for a newer server build maintain", name: "check_for_updates", tone: "teal", targetLabel: "Figma + Chrome", desc: "Fetches origin and reports whether the local MCP server checkout is behind, with the commit list and version numbers.", why: "Know there is an update before running it, instead of finding out a feature is missing after the fact." },
+            { ds: "install_update pull and install the latest build maintain", name: "install_update", tone: "teal", targetLabel: "Figma + Chrome", desc: "Fast-forwards the local checkout to origin and runs npm install for whatever changed. Only works from a git checkout, and only when the working tree is clean.", why: "Gets new tools and fixes onto disk in one call - though the running process still needs a restart to actually load them, which the response always states." },
+          ],
+          "mcp-escape": [
+            { ds: "call_plugin send a raw plugin message escape", name: "call_plugin", tone: "teal", targetLabel: "Figma + Chrome", desc: "Forwards any raw UIMessage straight to the plugin, bypassing the typed tools.", why: "Reaches plugin capability that has no tool yet. Powerful, unvalidated - use it when nothing else fits." },
+          ],
+        };
+
+        const SKILL_SECTIONS = {
+          "skills-measure": [
+            { id: "skill-a11y-triage", ds: "a11y-triage accessibility triage measure", name: "a11y-triage", tone: "teal", targetLabel: "Figma + Chrome", desc: "Ranks accessibility issues by severity × reach and returns a top-N action list. Converts an unreadable issue dump into three things to fix this afternoon.", answer: "I have hundreds of a11y issues - where do I actually start?", attribution: null },
+            { id: "skill-manual-fixes-checklist", ds: "manual-fixes-checklist manual-fixes checklist measure", name: "manual-fixes-checklist", tone: "teal", targetLabel: "Figma + Chrome", desc: "Audits, dry-runs every fixer, then reports only what survives - grouped and prioritised. An honest to-do list for the last mile to 100%, so nobody promises a score the tools cannot reach.", answer: "What is left for a human after the auto-fixers have run?", attribution: null },
+          ],
+          "skills-convert": [
+            { id: "skill-lyra-visual-patterns", ds: "lyra-visual-patterns lyra visual patterns convert", name: "lyra-visual-patterns", tone: "teal", targetLabel: "Figma + Chrome", desc: "Reference for Lyra page chrome, surfaces, tables, panels, nav, chips and AI affordances in light and dark. Load it before any conversion and you know what you are going to get - no surprise redesigns.", answer: "What is a correctly-converted Lyra page supposed to look like?", attribution: null },
+          ],
+          "skills-handoff": [
+            { id: "skill-figma-element-css", ds: "figma-element-css figma element → css handoff", name: "figma-element-css", tone: "blue", targetLabel: "Figma only", desc: "Turns the selected Figma node into production CSS with Lyra tokens substituted where they match. Output that survives a theme change, instead of hard-coded hex and px.", answer: "What is the CSS for this layer?", attribution: null },
+            { id: "skill-browser-element-specs", ds: "browser-element-specs browser element → spec sheet handoff", name: "browser-element-specs", tone: "emerald", targetLabel: "Chrome only", desc: "Pulls computed CSS for the inspected element and annotates every raw value with its nearest token. A spec a developer can act on, not just a description of what is there.", answer: "What are the design specs of this element on the page?", attribution: null },
+          ],
+          "skills-parity": [
+            { id: "skill-figma-chrome-parity", ds: "figma-chrome-parity figma ↔ chrome parity parity", name: "figma-chrome-parity", tone: "teal", targetLabel: "Both required", desc: "Aligns Figma layers to page elements by name and diffs colors, type, spacing, radius and shadows. Ends the \"it looks off but I cannot say why\" review with a per-property drift table.", answer: "Does the live site actually match the Figma?", attribution: null },
+            { id: "skill-artboard-to-page", ds: "artboard-to-page artboard → live page parity", name: "artboard-to-page", tone: "teal", targetLabel: "Both required", desc: "Maps artboard styling onto page selectors and applies it as CSS overrides after you confirm the mapping. Demo a redesign on the real product in minutes, with no branch and no build.", answer: "Can we make this real page look like this artboard?", attribution: null },
+          ],
+          "skills-qa": [
+            { id: "skill-dark-mode-parity", ds: "dark-mode-parity dark-mode parity qa", name: "dark-mode-parity", tone: "emerald", targetLabel: "Chrome only", desc: "Audits colors in light, simulates dark, audits again, and always restores the baseline. Only the delta - what breaks in dark and what breaks in light. No re-reading the full audit.", answer: "Does this page work in dark mode, or only in light?", attribution: null },
+          ],
+          "skills-system": [
+            { id: "skill-token-candidates", ds: "token-candidates token candidates system", name: "token-candidates", tone: "teal", targetLabel: "Figma + Chrome", desc: "Groups recurring raw values across all four domains and ranks the ones worth promoting. Fixes the cause once upstream instead of the same symptom on thirty screens.", answer: "Which of these custom values should just become Lyra tokens?", attribution: null },
+          ],
+          "skills-decide": [
+            { id: "skill-ux-eval", ds: "ux-eval ten-question ux eval decide", name: "ux-eval", tone: "teal", targetLabel: "Figma + Chrome", desc: "Answers all ten prioritisation questions against real evidence, then states pass / pass-with-conditions / not-yet. A defensible verdict with the reasoning attached - the thing you can actually take to a VP.", answer: "Is this good enough to move to the next step, or to dev?", attribution: "- by Bill Bangs" },
+          ],
+          "skills-knowledge": [
+            { id: "skill-nice-product-knowledge", ds: "nice-product-knowledge nice product knowledge knowledge", name: "nice-product-knowledge", tone: "teal", targetLabel: "Figma + Chrome", desc: "Sourced reference on NICE the company and its product lines (CXone Mpower, Enlighten AI, Actimize, Evidencentral) - compiled from public material with citations. Design decisions grounded in what the real product and its real users are, instead of generic SaaS assumptions.", answer: "What does this NICE product actually do, and who uses it?", attribution: null },
+          ],
+        };
+
+    /* ---- render helpers --------------------------------------------------- */
+
+    /** The 4 suite tool cards: lynn-ui <FeatureCard density="compact">. The
+     * card's own longer description reads best in the `whyText` accent-quote
+     * slot rather than the short `tagline` line. */
+    function suiteCard(card, key) {
+      return h(FeatureCard, {
+        key,
+        density: 'compact',
+        icon: h('svg', {
+          width: 24, height: 24, viewBox: '0 0 24 24', fill: 'none',
+          stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round',
+          strokeLinejoin: 'round', 'aria-hidden': true,
+          dangerouslySetInnerHTML: { __html: card.iconPaths },
+        }),
+        iconGradient: card.iconGradient,
+        accentColor: card.accentColor,
+        name: card.name,
+        whyText: card.desc,
+        tags: card.tags,
+      });
+    }
+
+    /** The 55 MCP tool cards: a Card + Badge composite (FeatureCard has no
+     * slot that fits a monospace name-plus-badge header row, so this stays a
+     * small composite rather than a forced fit - see the mount script's
+     * top-of-file comment). `interactive: false` because these sit packed
+     * edge-to-edge in a dense grid, per Card's own usage note. */
+    function mcpCard(card, key) {
+      return h(
+        'div',
+        { key, 'data-search': card.ds },
+        h(
+          Card,
+          { interactive: false },
+          h(
+            'div',
+            { className: 'lynn-mcp-card-top' },
+            h('code', null, card.name),
+            targetBadge(card.tone, card.targetLabel)
+          ),
+          h('p', { className: 'lynn-mcp-desc' }, card.desc),
+          h('p', { className: 'lynn-mcp-why' }, h('strong', null, 'Why:'), ' ', card.why)
+        )
+      );
+    }
+
+    /** The 11 skill cards: same composite approach as MCP cards - the original
+     * carries no per-card icon at all (just a fixed left accent rule), so
+     * FeatureCard's required icon tile would add a gap that was never in the
+     * source. `interactive: true` since these sit 1-2 per subsection, not in
+     * a dense grid. */
+    function skillCard(card, key) {
+      return h(
+        'div',
+        { key, id: card.id, 'data-search': card.ds },
+        h(
+          Card,
+          { interactive: true, className: 'lynn-skill-card' },
+          h(
+            'div',
+            { className: 'lynn-skill-card-top' },
+            h('div', { className: 'lynn-skill-name' }, card.name),
+            h(
+              'div',
+              { className: 'lynn-skill-targets' },
+              targetBadge(card.tone, card.targetLabel)
+            )
+          ),
+          h('p', { className: 'lynn-skill-desc' }, card.desc),
+          h(
+            'p',
+            { className: 'lynn-skill-triggers' },
+            h('strong', null, 'Answers:'),
+            ' "' + card.answer + '"',
+            card.attribution
+              ? h('span', { style: { color: 'rgba(255,255,255,0.35)', fontStyle: 'normal' } }, ' ' + card.attribution)
+              : null
+          )
+        )
+      );
+    }
+
+    /* ThemeProvider stamps `data-lynn-theme` on its own wrapper div, but the
+       portalled chrome and cards live outside that div - mirror it onto <html>
+       too, matching the-suite.html / release-notes.html / 404.html. */
+    function ThemeBridge() {
+      const { theme } = useLynnTheme();
+      useEffect(() => {
+        document.documentElement.setAttribute('data-lynn-theme', theme);
+      }, [theme]);
+      return null;
+    }
+
+    function portal(node, id) {
+      const host = document.getElementById(id);
+      return host ? createPortal(node, host) : null;
+    }
+
+    function App() {
+      const [unlocked, setUnlocked] = useState(() => {
+        try {
+          return sessionStorage.getItem(GATE_KEY) === '1';
+        } catch (e) {
+          return false;
+        }
+      });
+      const [error, setError] = useState(undefined);
+      const [railCollapsed, setRailCollapsed] = useState(() => {
+        try {
+          return localStorage.getItem(RAIL_KEY) === '1';
+        } catch (e) {
+          return false;
+        }
+      });
+
+      useEffect(() => {
+        // The chrome is up; let the page paint (see the gate-pending guard in
+        // <head>).
+        document.documentElement.classList.remove('lynn-gate-pending');
+
+        // The 4 suite tool cards get the same tilt/spotlight the mcp/skill
+        // Cards already have built in - see the `polish()` note in the inline
+        // <script> above the search wiring.
+        if (window.NicePolish) {
+          window.NicePolish.polish([].slice.call(document.querySelectorAll('.lynn-feature-card')));
+        }
+
+        // The cards render a tick later than a static page would have, so a
+        // `#suite-audit` / `#skill-a11y-triage` deep link on load has already
+        // failed by the time this runs - re-try it once the chrome is up.
+        const hash = location.hash.slice(1);
+        if (hash) {
+          const target = document.getElementById(hash);
+          if (target) target.scrollIntoView();
+        }
+      }, []);
+
+      // Cmd+K / Ctrl+K opens the rail and focuses its filter box.
+      useEffect(() => {
+        function onKeyDown(event) {
+          if (event.key !== 'k' && event.key !== 'K') return;
+          if (!(event.metaKey || event.ctrlKey)) return;
+          event.preventDefault();
+          setRail(false);
+          const input = document.querySelector('.lynn-doc-rail-search');
+          if (input) {
+            input.focus();
+            input.select();
+          }
+        }
+        document.addEventListener('keydown', onKeyDown);
+        return () => document.removeEventListener('keydown', onKeyDown);
+      }, []);
+
+      const checkCode = (code) => {
+        if (code === GATE_PASSWORD) {
+          try {
+            sessionStorage.setItem(GATE_KEY, '1');
+          } catch (e) { /* unwritable store just means no persistence */ }
+          setError(undefined);
+          setUnlocked(true);
+        } else {
+          setError(GATE_ERROR);
+        }
+      };
+
+      const setRail = (collapsed) => {
+        setRailCollapsed(collapsed);
+        try {
+          localStorage.setItem(RAIL_KEY, collapsed ? '1' : '0');
+        } catch (e) { /* no persistence, still collapses for this visit */ }
+      };
+
+      const suitePortals = Object.keys(SUITE_SECTIONS).map((subId) =>
+        portal(
+          h(Fragment, null, SUITE_SECTIONS[subId].map((card, i) =>
+            h('div', { key: card.name, 'data-search': card.ds }, suiteCard(card, card.name))
+          )),
+          'lynn-grid-' + subId
+        )
+      );
+
+      const mcpPortals = Object.keys(MCP_SECTIONS).map((subId) =>
+        portal(
+          h(Fragment, null, MCP_SECTIONS[subId].map((card) => mcpCard(card, card.name))),
+          'lynn-grid-' + subId
+        )
+      );
+
+      const skillPortals = Object.keys(SKILL_SECTIONS).map((subId) =>
+        portal(
+          h(Fragment, null, SKILL_SECTIONS[subId].map((card) => skillCard(card, card.id))),
+          'lynn-grid-' + subId
+        )
+      );
+
+      return h(
+        Fragment,
+        null,
+        h(ThemeBridge, { key: 'theme-bridge' }),
+        h(AccessGate, {
+          key: 'gate',
+          title: 'NiCE Designer Site Login',
+          subtitle:
+            'This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.',
+          onSubmit: checkCode,
+          error,
+          unlocked,
+          ctaText: h(
+            Fragment,
+            null,
+            "Don't have the code?",
+            h('br'),
+            h('strong', null, 'Reach out to Erick Mathews on Teams'),
+            ' to request access.'
+          ),
+          ctaHref: TEAMS_HREF,
+        }),
+        portal(
+          h(Nav, {
+            logoHref: './index.html',
+            cta: h(Fragment, null, [
+              h(ThemeToggle, { key: 'theme', showLabels: false }),
+              downloadPill('download'),
+            ]),
+          }),
+          'lynn-nav-root'
+        ),
+        portal(
+          h(DocRail, {
+            mode: 'pages',
+            pages: railPages,
+            groups: railGroups,
+            activeHref: './' + PAGE,
+            searchable: true,
+            collapsed: railCollapsed,
+            onToggle: setRail,
+          }),
+          'lynn-docrail-root'
+        ),
+        ...suitePortals,
+        ...mcpPortals,
+        ...skillPortals,
+        portal(h(Footer, { columns: FOOTER_COLUMNS }), 'lynn-footer-root')
+      );
+    }
+
+    createRoot(document.getElementById('lynn-app-root')).render(
+      h(ThemeProvider, { defaultTheme: 'lynn' }, h(App))
+    );
+
+  </script>
 
 </body>
 </html>

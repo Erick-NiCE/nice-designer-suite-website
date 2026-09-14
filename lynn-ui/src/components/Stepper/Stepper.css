@@ -1,0 +1,190 @@
+/*!
+ * Stepper
+ * Ported from install-guide.html:
+ *   `.steps-list`        - flex column, 56px gap
+ *   `.step`              - grid 80px / 1fr, 32px column gap
+ *   `.step-sidebar`      - centered flex column holding badge + line
+ *   `.step-line`         - 2px rule, `flex: 1`, 12px top margin, 40px min
+ *                          height, top-to-bottom accent fade (0.4 -> 0.04),
+ *                          hidden on the last step
+ *   `.step-header`       - 10px top padding, 20px bottom margin
+ *   `.step-title`        - 1.5rem/700
+ *   `.step-card`         - `card` surface, 1px border, 16px radius,
+ *                          28px/32px padding
+ *   `@media (max-width: 600px)` - single column, 16px gap, sidebar turns into
+ *                          a row
+ *
+ * The badge itself is `StepNumber` at `lg`, not a copy of
+ * `.step-number-badge`.
+ *
+ * The line's two stops come off `--lynn-stepper-line` so the accent is a
+ * single knob shared with the badge, instead of the source's hard-coded
+ * `rgba(2,90,251,...)` pair.
+ */
+
+.lynn-stepper {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: var(--lynn-font-family);
+}
+
+.lynn-stepper-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
+
+.lynn-stepper-step {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 0 var(--lynn-space-2xl);
+  scroll-margin-top: calc(var(--lynn-nav-height) + var(--lynn-space-xl));
+}
+
+.lynn-stepper-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lynn-stepper-line {
+  width: 2px;
+  flex: 1;
+  min-height: 40px;
+  margin-top: var(--lynn-space-md);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--lynn-stepper-line) 40%, transparent),
+    color-mix(in srgb, var(--lynn-stepper-line) 4%, transparent)
+  );
+}
+
+.lynn-stepper-step:last-child .lynn-stepper-line {
+  display: none;
+}
+
+.lynn-stepper-body {
+  min-width: 0;
+  padding-bottom: var(--lynn-space-lg);
+}
+
+.lynn-stepper-header {
+  display: flex;
+  align-items: center;
+  padding-top: 10px;
+  margin-bottom: var(--lynn-space-xl);
+}
+
+.lynn-stepper-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: var(--lynn-font-weight-bold);
+  color: var(--lynn-color-text);
+}
+
+.lynn-stepper-card {
+  background: var(--lynn-color-card);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-lg);
+  padding: 28px 32px;
+  font-size: var(--lynn-font-size-body);
+  line-height: var(--lynn-line-height-body);
+  color: var(--lynn-color-text-secondary);
+}
+
+/* ---------- horizontal ----------
+   The same three atoms in a row: the connector leaves the badge sideways and
+   the card sits under its own step instead of beside it. */
+.lynn-stepper-horizontal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lynn-space-xl);
+}
+
+.lynn-stepper-horizontal .lynn-stepper-step {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 260px;
+  min-width: 0;
+  gap: var(--lynn-space-lg);
+}
+
+.lynn-stepper-horizontal .lynn-stepper-sidebar {
+  flex-direction: row;
+  align-items: center;
+  align-self: stretch;
+}
+
+.lynn-stepper-horizontal .lynn-stepper-line {
+  width: auto;
+  height: 2px;
+  min-height: 0;
+  min-width: 40px;
+  margin: 0 0 0 var(--lynn-space-md);
+  background: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--lynn-stepper-line) 40%, transparent),
+    color-mix(in srgb, var(--lynn-stepper-line) 4%, transparent)
+  );
+}
+
+.lynn-stepper-horizontal .lynn-stepper-header {
+  padding-top: 0;
+  margin-bottom: var(--lynn-space-md);
+}
+
+.lynn-stepper-horizontal .lynn-stepper-title {
+  font-size: 18px;
+}
+
+/* ---------- accents ---------- */
+.lynn-stepper-color-blue {
+  --lynn-stepper-line: var(--lynn-color-blue);
+}
+.lynn-stepper-color-electric-blue {
+  --lynn-stepper-line: var(--lynn-color-electric-blue);
+}
+.lynn-stepper-color-indigo {
+  --lynn-stepper-line: var(--lynn-color-indigo);
+}
+.lynn-stepper-color-emerald {
+  --lynn-stepper-line: var(--lynn-color-emerald);
+}
+.lynn-stepper-color-teal {
+  --lynn-stepper-line: var(--lynn-color-teal);
+}
+.lynn-stepper-color-coral {
+  --lynn-stepper-line: var(--lynn-color-coral);
+}
+.lynn-stepper-color-lynn {
+  --lynn-stepper-line: var(--lynn-color-lynn);
+}
+
+@media (max-width: 600px) {
+  .lynn-stepper-vertical .lynn-stepper-step {
+    grid-template-columns: 1fr;
+    gap: var(--lynn-space-lg);
+  }
+
+  .lynn-stepper-vertical .lynn-stepper-sidebar {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .lynn-stepper-vertical .lynn-stepper-line {
+    width: auto;
+    height: 2px;
+    min-height: 0;
+    margin: 0 0 0 var(--lynn-space-md);
+    background: linear-gradient(
+      to right,
+      color-mix(in srgb, var(--lynn-stepper-line) 40%, transparent),
+      color-mix(in srgb, var(--lynn-stepper-line) 4%, transparent)
+    );
+  }
+
+  .lynn-stepper-card {
+    padding: var(--lynn-space-xl);
+  }
+}

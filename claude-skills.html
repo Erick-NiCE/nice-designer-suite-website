@@ -11,9 +11,64 @@
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <link rel="stylesheet" href="site-gate.css" />
-  <script src="site-gate.js" defer></script>
-  <script src="nice-effects.js?v=9" defer></script>
+  <script src="nice-effects.js?v=11" defer></script>
+
+  <!--
+    ===== lynn-ui: the site chrome, as React components =====
+    The access gate, the nav and (on pages that have them) the footer and the
+    doc rail all come from lynn-ui now - see the single #lynn-app-root mount
+    script at the end of <body>. site-gate.css / site-gate.js are gone with
+    them; `AccessGate` is the same screen and the mount script re-runs the
+    same client-side code check.
+
+    Three things are needed, and none of them affect the rest of the page:
+      1. dist/lynn-ui.css - the package's built stylesheet. Everything in it
+         is either a `--lynn-*` custom property or a `.lynn-*` class, so it
+         cannot collide with this page's own tokens/classes.
+      2. the import map  - React, ReactDOM and matter-js as CDN ESM.
+         `?external=react` on react-dom stops a second copy of React being
+         pulled in ("invalid hook call"). matter-js is in the map because
+         dist/index.js is one barrel that also reaches LiquidFill.
+      3. `.lynn-mount` - the chrome renders through portals into placeholder
+         divs left where the old markup was. `display: contents` means those
+         placeholders generate no box, so the sticky nav and the footer's
+         margin still resolve against <body> exactly as before.
+  -->
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@18.3.1",
+      "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+      "react-dom": "https://esm.sh/react-dom@18.3.1?external=react",
+      "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?external=react",
+      "scheduler": "https://esm.sh/scheduler@0.23.2",
+      "matter-js": "https://esm.sh/matter-js@0.20.0"
+    }
+  }
+  </script>
+  <style>.lynn-mount { display: contents; }</style>
+
+  <!--
+    The gate used to be static markup covered by blocking CSS, so it was up
+    before first paint. React arrives as ESM from a CDN, so the component
+    can only mount a tick later - hold the page back until it does, or a
+    locked visitor reads the whole page in the gap. Costs nothing once the
+    session is unlocked (the class is never added), and a 4s failsafe means
+    a CDN that never answers leaves a readable page rather than a blank one.
+  -->
+  <style>html.lynn-gate-pending body { visibility: hidden; }</style>
+  <script>
+    (function () {
+      try {
+        if (sessionStorage.getItem('nice-site-access') === '1') return;
+      } catch (e) { /* blocked storage: fall through and gate */ }
+      var root = document.documentElement;
+      root.classList.add('lynn-gate-pending');
+      setTimeout(function () { root.classList.remove('lynn-gate-pending'); }, 4000);
+    })();
+  </script>
+
   <style>
     body { line-height: 1.6; } /* page-specific */
 
@@ -112,24 +167,10 @@
       border-radius: 4px;
     }
 
-    .intro-highlight {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      background: rgba(185,143,255,0.08);
-      border: 1px solid rgba(185,143,255,0.18);
-      border-radius: 10px;
-      padding: 16px 20px;
-      margin-top: 20px;
-    }
-
-    .intro-highlight-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
-
-    .intro-highlight-text {
-      font-size: 0.9rem;
-      color: rgba(255,255,255,0.75);
-      line-height: 1.7;
-    }
+    /* The `.intro-highlight` callout is lynn-ui's <Alert variant="purple">
+       now (see the mount script at the end of <body>), so only the 20px gap
+       it needs from the paragraph above it is still this page's business. */
+    .intro-card .lynn-alert { margin-top: 20px; }
 
     /* ---- SKILLS GRID ---- */
     .skills-grid {
@@ -153,112 +194,34 @@
       margin-top: 0;
     }
 
-    .skill-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 28px;
-      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
+    /* The twelve skill cards are lynn-ui's <FeatureCard density="compact">
+       now (see the mount script at the end of <body>), so the `.skill-card*`
+       / `.skill-header` / `.skill-icon` / `.skill-description` /
+       `.skill-triggers*` / `.trigger-*` CSS that used to live here has gone
+       with the markup - `.lynn-feature-card*` in lynn-ui.css is the same
+       design, reading `--lynn-t-color` / `--lynn-t-gradient` where this read
+       `--skill-color`. What is left below is the part the component has no
+       opinion about: the card's own `.skill-tools` block, which is passed in
+       as FeatureCard `children`. */
 
-    .skill-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: var(--skill-color, var(--blue));
-      opacity: 0.7;
-    }
-
-    .skill-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 16px 40px rgba(0,0,0,0.4);
-      border-color: rgba(255,255,255,0.14);
-    }
-
-    .skill-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 18px;
-    }
-
-    .skill-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.25rem;
-      background: rgba(255,255,255,0.06);
-      flex-shrink: 0;
-    }
-
-    .skill-name {
+    /* The skill name is a package identifier, so it keeps the source's mono
+       face and its accent colour - which is exactly the `--lynn-t-color`
+       FeatureCard already stamps on the card from `accentColor`. */
+    .skills-grid .lynn-feature-card-name {
       font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--skill-color, var(--blue));
+      color: var(--lynn-t-color);
       letter-spacing: -0.01em;
     }
 
-    .skill-target-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 3px 9px;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.07);
-      color: var(--secondary);
-      border: 1px solid var(--border);
-      margin-top: 4px;
-    }
-
-    .skill-description {
-      font-size: 0.875rem;
-      color: var(--secondary);
-      line-height: 1.7;
-      margin-bottom: 18px;
-    }
-
-    .skill-triggers {
-      margin-bottom: 18px;
-    }
-
-    .skill-triggers-label {
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.35);
-      margin-bottom: 8px;
-    }
-
-    .trigger-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .trigger-pill {
-      font-size: 0.75rem;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 4px 10px;
-      color: rgba(255,255,255,0.65);
-      line-height: 1.3;
-    }
-
+    /* These three blocks are FeatureCard `children`, so they sit on a lynn-ui
+       surface that repaints when the theme toggle flips - hence
+       `--lynn-color-text-muted` / `--lynn-color-border` rather than the
+       hardcoded white alphas the source used. In the default `lynn` mode the
+       token is rgba(255,255,255,.30) against the source's .35, which is the
+       one deliberate difference; page tokens would leave these grey on white
+       in light mode. */
     .skill-tools {
-      border-top: 1px solid var(--border);
+      border-top: 1px solid var(--lynn-color-border);
       padding-top: 16px;
     }
 
@@ -267,7 +230,7 @@
       font-weight: 700;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.35);
+      color: var(--lynn-color-text-muted);
       margin-bottom: 8px;
     }
 
@@ -277,20 +240,25 @@
       gap: 5px;
     }
 
-    .tool-tag {
+    /* The MCP tool pills are <Badge tone="blue" bordered> now. They name
+       real tools, so they keep the source's mono face on top of the badge. */
+    .tools-list .lynn-badge {
       font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
-      font-size: 0.7rem;
-      background: rgba(54,148,252,0.1);
-      color: rgba(54,148,252,0.85);
-      border: 1px solid rgba(54,148,252,0.15);
-      border-radius: 4px;
-      padding: 2px 7px;
+      font-weight: 500;
+      letter-spacing: 0;
     }
 
-    .tool-tag.context-setter {
-      background: rgba(185,143,255,0.1);
-      color: rgba(185,143,255,0.85);
-      border-color: rgba(185,143,255,0.15);
+    /* "None - pure reference context" is a note, not a tool name, so it is
+       not a badge - it is the muted line the source rendered at opacity .6. */
+    .tools-none {
+      font-size: 0.7rem;
+      color: var(--lynn-color-text-muted);
+    }
+
+    .skill-byline {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--lynn-color-text-muted);
     }
 
     /* ---- MCP TOOL DETAIL CARDS ---- */
@@ -455,18 +423,12 @@
     }
     .mcp-full-link-cta:hover { color: #fff; gap: 10px; }
 
-    .tools-note {
-      margin-top: 24px;
-      padding: 16px 20px;
-      background: rgba(54,148,252,0.06);
-      border: 1px solid rgba(54,148,252,0.15);
-      border-radius: 10px;
-      font-size: 0.875rem;
-      color: var(--secondary);
-      line-height: 1.7;
-    }
+    /* `.tools-note` is <Alert variant="info"> now - the tint, border and
+       radius are the component's, so only the 24px gap under the CTA above
+       it and the inline `<code>` face are still this page's business. */
+    .tools-note-alert { margin-top: 24px; }
 
-    .tools-note code {
+    .tools-note-alert code {
       font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
       font-size: 0.8rem;
       background: rgba(54,148,252,0.12);
@@ -552,37 +514,14 @@
 </head>
 <body>
 
-  <!-- SITE-WIDE ACCESS GATE (see site-gate.css / site-gate.js) -->
-  <div id="nice-site-gate">
-    <div class="sg-card">
-      <div class="sg-lock">🔒</div>
-      <div class="sg-title">NiCE Designer Site Login</div>
-      <div class="sg-subtitle">This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.</div>
-      <div class="sg-input-wrap">
-        <input id="nice-site-gate-input" type="password" placeholder="Enter code" autocomplete="off" />
-      </div>
-      <div class="sg-error" id="nice-site-gate-error"></div>
-      <button id="nice-site-gate-btn" type="button">Unlock</button>
-      <div class="sg-divider"></div>
-      <div class="sg-cta">
-        Don't have the code?<br>
-        <strong>Reach out to Erick Mathews on Teams</strong> to request access.
-        <br>
-        <a class="sg-teams-btn" href="https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com" target="_blank" rel="noopener">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H8a2 2 0 00-2 2v2H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2h2a2 2 0 002-2V4a2 2 0 00-2-2zM4 20V8h12v12H4zm16-4h-2V8a2 2 0 00-2-2H8V4h12v12z" fill="currentColor"/></svg>
-          Message on Teams
-        </a>
-      </div>
-    </div>
-  </div>
+  <!-- lynn-ui chrome. One React root, one ThemeProvider (see the mount
+       script at the end of <body>); the gate renders inside it, everything
+       else portals into the `.lynn-mount` placeholders below. -->
+  <div id="lynn-app-root"></div>
 
-  <!-- NAV -->
-  <nav class="site-nav" id="site-nav">
-    <a href="./index.html" class="nav-logo">
-      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span><span class="logo-suite"> Suite</span>
-    </a>
-    <span class="nav-download is-disabled" aria-disabled="true">Download<span class="coming-soon-tag">Coming soon!</span></span>
-  </nav>
+  <!-- NAV (lynn-ui <Nav>) + DOC RAIL (lynn-ui <DocRail>, position: fixed) -->
+  <div id="lynn-nav-root" class="lynn-mount"></div>
+  <div id="lynn-docrail-root" class="lynn-mount"></div>
 
   <!-- HERO -->
   <section class="hero">
@@ -595,16 +534,12 @@
   <div class="section reveal">
     <p class="section-label">What is a skill?</p>
     <h2 class="section-title">Skills make Claude an expert tool operator</h2>
-    <p class="section-body">NiCE Designer ships 12 Claude skills. A skill is a context file (SKILL.md) that tells Claude exactly how to use the MCP tools for a specific job. You run a skill just by naming it — "run the [skill-name] skill", or even just "run North Star Fox" — Claude looks it up with <code>list_skills</code> and loads it with <code>get_skill</code> automatically, then uses the right MCP tools in the right order.</p>
+    <p class="section-body">NiCE Designer ships 12 Claude skills. A skill is a context file (SKILL.md) that tells Claude exactly how to use the MCP tools for a specific job. You run a skill just by naming it - "run the [skill-name] skill", or even just "run North Star Fox" - Claude looks it up with <code>list_skills</code> and loads it with <code>get_skill</code> automatically, then uses the right MCP tools in the right order.</p>
     <div class="intro-card">
       <p>Each skill pre-loads Claude with the correct tool sequence, common pitfalls, expected outputs, and quality checks for a particular workflow. Without a skill, Claude knows the tools exist but has to figure out the right approach on its own. With a skill loaded, it already has a playbook.</p>
-      <p>Skills are stored in the <code>skills/</code> directory of the plugin, and published here so every connected Claude session gets the latest content with no reinstall. Each skill has a <code>SKILL.md</code> file; the same set is bundled into the packaged Chrome build at <code>builds/chrome/skills/</code> as an offline fallback. <code>ux-eval</code> and <code>north-star-fox</code> are grouped as Decide &amp; review; <code>nice-product-knowledge</code> as NICE product knowledge — see the groups below.</p>
-      <div class="intro-highlight">
-        <div class="intro-highlight-icon">&#9888;&#65039;</div>
-        <div class="intro-highlight-text">
-          Always call <code>list_targets</code> first to check which clients are connected (Figma, Chrome, or both). Some skills require both clients to be connected at the same time. Calling the wrong target silently does nothing.
-        </div>
-      </div>
+      <p>Skills are stored in the <code>skills/</code> directory of the plugin, and published here so every connected Claude session gets the latest content with no reinstall. Each skill has a <code>SKILL.md</code> file; the same set is bundled into the packaged Chrome build at <code>builds/chrome/skills/</code> as an offline fallback. <code>ux-eval</code> and <code>north-star-fox</code> are grouped as Decide &amp; review; <code>nice-product-knowledge</code> as NICE product knowledge - see the groups below.</p>
+      <!-- lynn-ui <Alert variant="purple"> -->
+      <div id="lynn-intro-alert-root" class="lynn-mount"></div>
     </div>
   </div>
 
@@ -616,339 +551,11 @@
     <h2 class="section-title">Skills reference</h2>
     <p class="section-body">Each skill below shows the trigger phrases that load it, the target client(s) it works with, and the key MCP tools it orchestrates.</p>
 
-    <div class="skills-grid">
-
-      <!-- SCORE & TRIAGE -->
-      <div class="skills-group-label" style="color:var(--lyra)">Score & triage</div>
-      <div class="skill-card reveal" id="skill-a11y-triage" style="--skill-color: var(--lyra);">
-        <div class="skill-header">
-          <div class="skill-icon">&#127919;</div>
-          <div>
-            <div class="skill-name">a11y-triage</div>
-            <div class="skill-target-badge">&#9679; Figma or Chrome</div>
-          </div>
-        </div>
-        <div class="skill-triggers">
-          <div class="skill-triggers-label">Say something like</div>
-          <div class="trigger-list">
-            <span class="trigger-pill">"triage accessibility issues"</span>
-            <span class="trigger-pill">"which a11y issues matter most"</span>
-            <span class="trigger-pill">"where do I start with a11y"</span>
-          </div>
-        </div>
-        <p class="skill-description">Ranks accessibility issues by severity × reach and returns a top-N action list. Converts an unreadable issue dump into three things to fix this afternoon.</p>
-        <div class="skill-tools">
-          <div class="skill-tools-label">Key MCP tools</div>
-          <div class="tools-list">
-            <span class="tool-tag">audit_accessibility</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="skill-card reveal" id="skill-manual-fixes-checklist" style="--skill-color: var(--lyra);">
-        <div class="skill-header">
-          <div class="skill-icon">&#128203;</div>
-          <div>
-            <div class="skill-name">manual-fixes-checklist</div>
-            <div class="skill-target-badge">&#9679; Figma or Chrome</div>
-          </div>
-        </div>
-        <div class="skill-triggers">
-          <div class="skill-triggers-label">Say something like</div>
-          <div class="trigger-list">
-            <span class="trigger-pill">"what's left to fix manually"</span>
-            <span class="trigger-pill">"what can't be auto-fixed"</span>
-            <span class="trigger-pill">"show me the manual checklist"</span>
-          </div>
-        </div>
-        <p class="skill-description">Audits, dry-runs every fixer, then reports only what survives — grouped and prioritized. An honest to-do list for the last mile to 100%, so nobody promises a score the tools cannot reach.</p>
-        <div class="skill-tools">
-          <div class="skill-tools-label">Key MCP tools</div>
-          <div class="tools-list">
-            <span class="tool-tag">run_full_audit</span>
-            <span class="tool-tag">convert_page_to_lyra</span>
-            <span class="tool-tag">migrate_to_lyra</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- CONVERT TO LYRA -->
-      <div class="skills-group-label" style="color:var(--emerald)">Convert to Lyra</div>
-      <div class="skill-card reveal" id="skill-lyra-visual-patterns" style="--skill-color: var(--emerald);">
-        <div class="skill-header">
-          <div class="skill-icon">&#10024;</div>
-          <div>
-            <div class="skill-name">lyra-visual-patterns</div>
-            <div class="skill-target-badge">&#9679; Figma or Chrome</div>
-          </div>
-        </div>
-        <div class="skill-triggers">
-          <div class="skill-triggers-label">Load BEFORE Lyra conversion</div>
-          <div class="trigger-list">
-            <span class="trigger-pill">"load lyra-visual-patterns skill"</span>
-            <span class="trigger-pill">"convert to Lyra"</span>
-            <span class="trigger-pill">"migrate to Lyra"</span>
-          </div>
-        </div>
-        <p class="skill-description">Reference for Lyra page chrome, surfaces, tables, panels, nav, chips and AI affordances in light and dark. Load it before any conversion and you know what you are going to get — no surprise redesigns.</p>
-        <div class="skill-tools">
-          <div class="skill-tools-label">Key MCP tools</div>
-          <div class="tools-list">
-            <span class="tool-tag">convert_page_to_lyra</span>
-            <span class="tool-tag">migrate_to_lyra</span>
-            <span class="tool-tag">convert_mode</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- SPEC MODE -->
-      <div class="skills-group-label" style="color:var(--indigo)">Spec Mode</div>
-      <div class="skill-card reveal" id="skill-figma-element-css" style="--skill-color: var(--indigo);">
-        <div class="skill-header">
-          <div class="skill-icon">&#127912;</div>
-          <div>
-            <div class="skill-name">figma-element-css</div>
-            <div class="skill-target-badge">&#9679; Figma only</div>
-          </div>
-        </div>
-        <div class="skill-triggers">
-          <div class="skill-triggers-label">Say something like</div>
-          <div class="trigger-list">
-            <span class="trigger-pill">"get CSS for this node"</span>
-            <span class="trigger-pill">"export CSS for the selected element"</span>
-            <span class="trigger-pill">"what's the CSS for this"</span>
-          </div>
-        </div>
-        <p class="skill-description">Turns the selected Figma node into production CSS with Lyra tokens substituted where they match. Output that survives a theme change, instead of hard-coded hex and px.</p>
-        <div class="skill-tools">
-          <div class="skill-tools-label">Key MCP tools</div>
-          <div class="tools-list">
-            <span class="tool-tag">get_selection_info</span>
-            <span class="tool-tag">extract_dev_details</span>
-            <span class="tool-tag">extract_token_css</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="skill-card reveal" id="skill-browser-element-specs" style="--skill-color: var(--indigo);">
-        <div class="skill-header">
-          <div class="skill-icon">&#128269;</div>
-          <div>
-            <div class="skill-name">browser-element-specs</div>
-            <div class="skill-target-badge">&#9679; Chrome only</div>
-          </div>
-        </div>
-        <div class="skill-triggers">
-          <div class="skill-triggers-label">Say something like</div>
-          <div class="trigger-list">
-            <span class="trigger-pill">"get specs for this element"</span>
-            <span class="trigger-pill">"what are the design specs on this component"</span>
-            <span class="trigger-pill">"design specs for the inspected element"</span>
-          </div>
-        </div>
-        <p class="skill-description">Pulls computed CSS for the inspected element and annotates every raw value with its nearest token. A spec a developer can act on, not just a description of what is there.</p>
-        <div class="skill-tools">
-          <div class="skill-tools-label">Key MCP tools</div>
-          <div class="tools-list">
-            <span class="tool-tag">get_selection_info</span>
-            <span class="tool-tag">extract_dev_details</span>
-            <span class="tool-tag">audit_colors</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- DESIGN ↔ BUILD PARITY -->
-      <div class="skills-group-label" style="color:var(--coral)">Design ↔ build parity</div>
-      <div class="skill-card reveal" id="skill-figma-chrome-parity" style="--skill-color: var(--coral);">
-        <div class="skill-header">
-          <div class="skill-icon">&#9878;&#65039;</div>
-          <div>
-            <div class="skill-name">figma-chrome-parity</div>
-            <div class="skill-target-badge">&#9679; Both clients required</div>
-          </div>
-        </div>
-        <div class="skill-triggers">
-          <div class="skill-triggers-label">Say something like</div>
-          <div class="trigger-list">
-            <span class="trigger-pill">"diff Figma against the live page"</span>
-            <span class="trigger-pill">"compare the design to the implementation"</span>
-            <span class="trigger-pill">"figma-chrome parity"</span>
-          </div>
-        </div>
-        <p class="skill-description">Aligns Figma layers to page elements by name and diffs colors, type, spacing, radius and shadows. Ends the "it looks off but I cannot say why" review with a per-property drift table.</p>
-        <div class="skill-tools">
-          <div class="skill-tools-label">Key MCP tools</div>
-          <div class="tools-list">
-            <span class="tool-tag">extract_dev_details</span>
-            <span class="tool-tag">get_selection_info</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="skill-card reveal" id="skill-artboard-to-page" style="--skill-color: var(--coral);">
-        <div class="skill-header">
-          <div class="skill-icon">&#128444;&#65039;</div>
-          <div>
-            <div class="skill-name">artboard-to-page</div>
-            <div class="skill-target-badge">&#9679; Both clients required</div>
-          </div>
-        </div>
-        <div class="skill-triggers">
-          <div class="skill-triggers-label">Say something like</div>
-          <div class="trigger-list">
-            <span class="trigger-pill">"apply this artboard to the live page"</span>
-            <span class="trigger-pill">"push Figma styles to Chrome"</span>
-            <span class="trigger-pill">"can we make this real page look like this artboard"</span>
-          </div>
-        </div>
-        <p class="skill-description">Maps artboard styling onto page selectors and applies it as CSS overrides after you confirm the mapping. Demo a redesign on the real product in minutes, with no branch and no build.</p>
-        <div class="skill-tools">
-          <div class="skill-tools-label">Key MCP tools</div>
-          <div class="tools-list">
-            <span class="tool-tag">extract_dev_details</span>
-            <span class="tool-tag">apply_css_overrides</span>
-            <span class="tool-tag">clear_css_overrides</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- LIVE-PAGE QA -->
-      <div class="skills-group-label" style="color:var(--teal)">Live-page QA</div>
-      <div class="skill-card reveal" id="skill-dark-mode-parity" style="--skill-color: var(--teal);">
-        <div class="skill-header">
-          <div class="skill-icon">&#127769;</div>
-          <div>
-            <div class="skill-name">dark-mode-parity</div>
-            <div class="skill-target-badge">&#9679; Chrome only</div>
-          </div>
-        </div>
-        <div class="skill-triggers">
-          <div class="skill-triggers-label">Say something like</div>
-          <div class="trigger-list">
-            <span class="trigger-pill">"check dark mode"</span>
-            <span class="trigger-pill">"does this work in dark mode"</span>
-            <span class="trigger-pill">"dark mode parity"</span>
-          </div>
-        </div>
-        <p class="skill-description">Audits colors in light, simulates dark, audits again, and always restores the baseline. Only the delta — what breaks in dark and what breaks in light. No re-reading the full audit.</p>
-        <div class="skill-tools">
-          <div class="skill-tools-label">Key MCP tools</div>
-          <div class="tools-list">
-            <span class="tool-tag">audit_colors</span>
-            <span class="tool-tag">polish_page</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- DESIGN-SYSTEM MAINTENANCE -->
-      <div class="skills-group-label" style="color:var(--blue)">Design-system maintenance</div>
-      <div class="skill-card reveal" id="skill-token-candidates" style="--skill-color: var(--blue);">
-        <div class="skill-header">
-          <div class="skill-icon">&#127991;&#65039;</div>
-          <div>
-            <div class="skill-name">token-candidates</div>
-            <div class="skill-target-badge">&#9679; Figma or Chrome</div>
-          </div>
-        </div>
-        <div class="skill-triggers">
-          <div class="skill-triggers-label">Say something like</div>
-          <div class="trigger-list">
-            <span class="trigger-pill">"which values should become tokens"</span>
-            <span class="trigger-pill">"what should be promoted to Lyra tokens"</span>
-            <span class="trigger-pill">"token candidates"</span>
-          </div>
-        </div>
-        <p class="skill-description">Groups recurring raw values across all four domains and ranks the ones worth promoting. Fixes the cause once upstream instead of the same symptom on thirty screens.</p>
-        <div class="skill-tools">
-          <div class="skill-tools-label">Key MCP tools</div>
-          <div class="tools-list">
-            <span class="tool-tag">audit_colors</span>
-            <span class="tool-tag">audit_text_styles</span>
-            <span class="tool-tag">audit_spacing</span>
-            <span class="tool-tag">audit_radius</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- DECIDE & REVIEW -->
-      <div class="skills-group-label" style="color:var(--emerald)">Decide & review</div>
-      <div class="skill-card reveal" id="skill-ux-eval" style="--skill-color: var(--emerald);">
-        <div class="skill-header">
-          <div class="skill-icon">&#128202;</div>
-          <div>
-            <div class="skill-name">ux-eval <span class="tool-status new" style="font-size:9px;vertical-align:middle;padding:2px 7px;">New</span></div>
-            <div class="skill-target-badge">&#9679; Figma or Chrome</div>
-          </div>
-        </div>
-        <div class="skill-triggers">
-          <div class="skill-triggers-label">Say something like</div>
-          <div class="trigger-list">
-            <span class="trigger-pill">"is this ready for dev"</span>
-            <span class="trigger-pill">"run a UX eval"</span>
-            <span class="trigger-pill">"ten-question UX eval"</span>
-          </div>
-        </div>
-        <p class="skill-description">Answers all ten prioritization questions against real evidence, then states pass / pass-with-conditions / not-yet. A defensible verdict with the reasoning attached — the thing you can actually take to a VP.</p>
-        <div class="skill-tools">
-          <div class="skill-tools-label">Key MCP tools</div>
-          <div class="tools-list">
-            <span class="tool-tag">run_ux_eval</span>
-            <span class="tool-tag">run_full_audit</span>
-          </div>
-        </div>
-        <p style="margin-top:10px;font-size:11px;color:rgba(255,255,255,0.35);">Community skill by Bill Bangs</p>
-      </div>
-
-      <div class="skill-card reveal" id="skill-north-star-fox" style="--skill-color: var(--emerald);">
-        <div class="skill-header">
-          <div class="skill-icon">&#129517;</div>
-          <div>
-            <div class="skill-name">north-star-fox <span class="tool-status new" style="font-size:9px;vertical-align:middle;padding:2px 7px;">New</span></div>
-            <div class="skill-target-badge">&#9679; Figma or Chrome</div>
-          </div>
-        </div>
-        <div class="skill-triggers">
-          <div class="skill-triggers-label">Say something like</div>
-          <div class="trigger-list">
-            <span class="trigger-pill">"run North Star Fox"</span>
-            <span class="trigger-pill">"check this against our AI tenets"</span>
-            <span class="trigger-pill">"is this design on-tenet and on-brand"</span>
-          </div>
-        </div>
-        <p class="skill-description">Scores a CXone AI design, screen, or JIRA ticket against the twelve NiCE AI design tenets, plus Lyra Foundations and NiCE Brand adherence, and returns a fixed-shape pass/fail verdict per section. A critical look to keep designs and tickets aligned with NiCE's Core Values around AI architecture.</p>
-        <div class="skill-tools">
-          <div class="skill-tools-label">Key MCP tools</div>
-          <div class="tools-list"><span class="tool-tag" style="opacity:.6;">None — pure design/tenet judgment</span></div>
-        </div>
-        <p style="margin-top:10px;font-size:11px;color:rgba(255,255,255,0.35);">Community skill by Janet Gonzales</p>
-      </div>
-
-      <!-- NICE PRODUCT KNOWLEDGE -->
-      <div class="skills-group-label" style="color:var(--lyra)">NICE product knowledge</div>
-      <div class="skill-card reveal" id="skill-nice-product-knowledge" style="--skill-color: var(--lyra);">
-        <div class="skill-header">
-          <div class="skill-icon">&#128218;</div>
-          <div>
-            <div class="skill-name">nice-product-knowledge <span class="tool-status new" style="font-size:9px;vertical-align:middle;padding:2px 7px;">New</span></div>
-            <div class="skill-target-badge">&#9679; Figma or Chrome</div>
-          </div>
-        </div>
-        <div class="skill-triggers">
-          <div class="skill-triggers-label">Say something like</div>
-          <div class="trigger-list">
-            <span class="trigger-pill">"what does this NICE product do"</span>
-            <span class="trigger-pill">"who uses CXone Mpower"</span>
-            <span class="trigger-pill">"NiCE product knowledge"</span>
-          </div>
-        </div>
-        <p class="skill-description">Sourced reference on NICE the company and its product lines (CXone Mpower, Enlighten AI, Actimize, Evidencentral), compiled from public material with citations. Grounds design decisions in what the real product and its real users are, instead of generic SaaS assumptions.</p>
-        <div class="skill-tools">
-          <div class="skill-tools-label">Key MCP tools</div>
-          <div class="tools-list"><span class="tool-tag" style="opacity:.6;">None — pure reference context</span></div>
-        </div>
-      </div>
-
-    </div>
+    <!-- The eight group labels and the twelve skill cards: lynn-ui
+         <FeatureCard density="compact"> (see the mount script at the end of
+         <body>). The labels render inside the same portal so they stay
+         interleaved with the cards in grid order. -->
+    <div class="skills-grid" id="lynn-skills-root"></div>
   </div>
 
   <hr class="section-divider" />
@@ -958,13 +565,12 @@
     <div class="section reveal" id="mcp">
       <p class="section-label">MCP server</p>
       <h2 class="section-title">57 tools, 12 groups</h2>
-      <p class="section-body">NiCE Designer exposes 57 MCP tools via the local WebSocket server at <code style="font-family:'SF Mono','Fira Code',monospace;font-size:.82rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:2px 6px;border-radius:4px">127.0.0.1:7331</code>. Most accept <code style="font-family:'SF Mono','Fira Code',monospace;font-size:.82rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:2px 6px;border-radius:4px">target: "figma" | "chrome" | "auto"</code> (the skill-lookup tools are the exception — pure introspection, no target needed), organized into 12 groups — connect &amp; diagnose, run a skill, scope, score &amp; measure, bulk fixes, one-at-a-time fixes, undo &amp; history, live-page restyling, Spec Mode, decide &amp; review, keeping the server current, and an escape hatch for anything the typed tools don't cover yet.</p>
-      <p class="section-body">The full reference — every tool, its group, target client(s), and what it does — lives on the <a href="./tools.html#mcp" class="mcp-full-link">Tools page</a>, generated straight from the MCP server's own catalog so it never drifts out of sync.</p>
+      <p class="section-body">NiCE Designer exposes 57 MCP tools via the local WebSocket server at <code style="font-family:'SF Mono','Fira Code',monospace;font-size:.82rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:2px 6px;border-radius:4px">127.0.0.1:7331</code>. Most accept <code style="font-family:'SF Mono','Fira Code',monospace;font-size:.82rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:2px 6px;border-radius:4px">target: "figma" | "chrome" | "auto"</code> (the skill-lookup tools are the exception - pure introspection, no target needed), organized into 12 groups - connect &amp; diagnose, run a skill, scope, score &amp; measure, bulk fixes, one-at-a-time fixes, undo &amp; history, live-page restyling, Spec Mode, decide &amp; review, keeping the server current, and an escape hatch for anything the typed tools don't cover yet.</p>
+      <p class="section-body">The full reference - every tool, its group, target client(s), and what it does - lives on the <a href="./tools.html#mcp" class="mcp-full-link">Tools page</a>, generated straight from the MCP server's own catalog so it never drifts out of sync.</p>
       <a href="./tools.html#mcp" class="mcp-full-link-cta">Browse all 55 MCP tools &rarr;</a>
 
-      <div class="tools-note">
-        Start the MCP server: <code>cd packages/mcp-server &amp;&amp; node src/index.js</code> — override the port with <code>NICE_MCP_WS_PORT</code> (default: 7331).
-      </div>
+      <!-- lynn-ui <Alert variant="info"> -->
+      <div id="lynn-tools-note-root" class="lynn-mount"></div>
     </div>
   </div>
 
@@ -1024,36 +630,8 @@
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="footer-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></div>
-      </div>
-      <nav class="footer-nav">
-        <div class="footer-nav-col">
-          <a href="./index.html">Overview</a>
-          <a href="./install-guide.html">Install Guide</a>
-          <a href="./claude-skills.html" class="active">Claude Skills</a>
-          <a href="./the-suite.html">The Suite</a>
-        </div>
-        <div class="footer-nav-col">
-          <a href="./use-cases.html">Use Cases</a>
-          <a href="./scoring.html">Scoring</a>
-          <a href="./dashboard.html">Dashboard</a>
-          <a href="./roadmap.html">Roadmap</a>
-        </div>
-        <div class="footer-nav-col">
-          <a href="./release-notes.html">Release Notes</a>
-          <a href="./faq.html">FAQ</a>
-          <a href="./tools.html">Tools</a>
-          <a href="./marketplace.html">Marketplace</a>
-          <a href="./lynn.html">Lynn</a>
-        </div>
-      </nav>
-    </div>
-  </footer>
+  <!-- FOOTER (lynn-ui <Footer>) -->
+  <div id="lynn-footer-root" class="lynn-mount"></div>
 
   <script>
 
@@ -1152,16 +730,23 @@
     });
     document.addEventListener('mouseleave', function() { glow.style.opacity = '0'; });
 
-    // Apply tilt + spotlight to cards
+    // Apply tilt + spotlight to cards. `.lynn-feature-card` is the lynn-ui
+    // component that replaced `.skill-card` on this page; it mounts after
+    // this script runs, so `polish()` is exposed below for the mount script
+    // to call with them (the dataset guard makes a second pass over an
+    // already-wired card a no-op).
     var SELECTORS = [
-      '.tool-card', '.skill-card', '.phase-block', '.case-card',
-      '.pillar', '.step-card', '.score-card', '.sp-card',
+      '.tool-card', '.skill-card', '.lynn-feature-card', '.phase-block',
+      '.case-card', '.pillar', '.step-card', '.score-card', '.sp-card',
       '.sp-callout-card', '.stat-card', '.doc-card', '.dl-card',
       '.faq-item', '.checklist-item', '.tool-mini', '.gate-card',
       '.score-band', '.audit-cat', '.workflow-card', '.case-scenario'
     ].join(', ');
 
-    document.querySelectorAll(SELECTORS).forEach(function(card) {
+    function polish(cards) {
+      cards.forEach(function(card) {
+      if (card.dataset.nicePolished === '1') return;
+      card.dataset.nicePolished = '1';
       card.classList.add('tilt-ready');
 
       card.addEventListener('mousemove', function(e) {
@@ -1187,7 +772,10 @@
         card.style.setProperty('--mx', '50%');
         card.style.setProperty('--my', '50%');
       });
-    });
+      });
+    }
+
+    polish([].slice.call(document.querySelectorAll(SELECTORS)));
 
     // Magnetic effect on primary action buttons
     document.querySelectorAll('.nav-cta, .btn-primary, .cta-btn').forEach(function(btn) {
@@ -1217,12 +805,633 @@
       });
     }, { threshold: 0.05, rootMargin: '0px 0px -24px 0px' });
 
-    document.querySelectorAll('.reveal').forEach(function(el, i) {
-      // Stagger siblings in same parent
-      el.dataset.polishDelay = (i % 6) * 55;
-      ro.observe(el);
-    });
+    function observeReveal(els) {
+      els.forEach(function(el, i) {
+        // Stagger siblings in same parent
+        el.dataset.polishDelay = (i % 6) * 55;
+        ro.observe(el);
+      });
+    }
+
+    observeReveal([].slice.call(document.querySelectorAll('.reveal')));
+
+    // Handed to the lynn-ui mount script, whose cards do not exist yet.
+    window.NicePolish = { polish: polish, observeReveal: observeReveal };
   })();
+  </script>
+
+  <!--
+    ===== lynn-ui mount =====
+    One createRoot, one ThemeProvider, one <App>: the access gate, the nav,
+    the doc rail, the footer, the twelve skill cards and the two callouts.
+    Keeping them in a single root is what keeps the theme in sync between
+    them - separate roots would each get their own provider and drift apart.
+
+    Anything that belongs elsewhere in the document is placed with
+    createPortal into a placeholder rather than rendered here: a footer
+    rendered next to the nav would sit at the top of the page, and a nav
+    rendered inside a 60px wrapper could not be sticky. The card grid portals
+    into the page's own `.skills-grid` container, so the cards (and the group
+    labels between them) stay real grid children.
+  -->
+  <script type="module">
+    import { createElement as h, Fragment, useEffect, useState } from 'react';
+    import { createPortal } from 'react-dom';
+    import { createRoot } from 'react-dom/client';
+    import {
+      AccessGate,
+      Alert,
+      Badge,
+      DocRail,
+      FeatureCard,
+      Footer,
+      Nav,
+      ThemeProvider,
+      ThemeToggle,
+      useLynnTheme,
+    } from './lynn-ui/dist/index.js';
+
+    const PAGE = 'claude-skills.html';
+
+    /* ---- the real gate, ported from site-gate.js ------------------------ */
+    /* Same session key, same password, same message, same Teams link. Still
+       a soft deterrent, not security - the check is client-side and readable
+       right here, exactly as it was in site-gate.js. */
+    const GATE_KEY = 'nice-site-access';
+    const GATE_PASSWORD = 'niceux';
+    const GATE_ERROR = 'Incorrect code. Contact Erick Mathews on Teams for access.';
+    const TEAMS_HREF = 'https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com';
+
+    /* ---- doc rail ------------------------------------------------------- */
+    /* The page table is read straight off nice-effects.js (which publishes
+       its own DOC_PAGES as NiceEffects.docPages) rather than hand-copied, so
+       adding a section anchor there still updates this rail - which matters
+       more here than anywhere: this page's rail lists all twelve skill cards
+       by id, and those ids are the FeatureCard `id`s below. Collapse state
+       shares nice-effects.js's own localStorage key, which is also the one
+       embed.js stashes. */
+    const RAIL_KEY = 'nice-doc-rail-collapsed';
+    const DOC_PAGES = (window.NiceEffects && window.NiceEffects.docPages) || [];
+    const railPages = DOC_PAGES.map((page) => ({
+      href: './' + page.href,
+      label: page.label,
+    }));
+    const railGroups = (DOC_PAGES.find((page) => page.href === PAGE) || {}).groups || [];
+
+    /* ---- footer --------------------------------------------------------- */
+    /* The same three columns the static markup had, with this page marked
+       active. Passed explicitly rather than relying on Footer's defaults,
+       because the defaults cannot know which page is current. */
+    const FOOTER_COLUMNS = [
+      {
+        title: 'Product',
+        links: [
+          { label: 'Overview', href: './index.html' },
+          { label: 'Install Guide', href: './install-guide.html' },
+          { label: 'Claude Skills', href: './claude-skills.html', active: true },
+          { label: 'The Suite', href: './the-suite.html' },
+        ],
+      },
+      {
+        title: 'Learn',
+        links: [
+          { label: 'Use Cases', href: './use-cases.html' },
+          { label: 'Scoring', href: './scoring.html' },
+          { label: 'Dashboard', href: './dashboard.html' },
+          { label: 'Roadmap', href: './roadmap.html' },
+        ],
+      },
+      {
+        title: 'Reference',
+        links: [
+          { label: 'Release Notes', href: './release-notes.html' },
+          { label: 'FAQ', href: './faq.html' },
+          { label: 'Tools', href: './tools.html' },
+          { label: 'Marketplace', href: './marketplace.html' },
+          { label: 'Lynn', href: './lynn.html' },
+        ],
+      },
+    ];
+
+    /* ---- content helpers ------------------------------------------------ */
+    /* A few strings carry inline <strong>/<code> from the source. They are
+       authored right here in this file - not user input - so keeping them as
+       markup is both safe and far more legible than nesting createElement
+       three deep for one bold clause. */
+    const rich = (html) => h('span', { dangerouslySetInnerHTML: { __html: html } });
+
+    /* Each card's `--skill-color`, verbatim from the markup: the flat accent
+       that tinted the name and the 2px top stripe. `iconGradient` is that
+       same colour on both stops, because the stripe it fills was flat. */
+    const accent = (token) => ({
+      accentColor: 'var(--' + token + ')',
+      iconGradient: 'linear-gradient(90deg, var(--' + token + '), var(--' + token + '))',
+    });
+
+    /* The target pill on each card. The source rendered all four the same
+       neutral grey; lynn-ui already has a target-badge family (tools.html's
+       Figma / Chrome / both pills), so each one takes its own colour here:
+       blue for Figma, emerald for Chrome, teal for either, and `lynn` for
+       the two that need both clients at once - which is the Supercharge-only
+       case the system tints `lynn` everywhere else. The `●` is kept because
+       it was in the source's own label text. */
+    const TARGETS = {
+      either: { tone: 'teal', label: 'Figma or Chrome' },
+      figma: { tone: 'blue', label: 'Figma only' },
+      chrome: { tone: 'emerald', label: 'Chrome only' },
+      both: { tone: 'lynn', label: 'Both clients required' },
+    };
+    const targetBadge = (key) =>
+      h(Badge, { tone: TARGETS[key].tone, bordered: true, icon: '●' }, TARGETS[key].label);
+
+    /* "Key MCP tools" - the card's own footer block, passed as FeatureCard
+       `children`. `note` is the two cards whose list is a sentence rather
+       than a set of tool names ("None - pure reference context"), which is
+       not a badge. */
+    const toolsBlock = ({ tools, note, byline }) =>
+      h(
+        Fragment,
+        null,
+        h(
+          'div',
+          { className: 'skill-tools' },
+          h('div', { className: 'skill-tools-label' }, 'Key MCP tools'),
+          h(
+            'div',
+            { className: 'tools-list' },
+            note
+              ? h('span', { className: 'tools-none' }, note)
+              : tools.map((tool) =>
+                  h(Badge, { tone: 'blue', bordered: true, key: tool }, tool)
+                )
+          )
+        ),
+        byline ? h('p', { className: 'skill-byline' }, byline) : null
+      );
+
+    /* ---- the twelve skills --------------------------------------------- */
+    /* Grouped exactly as the source's eight `.skills-group-label`s grouped
+       them, each label carrying the same inline colour it had in the markup.
+       `triggersLabel` is per-card because one of them really is different:
+       lyra-visual-patterns says "Load BEFORE Lyra conversion". */
+    const SKILL_GROUPS = [
+      {
+        label: 'Score & triage',
+        color: 'var(--lyra)',
+        skills: [
+          {
+            id: 'skill-a11y-triage',
+            ...accent('lyra'),
+            icon: '\u{1F3AF}',
+            name: 'a11y-triage',
+            target: 'either',
+            triggers: [
+              '"triage accessibility issues"',
+              '"which a11y issues matter most"',
+              '"where do I start with a11y"',
+            ],
+            description:
+              'Ranks accessibility issues by severity × reach and returns a top-N action list. Converts an unreadable issue dump into three things to fix this afternoon.',
+            tools: ['audit_accessibility'],
+          },
+          {
+            id: 'skill-manual-fixes-checklist',
+            ...accent('lyra'),
+            icon: '\u{1F4CB}',
+            name: 'manual-fixes-checklist',
+            target: 'either',
+            triggers: [
+              `"what's left to fix manually"`,
+              `"what can't be auto-fixed"`,
+              '"show me the manual checklist"',
+            ],
+            description:
+              'Audits, dry-runs every fixer, then reports only what survives - grouped and prioritized. An honest to-do list for the last mile to 100%, so nobody promises a score the tools cannot reach.',
+            tools: ['run_full_audit', 'convert_page_to_lyra', 'migrate_to_lyra'],
+          },
+        ],
+      },
+      {
+        label: 'Convert to Lyra',
+        color: 'var(--emerald)',
+        skills: [
+          {
+            id: 'skill-lyra-visual-patterns',
+            ...accent('emerald'),
+            icon: '✨',
+            name: 'lyra-visual-patterns',
+            target: 'either',
+            triggersLabel: 'Load BEFORE Lyra conversion',
+            triggers: [
+              '"load lyra-visual-patterns skill"',
+              '"convert to Lyra"',
+              '"migrate to Lyra"',
+            ],
+            description:
+              'Reference for Lyra page chrome, surfaces, tables, panels, nav, chips and AI affordances in light and dark. Load it before any conversion and you know what you are going to get - no surprise redesigns.',
+            tools: ['convert_page_to_lyra', 'migrate_to_lyra', 'convert_mode'],
+          },
+        ],
+      },
+      {
+        label: 'Spec Mode',
+        color: 'var(--indigo)',
+        skills: [
+          {
+            id: 'skill-figma-element-css',
+            ...accent('indigo'),
+            icon: '\u{1F3A8}',
+            name: 'figma-element-css',
+            target: 'figma',
+            triggers: [
+              '"get CSS for this node"',
+              '"export CSS for the selected element"',
+              `"what's the CSS for this"`,
+            ],
+            description:
+              'Turns the selected Figma node into production CSS with Lyra tokens substituted where they match. Output that survives a theme change, instead of hard-coded hex and px.',
+            tools: ['get_selection_info', 'extract_dev_details', 'extract_token_css'],
+          },
+          {
+            id: 'skill-browser-element-specs',
+            ...accent('indigo'),
+            icon: '\u{1F50D}',
+            name: 'browser-element-specs',
+            target: 'chrome',
+            triggers: [
+              '"get specs for this element"',
+              '"what are the design specs on this component"',
+              '"design specs for the inspected element"',
+            ],
+            description:
+              'Pulls computed CSS for the inspected element and annotates every raw value with its nearest token. A spec a developer can act on, not just a description of what is there.',
+            tools: ['get_selection_info', 'extract_dev_details', 'audit_colors'],
+          },
+        ],
+      },
+      {
+        label: 'Design ↔ build parity',
+        color: 'var(--coral)',
+        skills: [
+          {
+            id: 'skill-figma-chrome-parity',
+            ...accent('coral'),
+            icon: '⚖️',
+            name: 'figma-chrome-parity',
+            target: 'both',
+            triggers: [
+              '"diff Figma against the live page"',
+              '"compare the design to the implementation"',
+              '"figma-chrome parity"',
+            ],
+            description:
+              'Aligns Figma layers to page elements by name and diffs colors, type, spacing, radius and shadows. Ends the "it looks off but I cannot say why" review with a per-property drift table.',
+            tools: ['extract_dev_details', 'get_selection_info'],
+          },
+          {
+            id: 'skill-artboard-to-page',
+            ...accent('coral'),
+            icon: '\u{1F5BC}️',
+            name: 'artboard-to-page',
+            target: 'both',
+            triggers: [
+              '"apply this artboard to the live page"',
+              '"push Figma styles to Chrome"',
+              '"can we make this real page look like this artboard"',
+            ],
+            description:
+              'Maps artboard styling onto page selectors and applies it as CSS overrides after you confirm the mapping. Demo a redesign on the real product in minutes, with no branch and no build.',
+            tools: ['extract_dev_details', 'apply_css_overrides', 'clear_css_overrides'],
+          },
+        ],
+      },
+      {
+        label: 'Live-page QA',
+        color: 'var(--teal)',
+        skills: [
+          {
+            id: 'skill-dark-mode-parity',
+            ...accent('teal'),
+            icon: '\u{1F319}',
+            name: 'dark-mode-parity',
+            target: 'chrome',
+            triggers: [
+              '"check dark mode"',
+              '"does this work in dark mode"',
+              '"dark mode parity"',
+            ],
+            description:
+              'Audits colors in light, simulates dark, audits again, and always restores the baseline. Only the delta - what breaks in dark and what breaks in light. No re-reading the full audit.',
+            tools: ['audit_colors', 'polish_page'],
+          },
+        ],
+      },
+      {
+        label: 'Design-system maintenance',
+        color: 'var(--blue)',
+        skills: [
+          {
+            id: 'skill-token-candidates',
+            ...accent('blue'),
+            icon: '\u{1F3F7}️',
+            name: 'token-candidates',
+            target: 'either',
+            triggers: [
+              '"which values should become tokens"',
+              '"what should be promoted to Lyra tokens"',
+              '"token candidates"',
+            ],
+            description:
+              'Groups recurring raw values across all four domains and ranks the ones worth promoting. Fixes the cause once upstream instead of the same symptom on thirty screens.',
+            tools: ['audit_colors', 'audit_text_styles', 'audit_spacing', 'audit_radius'],
+          },
+        ],
+      },
+      {
+        label: 'Decide & review',
+        color: 'var(--emerald)',
+        skills: [
+          {
+            id: 'skill-ux-eval',
+            ...accent('emerald'),
+            icon: '\u{1F4CA}',
+            name: 'ux-eval',
+            isNew: true,
+            target: 'either',
+            triggers: [
+              '"is this ready for dev"',
+              '"run a UX eval"',
+              '"ten-question UX eval"',
+            ],
+            description:
+              'Answers all ten prioritization questions against real evidence, then states pass / pass-with-conditions / not-yet. A defensible verdict with the reasoning attached - the thing you can actually take to a VP.',
+            tools: ['run_ux_eval', 'run_full_audit'],
+            byline: 'Community skill by Bill Bangs',
+          },
+          {
+            id: 'skill-north-star-fox',
+            ...accent('emerald'),
+            icon: '\u{1F98A}',
+            name: 'north-star-fox',
+            isNew: true,
+            target: 'either',
+            triggers: [
+              '"run North Star Fox"',
+              '"check this against our AI tenets"',
+              '"is this design on-tenet and on-brand"',
+            ],
+            description:
+              "Scores a CXone AI design, screen, or JIRA ticket against the twelve NiCE AI design tenets, plus Lyra Foundations and NiCE Brand adherence, and returns a fixed-shape pass/fail verdict per section. A critical look to keep designs and tickets aligned with NiCE's Core Values around AI architecture.",
+            toolsNote: 'None - pure design/tenet judgment',
+            byline: 'Community skill by Janet Gonzales',
+          },
+        ],
+      },
+      {
+        label: 'NICE product knowledge',
+        color: 'var(--lyra)',
+        skills: [
+          {
+            id: 'skill-nice-product-knowledge',
+            ...accent('lyra'),
+            icon: '\u{1F4DA}',
+            name: 'nice-product-knowledge',
+            isNew: true,
+            target: 'either',
+            triggers: [
+              '"what does this NICE product do"',
+              '"who uses CXone Mpower"',
+              '"NiCE product knowledge"',
+            ],
+            description:
+              'Sourced reference on NICE the company and its product lines (CXone Mpower, Enlighten AI, Actimize, Evidencentral), compiled from public material with citations. Grounds design decisions in what the real product and its real users are, instead of generic SaaS assumptions.',
+            toolsNote: 'None - pure reference context',
+          },
+        ],
+      },
+    ];
+
+    /* One flat list of grid children: label, its cards, next label... which
+       is the order the static markup had them in. */
+    const skillGrid = SKILL_GROUPS.flatMap((group) => [
+      h(
+        'div',
+        {
+          className: 'skills-group-label',
+          key: 'group-' + group.label,
+          style: { color: group.color },
+        },
+        group.label
+      ),
+      ...group.skills.map((skill) =>
+        h(FeatureCard, {
+          key: skill.id,
+          id: skill.id,
+          density: 'compact',
+          className: 'reveal',
+          accentColor: skill.accentColor,
+          iconGradient: skill.iconGradient,
+          icon: skill.icon,
+          name: skill.isNew
+            ? h(Fragment, null, skill.name, ' ', h(Badge, { status: 'new' }, 'New'))
+            : skill.name,
+          tagline: targetBadge(skill.target),
+          bulletsLabel: skill.triggersLabel || 'Say something like',
+          bullets: skill.triggers,
+          whyText: skill.description,
+          children: toolsBlock({
+            tools: skill.tools,
+            note: skill.toolsNote,
+            byline: skill.byline,
+          }),
+        })
+      ),
+    ]);
+
+    /* The nav's single action slot, unchanged from the markup it replaces:
+       the disabled Download pill plus its "Coming soon!" tag. `nav-download`
+       / `coming-soon-tag` are theme.css classes, so it keeps its exact look.
+       If a live version label is ever wanted here, `data-latest-label` is
+       the attribute downloads.js looks for - no page on the site sets it on
+       this pill today. */
+    const downloadPill = (key) =>
+      h(
+        'span',
+        { key, className: 'nav-download is-disabled', 'aria-disabled': 'true' },
+        'Download',
+        h('span', { className: 'coming-soon-tag' }, 'Coming soon!')
+      );
+
+    /* ThemeProvider stamps `data-lynn-theme` on its own wrapper div, but the
+       portalled chrome and cards live outside that div - so mirror the
+       attribute onto <html>, where the same `[data-lynn-theme]` rules in
+       lynn-ui.css apply to the whole document. */
+    function ThemeBridge() {
+      const { theme } = useLynnTheme();
+      useEffect(() => {
+        document.documentElement.setAttribute('data-lynn-theme', theme);
+      }, [theme]);
+      return null;
+    }
+
+    function portal(node, id) {
+      const host = document.getElementById(id);
+      return host ? createPortal(node, host) : null;
+    }
+
+    function App() {
+      const [unlocked, setUnlocked] = useState(() => {
+        try {
+          return sessionStorage.getItem(GATE_KEY) === '1';
+        } catch (e) {
+          return false;
+        }
+      });
+      const [error, setError] = useState(undefined);
+      const [railCollapsed, setRailCollapsed] = useState(() => {
+        try {
+          return localStorage.getItem(RAIL_KEY) === '1';
+        } catch (e) {
+          return false;
+        }
+      });
+
+      useEffect(() => {
+        // The chrome is up; let the page paint (see the gate-pending guard
+        // in <head>).
+        document.documentElement.classList.remove('lynn-gate-pending');
+
+        // The tilt/spotlight hover and the scroll-in the page's own polish
+        // script used to wire onto the static `.skill-card`s. Both were
+        // applied before these existed, so hand them over now.
+        const cards = [].slice.call(document.querySelectorAll('.lynn-feature-card'));
+        if (window.NicePolish) {
+          window.NicePolish.polish(cards);
+          window.NicePolish.observeReveal(
+            cards.filter((card) => card.classList.contains('reveal'))
+          );
+        }
+
+        // The cards used to be static markup, so the browser could honour a
+        // `#skill-north-star-fox` deep link on load - every entry in this
+        // page's doc rail is one. They render a tick later now, by which
+        // time that jump has already failed, so re-run it.
+        const hash = location.hash.slice(1);
+        if (hash) {
+          const target = document.getElementById(hash);
+          if (target) target.scrollIntoView();
+        }
+      }, []);
+
+      // Cmd+K / Ctrl+K opens the rail and focuses its filter box - the
+      // shortcut buildDocRail() used to own.
+      useEffect(() => {
+        function onKeyDown(event) {
+          if (event.key !== 'k' && event.key !== 'K') return;
+          if (!(event.metaKey || event.ctrlKey)) return;
+          event.preventDefault();
+          setRail(false);
+          const input = document.querySelector('.lynn-doc-rail-search');
+          if (input) {
+            input.focus();
+            input.select();
+          }
+        }
+        document.addEventListener('keydown', onKeyDown);
+        return () => document.removeEventListener('keydown', onKeyDown);
+      }, []);
+
+      const checkCode = (code) => {
+        if (code === GATE_PASSWORD) {
+          try {
+            sessionStorage.setItem(GATE_KEY, '1');
+          } catch (e) { /* unwritable store just means no persistence */ }
+          setError(undefined);
+          setUnlocked(true);
+        } else {
+          setError(GATE_ERROR);
+        }
+      };
+
+      const setRail = (collapsed) => {
+        setRailCollapsed(collapsed);
+        try {
+          localStorage.setItem(RAIL_KEY, collapsed ? '1' : '0');
+        } catch (e) { /* no persistence, still collapses for this visit */ }
+      };
+
+      return h(
+        Fragment,
+        null,
+        h(ThemeBridge, { key: 'theme-bridge' }),
+        h(AccessGate, {
+          key: 'gate',
+          title: 'NiCE Designer Site Login',
+          subtitle:
+            'This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.',
+          onSubmit: checkCode,
+          error,
+          unlocked,
+          ctaText: h(
+            Fragment,
+            null,
+            "Don't have the code?",
+            h('br'),
+            h('strong', null, 'Reach out to Erick Mathews on Teams'),
+            ' to request access.'
+          ),
+          ctaHref: TEAMS_HREF,
+        }),
+        portal(
+          h(Nav, {
+            logoHref: './index.html',
+            cta: h(Fragment, null, [
+              h(ThemeToggle, { key: 'theme', showLabels: false }),
+              downloadPill('download'),
+            ]),
+          }),
+          'lynn-nav-root'
+        ),
+        portal(
+          h(DocRail, {
+            mode: 'pages',
+            pages: railPages,
+            groups: railGroups,
+            activeHref: './' + PAGE,
+            searchable: true,
+            collapsed: railCollapsed,
+            onToggle: setRail,
+          }),
+          'lynn-docrail-root'
+        ),
+        portal(
+          h(
+            Alert,
+            { variant: 'purple', icon: '⚠️' },
+            rich(
+              'Always call <code>list_targets</code> first to check which clients are connected (Figma, Chrome, or both). Some skills require both clients to be connected at the same time. Calling the wrong target silently does nothing.'
+            )
+          ),
+          'lynn-intro-alert-root'
+        ),
+        portal(h(Fragment, null, skillGrid), 'lynn-skills-root'),
+        portal(
+          h(
+            Alert,
+            { variant: 'info', className: 'tools-note-alert' },
+            rich(
+              'Start the MCP server: <code>cd packages/mcp-server &amp;&amp; node src/index.js</code> - override the port with <code>NICE_MCP_WS_PORT</code> (default: 7331).'
+            )
+          ),
+          'lynn-tools-note-root'
+        ),
+        portal(h(Footer, { columns: FOOTER_COLUMNS }), 'lynn-footer-root')
+      );
+    }
+
+    createRoot(document.getElementById('lynn-app-root')).render(
+      h(ThemeProvider, { defaultTheme: 'lynn' }, h(App))
+    );
   </script>
 
 </body>

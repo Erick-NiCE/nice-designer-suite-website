@@ -1,0 +1,510 @@
+/*
+  Playground chrome.
+
+  Nothing in here is part of Lynn: every control, surface and swatch inside a
+  section is a real lynn-ui component, and these rules only lay the
+  playground out and label it.
+
+  This file is shared by the two places the playground mounts:
+    - `playground/index.html`  - the standalone shell (own page, own Nav)
+    - `../../lynn.html`        - the live site's Lynn page, embedded as one
+                                 section (`mountPlayground(el, { embedded: true })`)
+  Rules that only make sense in one of the two are grouped and labelled as
+  such below.
+*/
+
+/* ================================================================== *
+ * shared: section shells and headings
+ * ================================================================== */
+
+/* Every doc-rail target. The offset clears the sticky site nav. */
+.docs-section {
+  scroll-margin-top: 80px;
+  padding: 8px 0 44px;
+}
+
+.docs-eyebrow {
+  margin: 0 0 8px;
+  font-size: var(--lynn-font-size-section-label);
+  font-weight: var(--lynn-font-weight-bold);
+  letter-spacing: var(--lynn-letter-spacing-section-label);
+  text-transform: uppercase;
+  color: var(--lynn-color-text-muted);
+}
+
+.docs-h1 {
+  margin: 0 0 12px;
+  font-size: 40px;
+  font-weight: var(--lynn-font-weight-black);
+  letter-spacing: -1.4px;
+  line-height: 1.1;
+}
+
+.docs-h2 {
+  margin: 0 0 6px;
+  font-size: 26px;
+  font-weight: var(--lynn-font-weight-extrabold);
+  letter-spacing: -0.6px;
+}
+
+.docs-lede {
+  margin: 0 0 24px;
+  max-width: 72ch;
+  color: var(--lynn-color-text-secondary);
+}
+
+.docs-note {
+  font-family: var(--lynn-font-family-mono);
+  font-size: 11px;
+  color: var(--lynn-color-text-muted);
+}
+
+.docs-group-divider {
+  margin: 56px 0 28px;
+  padding-top: 28px;
+  border-top: 1px solid var(--lynn-color-border);
+}
+
+/* ================================================================== *
+ * shared: token displays
+ * ================================================================== */
+
+.tok-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.tok-swatch {
+  height: 64px;
+  border-radius: var(--lynn-radius-md);
+  border: 1px solid var(--lynn-color-border);
+}
+
+.tok-name {
+  margin: 10px 0 2px;
+  font-size: 13px;
+  font-weight: var(--lynn-font-weight-semibold);
+}
+
+.tok-meta {
+  font-family: var(--lynn-font-family-mono);
+  font-size: 11px;
+  color: var(--lynn-color-text-muted);
+  word-break: break-all;
+}
+
+.tok-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.tok-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 20px;
+  align-items: center;
+}
+
+@media (max-width: 760px) {
+  .tok-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
+
+.tok-bar {
+  height: 14px;
+  border-radius: var(--lynn-radius-xs);
+  background: linear-gradient(
+    90deg,
+    var(--lynn-color-blue),
+    var(--lynn-color-indigo)
+  );
+}
+
+.tok-box {
+  width: 96px;
+  height: 64px;
+  border: 1px solid var(--lynn-color-border-hover);
+  background: var(--lynn-color-surface);
+}
+
+.tok-sample {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tok-demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.tok-demo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 132px;
+  padding: 16px;
+  border: 1px dashed var(--lynn-color-border-hover);
+  border-radius: var(--lynn-radius-md);
+}
+
+.tok-demo-body {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ================================================================== *
+ * shared: the playground card
+ * ================================================================== */
+
+.pgc-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 10px;
+}
+
+/*
+ * The description keeps `.docs-lede`'s measure and color but gives up its 24px
+ * bottom margin, because `.pgc-guide` now follows it and the two read as one
+ * block: what the component is, then how to reach for it.
+ */
+.pgc-desc {
+  margin-bottom: 10px;
+}
+
+/*
+ * Per-component Usage / Don't guidance, sourced from the same `usage` / `dont`
+ * fields the component's own JSDoc carries. Text only - no controls - so it
+ * borrows the card chrome (hairline border, `sm` radius, the `surface` fill at
+ * 55%, mirroring what `.pgc-preview` does with `bg`) and the real type tokens
+ * rather than inventing a scale.
+ *
+ * The two lines are told apart by a 2px accent rule - `teal` for guidance,
+ * `coral` for a warning, both existing Lynn accents - rather than by coloring
+ * the label text. The accents are mode-invariant by design, so a teal 12px
+ * label would be legible on Lynn's dark ground and washed out on light mode's
+ * white; as a decorative rule beside `--lynn-color-text-muted` label text, the
+ * same color codes the line without ever having to carry contrast. That keeps
+ * the label identical to `.pgc-control-label` and `.docs-eyebrow`, which is
+ * how every other label on this page is already drawn.
+ */
+.pgc-guide {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 4px;
+  padding: 10px var(--lynn-space-md);
+  max-width: 72ch;
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-sm);
+  background: color-mix(in srgb, var(--lynn-color-surface) 55%, transparent);
+}
+
+.pgc-guide-line {
+  margin: 0;
+  padding-left: 10px;
+  border-left: 2px solid var(--lynn-color-border-hover);
+  font-size: var(--lynn-font-size-metadata);
+  line-height: var(--lynn-line-height-body);
+  color: var(--lynn-color-text-secondary);
+}
+
+.pgc-guide-label {
+  margin-right: 2px;
+  font-size: var(--lynn-font-size-section-label);
+  font-weight: var(--lynn-font-weight-bold);
+  letter-spacing: var(--lynn-letter-spacing-section-label);
+  text-transform: uppercase;
+  color: var(--lynn-color-text-muted);
+}
+
+.pgc-guide-usage {
+  border-left-color: var(--lynn-color-teal);
+}
+
+.pgc-guide-dont {
+  border-left-color: var(--lynn-color-coral);
+}
+
+.pgc-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 268px;
+  gap: 20px;
+  margin-top: 18px;
+}
+
+.pgc-body-stacked {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (max-width: 900px) {
+  .pgc-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.pgc-preview {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  /* A floor, not a target - demos with real content (a card, a table) size
+     past this on their own. Keeps a lone 16px Spinner or Switch from
+     stranding in a disproportionately tall box. */
+  min-height: 96px;
+  padding: 20px 24px;
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-md);
+  background: color-mix(in srgb, var(--lynn-color-bg) 55%, transparent);
+}
+
+.pgc-preview-block {
+  display: block;
+}
+
+.pgc-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-content: start;
+}
+
+.pgc-control-label {
+  margin: 0 0 6px;
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-bold);
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--lynn-color-text-muted);
+}
+
+.pgc-code {
+  margin-top: 18px;
+}
+
+.pgc-empty {
+  color: var(--lynn-color-text-muted);
+  font-size: 12px;
+}
+
+/* The preview pane must never leak a fixed/overflowing demo onto the page. */
+.pgc-preview > .lynn-hero,
+.pgc-preview > .lynn-lightning,
+.pgc-preview > .lynn-liquid,
+.pgc-preview > .lynn-cta-banner,
+.pgc-preview > .lynn-feature-panel,
+.pgc-preview > .lynn-nav,
+.pgc-preview > .lynn-footer,
+.pgc-preview > .lynn-data-table,
+.pgc-preview > .lynn-timeline,
+.pgc-preview > .lynn-stepper,
+.pgc-preview > .lynn-accordion,
+.pgc-preview > .lynn-code-block,
+.pgc-preview > .lynn-skeleton,
+.pgc-preview > .lynn-progress,
+.pgc-preview > .lynn-changelog-card,
+.pgc-preview > .lynn-tab-panels,
+.pgc-preview > .lynn-feature-card,
+.pgc-preview > .lynn-icon-card,
+.pgc-preview > .lynn-card {
+  width: 100%;
+  min-width: 0;
+}
+
+/* ================================================================== *
+ * standalone shell only (playground/index.html)
+ * ================================================================== */
+
+/*
+  In the standalone shell the rail is the component's own `position: fixed`
+  panel at `left: 24px`, 220px wide at every width, so the main column always
+  has to clear it - dropping the margin on a narrow viewport would put the
+  rail on top of the content. What reclaims the space is collapsing the rail,
+  which leaves only its 26px edge tab.
+*/
+.docs-main {
+  margin-left: 268px;
+  max-width: 1120px;
+  padding: 40px 32px 160px;
+  transition: margin-left 0.3s var(--lynn-ease);
+}
+
+.docs-main-wide {
+  margin-left: 52px;
+}
+
+@media (max-width: 760px) {
+  .docs-main {
+    padding: 28px 16px 120px;
+  }
+}
+
+.docs-error {
+  margin: 0;
+  padding: 16px 32px;
+  background: rgba(255, 91, 138, 0.12);
+  color: #ff8ab0;
+  font-family: var(--lynn-font-family-mono);
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+
+/* ================================================================== *
+ * embedded only (a section of the live lynn.html)
+ * ================================================================== *
+ *
+ * The live page already has its own site nav and its own `.doc-rail` fixed
+ * down the left edge, so the embedded playground mounts no `Nav` at all and
+ * puts its `DocRail` in a *right-hand* column instead: a sticky, in-flow,
+ * section-scoped rail that can never overlap or compete with the real one.
+ */
+
+/* The ThemeProvider's own `.lynn-root`, sized as a panel rather than a page. */
+.lynn-root.pg-embed {
+  padding: 28px;
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-xl);
+  font-size: var(--lynn-font-size-body);
+  line-height: var(--lynn-line-height-body);
+  transition: background 0.3s var(--lynn-ease), color 0.3s var(--lynn-ease);
+  /*
+    `.lynn-root` ships `overflow-x: hidden`, which makes the element a scroll
+    container (a `visible` cross-axis computes to `auto`) and would stop the
+    sticky rail below from ever sticking. `clip` gives the same overflow
+    protection without creating one.
+  */
+  overflow-x: clip;
+}
+
+.pg-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--lynn-color-border);
+}
+
+.pg-header-title {
+  margin: 0 0 4px;
+  font-size: 22px;
+  font-weight: var(--lynn-font-weight-extrabold);
+  letter-spacing: -0.5px;
+}
+
+.pg-header-sub {
+  margin: 0;
+  font-size: 13px;
+  color: var(--lynn-color-text-secondary);
+}
+
+.pg-header-theme {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+.pg-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 244px;
+  gap: 28px;
+  /*
+    Both columns stretch to the row's full height on purpose: the rail
+    column is the sticky rail's containing block, so a column sized to the
+    rail's own 760px would give it no travel and `position: sticky` would
+    never engage.
+  */
+  align-items: stretch;
+}
+
+/* Collapsing the rail hands its column back to the content. */
+.pg-shell-collapsed {
+  grid-template-columns: minmax(0, 1fr) 34px;
+}
+
+.pg-main {
+  min-width: 0;
+}
+
+.pg-railcol {
+  position: relative;
+  min-width: 0;
+}
+
+/*
+  Section-scoped rail: the component's fixed glass panel becomes a sticky
+  in-flow one, full-width in its own column. Same component, same markup -
+  only the box it lives in changes.
+*/
+.pg-railcol .lynn-doc-rail {
+  position: sticky;
+  top: 84px;
+  left: auto;
+  width: 100%;
+  max-height: calc(100vh - 140px);
+  z-index: 4;
+  box-shadow: none;
+  background: color-mix(in srgb, var(--lynn-color-surface) 92%, transparent);
+}
+
+/* Collapsed: drop it out of flow so the 34px column is all that is left. */
+.pg-shell-collapsed .lynn-doc-rail {
+  display: none;
+}
+
+/* The expand tab is `position: fixed; left: 0` by default - which would land
+   it on top of the real page's own rail tab. Pin it into this column. */
+.pg-railcol .lynn-doc-rail-expand {
+  position: sticky;
+  top: 84px;
+  left: auto;
+  width: 34px;
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-sm);
+  z-index: 4;
+}
+
+@media (max-width: 1080px) {
+  /* Not enough width for two columns: the rail becomes a contents box that
+     sits above the cards, still scoped to this section. */
+  .pg-shell,
+  .pg-shell-collapsed {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pg-railcol {
+    order: -1;
+  }
+
+  .pg-railcol .lynn-doc-rail {
+    position: static;
+    max-height: 320px;
+  }
+
+  /* Collapsed still means hidden - the tab just becomes an inline chip
+     above the cards rather than an edge tab beside them. */
+  .pg-railcol .lynn-doc-rail-expand {
+    position: static;
+    width: auto;
+    height: 32px;
+    padding: 0 14px;
+  }
+}
+
+@media (max-width: 760px) {
+  .lynn-root.pg-embed {
+    padding: 18px 14px;
+  }
+}

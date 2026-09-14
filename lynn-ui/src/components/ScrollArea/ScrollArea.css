@@ -1,0 +1,213 @@
+/*!
+ * ScrollArea
+ * -------------------------------------------------------------
+ * A genuinely curved scrollbar. CSS cannot bend a box along an arc, so the
+ * bar is not a box: the overlay is an SVG whose single `d` traces the
+ * container's own rounded-rect perimeter - through the top-right corner, down
+ * the right edge, through the bottom-right corner - and the thumb is one
+ * dash on that path.
+ *
+ * Three paths share the `d` the hook writes:
+ *   .lynn-scroll-area-hit    transparent, wide, the only thing clickable
+ *   .lynn-scroll-area-rail   the faint full-length groove
+ *   .lynn-scroll-area-thumb  the dash, moved by stroke-dashoffset
+ *
+ * Four custom properties drive it, all in px and all written by the hook:
+ *   --lynn-scroll-radius   the container's radius, the curve to trace
+ *   --lynn-track-length    getTotalLength() of the path, the dash gap
+ *   --lynn-thumb-size      clientSize / scrollSize, of the track length
+ *   --lynn-thumb-offset    scrollPos / slack, of the track's leftover length
+ *
+ * The dash pattern is `size gap` with the gap set to the whole track, so the
+ * pattern is longer than the path and exactly one dash can ever be on it; a
+ * *negative* dashoffset is what slides that dash forward, because a positive
+ * one walks the pattern backwards.
+ *
+ * State classes, also from the hook:
+ *   .lynn-scroll-area-scrollable  content actually overflows (bar exists)
+ *   .lynn-scroll-area-active      scrolling, hovered, or mid-drag (bar shown)
+ *   .lynn-scroll-area-dragging    the thumb is captured
+ */
+
+.lynn-scroll-area {
+  --lynn-scroll-radius: var(--lynn-radius-lg);
+  --lynn-scroll-thickness: 5px;
+  --lynn-scroll-inset: 4px;
+  --lynn-scroll-grab: 14px;
+  --lynn-track-length: 0px;
+  --lynn-thumb-size: 0px;
+  --lynn-thumb-offset: 0px;
+  /*
+   * Flex, not `height: 100%` on the viewport. A percentage height needs a
+   * *definite* containing block, and the most common way to bound one of
+   * these is a `max-height` on an auto-height ancestor (DocRail does exactly
+   * that) - which is precisely the case where a percentage resolves to auto,
+   * the viewport grows to fit its content, and nothing ever scrolls. Flex
+   * sizing works off the used height instead, so the viewport shrinks to
+   * whatever the root ended up being, however the root got there.
+   */
+  display: flex;
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  font-family: var(--lynn-font-family);
+}
+
+.lynn-scroll-area-vertical {
+  flex-direction: column;
+}
+
+.lynn-scroll-area-horizontal {
+  flex-direction: row;
+}
+
+.lynn-scroll-area-viewport {
+  /* `min-*: 0` is the other half: a flex item will not shrink below its
+     content without it, which puts us straight back to a viewport that
+     never overflows. */
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  /* The point of the whole component: no native bar, no reserved gutter. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /* A tab stop with no focus ring would be invisible; this is the same
+     blue rim the rest of Lynn's focus states use. */
+  outline: none;
+}
+
+.lynn-scroll-area-viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.lynn-scroll-area-viewport:focus-visible {
+  border-radius: var(--lynn-radius-sm);
+  box-shadow: 0 0 0 2px var(--lynn-color-border-glow);
+}
+
+.lynn-scroll-area-vertical > .lynn-scroll-area-viewport {
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Vertical scrolling is ours, horizontal panning stays the page's. */
+  touch-action: pan-y;
+  overscroll-behavior-y: contain;
+}
+
+.lynn-scroll-area-horizontal > .lynn-scroll-area-viewport {
+  overflow-x: auto;
+  overflow-y: hidden;
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+}
+
+.lynn-scroll-area-horizontal > .lynn-scroll-area-viewport
+  > .lynn-scroll-area-content {
+  display: inline-flex;
+  min-width: 100%;
+}
+
+/* ---------- the overlay bar ---------- */
+/*
+ * The SVG is stretched over the root's whole padding box rather than over a
+ * strip at the edge: the path needs the container's real corners to curve
+ * through, and the hook builds `d` in this element's own px coordinates
+ * (no `viewBox`, so one user unit is one CSS px).
+ */
+.lynn-scroll-area-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* An SVG root clips to its viewport by default, which would shave the
+     thumb's round caps where they sit on the boundary. */
+  overflow: visible;
+  /* Two layers of protection against a leftover overlay swallowing clicks:
+     the track is inert, and only the hit path opts back in. */
+  pointer-events: none;
+  opacity: 0;
+  /* The fade is the one piece of motion here, on Lynn's own easing. The
+     curve itself is static geometry - there is nothing in it to reduce. */
+  transition: opacity 0.3s var(--lynn-ease);
+  z-index: 2;
+  /* Inherited by all three paths. */
+  fill: none;
+  stroke-width: var(--lynn-scroll-thickness);
+  stroke-linecap: round;
+  /*
+   * Not decoration - this is how `radius` gets to the path builder. The hook
+   * reads the *resolved* `border-top-right-radius` off this element, so a
+   * `radius` given in rem, em or a calc() arrives as px. The element paints
+   * no border and no background, so the declaration is invisible.
+   */
+  border-top-right-radius: var(--lynn-scroll-radius);
+}
+
+/* A non-overflowing region has no bar at all - not a faded one. */
+.lynn-scroll-area:not(.lynn-scroll-area-scrollable) > .lynn-scroll-area-track {
+  display: none;
+}
+
+.lynn-scroll-area-active > .lynn-scroll-area-track {
+  opacity: 1;
+}
+
+/* The groove: the whole curve, faint, always full-length. */
+.lynn-scroll-area-rail {
+  stroke: color-mix(in srgb, var(--lynn-color-text) 7%, transparent);
+}
+
+/*
+ * The thumb. One dash, `--lynn-thumb-size` long, on a pattern whose gap is
+ * the entire track - so the pattern cannot repeat and no second dash can
+ * appear. The offset is negated because `stroke-dashoffset` counts *into*
+ * the pattern, i.e. a positive value walks the dash back toward the path's
+ * start.
+ */
+.lynn-scroll-area-thumb {
+  stroke: color-mix(in srgb, var(--lynn-color-text) 26%, transparent);
+  stroke-dasharray: var(--lynn-thumb-size) var(--lynn-track-length);
+  stroke-dashoffset: calc(-1 * var(--lynn-thumb-offset));
+  transition:
+    stroke 0.25s var(--lynn-ease),
+    filter 0.25s var(--lynn-ease);
+}
+
+/*
+ * The grab target: the same dash, three times as thick, painted nothing.
+ * `pointer-events: stroke` hit-tests the stroke area whatever the paint is,
+ * which is what turns a 5px bar into a 14px one to grab without making it
+ * look 14px wide. It sits before the thumb so `:hover` can reach it.
+ */
+.lynn-scroll-area-hit {
+  stroke: transparent;
+  stroke-width: var(--lynn-scroll-grab);
+  stroke-dasharray: var(--lynn-thumb-size) var(--lynn-track-length);
+  stroke-dashoffset: calc(-1 * var(--lynn-thumb-offset));
+  pointer-events: stroke;
+  cursor: grab;
+}
+
+.lynn-scroll-area-hit:hover ~ .lynn-scroll-area-thumb {
+  stroke: color-mix(in srgb, var(--lynn-color-text) 40%, transparent);
+}
+
+.lynn-scroll-area-dragging .lynn-scroll-area-hit {
+  cursor: grabbing;
+}
+
+.lynn-scroll-area-dragging .lynn-scroll-area-thumb {
+  /* Mid-drag the thumb picks up the action accent, so the grab reads as
+     held rather than merely hovered. `filter`, not `box-shadow`: a shadow
+     is a box property and an SVG path has no box to cast one. */
+  stroke: color-mix(in srgb, var(--lynn-color-blue) 78%, transparent);
+  filter: drop-shadow(0 0 5px var(--lynn-color-border-glow));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* The bar still appears and disappears - it just does it at once. */
+  .lynn-scroll-area-track,
+  .lynn-scroll-area-thumb {
+    transition: none;
+  }
+}

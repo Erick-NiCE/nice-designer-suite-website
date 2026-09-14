@@ -1,0 +1,94 @@
+/*!
+ * Accordion / AccordionItem
+ * Behavior + chevron <- the plugin's `.dev-section-head` /
+ *                       `.dev-section-toggle` / `.dev-section-actions` /
+ *                       `.ed-chevron` (`transform: rotate(90deg)` on
+ *                       `.is-open`, 120ms, 9px glyph) / `.ed-panel`
+ *                       (`styles.css:5902-5936`)
+ * Card chrome        <- faq.html `.faq-item` (`card` surface, 1px border,
+ *                       16px radius, `overflow: hidden`, 30% blue border when
+ *                       open), `.faq-q` (20px/24px header, 16px/700),
+ *                       `.faq-a` (0/24px/20px panel, 14px secondary at 1.75,
+ *                       1px top rule) and `.faq-list` (12px column gap)
+ *
+ * The toggle is the real `Button` at `ghost`, so the only rules here are the
+ * ones that turn it into a full-width header row: the button keeps its own
+ * hover, focus ring and icon-gap behavior.
+ */
+
+.lynn-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lynn-space-md);
+  font-family: var(--lynn-font-family);
+}
+
+.lynn-accordion-item {
+  background: var(--lynn-color-card);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-lg);
+  overflow: hidden;
+  transition: border-color 0.2s var(--lynn-ease);
+}
+
+.lynn-accordion-item-open {
+  border-color: rgba(54, 148, 252, 0.3);
+}
+
+.lynn-accordion-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 20px 24px;
+}
+
+/* The header's own type, and the full row as its hit area - a person aiming
+   at a section header aims at the whole strip, not at the words. */
+.lynn-accordion-head > .lynn-accordion-toggle {
+  flex: 1;
+  min-width: 0;
+  justify-content: flex-start;
+  text-align: left;
+  font-size: var(--lynn-font-size-card-title);
+  font-weight: var(--lynn-font-weight-bold);
+  color: var(--lynn-color-text);
+}
+
+.lynn-accordion-chevron {
+  display: inline-block;
+  font-size: 9px;
+  color: var(--lynn-color-blue);
+  transition: transform 120ms ease;
+}
+
+.lynn-accordion-chevron-open {
+  transform: rotate(90deg);
+}
+
+.lynn-accordion-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--lynn-space-xs);
+  margin-left: auto;
+}
+
+.lynn-accordion-panel {
+  padding: var(--lynn-space-lg) 24px 20px;
+  border-top: 1px solid var(--lynn-color-border);
+  font-size: var(--lynn-font-size-body);
+  line-height: 1.75;
+  color: var(--lynn-color-text-secondary);
+}
+
+.lynn-accordion-panel[hidden] {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-accordion-item,
+  .lynn-accordion-chevron {
+    transition: none;
+  }
+}

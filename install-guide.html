@@ -11,9 +11,64 @@
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <link rel="stylesheet" href="site-gate.css" />
-  <script src="site-gate.js" defer></script>
-  <script src="nice-effects.js?v=9" defer></script>
+  <script src="nice-effects.js?v=11" defer></script>
+
+  <!--
+    ===== lynn-ui: the site chrome, as React components =====
+    The access gate, the nav and (on pages that have them) the footer and the
+    doc rail all come from lynn-ui now - see the single #lynn-app-root mount
+    script at the end of <body>. site-gate.css / site-gate.js are gone with
+    them; `AccessGate` is the same screen and the mount script re-runs the
+    same client-side code check.
+
+    Three things are needed, and none of them affect the rest of the page:
+      1. dist/lynn-ui.css - the package's built stylesheet. Everything in it
+         is either a `--lynn-*` custom property or a `.lynn-*` class, so it
+         cannot collide with this page's own tokens/classes.
+      2. the import map  - React, ReactDOM and matter-js as CDN ESM.
+         `?external=react` on react-dom stops a second copy of React being
+         pulled in ("invalid hook call"). matter-js is in the map because
+         dist/index.js is one barrel that also reaches LiquidFill.
+      3. `.lynn-mount` - the chrome renders through portals into placeholder
+         divs left where the old markup was. `display: contents` means those
+         placeholders generate no box, so the sticky nav and the footer's
+         margin still resolve against <body> exactly as before.
+  -->
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@18.3.1",
+      "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+      "react-dom": "https://esm.sh/react-dom@18.3.1?external=react",
+      "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?external=react",
+      "scheduler": "https://esm.sh/scheduler@0.23.2",
+      "matter-js": "https://esm.sh/matter-js@0.20.0"
+    }
+  }
+  </script>
+  <style>.lynn-mount { display: contents; }</style>
+
+  <!--
+    The gate used to be static markup covered by blocking CSS, so it was up
+    before first paint. React arrives as ESM from a CDN, so the component
+    can only mount a tick later - hold the page back until it does, or a
+    locked visitor reads the whole page in the gap. Costs nothing once the
+    session is unlocked (the class is never added), and a 4s failsafe means
+    a CDN that never answers leaves a readable page rather than a blank one.
+  -->
+  <style>html.lynn-gate-pending body { visibility: hidden; }</style>
+  <script>
+    (function () {
+      try {
+        if (sessionStorage.getItem('nice-site-access') === '1') return;
+      } catch (e) { /* blocked storage: fall through and gate */ }
+      var root = document.documentElement;
+      root.classList.add('lynn-gate-pending');
+      setTimeout(function () { root.classList.remove('lynn-gate-pending'); }, 4000);
+    })();
+  </script>
+
   <style>
     body { line-height: 1.6; } /* page-specific */
 
@@ -66,82 +121,45 @@
     }
 
     /* ---- STEPS ---- */
-    .steps-list {
-      display: flex;
-      flex-direction: column;
-      gap: 56px;
+    /* The six-step walkthrough is lynn-ui's <Stepper> now (see the mount
+       script at the end of <body>), so the `.steps-list` / `.step` /
+       `.step-sidebar` / `.step-number-badge` / `.step-line` / `.step-body` /
+       `.step-header` / `.step-title` / `.step-card` CSS that used to live
+       here has gone with the markup - `.lynn-stepper*` in lynn-ui.css is a
+       verbatim port of it, down to the 80px badge gutter, the 56px gap, the
+       `scroll-margin-top` an anchored step needs and the single-column
+       collapse under 600px. What is left below is everything *inside* a step
+       card, which the component takes as each step's `children`. */
+
+    /* The callouts inside a step card are <Alert>s now; this is the 16px gap
+       `.note-box` / `.tip-box` / `.warn-box` each carried themselves. The
+       `.lynn-mount` half is the four callouts further down the page, in the
+       "Updating the App" section, which portal in from the same mount. */
+    .lynn-stepper-card .lynn-alert,
+    .lynn-mount .lynn-alert {
+      margin-top: 16px;
     }
 
-    .step {
-      display: grid;
-      grid-template-columns: 80px 1fr;
-      gap: 0 32px;
-      scroll-margin-top: calc(var(--nav-h) + 24px);
+    /* Three step titles carry a <Badge> after the heading text, where the
+       source had a `.pill-tag` - same mid-line alignment against 24px type. */
+    .lynn-stepper-title .lynn-badge {
+      margin-left: 10px;
+      vertical-align: middle;
     }
 
-    .step-sidebar {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .step-number-badge {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--electric), var(--indigo));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: #fff;
-      flex-shrink: 0;
-      box-shadow: 0 0 0 4px rgba(2,90,251,0.18);
-    }
-
-    .step-line {
-      width: 2px;
-      flex: 1;
-      background: linear-gradient(to bottom, rgba(2,90,251,0.4), rgba(2,90,251,0.04));
-      margin-top: 12px;
-      min-height: 40px;
-    }
-
-    .step:last-child .step-line {
-      display: none;
-    }
-
-    .step-body {
-      padding-bottom: 16px;
-    }
-
-    .step-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-      padding-top: 10px;
-    }
-
-    .step-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    .step-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 28px 32px;
-    }
-
+    /* Every `.step-*` rule below now lives inside a lynn-ui surface - the
+       <Stepper>'s own card, which repaints per theme mode. So the four text
+       colours in here read the `--lynn-color-text-*` tokens rather than the
+       page's `--secondary` / `--muted`: identical values in the default
+       `lynn` mode (rgba(255,255,255,.58) / .30, to the byte), but they follow
+       the card when the theme toggle flips it light or dark, where page
+       tokens would leave grey-on-white prose. */
     .step-section-label {
       font-size: 0.7rem;
       font-weight: 700;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: var(--lynn-color-text-muted);
       margin-bottom: 10px;
     }
 
@@ -179,7 +197,7 @@
     .step-figure figcaption {
       margin-top: 10px;
       font-size: 0.85rem;
-      color: var(--muted);
+      color: var(--lynn-color-text-muted);
       line-height: 1.5;
     }
 
@@ -188,7 +206,7 @@
     }
 
     .step-section p {
-      color: var(--secondary);
+      color: var(--lynn-color-text-secondary);
       font-size: 0.9375rem;
       line-height: 1.7;
     }
@@ -219,6 +237,12 @@
       color: var(--muted);
       border-bottom-color: transparent;
     }
+    /* Same split as `.numbered-list` below: the in-card copy follows the
+       Stepper card's theme, the one in the static update-card does not. */
+    .lynn-stepper-card .step-link.is-disabled,
+    .lynn-stepper-card .step-link.is-disabled:hover {
+      color: var(--lynn-color-text-muted);
+    }
 
     .numbered-list {
       list-style: none;
@@ -235,6 +259,13 @@
       color: var(--secondary);
       font-size: 0.9375rem;
       line-height: 1.6;
+    }
+
+    /* `.numbered-list` is used twice: inside a step card, which repaints per
+       theme mode, and inside the static `.update-card`s, which do not - so
+       only the in-card copy follows the lynn text token. */
+    .lynn-stepper-card .numbered-list li {
+      color: var(--lynn-color-text-secondary);
     }
 
     .numbered-list li::before {
@@ -289,89 +320,14 @@
       color: var(--emerald);
     }
 
-    .note-box {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      background: rgba(54,148,252,0.07);
-      border: 1px solid rgba(54,148,252,0.2);
-      border-radius: 10px;
-      padding: 14px 16px;
-      margin-top: 16px;
-    }
-
-    .note-box-icon {
-      font-size: 1rem;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    .note-box p {
-      font-size: 0.875rem;
-      color: rgba(255,255,255,0.65);
-      line-height: 1.6;
-    }
-
-    .tip-box {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      background: rgba(0,226,160,0.06);
-      border: 1px solid rgba(0,226,160,0.2);
-      border-radius: 10px;
-      padding: 14px 16px;
-      margin-top: 16px;
-    }
-
-    .tip-box p {
-      font-size: 0.875rem;
-      color: rgba(255,255,255,0.65);
-      line-height: 1.6;
-    }
-
-    .warn-box {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      background: rgba(255,176,32,0.08);
-      border: 1px solid rgba(255,176,32,0.28);
-      border-radius: 10px;
-      padding: 14px 16px;
-      margin-top: 16px;
-    }
-
-    .warn-box-icon {
-      font-size: 1rem;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    .warn-box p {
-      font-size: 0.875rem;
-      color: rgba(255,255,255,0.72);
-      line-height: 1.6;
-    }
-
-    .pill-tag {
-      display: inline-block;
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 3px 9px;
-      border-radius: 20px;
-      vertical-align: middle;
-    }
-
-    .pill-optional {
-      background: rgba(185,143,255,0.14);
-      color: var(--lyra);
-    }
-
-    .pill-recommended {
-      background: rgba(0,214,143,0.14);
-      color: var(--emerald);
-    }
+    /* `.note-box` / `.tip-box` / `.warn-box` are lynn-ui <Alert variant=
+       "info" | "success" | "warning"> now, and `.pill-tag` / `.pill-optional`
+       / `.pill-recommended` are <Badge status="optional" | "recommended">, so
+       all six rule blocks have gone with the markup. Two deliberate
+       differences, both the component's documented behaviour: `warning` is
+       teal in Lynn (there is no amber accent in the system), and the
+       `optional` status pill is the muted card-grey pair rather than the
+       lyra-purple `.pill-optional` painted. */
 
     /* ---- VERIFY CHECKLIST ---- */
     .checklist {
@@ -384,7 +340,7 @@
       display: flex;
       align-items: flex-start;
       gap: 12px;
-      color: var(--secondary);
+      color: var(--lynn-color-text-secondary);
       font-size: 0.9375rem;
       line-height: 1.6;
     }
@@ -479,11 +435,6 @@
       font-weight: 600;
     }
 
-    .update-card .note-box,
-    .update-card .warn-box {
-      margin-top: 16px;
-    }
-
     .update-intro {
       color: var(--secondary);
       font-size: 0.9375rem;
@@ -549,7 +500,9 @@
     }
 
     .trouble-icon {
-      font-size: 1.1rem;
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
     }
 
     .trouble-card-body {
@@ -571,31 +524,10 @@
     }
 
     /* ---- RESPONSIVE STEP ---- */
+    /* <Stepper> collapses its own grid, sidebar, line, badge and card
+       padding under 600px, exactly as the rules that used to live here did,
+       so only the hero is left for this breakpoint. */
     @media (max-width: 600px) {
-      .step {
-        grid-template-columns: 1fr;
-        gap: 16px;
-      }
-
-      .step-sidebar {
-        flex-direction: row;
-        align-items: center;
-      }
-
-      .step-line {
-        display: none;
-      }
-
-      .step-number-badge {
-        width: 40px;
-        height: 40px;
-        font-size: 1rem;
-      }
-
-      .step-card {
-        padding: 20px;
-      }
-
       .hero {
         padding: 64px 20px 56px;
       }
@@ -604,37 +536,14 @@
 </head>
 <body>
 
-  <!-- SITE-WIDE ACCESS GATE (see site-gate.css / site-gate.js) -->
-  <div id="nice-site-gate">
-    <div class="sg-card">
-      <div class="sg-lock">🔒</div>
-      <div class="sg-title">NiCE Designer Site Login</div>
-      <div class="sg-subtitle">This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.</div>
-      <div class="sg-input-wrap">
-        <input id="nice-site-gate-input" type="password" placeholder="Enter code" autocomplete="off" />
-      </div>
-      <div class="sg-error" id="nice-site-gate-error"></div>
-      <button id="nice-site-gate-btn" type="button">Unlock</button>
-      <div class="sg-divider"></div>
-      <div class="sg-cta">
-        Don't have the code?<br>
-        <strong>Reach out to Erick Mathews on Teams</strong> to request access.
-        <br>
-        <a class="sg-teams-btn" href="https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com" target="_blank" rel="noopener">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H8a2 2 0 00-2 2v2H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2h2a2 2 0 002-2V4a2 2 0 00-2-2zM4 20V8h12v12H4zm16-4h-2V8a2 2 0 00-2-2H8V4h12v12z" fill="currentColor"/></svg>
-          Message on Teams
-        </a>
-      </div>
-    </div>
-  </div>
+  <!-- lynn-ui chrome. One React root, one ThemeProvider (see the mount
+       script at the end of <body>); the gate renders inside it, everything
+       else portals into the `.lynn-mount` placeholders below. -->
+  <div id="lynn-app-root"></div>
 
-  <!-- NAV -->
-  <nav class="site-nav" id="site-nav">
-    <a href="./index.html" class="nav-logo">
-      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span><span class="logo-suite"> Suite</span>
-    </a>
-    <span class="nav-download is-disabled" aria-disabled="true">Download<span class="coming-soon-tag">Coming soon!</span></span>
-  </nav>
+  <!-- NAV (lynn-ui <Nav>) + DOC RAIL (lynn-ui <DocRail>, position: fixed) -->
+  <div id="lynn-nav-root" class="lynn-mount"></div>
+  <div id="lynn-docrail-root" class="lynn-mount"></div>
 
   <!-- HERO -->
   <section class="hero">
@@ -647,313 +556,10 @@
 
   <!-- MAIN -->
   <main class="main-content">
-    <div class="steps-list">
-
-      <!-- STEP 1: Chrome Extension -->
-      <div class="step reveal" id="step-chrome">
-        <div class="step-sidebar">
-          <div class="step-number-badge">1</div>
-          <div class="step-line"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-header">
-            <h2 class="step-title">Install the Chrome Extension</h2>
-          </div>
-          <div class="step-card">
-            <div class="step-section">
-              <div class="step-section-label">Prerequisites</div>
-              <p>Chrome or Edge (Chromium-based) with Developer Mode enabled in <code>chrome://extensions</code>.</p>
-            </div>
-
-            <div class="step-section">
-              <div class="step-section-label">How to install</div>
-              <ol class="numbered-list">
-                <li>Download the latest release: <span class="step-link is-disabled" aria-disabled="true">NiCE-Designer-V11.2.zip</span> <span class="coming-soon-tag">Coming soon!</span></li>
-                <li>Unzip the downloaded package to a location you'll keep it</li>
-                <li>Go to <code>chrome://extensions</code> (or <code>edge://extensions</code>) and enable <strong>Developer Mode</strong></li>
-                <li>Click <strong>"Load unpacked"</strong> and select the <code>NiCE Designer Chrome</code> folder from the unzipped package</li>
-                <li>The NiCE Designer icon appears in your Chrome toolbar</li>
-              </ol>
-              <div class="note-box">
-                <span class="note-box-icon">📍</span>
-                <p><strong>Where is Developer Mode?</strong> Top-right in Chrome, bottom of the left sidebar in Edge - and <strong>Load unpacked</strong> only appears once it's on. Both are marked up below.</p>
-              </div>
-              <figure class="step-figure">
-                <img src="./images/install-chrome-extensions.png" alt="The top of the chrome://extensions page. A red box highlights the Load unpacked button on the left of the toolbar, and another highlights the Developer mode toggle switched on at the far right." loading="lazy" width="1400" height="171" />
-                <figcaption><strong>Chrome</strong> - <strong>Developer mode</strong> is the toggle at the top right. Switch it on and the toolbar row appears, with <strong>Load unpacked</strong> at the top left.</figcaption>
-              </figure>
-              <figure class="step-figure">
-                <img src="./images/install-edge-extensions.png" alt="The edge://extensions page in Microsoft Edge. The Load Unpacked button sits at the top of the Installed extensions list, and the Developer mode toggle is switched on in the bottom-left sidebar." loading="lazy" width="1400" height="859" />
-                <figcaption><strong>Edge</strong> - same two controls, different places: <strong>Developer mode</strong> is at the bottom of the left sidebar, and <strong>Load Unpacked</strong> is at the top of the installed list.</figcaption>
-              </figure>
-            </div>
-
-            <div class="step-section">
-              <div class="step-section-label">How to use it</div>
-              <p>Navigate to any web page and click the NiCE Designer icon in the toolbar. The inspection panel opens alongside the page. For a dedicated second-monitor view, click the pop-out icon in the extension settings panel.</p>
-            </div>
-
-            <div class="note-box">
-              <span class="note-box-icon">ℹ️</span>
-              <p>The extension persists per window. No reset is needed when switching tabs or navigating to a different page.</p>
-            </div>
-
-            <div class="tip-box">
-              <span class="note-box-icon">💡</span>
-              <p><strong>First launch:</strong> a Welcome screen offers <strong>Simple</strong> (Lite mode - just Frontend Audit and Design System) or the <strong>Full toolkit</strong>, followed by a short guided tour. Switch modes or replay the tour anytime from Settings.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- STEP 2: Install Node.js -->
-      <div class="step reveal" id="step-node">
-        <div class="step-sidebar">
-          <div class="step-number-badge">2</div>
-          <div class="step-line"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-header">
-            <h2 class="step-title">Install Node.js</h2>
-          </div>
-          <div class="step-card">
-            <div class="step-section">
-              <div class="step-section-label">What it does</div>
-              <p>Claude Desktop needs Node.js on your machine to run the local MCP server that connects Claude to the Figma plugin and Chrome extension. The Figma plugin and Chrome extension still work fully as standalone tools without it - this step only unlocks Supercharge.</p>
-            </div>
-
-            <div class="step-section">
-              <div class="step-section-label">Option A - Download the installer (recommended, no terminal)</div>
-              <p>Go to <a href="https://nodejs.org" class="step-link" target="_blank" rel="noopener">nodejs.org</a>, download the installer for your OS (the big green button - it's the LTS version), and double-click it like any other app installer. That's it - no terminal, no typing commands.</p>
-            </div>
-
-            <div class="step-section">
-              <div class="step-section-label">Option B - Install via npm/a package manager (for developers)</div>
-              <p>If you're comfortable with a terminal and already use a package manager, that works too:</p>
-              <div class="code-block"><span class="code-comment"># macOS (Homebrew)</span>
-brew install node
-
-<span class="code-comment"># Windows (winget)</span>
-winget install OpenJS.NodeJS.LTS</div>
-              <p style="margin-top:12px;">Either option gives you the same thing: a working <code>node</code> command that Claude Desktop can call. You only need to do this once per machine.</p>
-            </div>
-
-            <div class="note-box">
-              <span class="note-box-icon">ℹ️</span>
-              <p>You do <strong>not</strong> need to run <code>npm install</code> or start the server yourself - the downloaded package already includes its dependencies, and Claude Desktop starts the server automatically in the next step.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- STEP 3: Connect Claude -->
-      <div class="step reveal" id="step-claude">
-        <div class="step-sidebar">
-          <div class="step-number-badge">3</div>
-          <div class="step-line"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-header">
-            <h2 class="step-title">Connect Claude Desktop <span class="pill-tag pill-recommended">Supercharge</span></h2>
-          </div>
-          <div class="step-card">
-            <div class="step-section">
-              <div class="step-section-label">One-click install (recommended)</div>
-              <p>The <code>NiCE Designer Chrome</code> folder - the same one you loaded in step 1 - has <strong>"Click to install Claude Connector.mcpb"</strong> sitting directly inside it. Double-click it, confirm the two prompts, and <strong>"nice-designer-mcp"</strong> appears as an installed extension - already running. No file paths, no JSON, no terminal.</p>
-
-              <figure class="step-figure">
-                <img src="./images/install-mcpb-finder.png" alt="Finder window showing the NiCE Designer Chrome folder. The file named &quot;Click to install Claude Connector.mcpb&quot; sits in the top row between background.js and content.js." loading="lazy" width="1400" height="671" />
-                <figcaption><strong>1.</strong> Open the <code>NiCE Designer Chrome</code> folder and look for <strong>"Click to install Claude Connector.mcpb"</strong> in the top row - it's the one with the blank white document icon. Double-click it.</figcaption>
-              </figure>
-
-              <figure class="step-figure">
-                <img src="./images/install-connector-preview.png" alt="Claude Desktop showing a preview of the nice-designer-mcp extension, with a red warning about granting computer access, an Install button at the top right, and a Details section listing Version 11.2." loading="lazy" width="985" height="1000" />
-                <figcaption><strong>2.</strong> Claude Desktop opens a preview of the connector. <strong>Check the version under Details matches the plugin and extension you installed</strong>, then click <strong>Install</strong>.</figcaption>
-              </figure>
-
-              <figure class="step-figure is-narrow">
-                <img src="./images/install-connector-confirm.png" alt="A system dialog reading &quot;Do you want to install nice-designer-mcp? This desktop extension will be installed on your computer and made available to Claude.&quot; with Cancel and Install buttons." loading="lazy" width="536" height="388" />
-                <figcaption><strong>3.</strong> Confirm the system prompt by clicking <strong>Install</strong> again.</figcaption>
-              </figure>
-
-              <figure class="step-figure">
-                <img src="./images/install-connector-installed.png" alt="The Extensions page in Claude Desktop settings, showing nice-designer-mcp listed under &quot;Installed on your computer&quot; with a Configure button and a three-dot menu." loading="lazy" width="1400" height="508" />
-                <figcaption><strong>4.</strong> Done. <strong>nice-designer-mcp</strong> now shows under <em>Installed on your computer</em> in <strong>Settings &gt; Extensions</strong>. The <strong>...</strong> (three dots) menu next to it opens Details, where you can re-check the version - and it's the same menu you click to <strong>Uninstall</strong> when a new version ships.</figcaption>
-              </figure>
-
-              <div class="warn-box">
-                <span class="warn-box-icon">⚠️</span>
-                <p><strong>Now force quit Claude Desktop - this part is not optional.</strong> The connector only loads on a completely fresh start, and closing the window or pressing <strong>Cmd + Q</strong> often leaves it running in the background. On Mac: <strong>right-click the Claude icon in the Dock</strong>, hold <strong>Option</strong>, and choose <strong>Force Quit</strong>. Then reopen Claude. If the tools still aren't there, force quit once more - it's almost always this.</p>
-              </div>
-
-              <div class="note-box">
-                <span class="note-box-icon">🔄</span>
-                <p><strong>Updating the connector:</strong> there's no in-place upgrade. When a new version ships, uninstall the old one first: open <strong>Settings &gt; Extensions</strong> in Claude Desktop, click the <strong>...</strong> (three dots) next to <strong>nice-designer-mcp</strong>, and choose <strong>Uninstall</strong>. Once it's gone, double-click the new <code>.mcpb</code> file to install it - then force quit Claude Desktop again, exactly as above.</p>
-              </div>
-            </div>
-
-            <div class="step-section">
-              <div class="step-section-label">Turn on Supercharge</div>
-              <p>Last step, and the one that actually switches everything on. Open the NiCE Designer extension, go to the <strong>Supercharge</strong> panel, and flip the toggle to <strong>On</strong>. The header should show a green dot and <strong>Live at <code>ws://127.0.0.1:7331</code></strong> - that's your confirmation the extension and Claude are talking to each other.</p>
-              <figure class="step-figure">
-                <img src="./images/install-supercharge-on.png" alt="The Supercharge panel in the NiCE Designer extension. A green dot sits next to the Supercharge heading, the header reads &quot;Live at ws://127.0.0.1:7331&quot;, and the toggle at the right is switched On." loading="lazy" width="736" height="300" />
-                <figcaption><strong>5.</strong> Toggle <strong>Supercharge</strong> on. Green dot plus <strong>Live at <code>ws://127.0.0.1:7331</code></strong> means you're connected. If it stays off or shows no address, check that Claude Desktop is running - it starts the server.</figcaption>
-              </figure>
-              <p style="margin-top:12px;">If a tool or skill you expect is missing after an update, use the <strong>"Not seeing a new tool or skill?"</strong> link in that same panel - it points you back at the <code>.mcpb</code> file to reinstall the connector.</p>
-            </div>
-
-            <div class="step-section">
-              <div class="step-section-label">Manual config (advanced / no .mcpb support / running from source)</div>
-              <p>If you're on a Claude Desktop version that doesn't support <code>.mcpb</code> connector files yet, add the server entry to <code>claude_desktop_config.json</code> by hand instead - Claude Desktop will still start the server itself, same as the one-click path:</p>
-              <div class="code-block"><span class="code-comment">// claude_desktop_config.json</span>
-{
-  <span class="code-key">"mcpServers"</span>: {
-    <span class="code-key">"nice-designer"</span>: {
-      <span class="code-key">"command"</span>: <span class="code-str">"node"</span>,
-      <span class="code-key">"args"</span>: [<span class="code-str">"/path/to/nice-designer/packages/mcp-server/src/index.js"</span>]
-    }
-  }
-}</div>
-              <p style="margin-top:12px;">Use an <strong>absolute path</strong> to the <code>index.js</code> file. Relative paths will not work. Restart Claude Desktop after saving.</p>
-            </div>
-
-            <div class="step-section">
-              <div class="step-section-label">Running it yourself in a terminal (developers / non-Claude-Desktop MCP clients)</div>
-              <p>Neither option above is needed if you just want to run the server standalone - for example to connect a different MCP client, or if you're working from a git clone instead of the downloaded package:</p>
-              <div class="code-block"><span class="code-comment"># only needed from a fresh git clone - the downloaded package</span>
-<span class="code-comment"># already includes node_modules</span>
-cd packages/mcp-server
-npm install
-node src/index.js</div>
-              <p style="margin-top:12px;">The server starts on <code>ws://127.0.0.1:7331</code>. Set <code>NICE_MCP_WS_PORT</code> before starting to use a different port:</p>
-              <div class="code-block">NICE_MCP_WS_PORT=8080 node src/index.js</div>
-            </div>
-
-            <div class="step-section">
-              <div class="step-section-label">Best practice</div>
-              <p>Load a skill before using MCP tools for the best results. For example, tell Claude: <em>"Load the lyra-visual-patterns skill"</em> before starting a Lyra conversion workflow.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- STEP 4: Verify -->
-      <div class="step reveal" id="step-verify">
-        <div class="step-sidebar">
-          <div class="step-number-badge">4</div>
-          <div class="step-line"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-header">
-            <h2 class="step-title">Verify Everything Is Working</h2>
-          </div>
-          <div class="step-card">
-            <div class="step-section">
-              <div class="step-section-label">Quick checks</div>
-              <div class="checklist">
-                <div class="checklist-item">
-                  <div class="check-circle"></div>
-                  <span>Open the Chrome extension on a web page - the toolbar should appear with inspection controls</span>
-                </div>
-                <div class="checklist-item">
-                  <div class="check-circle"></div>
-                  <span>In the extension's <strong>Supercharge</strong> panel, the toggle is <strong>On</strong> and the header reads <em>Live at ws://127.0.0.1:7331</em> with a green dot - Claude Desktop starts the server itself, so there's nothing to run manually</span>
-                </div>
-                <div class="checklist-item">
-                  <div class="check-circle"></div>
-                  <span>Ask Claude: <em>"Call list_targets"</em> - it should respond listing which clients are currently connected (Figma, Chrome, or both)</span>
-                </div>
-                <div class="checklist-item">
-                  <div class="check-circle"></div>
-                  <span>In Chrome, click the refresh icon next to the version number in Settings to confirm the update checker reaches the latest release - see <a href="./release-notes.html" class="step-link">Release Notes</a> for what's new.</span>
-                </div>
-                <div class="checklist-item">
-                  <div class="check-circle"></div>
-                  <span>Open the Figma plugin on a frame - if you installed it, the audit panel should appear with color, type, and spacing scores</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- STEP 5: Figma Plugin -->
-      <div class="step reveal" id="step-figma">
-        <div class="step-sidebar">
-          <div class="step-number-badge">5</div>
-          <div class="step-line"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-header">
-            <h2 class="step-title">Install the Figma Plugin <span class="pill-tag pill-optional">Separate install</span></h2>
-          </div>
-          <div class="step-card">
-            <div class="step-section">
-              <div class="step-section-label">How to install</div>
-              <p>Independent of everything above - the plugin installs straight from the Figma Community and needs none of the steps 1-4. Do it whenever you want to audit designs on the Figma canvas as well as in the browser.</p>
-              <p>Open Figma, right-click the canvas (or open the main menu) and go to <strong>Plugins</strong>. Search for <strong>"NiCE Designer"</strong> and click Install.</p>
-              <p>Or open the plugin directly on the Figma Community page:</p>
-              <p><a href="https://www.figma.com/community/plugin/1623361730572479462" class="step-link" target="_blank" rel="noopener">figma.com/community/plugin/1623361730572479462</a></p>
-            </div>
-
-            <div class="step-section">
-              <div class="step-section-label">How to use it</div>
-              <p>With a frame or layer selected, right-click and go to <strong>Plugins &gt; NiCE Designer</strong>. Alternatively, open the Resources panel in Figma (<code>Shift+I</code>), switch to the Plugins tab, and search for NiCE Designer.</p>
-            </div>
-
-            <div class="step-section">
-              <div class="step-section-label">Notes</div>
-              <p>The plugin runs entirely inside Figma. No backend or server is required for standalone audit and convert workflows. Connect to the MCP server to enable Claude integration and cross-client features.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      <div class="step reveal" id="step-fig-export">
-        <div class="step-sidebar">
-          <div class="step-number-badge">6</div>
-          <!-- no line on last step -->
-        </div>
-        <div class="step-body">
-          <div class="step-header">
-            <h2 class="step-title">Work on Figma files without a plugin <span class="pill-tag pill-recommended">For view-only seats</span></h2>
-          </div>
-          <div class="step-card">
-            <div class="step-section">
-              <div class="step-section-label">Who this is for</div>
-              <p>Running a Figma plugin needs a seat that can edit. A <strong>view-only seat</strong> on an Enterprise org cannot run plugins at all, which is the normal situation for developers. This route needs no plugin, no edit seat, and no API key.</p>
-              <p>It is also the only route that works from the browser. A Figma file open in Chrome has no readable design content, because Figma draws its whole canvas in WebGL, so the Chrome extension cannot audit or spec a Figma tab no matter what.</p>
-            </div>
-
-            <div class="step-section">
-              <div class="step-section-label">Steps</div>
-              <p><strong>1. Save the file locally.</strong> In the Figma desktop app, open the file and choose <strong>File &gt; Save Local Copy&hellip;</strong>. That writes a <code>.fig</code> file, which contains the real document: layers, auto layout, typography, fills, and components.</p>
-              <p><strong>2. Upload it to Claude Design.</strong> In <a href="https://claude.ai/design" class="step-link" target="_blank" rel="noopener">Claude Design</a>, open the attach menu and choose <strong>Upload .fig file</strong> under Designs.</p>
-              <p><strong>3. Select the design system.</strong> Set the <strong>Design system</strong> picker to <strong>CXONE - Official - Lyra</strong> so generated code uses Lyra tokens instead of raw values.</p>
-              <p><strong>4. Ask for what you need.</strong> Request the code, the specs, or a compliance pass on the uploaded design. Anything Claude Design produces can be exported from there.</p>
-            </div>
-
-            <div class="step-section">
-              <div class="step-section-label">Why a .fig file and not an image</div>
-              <p>Do not use <strong>File &gt; Export</strong> for this. Export produces PNG, JPG, SVG or PDF. A PNG is a flat picture, so exact colours, font names and spacing have to be guessed from pixels. An SVG keeps geometry and fills but throws away auto layout, component structure, and any spacing semantics. <code>Save Local Copy</code> keeps the document intact, which is why it is the one to use.</p>
-            </div>
-
-            <div class="step-section">
-              <div class="step-section-label">If Save Local Copy is greyed out</div>
-              <p>Figma lets a file owner, or an Enterprise admin, switch off exporting for people with view-only access. By default it is allowed.</p>
-              <p>Per file, it is the <strong>Viewers can copy, share, and export from this file</strong> checkbox under <em>Advanced</em> in the file's Share settings. Org wide, an admin controls it under <strong>Admin &gt; Settings &gt; External access &gt; File exporting</strong>. A per-file restriction still applies even when the org setting is permissive, so check both. If your org has it switched off, ask the file owner or a Figma admin, since there is no way around it from our side.</p>
-            </div>
-
-            <div class="step-section">
-              <div class="step-section-label">Notes</div>
-              <p>Claude Design is in beta, so availability may vary by account.</p>
-              <p>Figma's REST API is not an alternative here. It rate limits file reads by seat type, and a view or collab seat gets roughly 20 file reads <em>per month</em> on every plan, including Enterprise. See <a href="https://developers.figma.com/docs/rest-api/rate-limits/" class="step-link" target="_blank" rel="noopener">Figma's rate limit documentation</a>.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- The six-step walkthrough: lynn-ui <Stepper> (see the mount script
+         at the end of <body>). Each step keeps its own id, which is what the
+         doc rail's "Steps" group links to. -->
+    <div id="lynn-steps-root" class="lynn-mount"></div>
 
     <!-- DIVIDER -->
     <div class="section-divider reveal"></div>
@@ -979,10 +585,8 @@ node src/index.js</div>
             <li><strong>Drag the files out of that new folder and into your existing, already-installed folder</strong> - the same one you originally pointed <strong>Load unpacked</strong> at - overwriting everything when your file manager asks</li>
             <li>Go to <code>chrome://extensions</code> and click <strong>Reload</strong> on NiCE Designer Suite</li>
           </ol>
-          <div class="note-box">
-            <span class="note-box-icon">🔑</span>
-            <p><strong>Why the same folder matters.</strong> Chrome generates the extension's storage identity from the folder's path, since a <strong>Load unpacked</strong> install has no fixed ID of its own. Overwrite files <em>inside</em> the folder you already loaded and everything tied to that identity survives untouched - your settings, theme, Supercharge toggle and connection, welcome-tour progress, all of it. Unzip to a <em>new</em> folder and load that instead, and Chrome treats it as a completely different extension: fresh storage, every setting back to default, and you would need to remove the old entry in <code>chrome://extensions</code> yourself to avoid running two copies side by side.</p>
-          </div>
+          <!-- lynn-ui <Alert variant="info"> -->
+          <div id="lynn-update-note-folder" class="lynn-mount"></div>
         </div>
 
         <div class="update-card">
@@ -996,10 +600,8 @@ node src/index.js</div>
             <li>Click the refresh icon next to <strong>Version</strong>. It reads the published version and tells you either <em>"You're up to date"</em> or <em>"Update available"</em></li>
             <li>Click the download link it gives you - it grabs the zip and brings you straight to the <a href="#update-manual" class="step-link">manual walkthrough above</a>, so you land on the same "same folder, drag files in" steps instead of having to find them yourself</li>
           </ol>
-          <div class="note-box">
-            <span class="note-box-icon">ℹ️</span>
-            <p>This button <strong>checks and links</strong> - it cannot install anything itself. See <em>Why there is no one-click update</em> below.</p>
-          </div>
+          <!-- lynn-ui <Alert variant="info"> -->
+          <div id="lynn-update-note-check" class="lynn-mount"></div>
         </div>
 
         <div class="update-card">
@@ -1013,18 +615,14 @@ node src/index.js</div>
             <li>Claude runs <code>self-update.sh</code> from inside that folder. The script compares your installed version against the published one, downloads the new build, and copies it over your folder in place - no unzipping, no dragging files around</li>
             <li>Go to <code>chrome://extensions</code> and click <strong>Reload</strong>. This last click is always yours - Chrome does not let a script do it</li>
           </ol>
-          <div class="warn-box">
-            <span class="warn-box-icon">⚠️</span>
-            <p>This needs a Claude that can run shell commands, which means <strong>Claude Code</strong>. Supercharge on its own is not enough: the MCP server's <code>install_update</code> tool is a separate thing that updates <em>the MCP server</em> from a git clone, not the Chrome extension.</p>
-          </div>
+          <!-- lynn-ui <Alert variant="warning"> -->
+          <div id="lynn-update-warn-claude" class="lynn-mount"></div>
         </div>
 
       </div>
 
-      <div class="warn-box">
-        <span class="warn-box-icon">🔒</span>
-        <p><strong>Why there is no one-click update.</strong> Chrome deliberately blocks a sideloaded extension from replacing its own files or reloading itself, and extensions get no shell access and no write access to their own install folder. So no button inside the app can ever install a build for you. <code>self-update.sh</code> collapses download, unzip and copy into a single command, but the final <strong>Reload</strong> in <code>chrome://extensions</code> is always a manual click.</p>
-      </div>
+      <!-- lynn-ui <Alert variant="warning"> -->
+      <div id="lynn-update-warn-why" class="lynn-mount"></div>
     </section>
 
     <!-- DIVIDER -->
@@ -1039,7 +637,7 @@ node src/index.js</div>
 
         <div class="trouble-card trouble-card-full">
           <div class="trouble-card-title">
-            <span class="trouble-icon">🪄</span>
+            <svg class="trouble-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 21l15 -15l-3 -3l-15 15l3 3"/><path d="M15 6l3 3"/><path d="M9 3a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2"/><path d="M19 13a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2"/></svg>
             Reading a Figma design that is open in Claude Design
           </div>
           <div class="trouble-card-body">
@@ -1059,7 +657,7 @@ node src/index.js</div>
 
         <div class="trouble-card">
           <div class="trouble-card-title">
-            <span class="trouble-icon">🌐</span>
+            <svg class="trouble-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"/><path d="M3.6 9h16.8"/><path d="M3.6 15h16.8"/><path d="M11.5 3a17 17 0 0 0 0 18"/><path d="M12.5 3a17 17 0 0 1 0 18"/></svg>
             Chrome extension not loading
           </div>
           <div class="trouble-card-body">
@@ -1069,7 +667,7 @@ node src/index.js</div>
 
         <div class="trouble-card">
           <div class="trouble-card-title">
-            <span class="trouble-icon">🔌</span>
+            <svg class="trouble-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.785 6l8.215 8.215l-2.054 2.054a5.81 5.81 0 1 1 -8.215 -8.215l2.054 -2.054"/><path d="M4 20l3.5 -3.5"/><path d="M15 4l-3.5 3.5"/><path d="M20 9l-3.5 3.5"/></svg>
             MCP server not connecting
           </div>
           <div class="trouble-card-body">
@@ -1079,7 +677,7 @@ node src/index.js</div>
 
         <div class="trouble-card">
           <div class="trouble-card-title">
-            <span class="trouble-icon">🤖</span>
+            <svg class="trouble-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2l0 -4"/><path d="M12 2v2"/><path d="M9 12v9"/><path d="M15 12v9"/><path d="M5 16l4 -2"/><path d="M15 14l4 2"/><path d="M9 18h6"/><path d="M10 8v.01"/><path d="M14 8v.01"/></svg>
             Claude can't see any targets
           </div>
           <div class="trouble-card-body">
@@ -1089,7 +687,7 @@ node src/index.js</div>
 
         <div class="trouble-card">
           <div class="trouble-card-title">
-            <span class="trouble-icon">🎨</span>
+            <svg class="trouble-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25"/><path d="M7.5 10.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M11.5 7.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M15.5 10.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/></svg>
             Plugin won't open
           </div>
           <div class="trouble-card-body">
@@ -1102,36 +700,8 @@ node src/index.js</div>
 
   </main>
 
-  <!-- FOOTER -->
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="footer-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></div>
-      </div>
-      <nav class="footer-nav">
-        <div class="footer-nav-col">
-          <a href="./index.html">Overview</a>
-          <a href="./install-guide.html" class="active">Install Guide</a>
-          <a href="./claude-skills.html">Claude Skills</a>
-          <a href="./the-suite.html">The Suite</a>
-        </div>
-        <div class="footer-nav-col">
-          <a href="./use-cases.html">Use Cases</a>
-          <a href="./scoring.html">Scoring</a>
-          <a href="./dashboard.html">Dashboard</a>
-          <a href="./roadmap.html">Roadmap</a>
-        </div>
-        <div class="footer-nav-col">
-          <a href="./release-notes.html">Release Notes</a>
-          <a href="./faq.html">FAQ</a>
-          <a href="./tools.html">Tools</a>
-          <a href="./marketplace.html">Marketplace</a>
-          <a href="./lynn.html">Lynn</a>
-        </div>
-      </nav>
-    </div>
-  </footer>
+  <!-- FOOTER (lynn-ui <Footer>) -->
+  <div id="lynn-footer-root" class="lynn-mount"></div>
 
   <script>
 
@@ -1229,16 +799,24 @@ node src/index.js</div>
     });
     document.addEventListener('mouseleave', function() { glow.style.opacity = '0'; });
 
-    // Apply tilt + spotlight to cards
+    // Apply tilt + spotlight to cards. `.lynn-stepper-card` is the lynn-ui
+    // component that replaced `.step-card` on this page, and the
+    // `.checklist-item`s inside step 4 are React-rendered with it; both
+    // mount after this script runs, so `polish()` is exposed below for the
+    // mount script to call with them (the dataset guard makes a second pass
+    // over an already-wired card a no-op).
     var SELECTORS = [
       '.tool-card', '.skill-card', '.phase-block', '.case-card',
-      '.pillar', '.step-card', '.score-card', '.sp-card',
-      '.sp-callout-card', '.stat-card', '.doc-card', '.dl-card',
+      '.pillar', '.step-card', '.lynn-stepper-card', '.score-card',
+      '.sp-card', '.sp-callout-card', '.stat-card', '.doc-card', '.dl-card',
       '.faq-item', '.checklist-item', '.tool-mini', '.gate-card',
       '.score-band', '.audit-cat', '.workflow-card', '.case-scenario'
     ].join(', ');
 
-    document.querySelectorAll(SELECTORS).forEach(function(card) {
+    function polish(cards) {
+      cards.forEach(function(card) {
+      if (card.dataset.nicePolished === '1') return;
+      card.dataset.nicePolished = '1';
       card.classList.add('tilt-ready');
 
       card.addEventListener('mousemove', function(e) {
@@ -1266,7 +844,10 @@ node src/index.js</div>
         card.style.setProperty('--mx', '50%');
         card.style.setProperty('--my', '50%');
       });
-    });
+      });
+    }
+
+    polish([].slice.call(document.querySelectorAll(SELECTORS)));
 
     // Magnetic effect on primary action buttons
     document.querySelectorAll('.nav-cta, .btn-primary, .cta-btn').forEach(function(btn) {
@@ -1296,15 +877,600 @@ node src/index.js</div>
       });
     }, { threshold: 0.05, rootMargin: '0px 0px -24px 0px' });
 
-    document.querySelectorAll('.reveal').forEach(function(el, i) {
-      // Stagger siblings in same parent
-      el.dataset.polishDelay = (i % 6) * 55;
-      ro.observe(el);
-    });
+    function observeReveal(els) {
+      els.forEach(function(el, i) {
+        // Stagger siblings in same parent
+        el.dataset.polishDelay = (i % 6) * 55;
+        ro.observe(el);
+      });
+    }
+
+    observeReveal([].slice.call(document.querySelectorAll('.reveal')));
+
+    // Handed to the lynn-ui mount script, whose step cards do not exist yet.
+    window.NicePolish = { polish: polish, observeReveal: observeReveal };
   })();
   </script>
 
   <script src="downloads.js"></script>
+
+  <!--
+    ===== lynn-ui mount =====
+    One createRoot, one ThemeProvider, one <App>: the access gate, the nav,
+    the doc rail, the footer, the six-step walkthrough and every callout on
+    the page. Keeping them in a single root is what keeps the theme in sync
+    between them - separate roots would each get their own provider and drift
+    apart.
+
+    Anything that belongs elsewhere in the document is placed with
+    createPortal into a `.lynn-mount` placeholder rather than rendered here:
+    a footer rendered next to the nav would sit at the top of the page, and a
+    nav rendered inside a 60px wrapper could not be sticky. The four callouts
+    in "Updating the App" portal into placeholders inside the static cards
+    they belong to, so they are the same <Alert> as the ones in the steps.
+  -->
+  <script type="module">
+    import { createElement as h, Fragment, useEffect, useState } from 'react';
+    import { createPortal } from 'react-dom';
+    import { createRoot } from 'react-dom/client';
+    import {
+      AccessGate,
+      Alert,
+      Badge,
+      DocRail,
+      Footer,
+      Nav,
+      Stepper,
+      ThemeProvider,
+      ThemeToggle,
+      useLynnTheme,
+    } from './lynn-ui/dist/index.js';
+
+    const PAGE = 'install-guide.html';
+
+    /* ---- the real gate, ported from site-gate.js ------------------------ */
+    /* Same session key, same password, same message, same Teams link. Still
+       a soft deterrent, not security - the check is client-side and readable
+       right here, exactly as it was in site-gate.js. */
+    const GATE_KEY = 'nice-site-access';
+    const GATE_PASSWORD = 'niceux';
+    const GATE_ERROR = 'Incorrect code. Contact Erick Mathews on Teams for access.';
+    const TEAMS_HREF = 'https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com';
+
+    /* ---- doc rail ------------------------------------------------------- */
+    /* The page table is read straight off nice-effects.js (which publishes
+       its own DOC_PAGES as NiceEffects.docPages) rather than hand-copied, so
+       adding a section anchor there still updates this rail. This page's own
+       "Steps" group links to the six `#step-*` ids, which are the Stepper
+       step ids below. Collapse state shares nice-effects.js's own
+       localStorage key, which is also the one embed.js stashes. */
+    const RAIL_KEY = 'nice-doc-rail-collapsed';
+    const DOC_PAGES = (window.NiceEffects && window.NiceEffects.docPages) || [];
+    const railPages = DOC_PAGES.map((page) => ({
+      href: './' + page.href,
+      label: page.label,
+    }));
+    const railGroups = (DOC_PAGES.find((page) => page.href === PAGE) || {}).groups || [];
+
+    /* ---- footer --------------------------------------------------------- */
+    /* The same three columns the static markup had, with this page marked
+       active. Passed explicitly rather than relying on Footer's defaults,
+       because the defaults cannot know which page is current. */
+    const FOOTER_COLUMNS = [
+      {
+        title: 'Product',
+        links: [
+          { label: 'Overview', href: './index.html' },
+          { label: 'Install Guide', href: './install-guide.html', active: true },
+          { label: 'Claude Skills', href: './claude-skills.html' },
+          { label: 'The Suite', href: './the-suite.html' },
+        ],
+      },
+      {
+        title: 'Learn',
+        links: [
+          { label: 'Use Cases', href: './use-cases.html' },
+          { label: 'Scoring', href: './scoring.html' },
+          { label: 'Dashboard', href: './dashboard.html' },
+          { label: 'Roadmap', href: './roadmap.html' },
+        ],
+      },
+      {
+        title: 'Reference',
+        links: [
+          { label: 'Release Notes', href: './release-notes.html' },
+          { label: 'FAQ', href: './faq.html' },
+          { label: 'Tools', href: './tools.html' },
+          { label: 'Marketplace', href: './marketplace.html' },
+          { label: 'Lynn', href: './lynn.html' },
+        ],
+      },
+    ];
+
+    /* ---- content helpers ------------------------------------------------ */
+    /* Every step body is prose, screenshots, ordered lists and code blocks -
+       all of it authored right here in this file, none of it user input - so
+       the leaf markup stays markup rather than becoming three levels of
+       createElement. `block` keeps a run of siblings (and therefore the
+       `.step-figure + .step-figure` / `p + p` adjacency the CSS relies on)
+       inside one wrapper; `section` is the real `.step-section` element, so
+       an <Alert> can sit between two runs of it. */
+    const rich = (html) => h('span', { dangerouslySetInnerHTML: { __html: html } });
+    const block = (html) => h('div', { dangerouslySetInnerHTML: { __html: html } });
+    const section = (label, ...children) =>
+      h(
+        'div',
+        { className: 'step-section' },
+        label ? h('div', { className: 'step-section-label' }, label) : null,
+        ...children
+      );
+
+    /* The callout glyphs, verbatim from the markup they replace. `.note-box-
+       icon` / `.warn-box-icon` tinted them per box type; `--lynn-alert-title`
+       is the same accent, already set by the Alert's own variant. */
+    const icon = (paths) =>
+      h('svg', {
+        width: 18,
+        height: 18,
+        viewBox: '0 0 24 24',
+        fill: 'none',
+        stroke: 'currentColor',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
+        'aria-hidden': true,
+        style: { display: 'block', color: 'var(--lynn-alert-title)' },
+        dangerouslySetInnerHTML: { __html: paths },
+      });
+
+    const ICON_PIN = icon('<path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0"/>');
+    const ICON_INFO = icon('<path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"/><path d="M12 9h.01"/><path d="M11 12h1v4h1"/>');
+    const ICON_BULB = icon('<path d="M3 12h1m8 -9v1m8 8h1m-15.4 -6.4l.7 .7m12.1 -.7l-.7 .7"/><path d="M9 16a5 5 0 1 1 6 0a3.5 3.5 0 0 0 -1 3a2 2 0 0 1 -4 0a3.5 3.5 0 0 0 -1 -3"/><path d="M9.7 17l4.6 0"/>');
+    const ICON_WARN = icon('<path d="M12 9v4"/><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0"/><path d="M12 16h.01"/>');
+    const ICON_REFRESH = icon('<path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"/><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"/>');
+    const ICON_TOOL = icon('<path d="M16.555 3.843l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.643 2.643a2.877 2.877 0 0 1 -4.069 0l-.301 -.301l-6.558 6.558a2 2 0 0 1 -1.239 .578l-.175 .008h-1.172a1 1 0 0 1 -.993 -.883l-.007 -.117v-1.172a2 2 0 0 1 .467 -1.284l.119 -.13l.414 -.414h2v-2h2v-2l2.144 -2.144l-.301 -.301a2.877 2.877 0 0 1 0 -4.069l2.643 -2.643a2.877 2.877 0 0 1 4.069 0"/><path d="M15 9h.01"/>');
+    const ICON_LOCK = icon('<path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6"/><path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0"/><path d="M8 11v-4a4 4 0 1 1 8 0v4"/>');
+
+    /* `.note-box` -> info, `.tip-box` -> success, `.warn-box` -> warning.
+       Lynn's `warning` is teal rather than the source's amber: the system has
+       no amber accent, and Alert documents this as the mapping. */
+    const note = (glyph, html) =>
+      h(Alert, { variant: 'info', icon: glyph }, rich(html));
+    const tip = (glyph, html) =>
+      h(Alert, { variant: 'success', icon: glyph }, rich(html));
+    const warn = (glyph, html) =>
+      h(Alert, { variant: 'warning', icon: glyph }, rich(html));
+
+    /* ---- the six steps -------------------------------------------------- */
+    const STEPS = [
+      {
+        id: 'step-chrome',
+        title: 'Install the Chrome Extension',
+        children: h(
+          Fragment,
+          null,
+          section(
+            'Prerequisites',
+            block('<p>Chrome or Edge (Chromium-based) with Developer Mode enabled in <code>chrome://extensions</code>.</p>')
+          ),
+          section(
+            'How to install',
+            block(`<ol class="numbered-list">
+                <li>Download the latest release: <span class="step-link is-disabled" aria-disabled="true">NiCE-Designer-V11.2.zip</span> <span class="coming-soon-tag">Coming soon!</span></li>
+                <li>Unzip the downloaded package to a location you'll keep it</li>
+                <li>Go to <code>chrome://extensions</code> (or <code>edge://extensions</code>) and enable <strong>Developer Mode</strong></li>
+                <li>Click <strong>"Load unpacked"</strong> and select the <code>NiCE Designer Chrome</code> folder from the unzipped package</li>
+                <li>The NiCE Designer icon appears in your Chrome toolbar</li>
+              </ol>`),
+            note(ICON_PIN, '<strong>Where is Developer Mode?</strong> Top-right in Chrome, bottom of the left sidebar in Edge - and <strong>Load unpacked</strong> only appears once it\'s on. Both are marked up below.'),
+            block(`<figure class="step-figure">
+                <img src="./images/install-chrome-extensions.png" alt="The top of the chrome://extensions page. A red box highlights the Load unpacked button on the left of the toolbar, and another highlights the Developer mode toggle switched on at the far right." loading="lazy" width="1400" height="171" />
+                <figcaption><strong>Chrome</strong> - <strong>Developer mode</strong> is the toggle at the top right. Switch it on and the toolbar row appears, with <strong>Load unpacked</strong> at the top left.</figcaption>
+              </figure>
+              <figure class="step-figure">
+                <img src="./images/install-edge-extensions.png" alt="The edge://extensions page in Microsoft Edge. The Load Unpacked button sits at the top of the Installed extensions list, and the Developer mode toggle is switched on in the bottom-left sidebar." loading="lazy" width="1400" height="859" />
+                <figcaption><strong>Edge</strong> - same two controls, different places: <strong>Developer mode</strong> is at the bottom of the left sidebar, and <strong>Load Unpacked</strong> is at the top of the installed list.</figcaption>
+              </figure>`)
+          ),
+          section(
+            'How to use it',
+            block('<p>Navigate to any web page and click the NiCE Designer icon in the toolbar. The inspection panel opens alongside the page. For a dedicated second-monitor view, click the pop-out icon in the extension settings panel.</p>')
+          ),
+          note(ICON_INFO, 'The extension persists per window. No reset is needed when switching tabs or navigating to a different page.'),
+          tip(ICON_BULB, '<strong>First launch:</strong> a Welcome screen offers <strong>Simple</strong> (Lite mode - just Frontend Audit and Design System) or the <strong>Full toolkit</strong>, followed by a short guided tour. Switch modes or replay the tour anytime from Settings.')
+        ),
+      },
+      {
+        id: 'step-node',
+        title: 'Install Node.js',
+        children: h(
+          Fragment,
+          null,
+          section(
+            'What it does',
+            block('<p>Claude Desktop needs Node.js on your machine to run the local MCP server that connects Claude to the Figma plugin and Chrome extension. The Figma plugin and Chrome extension still work fully as standalone tools without it - this step only unlocks Supercharge.</p>')
+          ),
+          section(
+            'Option A - Download the installer (recommended, no terminal)',
+            block(`<p>Go to <a href="https://nodejs.org" class="step-link" target="_blank" rel="noopener">nodejs.org</a>, download the installer for your OS (the big green button - it's the LTS version), and double-click it like any other app installer. That's it - no terminal, no typing commands.</p>`)
+          ),
+          section(
+            'Option B - Install via npm/a package manager (for developers)',
+            block(`<p>If you're comfortable with a terminal and already use a package manager, that works too:</p>
+              <div class="code-block"><span class="code-comment"># macOS (Homebrew)</span>
+brew install node
+
+<span class="code-comment"># Windows (winget)</span>
+winget install OpenJS.NodeJS.LTS</div>
+              <p style="margin-top:12px;">Either option gives you the same thing: a working <code>node</code> command that Claude Desktop can call. You only need to do this once per machine.</p>`)
+          ),
+          note(ICON_INFO, 'You do <strong>not</strong> need to run <code>npm install</code> or start the server yourself - the downloaded package already includes its dependencies, and Claude Desktop starts the server automatically in the next step.')
+        ),
+      },
+      {
+        id: 'step-claude',
+        title: h(
+          Fragment,
+          null,
+          'Connect Claude Desktop',
+          h(Badge, { status: 'recommended' }, 'Supercharge')
+        ),
+        children: h(
+          Fragment,
+          null,
+          section(
+            'One-click install (recommended)',
+            block(`<p>The <code>NiCE Designer Chrome</code> folder - the same one you loaded in step 1 - has <strong>"Click to install Claude Connector.mcpb"</strong> sitting directly inside it. Double-click it, confirm the two prompts, and <strong>"nice-designer-mcp"</strong> appears as an installed extension - already running. No file paths, no JSON, no terminal.</p>
+
+              <figure class="step-figure">
+                <img src="./images/install-mcpb-finder.png" alt="Finder window showing the NiCE Designer Chrome folder. The file named &quot;Click to install Claude Connector.mcpb&quot; sits in the top row between background.js and content.js." loading="lazy" width="1400" height="671" />
+                <figcaption><strong>1.</strong> Open the <code>NiCE Designer Chrome</code> folder and look for <strong>"Click to install Claude Connector.mcpb"</strong> in the top row - it's the one with the blank white document icon. Double-click it.</figcaption>
+              </figure>
+
+              <figure class="step-figure">
+                <img src="./images/install-connector-preview.png" alt="Claude Desktop showing a preview of the nice-designer-mcp extension, with a red warning about granting computer access, an Install button at the top right, and a Details section listing Version 11.2." loading="lazy" width="985" height="1000" />
+                <figcaption><strong>2.</strong> Claude Desktop opens a preview of the connector. <strong>Check the version under Details matches the plugin and extension you installed</strong>, then click <strong>Install</strong>.</figcaption>
+              </figure>
+
+              <figure class="step-figure is-narrow">
+                <img src="./images/install-connector-confirm.png" alt="A system dialog reading &quot;Do you want to install nice-designer-mcp? This desktop extension will be installed on your computer and made available to Claude.&quot; with Cancel and Install buttons." loading="lazy" width="536" height="388" />
+                <figcaption><strong>3.</strong> Confirm the system prompt by clicking <strong>Install</strong> again.</figcaption>
+              </figure>
+
+              <figure class="step-figure">
+                <img src="./images/install-connector-installed.png" alt="The Extensions page in Claude Desktop settings, showing nice-designer-mcp listed under &quot;Installed on your computer&quot; with a Configure button and a three-dot menu." loading="lazy" width="1400" height="508" />
+                <figcaption><strong>4.</strong> Done. <strong>nice-designer-mcp</strong> now shows under <em>Installed on your computer</em> in <strong>Settings &gt; Extensions</strong>. The <strong>...</strong> (three dots) menu next to it opens Details, where you can re-check the version - and it's the same menu you click to <strong>Uninstall</strong> when a new version ships.</figcaption>
+              </figure>`),
+            warn(ICON_WARN, '<strong>Now force quit Claude Desktop - this part is not optional.</strong> The connector only loads on a completely fresh start, and closing the window or pressing <strong>Cmd + Q</strong> often leaves it running in the background. On Mac: <strong>right-click the Claude icon in the Dock</strong>, hold <strong>Option</strong>, and choose <strong>Force Quit</strong>. Then reopen Claude. If the tools still aren\'t there, force quit once more - it\'s almost always this.'),
+            note(ICON_REFRESH, '<strong>Updating the connector:</strong> there\'s no in-place upgrade. When a new version ships, uninstall the old one first: open <strong>Settings &gt; Extensions</strong> in Claude Desktop, click the <strong>...</strong> (three dots) next to <strong>nice-designer-mcp</strong>, and choose <strong>Uninstall</strong>. Once it\'s gone, double-click the new <code>.mcpb</code> file to install it - then force quit Claude Desktop again, exactly as above.')
+          ),
+          section(
+            'Turn on Supercharge',
+            block(`<p>Last step, and the one that actually switches everything on. Open the NiCE Designer extension, go to the <strong>Supercharge</strong> panel, and flip the toggle to <strong>On</strong>. The header should show a green dot and <strong>Live at <code>ws://127.0.0.1:7331</code></strong> - that's your confirmation the extension and Claude are talking to each other.</p>
+              <figure class="step-figure">
+                <img src="./images/install-supercharge-on.png" alt="The Supercharge panel in the NiCE Designer extension. A green dot sits next to the Supercharge heading, the header reads &quot;Live at ws://127.0.0.1:7331&quot;, and the toggle at the right is switched On." loading="lazy" width="736" height="300" />
+                <figcaption><strong>5.</strong> Toggle <strong>Supercharge</strong> on. Green dot plus <strong>Live at <code>ws://127.0.0.1:7331</code></strong> means you're connected. If it stays off or shows no address, check that Claude Desktop is running - it starts the server.</figcaption>
+              </figure>
+              <p style="margin-top:12px;">If a tool or skill you expect is missing after an update, use the <strong>"Not seeing a new tool or skill?"</strong> link in that same panel - it points you back at the <code>.mcpb</code> file to reinstall the connector.</p>`)
+          ),
+          section(
+            'Manual config (advanced / no .mcpb support / running from source)',
+            block(`<p>If you're on a Claude Desktop version that doesn't support <code>.mcpb</code> connector files yet, add the server entry to <code>claude_desktop_config.json</code> by hand instead - Claude Desktop will still start the server itself, same as the one-click path:</p>
+              <div class="code-block"><span class="code-comment">// claude_desktop_config.json</span>
+{
+  <span class="code-key">"mcpServers"</span>: {
+    <span class="code-key">"nice-designer"</span>: {
+      <span class="code-key">"command"</span>: <span class="code-str">"node"</span>,
+      <span class="code-key">"args"</span>: [<span class="code-str">"/path/to/nice-designer/packages/mcp-server/src/index.js"</span>]
+    }
+  }
+}</div>
+              <p style="margin-top:12px;">Use an <strong>absolute path</strong> to the <code>index.js</code> file. Relative paths will not work. Restart Claude Desktop after saving.</p>`)
+          ),
+          section(
+            'Running it yourself in a terminal (developers / non-Claude-Desktop MCP clients)',
+            block(`<p>Neither option above is needed if you just want to run the server standalone - for example to connect a different MCP client, or if you're working from a git clone instead of the downloaded package:</p>
+              <div class="code-block"><span class="code-comment"># only needed from a fresh git clone - the downloaded package</span>
+<span class="code-comment"># already includes node_modules</span>
+cd packages/mcp-server
+npm install
+node src/index.js</div>
+              <p style="margin-top:12px;">The server starts on <code>ws://127.0.0.1:7331</code>. Set <code>NICE_MCP_WS_PORT</code> before starting to use a different port:</p>
+              <div class="code-block">NICE_MCP_WS_PORT=8080 node src/index.js</div>`)
+          ),
+          section(
+            'Best practice',
+            block('<p>Load a skill before using MCP tools for the best results. For example, tell Claude: <em>"Load the lyra-visual-patterns skill"</em> before starting a Lyra conversion workflow.</p>')
+          )
+        ),
+      },
+      {
+        id: 'step-verify',
+        title: 'Verify Everything Is Working',
+        children: section(
+          'Quick checks',
+          block(`<div class="checklist">
+                <div class="checklist-item">
+                  <div class="check-circle"></div>
+                  <span>Open the Chrome extension on a web page - the toolbar should appear with inspection controls</span>
+                </div>
+                <div class="checklist-item">
+                  <div class="check-circle"></div>
+                  <span>In the extension's <strong>Supercharge</strong> panel, the toggle is <strong>On</strong> and the header reads <em>Live at ws://127.0.0.1:7331</em> with a green dot - Claude Desktop starts the server itself, so there's nothing to run manually</span>
+                </div>
+                <div class="checklist-item">
+                  <div class="check-circle"></div>
+                  <span>Ask Claude: <em>"Call list_targets"</em> - it should respond listing which clients are currently connected (Figma, Chrome, or both)</span>
+                </div>
+                <div class="checklist-item">
+                  <div class="check-circle"></div>
+                  <span>In Chrome, click the refresh icon next to the version number in Settings to confirm the update checker reaches the latest release - see <a href="./release-notes.html" class="step-link">Release Notes</a> for what's new.</span>
+                </div>
+                <div class="checklist-item">
+                  <div class="check-circle"></div>
+                  <span>Open the Figma plugin on a frame - if you installed it, the audit panel should appear with color, type, and spacing scores</span>
+                </div>
+              </div>`)
+        ),
+      },
+      {
+        id: 'step-figma',
+        title: h(
+          Fragment,
+          null,
+          'Install the Figma Plugin',
+          h(Badge, { status: 'optional' }, 'Separate install')
+        ),
+        children: h(
+          Fragment,
+          null,
+          section(
+            'How to install',
+            block(`<p>Independent of everything above - the plugin installs straight from the Figma Community and needs none of the steps 1-4. Do it whenever you want to audit designs on the Figma canvas as well as in the browser.</p>
+              <p>Open Figma, right-click the canvas (or open the main menu) and go to <strong>Plugins</strong>. Search for <strong>"NiCE Designer"</strong> and click Install.</p>
+              <p>Or open the plugin directly on the Figma Community page:</p>
+              <p><a href="https://www.figma.com/community/plugin/1623361730572479462" class="step-link" target="_blank" rel="noopener">figma.com/community/plugin/1623361730572479462</a></p>`)
+          ),
+          section(
+            'How to use it',
+            block('<p>With a frame or layer selected, right-click and go to <strong>Plugins &gt; NiCE Designer</strong>. Alternatively, open the Resources panel in Figma (<code>Shift+I</code>), switch to the Plugins tab, and search for NiCE Designer.</p>')
+          ),
+          section(
+            'Notes',
+            block('<p>The plugin runs entirely inside Figma. No backend or server is required for standalone audit and convert workflows. Connect to the MCP server to enable Claude integration and cross-client features.</p>')
+          )
+        ),
+      },
+      {
+        id: 'step-fig-export',
+        title: h(
+          Fragment,
+          null,
+          'Work on Figma files without a plugin',
+          h(Badge, { status: 'recommended' }, 'For view-only seats')
+        ),
+        children: h(
+          Fragment,
+          null,
+          section(
+            'Who this is for',
+            block(`<p>Running a Figma plugin needs a seat that can edit. A <strong>view-only seat</strong> on an Enterprise org cannot run plugins at all, which is the normal situation for developers. This route needs no plugin, no edit seat, and no API key.</p>
+              <p>It is also the only route that works from the browser. A Figma file open in Chrome has no readable design content, because Figma draws its whole canvas in WebGL, so the Chrome extension cannot audit or spec a Figma tab no matter what.</p>`)
+          ),
+          section(
+            'Steps',
+            block(`<p><strong>1. Save the file locally.</strong> In the Figma desktop app, open the file and choose <strong>File &gt; Save Local Copy&hellip;</strong>. That writes a <code>.fig</code> file, which contains the real document: layers, auto layout, typography, fills, and components.</p>
+              <p><strong>2. Upload it to Claude Design.</strong> In <a href="https://claude.ai/design" class="step-link" target="_blank" rel="noopener">Claude Design</a>, open the attach menu and choose <strong>Upload .fig file</strong> under Designs.</p>
+              <p><strong>3. Select the design system.</strong> Set the <strong>Design system</strong> picker to <strong>CXONE - Official - Lyra</strong> so generated code uses Lyra tokens instead of raw values.</p>
+              <p><strong>4. Ask for what you need.</strong> Request the code, the specs, or a compliance pass on the uploaded design. Anything Claude Design produces can be exported from there.</p>`)
+          ),
+          section(
+            'Why a .fig file and not an image',
+            block('<p>Do not use <strong>File &gt; Export</strong> for this. Export produces PNG, JPG, SVG or PDF. A PNG is a flat picture, so exact colours, font names and spacing have to be guessed from pixels. An SVG keeps geometry and fills but throws away auto layout, component structure, and any spacing semantics. <code>Save Local Copy</code> keeps the document intact, which is why it is the one to use.</p>')
+          ),
+          section(
+            'If Save Local Copy is greyed out',
+            block(`<p>Figma lets a file owner, or an Enterprise admin, switch off exporting for people with view-only access. By default it is allowed.</p>
+              <p>Per file, it is the <strong>Viewers can copy, share, and export from this file</strong> checkbox under <em>Advanced</em> in the file's Share settings. Org wide, an admin controls it under <strong>Admin &gt; Settings &gt; External access &gt; File exporting</strong>. A per-file restriction still applies even when the org setting is permissive, so check both. If your org has it switched off, ask the file owner or a Figma admin, since there is no way around it from our side.</p>`)
+          ),
+          section(
+            'Notes',
+            block(`<p>Claude Design is in beta, so availability may vary by account.</p>
+              <p>Figma's REST API is not an alternative here. It rate limits file reads by seat type, and a view or collab seat gets roughly 20 file reads <em>per month</em> on every plan, including Enterprise. See <a href="https://developers.figma.com/docs/rest-api/rate-limits/" class="step-link" target="_blank" rel="noopener">Figma's rate limit documentation</a>.</p>`)
+          )
+        ),
+      },
+    ];
+
+    /* The nav's single action slot, unchanged from the markup it replaces:
+       the disabled Download pill plus its "Coming soon!" tag. `nav-download`
+       / `coming-soon-tag` are theme.css classes, so it keeps its exact look.
+       If a live version label is ever wanted here, `data-latest-label` is
+       the attribute downloads.js looks for - no page on the site sets it on
+       this pill today. */
+    const downloadPill = (key) =>
+      h(
+        'span',
+        { key, className: 'nav-download is-disabled', 'aria-disabled': 'true' },
+        'Download',
+        h('span', { className: 'coming-soon-tag' }, 'Coming soon!')
+      );
+
+    /* ThemeProvider stamps `data-lynn-theme` on its own wrapper div, but the
+       portalled chrome and steps live outside that div - so mirror the
+       attribute onto <html>, where the same `[data-lynn-theme]` rules in
+       lynn-ui.css apply to the whole document. */
+    function ThemeBridge() {
+      const { theme } = useLynnTheme();
+      useEffect(() => {
+        document.documentElement.setAttribute('data-lynn-theme', theme);
+      }, [theme]);
+      return null;
+    }
+
+    function portal(node, id) {
+      const host = document.getElementById(id);
+      return host ? createPortal(node, host) : null;
+    }
+
+    function App() {
+      const [unlocked, setUnlocked] = useState(() => {
+        try {
+          return sessionStorage.getItem(GATE_KEY) === '1';
+        } catch (e) {
+          return false;
+        }
+      });
+      const [error, setError] = useState(undefined);
+      const [railCollapsed, setRailCollapsed] = useState(() => {
+        try {
+          return localStorage.getItem(RAIL_KEY) === '1';
+        } catch (e) {
+          return false;
+        }
+      });
+
+      useEffect(() => {
+        // The chrome is up; let the page paint (see the gate-pending guard
+        // in <head>).
+        document.documentElement.classList.remove('lynn-gate-pending');
+
+        // The tilt/spotlight hover the page's own polish script used to wire
+        // onto the static `.step-card`s and the checklist items inside step
+        // 4. It ran before these existed, so hand them over now.
+        if (window.NicePolish) {
+          window.NicePolish.polish(
+            [].slice.call(
+              document.querySelectorAll('.lynn-stepper-card, .checklist-item')
+            )
+          );
+        }
+
+        // The steps used to be static markup, so the browser could honour a
+        // `#step-claude` deep link on load - every entry in this page's doc
+        // rail "Steps" group is one. They render a tick later now, by which
+        // time that jump has already failed, so re-run it.
+        const hash = location.hash.slice(1);
+        if (hash) {
+          const target = document.getElementById(hash);
+          if (target) target.scrollIntoView();
+        }
+      }, []);
+
+      // Cmd+K / Ctrl+K opens the rail and focuses its filter box - the
+      // shortcut buildDocRail() used to own.
+      useEffect(() => {
+        function onKeyDown(event) {
+          if (event.key !== 'k' && event.key !== 'K') return;
+          if (!(event.metaKey || event.ctrlKey)) return;
+          event.preventDefault();
+          setRail(false);
+          const input = document.querySelector('.lynn-doc-rail-search');
+          if (input) {
+            input.focus();
+            input.select();
+          }
+        }
+        document.addEventListener('keydown', onKeyDown);
+        return () => document.removeEventListener('keydown', onKeyDown);
+      }, []);
+
+      const checkCode = (code) => {
+        if (code === GATE_PASSWORD) {
+          try {
+            sessionStorage.setItem(GATE_KEY, '1');
+          } catch (e) { /* unwritable store just means no persistence */ }
+          setError(undefined);
+          setUnlocked(true);
+        } else {
+          setError(GATE_ERROR);
+        }
+      };
+
+      const setRail = (collapsed) => {
+        setRailCollapsed(collapsed);
+        try {
+          localStorage.setItem(RAIL_KEY, collapsed ? '1' : '0');
+        } catch (e) { /* no persistence, still collapses for this visit */ }
+      };
+
+      return h(
+        Fragment,
+        null,
+        h(ThemeBridge, { key: 'theme-bridge' }),
+        h(AccessGate, {
+          key: 'gate',
+          title: 'NiCE Designer Site Login',
+          subtitle:
+            'This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.',
+          onSubmit: checkCode,
+          error,
+          unlocked,
+          ctaText: h(
+            Fragment,
+            null,
+            "Don't have the code?",
+            h('br'),
+            h('strong', null, 'Reach out to Erick Mathews on Teams'),
+            ' to request access.'
+          ),
+          ctaHref: TEAMS_HREF,
+        }),
+        portal(
+          h(Nav, {
+            logoHref: './index.html',
+            cta: h(Fragment, null, [
+              h(ThemeToggle, { key: 'theme', showLabels: false }),
+              downloadPill('download'),
+            ]),
+          }),
+          'lynn-nav-root'
+        ),
+        portal(
+          h(DocRail, {
+            mode: 'pages',
+            pages: railPages,
+            groups: railGroups,
+            activeHref: './' + PAGE,
+            searchable: true,
+            collapsed: railCollapsed,
+            onToggle: setRail,
+          }),
+          'lynn-docrail-root'
+        ),
+        /* No `reveal` here, unlike the six `.step.reveal` divs this
+           replaces. The Stepper is one ~9000px <ol> rather than six
+           separately-observed blocks, and the page's scroll-in observer
+           fires at 5% of the observed element - which this list never
+           reaches while its top is on screen, so a `reveal` on it would
+           hold the entire walkthrough at opacity 0. The steps come in
+           already visible; every other `.reveal` on the page (hero,
+           dividers, the two sections below) still animates. */
+        portal(h(Stepper, { steps: STEPS }), 'lynn-steps-root'),
+        portal(
+          note(ICON_TOOL, '<strong>Why the same folder matters.</strong> Chrome generates the extension\'s storage identity from the folder\'s path, since a <strong>Load unpacked</strong> install has no fixed ID of its own. Overwrite files <em>inside</em> the folder you already loaded and everything tied to that identity survives untouched - your settings, theme, Supercharge toggle and connection, welcome-tour progress, all of it. Unzip to a <em>new</em> folder and load that instead, and Chrome treats it as a completely different extension: fresh storage, every setting back to default, and you would need to remove the old entry in <code>chrome://extensions</code> yourself to avoid running two copies side by side.'),
+          'lynn-update-note-folder'
+        ),
+        portal(
+          note(ICON_INFO, 'This button <strong>checks and links</strong> - it cannot install anything itself. See <em>Why there is no one-click update</em> below.'),
+          'lynn-update-note-check'
+        ),
+        portal(
+          warn(ICON_WARN, 'This needs a Claude that can run shell commands, which means <strong>Claude Code</strong>. Supercharge on its own is not enough: the MCP server\'s <code>install_update</code> tool is a separate thing that updates <em>the MCP server</em> from a git clone, not the Chrome extension.'),
+          'lynn-update-warn-claude'
+        ),
+        portal(
+          warn(ICON_LOCK, '<strong>Why there is no one-click update.</strong> Chrome deliberately blocks a sideloaded extension from replacing its own files or reloading itself, and extensions get no shell access and no write access to their own install folder. So no button inside the app can ever install a build for you. <code>self-update.sh</code> collapses download, unzip and copy into a single command, but the final <strong>Reload</strong> in <code>chrome://extensions</code> is always a manual click.'),
+          'lynn-update-warn-why'
+        ),
+        portal(h(Footer, { columns: FOOTER_COLUMNS }), 'lynn-footer-root')
+      );
+    }
+
+    createRoot(document.getElementById('lynn-app-root')).render(
+      h(ThemeProvider, { defaultTheme: 'lynn' }, h(App))
+    );
+  </script>
 
 </body>
 </html>

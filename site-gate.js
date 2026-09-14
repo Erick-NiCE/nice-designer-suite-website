@@ -1,12 +1,12 @@
 /*!
- * NiCE Designer — site-wide access gate behavior
+ * NiCE Designer - site-wide access gate behavior
  * -------------------------------------------------------------
  * Pairs with the #nice-site-gate markup + site-gate.css present on
  * every page. Unlocking persists for the browser session (same
  * mechanism as the roadmap's own page-level gate), so visitors only
  * enter the code once per visit across the whole site.
  *
- * NOTE: this is a soft deterrent, not real security — the password
+ * NOTE: this is a soft deterrent, not real security - the password
  * check runs client-side and is visible in this file's source.
  */
 (function () {

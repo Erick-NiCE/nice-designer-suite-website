@@ -1,0 +1,145 @@
+/*!
+ * Footer - ported from theme.css `.site-footer` / `.footer-top` /
+ * `.footer-logo` / `.footer-nav` / `.footer-nav-col`.
+ */
+
+.lynn-footer {
+  --lynn-mx: 50%;
+  --lynn-my: 50%;
+  position: relative;
+  /* The grid is painted edge to edge; this is what trims it to the footer. */
+  overflow: hidden;
+  /* Keeps the grid's stacking entirely inside the footer, so `z-index: 0`
+     below can never end up behind a page's own background layer. */
+  isolation: isolate;
+  border-top: 1px solid var(--lynn-color-border);
+  margin-top: 40px;
+  font-family: var(--lynn-font-family);
+}
+
+/*
+ * The interactive dot grid.
+ *
+ * Two identical lattices on one 24px cell, so their dots land on exactly the
+ * same centers: the base layer is a faint 1px neutral dot, and the `::after`
+ * layer is a larger, brighter, accent-tinted dot that is masked down to a
+ * soft circle around the pointer. Inside that circle the dots therefore read
+ * as both bigger and lit; outside it the mask is transparent and only the
+ * base lattice shows. No per-cell JS, no per-frame loop - `usePointerGrid`
+ * only writes `--lynn-mx` / `--lynn-my`.
+ *
+ * Kept deliberately quiet: 1px dots at 24px spacing, the whole layer at 55%,
+ * and a 150px light radius. It has to read as texture behind the links, not
+ * as a second thing to look at.
+ */
+.lynn-footer-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  background-image: radial-gradient(
+    circle at center,
+    color-mix(in srgb, var(--lynn-color-text) 22%, transparent) 0 1px,
+    transparent 1.2px
+  );
+  background-size: 24px 24px;
+  background-position: center;
+}
+
+.lynn-footer-grid::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.45s var(--lynn-ease);
+  background-image: radial-gradient(
+    circle at center,
+    color-mix(in srgb, var(--lynn-color-blue) 85%, transparent) 0 1.7px,
+    transparent 2.1px
+  );
+  background-size: 24px 24px;
+  background-position: center;
+  -webkit-mask-image: radial-gradient(
+    circle 150px at var(--lynn-mx) var(--lynn-my),
+    #000 0%,
+    rgba(0, 0, 0, 0.5) 45%,
+    transparent 72%
+  );
+  mask-image: radial-gradient(
+    circle 150px at var(--lynn-mx) var(--lynn-my),
+    #000 0%,
+    rgba(0, 0, 0, 0.5) 45%,
+    transparent 72%
+  );
+}
+
+/* `usePointerGrid` adds this while the pointer (or a finger) is over the
+   footer, and removes it on leave - so the lit lattice fades in and out
+   rather than snapping. */
+.lynn-footer.lynn-grid-lit .lynn-footer-grid::after {
+  opacity: 1;
+}
+
+.lynn-footer-top {
+  position: relative;
+  z-index: 1;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 48px var(--lynn-space-2xl) 40px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--lynn-space-2xl);
+  flex-wrap: wrap;
+}
+
+.lynn-footer-logo {
+  font-size: 20px;
+  font-weight: var(--lynn-font-weight-extrabold);
+  letter-spacing: -0.3px;
+}
+.lynn-footer-logo-nice {
+  color: var(--lynn-color-blue);
+}
+.lynn-footer-logo-designer {
+  color: var(--lynn-color-text);
+}
+
+.lynn-footer-nav {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.lynn-footer-nav-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lynn-footer-nav-col a {
+  color: var(--lynn-color-text-secondary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: var(--lynn-font-weight-medium);
+  transition: color 0.2s var(--lynn-ease);
+}
+.lynn-footer-nav-col a:hover {
+  color: var(--lynn-color-text);
+}
+.lynn-footer-nav-col a.lynn-footer-link-active {
+  color: var(--lynn-color-blue);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-footer-nav-col a {
+    transition: none;
+  }
+  /* The static lattice stays; the pointer-follow layer is gone entirely -
+     `usePointerGrid` binds no listeners under this preference, so this is
+     belt and braces for a page that adds the class some other way. */
+  .lynn-footer-grid::after {
+    display: none;
+  }
+}

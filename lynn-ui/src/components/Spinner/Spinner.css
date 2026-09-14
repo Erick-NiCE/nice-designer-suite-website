@@ -1,0 +1,54 @@
+/*!
+ * Spinner - ported from the plugin's `.spinner` / `.spinner-dark`
+ * (styles.css:2152-2180): a 2px ring whose top edge is opaque, rotating at
+ * 0.65s linear. `md` and `lg` are this package's additions - the plugin only
+ * ever needed the 11px inline size.
+ */
+
+@keyframes lynn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.lynn-spinner {
+  display: inline-block;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  vertical-align: middle;
+  animation: lynn-spin 0.65s linear infinite;
+}
+
+.lynn-spinner-sm {
+  width: 11px;
+  height: 11px;
+}
+.lynn-spinner-md {
+  width: 16px;
+  height: 16px;
+}
+.lynn-spinner-lg {
+  width: 24px;
+  height: 24px;
+  border-width: 3px;
+}
+
+.lynn-spinner-light {
+  border-color: rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+}
+
+.lynn-spinner-dark {
+  border-color: rgba(0, 0, 0, 0.15);
+  border-top-color: var(--lynn-color-blue);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-spinner {
+    /* Freeze the ring rather than hide it - it is the only thing telling the
+       user that work is in flight. */
+    animation: none;
+  }
+}

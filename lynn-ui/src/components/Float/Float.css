@@ -1,0 +1,30 @@
+/*!
+ * Float - ported from roadmap.html's `@keyframes float` (0/100% translateY(0),
+ * 50% translateY(-6px)).
+ *
+ * The travel distance is the source's exact -6px. The default duration is 6s
+ * (a slower, ambient bob for the general-purpose component); roadmap.html's
+ * single usage runs it at 2.5s on a scroll hint, which callers can restore
+ * with `duration={2.5}`.
+ */
+
+@keyframes lynn-float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(var(--lynn-float-distance, -6px));
+  }
+}
+
+.lynn-float {
+  display: inline-flex;
+  animation: lynn-float var(--lynn-float-duration, 6s) ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-float {
+    animation: none;
+  }
+}

@@ -1,0 +1,228 @@
+/*!
+ * Carousel
+ * -------------------------------------------------------------
+ * Glass    <- Card.css `.lynn-card-glass`: the same `blur(12px)` and the
+ *             same literal `rgba(47,47,61,...)` card tint, so Lynn has one
+ *             glass recipe rather than two. The difference here is that the
+ *             tint is a bottom-weighted gradient and the blur is masked to
+ *             the lower half - a screenshot has to stay readable above the
+ *             text, which a flat 0.92 scrim would bury.
+ *             Those tints stay literal-dark in every theme on purpose: the
+ *             scrim's job is contrast for white text over an arbitrary
+ *             image, and a light-mode scrim would not do that job.
+ * Spotlight <- Card.css `.lynn-card-interactive::after`, reading the same
+ *             `--lynn-mx`/`--lynn-my` that `useTiltSpotlight` writes.
+ * Shadow    <- Card.css's glass `0 16px 48px rgba(0,0,0,0.35)`.
+ * CTA       <- the `.lynn-cta-banner-btn` precedent: a consumer component
+ *             may retune a real `Button`'s padding and font-size through
+ *             `className`; `Button` itself has no size prop.
+ */
+
+.lynn-carousel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lynn-space-lg);
+  width: 100%;
+  font-family: var(--lynn-font-family);
+}
+
+/* The 12px padding is headroom, not decoration: `overflow: hidden` clips at
+   the padding edge, so it is what keeps the tilted card's corners from
+   being sliced off. */
+.lynn-carousel-viewport {
+  position: relative;
+  overflow: hidden;
+  padding: 12px;
+  border-radius: var(--lynn-radius-xl);
+  cursor: grab;
+  /* Vertical scrolling still belongs to the page; horizontal drags are ours. */
+  touch-action: pan-y;
+}
+
+.lynn-carousel-dragging .lynn-carousel-viewport {
+  cursor: grabbing;
+}
+
+.lynn-carousel-track {
+  display: flex;
+  width: 100%;
+  transition: transform 0.55s var(--lynn-ease);
+  will-change: transform;
+}
+
+.lynn-carousel-slide {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+.lynn-carousel-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-lg);
+  background: var(--lynn-color-card);
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+  /* The hook writes `transform` inline; `preserve-3d` is what lets the body
+     block below sit forward of the image in the same space. */
+  transform-style: preserve-3d;
+  will-change: transform;
+  /* A drag across the card is a swipe, not a text selection. */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.lynn-carousel-image {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lynn-carousel-glass {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(33, 33, 43, 0.94) 0%,
+    rgba(47, 47, 61, 0.78) 30%,
+    rgba(47, 47, 61, 0.34) 58%,
+    rgba(47, 47, 61, 0.06) 82%,
+    rgba(47, 47, 61, 0) 100%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  mask-image: linear-gradient(to top, #000 0%, #000 46%, transparent 84%);
+  -webkit-mask-image: linear-gradient(
+    to top,
+    #000 0%,
+    #000 46%,
+    transparent 84%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.lynn-carousel-spotlight {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    220px circle at var(--lynn-mx, 50%) var(--lynn-my, 50%),
+    rgba(255, 255, 255, 0.09) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s var(--lynn-ease);
+  z-index: 2;
+}
+
+.lynn-carousel-card:hover .lynn-carousel-spotlight {
+  opacity: 1;
+}
+
+.lynn-carousel-body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--lynn-space-sm);
+  padding: var(--lynn-space-xl);
+  /* Forward of the image in the card's 3D space - this is what turns the
+     4-degree tilt into parallax. */
+  transform: translateZ(28px);
+  z-index: 3;
+}
+
+.lynn-carousel-title {
+  margin: 0;
+  font-size: var(--lynn-font-size-card-title);
+  font-weight: var(--lynn-font-weight-extrabold);
+  letter-spacing: var(--lynn-letter-spacing-card-title);
+  line-height: 1.2;
+  /* Literal white for the same reason the scrim is literally dark. */
+  color: #fff;
+}
+
+.lynn-carousel-tagline {
+  margin: 0;
+  max-width: 44ch;
+  font-size: var(--lynn-font-size-body);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.lynn-carousel-body > .lynn-carousel-cta {
+  margin-top: var(--lynn-space-xs);
+  padding: 9px 20px;
+  font-size: 13px;
+}
+
+/* ---------- dot pagination ---------- */
+.lynn-carousel-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--lynn-space-xs);
+}
+
+/* A 26px control around an 8px pellet: the dot reads small and stays
+   comfortably clickable. */
+.lynn-carousel-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: var(--lynn-radius-pill);
+  cursor: pointer;
+}
+
+.lynn-carousel-dot:focus-visible {
+  outline: 2px solid var(--lynn-color-blue);
+  outline-offset: -2px;
+}
+
+.lynn-carousel-dot-pellet {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--lynn-radius-pill);
+  background: var(--lynn-color-border-hover);
+  transition: width 0.4s var(--lynn-ease), background 0.4s var(--lynn-ease);
+}
+
+.lynn-carousel-dot:hover .lynn-carousel-dot-pellet {
+  background: var(--lynn-color-text-muted);
+}
+
+.lynn-carousel-dot[aria-current='true'] .lynn-carousel-dot-pellet {
+  width: 22px;
+  background: var(--lynn-color-blue);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Snap between slides instead of sliding. Autoplay, if it is on, still
+     advances - it just arrives rather than travels. */
+  .lynn-carousel-track {
+    transition: none;
+  }
+  /* `useTiltSpotlight` already bails out, so nothing writes a transform;
+     this makes the spotlight's static state explicit too. */
+  .lynn-carousel-spotlight,
+  .lynn-carousel-card:hover .lynn-carousel-spotlight {
+    display: none;
+  }
+  .lynn-carousel-dot-pellet {
+    transition: none;
+  }
+}

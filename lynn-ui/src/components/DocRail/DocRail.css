@@ -1,0 +1,312 @@
+/*!
+ * DocRail - ported from theme.css's `.doc-rail*` block (lines 159-323):
+ * a fixed 220px glass panel pinned 16px under the nav and 24px from the left,
+ * with a 26x40 edge tab that takes over once it collapses.
+ *
+ * `.lynn-doc-rail-sublink`'s `--lynn-warmth` is the same 0-1 variable the
+ * source calls `--warmth`, driving text alpha, background tint and the inset
+ * left rule together. What sets it is simpler here (see useAnchorWarmth), but
+ * the visual contract is unchanged.
+ *
+ * Every fill the source wrote as a raw white alpha is re-expressed as a
+ * `color-mix` against a theme token, with the source's literal kept above it
+ * as the fallback. In Lynn's own mode the two are the same color
+ * (`--lynn-color-card` at 92% *is* `rgba(47,47,61,0.92)`, `--lynn-color-text`
+ * at 6% *is* `rgba(255,255,255,0.06)`); in light mode the literals would
+ * leave a dark panel with dark text and invisible hover states.
+ */
+
+.lynn-doc-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  position: fixed;
+  top: calc(var(--lynn-nav-height) + 16px);
+  left: var(--lynn-space-xl);
+  width: 220px;
+  max-height: calc(100vh - var(--lynn-nav-height) - 32px);
+  /* The rail itself no longer scrolls - `ScrollArea` around the link list
+     does (see DocRail.tsx), which is what keeps the header and the search
+     box pinned while the links move under them. `hidden` here is what makes
+     the inner region bounded, and so scrollable at all. */
+  overflow: hidden;
+  padding: 14px;
+  background: rgba(47, 47, 61, 0.92);
+  background: color-mix(in srgb, var(--lynn-color-card) 92%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: 14px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+  z-index: 90;
+  font-family: var(--lynn-font-family);
+  transition:
+    transform 0.25s var(--lynn-ease),
+    opacity 0.2s var(--lynn-ease);
+}
+
+.lynn-doc-rail-collapsed {
+  transform: translateX(-16px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- header ---------- */
+.lynn-doc-rail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2px;
+}
+
+.lynn-doc-rail-label {
+  padding: 4px 0 10px;
+  font-size: 11px;
+  font-weight: var(--lynn-font-weight-bold);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--lynn-color-text-secondary);
+}
+
+.lynn-doc-rail-collapse {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-bottom: var(--lynn-space-sm);
+  background: transparent;
+  border: 1px solid var(--lynn-color-border);
+  border-radius: 6px;
+  color: var(--lynn-color-text-secondary);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    color 0.2s var(--lynn-ease),
+    background 0.2s var(--lynn-ease);
+}
+
+.lynn-doc-rail-collapse:hover {
+  color: var(--lynn-color-text);
+  background: color-mix(in srgb, var(--lynn-color-text) 6%, transparent);
+}
+
+/* ---------- toggle icon: three bars <-> an X ---------- */
+.lynn-doc-rail-icon {
+  display: block;
+  overflow: visible;
+}
+
+.lynn-doc-rail-icon-bar {
+  fill: currentColor;
+  /* `fill-box` is what makes `center` mean "the middle of this bar" rather
+     than the middle of the 16x16 viewBox, so each bar rotates in place. */
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    transform 0.3s var(--lynn-ease),
+    opacity 0.18s var(--lynn-ease);
+}
+
+/*
+ * The bars sit 5 user units apart, so 5 is exactly the travel that lands the
+ * outer two on the middle one before they cross - which puts both arms'
+ * centers on (8, 8), the viewBox's own center, and makes the X symmetric
+ * about both axes by construction.
+ *
+ * The scale is the part that is not obvious. A bar rotated 45 degrees only
+ * spans `(length + thickness) / sqrt(2)` across the box, so three 11-unit
+ * bars that read 9.6px wide at this icon's real 14px size collapse into an X
+ * of 7.7px - the glyph visibly shrinks on close, which is what made the
+ * closed state look weak next to the open one. `scaleX(1.15)` takes the arms
+ * back out to ~10 units of span, so the two states read as the same size
+ * glyph. `scaleY(1.12)` is the companion correction: a 1.5-unit bar is
+ * 1.31px here, and on the diagonal that lands between device pixels and
+ * antialiases to a lighter grey than the horizontal bars do, so the arms are
+ * thickened just enough to hold the same weight.
+ *
+ * Scale before rotate (it is written last, and the functions apply
+ * right-to-left) so it stretches the bar along its *own* axis rather than
+ * along the box's.
+ */
+.lynn-doc-rail-icon-crossed .lynn-doc-rail-icon-top {
+  transform: translateY(5px) rotate(45deg) scale(1.15, 1.12);
+}
+.lynn-doc-rail-icon-crossed .lynn-doc-rail-icon-mid {
+  /* Gone in 0.18s while the other two are still 40% of the way over, so the
+     cross never lands on top of a bar that is still visible. */
+  opacity: 0;
+  transform: scaleX(0.2);
+}
+.lynn-doc-rail-icon-crossed .lynn-doc-rail-icon-bot {
+  transform: translateY(-5px) rotate(-45deg) scale(1.15, 1.12);
+}
+
+/* ---------- collapsed edge tab ---------- */
+.lynn-doc-rail-expand {
+  position: fixed;
+  top: calc(var(--lynn-nav-height) + 16px);
+  left: 0;
+  width: 26px;
+  height: 40px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(47, 47, 61, 0.92);
+  background: color-mix(in srgb, var(--lynn-color-card) 92%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--lynn-color-border);
+  border-left: none;
+  border-radius: 0 10px 10px 0;
+  color: var(--lynn-color-text-secondary);
+  font-family: var(--lynn-font-family);
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 90;
+  transition:
+    color 0.2s var(--lynn-ease),
+    background 0.2s var(--lynn-ease);
+}
+
+.lynn-doc-rail-expand-visible {
+  display: flex;
+}
+
+.lynn-doc-rail-expand:hover {
+  color: var(--lynn-color-text);
+  background: rgba(54, 148, 252, 0.18);
+}
+
+/* ---------- search ---------- */
+.lynn-doc-rail-search-wrap {
+  padding: 0 2px 10px;
+}
+
+.lynn-doc-rail-search {
+  width: 100%;
+  padding: 7px 10px;
+  background: rgba(255, 255, 255, 0.06);
+  background: color-mix(in srgb, var(--lynn-color-text) 6%, transparent);
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-sm);
+  color: var(--lynn-color-text);
+  font-family: var(--lynn-font-family);
+  font-size: 13px;
+  outline: none;
+  transition:
+    border-color 0.2s var(--lynn-ease),
+    background 0.2s var(--lynn-ease);
+}
+
+.lynn-doc-rail-search::placeholder {
+  color: var(--lynn-color-text-secondary);
+}
+
+.lynn-doc-rail-search:focus {
+  border-color: rgba(54, 148, 252, 0.4);
+  background: color-mix(in srgb, var(--lynn-color-text) 9%, transparent);
+}
+
+/* ---------- links ---------- */
+/* `min-height: 0` is the load-bearing half: without it a flex child refuses
+   to shrink below its content, the rail grows past its own max-height, and
+   nothing ever overflows for the custom bar to represent. */
+.lynn-doc-rail-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.lynn-doc-rail-links,
+.lynn-doc-rail-page,
+.lynn-doc-rail-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lynn-doc-rail-link {
+  padding: 8px 10px;
+  border-radius: var(--lynn-radius-sm);
+  color: var(--lynn-color-text-secondary);
+  font-size: 13px;
+  font-weight: var(--lynn-font-weight-medium);
+  text-decoration: none;
+  transition:
+    color 0.2s var(--lynn-ease),
+    background 0.2s var(--lynn-ease);
+}
+
+.lynn-doc-rail-link:hover {
+  color: var(--lynn-color-text);
+  background: color-mix(in srgb, var(--lynn-color-text) 6%, transparent);
+}
+
+.lynn-doc-rail-link-active {
+  color: var(--lynn-color-text);
+  background: rgba(54, 148, 252, 0.14);
+}
+
+.lynn-doc-rail-group-label {
+  padding: 10px 10px 2px 20px;
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-bold);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--lynn-color-text-secondary);
+}
+
+.lynn-doc-rail-sublink {
+  --lynn-warmth: 0;
+  padding: 6px 10px 6px 20px;
+  border-radius: var(--lynn-radius-sm);
+  font-size: var(--lynn-font-size-metadata);
+  font-weight: var(--lynn-font-weight-medium);
+  text-decoration: none;
+  /* Cold rows sit at the secondary text color and warm all the way to the
+     primary one - the source expressed the same ramp as a raw white alpha,
+     which would invert in light mode. */
+  color: var(--lynn-color-text-secondary);
+  background: rgba(54, 148, 252, calc(var(--lynn-warmth) * 0.16));
+  box-shadow: inset 2px 0 0 rgba(54, 148, 252, var(--lynn-warmth));
+  transition:
+    color 0.15s linear,
+    background 0.15s linear,
+    box-shadow 0.15s linear;
+}
+
+.lynn-doc-rail-sublink[aria-current='true'] {
+  color: var(--lynn-color-text);
+}
+
+.lynn-doc-rail-sublink:hover {
+  color: var(--lynn-color-text);
+  background: color-mix(in srgb, var(--lynn-color-text) 6%, transparent);
+}
+
+.lynn-doc-rail-empty {
+  padding: 8px 10px;
+  font-size: var(--lynn-font-size-metadata);
+  color: var(--lynn-color-text-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-doc-rail,
+  .lynn-doc-rail-collapse,
+  .lynn-doc-rail-expand,
+  .lynn-doc-rail-search,
+  .lynn-doc-rail-link,
+  .lynn-doc-rail-sublink {
+    transition: none;
+  }
+  .lynn-doc-rail-collapsed {
+    transform: none;
+  }
+  /* The icon still swaps between its two shapes - it just cuts rather than
+     morphing. */
+  .lynn-doc-rail-icon-bar {
+    transition: none;
+  }
+}

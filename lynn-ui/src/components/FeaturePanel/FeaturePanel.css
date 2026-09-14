@@ -1,0 +1,115 @@
+/*!
+ * FeaturePanel
+ * Ported from wings-2026.html:
+ *   `.walk-panel`         - 1px border, 24px radius, 40px padding,
+ *                           `overflow: hidden`, two radial glows
+ *                           (`circle at 12% 0%` 20% indigo and
+ *                           `circle at 92% 100%` 16% emerald, both to
+ *                           `transparent 55%`) over the `card` fill, and a
+ *                           400ms border/transform transition
+ *   `.walk-panel:hover`   - 13% white border, `translateY(-1px)`
+ *   `.walk-panel::before` - 2px top stripe,
+ *                           `linear-gradient(90deg, blue, indigo, emerald)`
+ *   `.walk-badge`         - 11px/700 uppercase pill, 1.5px track,
+ *                           13% `lynn` fill, 6px/14px padding, 18px below
+ *   `.walk-heading`       - 26px/800, -0.5px track, 12px below
+ *   `.walk-body`          - 15px secondary at 1.7, 620px cap, 26px below
+ *   `.walk-actions`       - 14px-gap wrapping row
+ *
+ * The pill is `Badge` at `tone="lynn"` with the source's own type restored
+ * (Badge only uppercases its `status` pills), and the actions are real
+ * `Button`s.
+ */
+
+.lynn-feature-panel {
+  position: relative;
+  padding: 40px;
+  border: 1px solid var(--lynn-color-border);
+  border-radius: var(--lynn-radius-xl);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(97, 0, 255, 0.2), transparent 55%),
+    radial-gradient(circle at 92% 100%, rgba(0, 226, 160, 0.16), transparent 55%),
+    var(--lynn-color-card);
+  font-family: var(--lynn-font-family);
+  scroll-margin-top: calc(var(--lynn-nav-height) + var(--lynn-space-xl));
+  transition:
+    border-color 0.4s var(--lynn-ease),
+    transform 0.4s var(--lynn-ease);
+}
+
+.lynn-feature-panel:hover {
+  border-color: var(--lynn-color-border-hover);
+  transform: translateY(-1px);
+}
+
+.lynn-feature-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(
+    --lynn-panel-stripe,
+    linear-gradient(
+      90deg,
+      var(--lynn-color-blue),
+      var(--lynn-color-indigo),
+      var(--lynn-color-emerald)
+    )
+  );
+}
+
+.lynn-feature-panel > .lynn-feature-panel-badge {
+  margin-bottom: 18px;
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: var(--lynn-font-weight-bold);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.lynn-feature-panel-heading {
+  margin: 0 0 var(--lynn-space-md);
+  font-size: 26px;
+  font-weight: var(--lynn-font-weight-extrabold);
+  letter-spacing: -0.5px;
+  color: var(--lynn-color-text);
+}
+
+.lynn-feature-panel-body {
+  margin: 0 0 26px;
+  max-width: 620px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--lynn-color-text-secondary);
+}
+
+.lynn-feature-panel-body strong {
+  color: var(--lynn-color-text);
+  font-weight: var(--lynn-font-weight-semibold);
+}
+
+.lynn-feature-panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 720px) {
+  .lynn-feature-panel {
+    padding: var(--lynn-space-xl);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lynn-feature-panel {
+    transition: none;
+  }
+
+  .lynn-feature-panel:hover {
+    transform: none;
+  }
+}

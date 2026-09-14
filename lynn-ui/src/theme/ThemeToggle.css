@@ -1,0 +1,68 @@
+/*!
+ * ThemeToggle - everything structural comes from Tabs; this only sizes the
+ * three mode glyphs and keeps an icon-only toggle square.
+ *
+ * Plus the theme wipe's overlay, which is the one element in this package
+ * that no component renders: `themeWipe.ts` appends it to <body> so the whole
+ * document sweeps, including chrome portalled outside ThemeProvider's div.
+ * It is only ever on screen for about 700ms.
+ */
+
+.lynn-theme-toggle .lynn-tabs-segment-icon svg {
+  display: block;
+}
+
+.lynn-theme-toggle .lynn-tabs-segment {
+  gap: 6px;
+}
+
+.lynn-theme-toggle .lynn-tabs-segment:not(:has(.lynn-tabs-segment-label)) {
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+/* ---------- the theme wipe ---------- */
+/*
+ * `inset: 0` rather than 100vw/100vh: on a page with a scrollbar the viewport
+ * units overshoot and the fixed overlay would give the document a horizontal
+ * one of its own for the half-second it exists.
+ *
+ * The clip-path is written and animated from JS - the circle's center is the
+ * clicked segment's, so there is no value for a stylesheet to hold. What
+ * lives here is everything that is a *design* decision: the stacking, and
+ * the three washes the sweep reveals with.
+ */
+.lynn-theme-wipe {
+  position: fixed;
+  inset: 0;
+  /* Never intercepts a click, including the click that started it. */
+  pointer-events: none;
+  /* Above Tooltip's 10001, the highest thing Lynn draws - a tooltip poking
+     through the sweep would give the flip away. */
+  z-index: 10050;
+  will-change: clip-path, opacity;
+  /* Dark is the default arm, matching the plugin's own fall-through. */
+  background: linear-gradient(135deg, #1a1a2e 0%, #1e1e1e 60%, #1e1e1e 100%);
+}
+
+/* The plugin's own three fills: a sunrise wash into near-white for light,
+   near-black for dark, and Lynn's violet-into-navy for lynn (the plugin
+   calls that third mode `site`). Deliberately literal rather than token
+   references - the overlay is showing the theme you are moving *to*, so it
+   cannot read the tokens of the theme still on screen. */
+.lynn-theme-wipe[data-lynn-wipe='light'] {
+  background: linear-gradient(135deg, #ffe4b5 0%, #fafafa 60%, #f5f5f5 100%);
+}
+
+.lynn-theme-wipe[data-lynn-wipe='lynn'] {
+  background: linear-gradient(135deg, #2a1a4e 0%, #120a24 60%, #0b0d17 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Belt and braces: runThemeWipe() already skips the sweep entirely and
+     never appends this element, so there is nothing to animate. If one is
+     somehow on screen, it must not be a half-covered page. */
+  .lynn-theme-wipe {
+    display: none;
+  }
+}

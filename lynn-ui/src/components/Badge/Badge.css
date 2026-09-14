@@ -1,0 +1,152 @@
+/*!
+ * Badge
+ * Base pill    <- tools.html `.target-badge` (10px/700, 3px 8px, pill)
+ * Tone tints   <- theme.css `.coming-soon-tag` (14% accent background)
+ * Bordered     <- tools.html `.target-figma/.target-chrome/.target-both`
+ *                 (20% accent border)
+ * Status pills <- roadmap.html `.badge.active/.shipped/.next/.planned/
+ *                 .new/.dropped`, ported verbatim
+ * Grades       <- the audit/scoring ramp, rebuilt on Lynn's palette
+ * Lifecycle    <- `beta` / `recommended` / `optional`
+ *
+ * The rgb() triples below are the real accent hexes converted exactly.
+ * Note: tools.html's `.target-both` background reads `rgba(54,226,208,.12)`
+ * while `--teal` is `#36EAD0` = `rgb(54,234,208)`. That two-point green
+ * drift is a typo in the source, corrected here to the real accent value.
+ */
+
+.lynn-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lynn-space-xs);
+  font-family: var(--lynn-font-family);
+  font-size: 10px;
+  font-weight: var(--lynn-font-weight-bold);
+  padding: 3px 8px;
+  border-radius: var(--lynn-radius-pill);
+  border: 1px solid transparent;
+  white-space: nowrap;
+  flex-shrink: 0;
+  background: var(--lynn-badge-bg);
+  color: var(--lynn-badge-fg);
+}
+
+.lynn-badge-icon {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.lynn-badge-bordered {
+  border-color: var(--lynn-badge-border);
+}
+
+/* ---------- tones: 14% accent background, 20% accent border ---------- */
+.lynn-badge-tone-blue {
+  --lynn-badge-bg: rgba(54, 148, 252, 0.14);
+  --lynn-badge-fg: #3694fc;
+  --lynn-badge-border: rgba(54, 148, 252, 0.2);
+}
+.lynn-badge-tone-electric-blue {
+  --lynn-badge-bg: rgba(2, 90, 251, 0.14);
+  --lynn-badge-fg: #025afb;
+  --lynn-badge-border: rgba(2, 90, 251, 0.2);
+}
+.lynn-badge-tone-indigo {
+  --lynn-badge-bg: rgba(97, 0, 255, 0.14);
+  --lynn-badge-fg: #6100ff;
+  --lynn-badge-border: rgba(97, 0, 255, 0.2);
+}
+.lynn-badge-tone-emerald {
+  --lynn-badge-bg: rgba(0, 226, 160, 0.14);
+  --lynn-badge-fg: #00e2a0;
+  --lynn-badge-border: rgba(0, 226, 160, 0.2);
+}
+.lynn-badge-tone-teal {
+  --lynn-badge-bg: rgba(54, 234, 208, 0.14);
+  --lynn-badge-fg: #36ead0;
+  --lynn-badge-border: rgba(54, 234, 208, 0.2);
+}
+.lynn-badge-tone-coral {
+  --lynn-badge-bg: rgba(255, 91, 138, 0.14);
+  --lynn-badge-fg: #ff5b8a;
+  --lynn-badge-border: rgba(255, 91, 138, 0.2);
+}
+.lynn-badge-tone-lynn {
+  --lynn-badge-bg: rgba(185, 143, 255, 0.14);
+  --lynn-badge-fg: #b98fff;
+  --lynn-badge-border: rgba(185, 143, 255, 0.2);
+}
+
+/* ---------- statuses: roadmap.html verbatim ---------- */
+.lynn-badge[class*='lynn-badge-status-'] {
+  font-size: 9px;
+  font-weight: var(--lynn-font-weight-extrabold);
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+.lynn-badge-status-active {
+  --lynn-badge-bg: rgba(54, 148, 252, 0.2);
+  --lynn-badge-fg: #6ab4ff;
+}
+.lynn-badge-status-shipped {
+  --lynn-badge-bg: rgba(0, 226, 160, 0.15);
+  --lynn-badge-fg: #00e2a0;
+}
+.lynn-badge-status-next {
+  --lynn-badge-bg: rgba(0, 226, 160, 0.12);
+  --lynn-badge-fg: #00e2a0;
+}
+.lynn-badge-status-planned {
+  --lynn-badge-bg: rgba(255, 255, 255, 0.06);
+  --lynn-badge-fg: rgba(255, 255, 255, 0.3);
+}
+.lynn-badge-status-new {
+  --lynn-badge-bg: rgba(97, 0, 255, 0.2);
+  --lynn-badge-fg: #b98fff;
+}
+.lynn-badge-status-dropped {
+  --lynn-badge-bg: rgba(255, 91, 138, 0.15);
+  --lynn-badge-fg: #ff8ab0;
+}
+
+/* ---------- score grades ----------
+ * The plugin's own grading ramp is `success` / `warning` / `danger`, but its
+ * `warning` is amber and Lynn has exactly seven accents, none of them amber.
+ * The ramp is rebuilt from Lynn's own palette instead, descending
+ * emerald -> teal -> blue -> coral, which keeps four distinguishable steps
+ * without inventing an eighth accent. */
+.lynn-badge-status-great {
+  --lynn-badge-bg: rgba(0, 226, 160, 0.2);
+  --lynn-badge-fg: #00e2a0;
+}
+.lynn-badge-status-good {
+  --lynn-badge-bg: rgba(54, 234, 208, 0.15);
+  --lynn-badge-fg: #36ead0;
+}
+.lynn-badge-status-ok {
+  --lynn-badge-bg: rgba(54, 148, 252, 0.15);
+  --lynn-badge-fg: #6ab4ff;
+}
+.lynn-badge-status-bad {
+  --lynn-badge-bg: rgba(255, 91, 138, 0.15);
+  --lynn-badge-fg: #ff8ab0;
+}
+
+/* ---------- lifecycle / emphasis ----------
+ * `beta` shares `new`'s lynn-tinted pair: both mean "just arrived, expect
+ * movement". `optional` reads off the theme tokens rather than a fixed
+ * white alpha, so the one intentionally colorless pill stays legible in
+ * light mode too. */
+.lynn-badge-status-beta {
+  --lynn-badge-bg: rgba(97, 0, 255, 0.2);
+  --lynn-badge-fg: #b98fff;
+}
+.lynn-badge-status-recommended {
+  --lynn-badge-bg: rgba(0, 226, 160, 0.12);
+  --lynn-badge-fg: #00e2a0;
+}
+.lynn-badge-status-optional {
+  --lynn-badge-bg: var(--lynn-color-card);
+  --lynn-badge-fg: var(--lynn-color-text-muted);
+}
