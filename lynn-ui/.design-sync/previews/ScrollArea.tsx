@@ -27,7 +27,7 @@ export function Default() {
         padding: '4px 0',
       }}
     >
-      <ScrollArea radius="14px" ariaLabel="Documentation sections">
+      <ScrollArea radius="14px" ariaLabel="Documentation sections" style={{ height: '100%' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4, padding: '8px 16px' }}>
           {SECTIONS.map((section) => (
             <div key={section} style={{ padding: '6px 4px', color: 'var(--lynn-color-text)' }}>

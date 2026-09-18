@@ -4,6 +4,7 @@
   "pkg": "lynn-ui",
   "cssEntry": "./dist/lynn-ui.css",
   "tokensGlob": "./src/tokens/tokens.css",
+  "readmeHeader": ".design-sync/conventions.md",
   "provider": {
     "component": "ThemeProvider",
     "props": { "defaultTheme": "lynn" }
@@ -13,6 +14,8 @@
     "DocRail": { "cardMode": "single", "viewport": "320x600" },
     "AccessGate": { "cardMode": "single", "viewport": "500x600" },
     "Footer": { "cardMode": "column" },
-    "Hero": { "cardMode": "single" }
+    "Hero": { "cardMode": "single" },
+    "CursorGlow": { "cardMode": "single", "primaryStory": "Default" },
+    "ToastViewport": { "cardMode": "single", "primaryStory": "SuccessToast" }
   }
 }
