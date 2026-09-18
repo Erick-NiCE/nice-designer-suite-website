@@ -33,6 +33,16 @@
 }
 
 .lynn-glow-pulse {
+  /* A bare `div` is a block box - full container width, square corners - so
+     the halo rendered as a wide rectangle behind whatever pill-shaped thing
+     it actually wrapped. `inline-block` shrink-wraps it to its child instead,
+     and `--lynn-radius-pill` matches the halo's own corners to the two
+     documented use cases (a `Badge`, a primary CTA button), both already
+     pill-shaped - so the glow reads as one rounded halo, not a rectangle
+     showing through a rounded pill.
+  */
+  display: inline-block;
+  border-radius: var(--lynn-radius-pill);
   animation: lynn-glow-pulse 3s ease-in-out infinite;
 }
 

@@ -16,6 +16,12 @@
 .lynn-sheen {
   position: relative;
   overflow: hidden;
+  /* The wrapper is what actually clips the sweep band, so it needs the same
+     curve as whatever it wraps or the band's square corners show past the
+     child's rounded ones. `--lynn-radius-lg` matches the two documented
+     targets (`Card`, `CtaBanner`'s outer panel) - override through
+     `className` for anything on a different radius. */
+  border-radius: var(--lynn-radius-lg);
 }
 
 .lynn-sheen::after {

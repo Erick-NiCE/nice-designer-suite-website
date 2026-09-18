@@ -5,21 +5,21 @@
  * directly, importing React through the host page's import map and every
  * component from the package's own built `dist/index.js`.
  *
- * This module has no side effects - it exports `mountPlayground(container,
- * options)` and nothing else runs on import. It is mounted from two places:
+ * This module is used two ways:
  *
- *   - `playground/index.html`  standalone shell, `{ embedded: false }`:
- *                              owns the whole document, renders its own
- *                              `Nav` with the `ThemeToggle` in it, and lets
- *                              `DocRail` be the fixed left panel it is by
- *                              default.
- *   - `../../lynn.html`        the live site's Lynn page, `{ embedded: true }`:
- *                              one section of a page that already has a nav
- *                              and its own fixed left `.doc-rail`, so no
- *                              `Nav` is rendered, the `ThemeToggle` moves
- *                              into this section's own small header, and the
- *                              `DocRail` becomes a sticky right-hand column
- *                              (see `.pg-*` in playground.css).
+ *   - `playground/index.html`  the standalone shell: has no nav or rail of
+ *                              its own, so it calls `mountPlayground(el)`,
+ *                              which owns the whole document - its own `Nav`,
+ *                              `ThemeProvider` and a fixed-left `DocRail`
+ *                              fed by `RAIL_GROUPS`.
+ *   - `../../lynn.html`        the live site's Lynn page: already has its
+ *                              own `Nav`, `ThemeProvider` and left `DocRail`
+ *                              (the page IS a lynn-ui app, not a host
+ *                              embedding one), so it imports `Body` and
+ *                              `RAIL_GROUPS` directly and renders them
+ *                              inside its own single tree instead of calling
+ *                              `mountPlayground` - one theme, one rail, no
+ *                              second nav competing with the page's own.
  *
  * House rule: every clickable control here is a real lynn-ui component. The
  * theme switch is `ThemeToggle`, the picker axes are `Tabs`, `Dropdown` and
@@ -78,6 +78,13 @@ import {
   resolve,
   titleize,
 } from './registry.js';
+
+// Re-exported so a host page rendering `Body` directly only needs one import
+// source: `DocRailPreview` (inside `Body`'s "DocRail" component card) reads
+// this to demo controlling the host's own real rail, so the host must wrap
+// `Body` in `RailContext.Provider` with the same `collapsed`/`setCollapsed`
+// state it hands its own `DocRail`.
+export { RailContext };
 
 /* ------------------------------------------------------------------ *
  * live token reading
@@ -464,7 +471,17 @@ function MotionTokens() {
       h(
         Demo,
         { key: 'sparkle', label: '<Sparkle /> - twinkling field' },
-        h(Sparkle, null, h(Badge, { tone: 'lynn', icon: h(IconBolt, { size: 12 }) }, 'Superpowers'))
+        // Sparkle beside the badge, not wrapping it - see the registry's
+        // matching component card for why: children swap in the plain
+        // scale+opacity fallback instead of the real twinkling glyph.
+        h(
+          'div',
+          { style: { display: 'flex', alignItems: 'center', gap: 10 } },
+          [
+            h(Sparkle, { key: 'glyph' }),
+            h(Badge, { key: 'badge', tone: 'lynn', icon: h(IconBolt, { size: 12 }) }, 'Superpowers'),
+          ]
+        )
       ),
       h(
         Demo,
@@ -624,7 +641,12 @@ function PlaygroundCard(props) {
  * the page
  * ------------------------------------------------------------------ */
 
-const RAIL_GROUPS = [
+/**
+ * `Body`'s section/component list, shaped as `DocRailGroup[]` - exported so a
+ * host page can append it to its own rail's `groups` instead of standing up a
+ * second `DocRail` alongside it.
+ */
+export const RAIL_GROUPS = [
   { label: 'Overview', items: [{ id: 'overview', label: 'Introduction' }] },
   { label: 'Tokens', items: TOKEN_ITEMS },
   ...GROUPS.map((group) => ({
@@ -752,14 +774,21 @@ function Components() {
 }
 
 /**
- * The page body: the rail plus the three content blocks. Identical in both
- * mounts; only the boxes around it differ.
+ * The playground's actual content: the three sections (Overview, Tokens,
+ * Components), no chrome of its own.
+ *
+ * Exported so a host page that already has its own `Nav`/`DocRail`/
+ * `ThemeProvider` (lynn.html) can render this directly inside its own tree,
+ * merging `RAIL_GROUPS` into its own rail instead of getting a second one.
+ * The standalone shell's `mountPlayground` renders the same component, just
+ * wrapped in its own chrome below.
  */
-function Body() {
+export function Body() {
   return h(Fragment, null, [
     h(Overview, { key: 'overview' }),
     h(Tokens, { key: 'tokens' }),
     h(Components, { key: 'components' }),
+    h(ToastViewport, { key: 'toast' }),
   ]);
 }
 
@@ -800,84 +829,24 @@ function StandaloneApp() {
       },
       h(Body)
     ),
-
-    h(ToastViewport, { key: 'toast' }),
   ]);
 }
 
 /**
- * The embedded shell, for a page that already has a nav and a rail of its
- * own: a small local header carrying the `ThemeToggle`, and the same
- * `DocRail` moved into a sticky right-hand column of this section only.
- */
-function EmbeddedApp() {
-  const [collapsed, setCollapsed] = useState(false);
-
-  return h(RailContext.Provider, { value: { collapsed, setCollapsed } }, [
-    h('div', { key: 'header', className: 'pg-header' }, [
-      h('div', { key: 'text' }, [
-        h(
-          'h3',
-          { key: 'title', className: 'pg-header-title' },
-          'Every component, live'
-        ),
-        h(
-          'p',
-          { key: 'sub', className: 'pg-header-sub' },
-          'Real React components out of lynn-ui - drive the pickers, read the generated JSX.'
-        ),
-      ]),
-      h('div', { key: 'theme', className: 'pg-header-theme' }, [
-        h(
-          'p',
-          { key: 'label', className: 'pgc-control-label' },
-          'Try it in light / dark / lynn'
-        ),
-        h(ThemeToggle, { key: 'toggle', showLabels: true }),
-      ]),
-    ]),
-
-    h(
-      'div',
-      {
-        key: 'shell',
-        className: `pg-shell${collapsed ? ' pg-shell-collapsed' : ''}`,
-      },
-      [
-        h('div', { key: 'main', className: 'pg-main' }, h(Body)),
-        h(
-          'div',
-          { key: 'railcol', className: 'pg-railcol' },
-          h(DocRail, {
-            mode: 'sections',
-            groups: RAIL_GROUPS,
-            collapsed,
-            onToggle: setCollapsed,
-            searchable: true,
-            label: 'In this section',
-            searchPlaceholder: 'Filter demos…',
-            emptyText: 'No matching sections',
-          })
-        ),
-      ]
-    ),
-
-    h(ToastViewport, { key: 'toast' }),
-  ]);
-}
-
-/**
- * Mounts the playground into any container.
+ * Mounts the standalone playground shell into any container.
+ *
+ * Only `playground/index.html` calls this - a page that already has its own
+ * `Nav`/`DocRail`/`ThemeProvider` (lynn.html) should import `Body` and
+ * `RAIL_GROUPS` instead and render them inside its own tree; mounting a
+ * second, independent `ThemeProvider` there would give the page two
+ * disconnected theme states and a second competing rail.
  *
  * @param {Element|string} container element, or the id of one.
- * @param {{ embedded?: boolean, defaultTheme?: 'lynn'|'light'|'dark' }} [options]
- *   `embedded: true` drops the `Nav`, moves the `ThemeToggle` into a local
- *   header and turns the rail into a sticky in-section column - use it when
- *   the host page already has its own nav and doc rail.
+ * @param {{ defaultTheme?: 'lynn'|'light'|'dark' }} [options]
  * @returns the React root, so a caller can `unmount()` it.
  */
 export function mountPlayground(container, options = {}) {
-  const { embedded = false, defaultTheme = 'lynn' } = options;
+  const { defaultTheme = 'lynn' } = options;
 
   const element =
     typeof container === 'string'
@@ -895,19 +864,12 @@ export function mountPlayground(container, options = {}) {
     h(
       StrictMode,
       null,
-      h(
-        ThemeProvider,
-        {
-          defaultTheme,
-          className: embedded ? 'pg-embed' : undefined,
-        },
-        h(embedded ? EmbeddedApp : StandaloneApp)
-      )
+      h(ThemeProvider, { defaultTheme }, h(StandaloneApp))
     )
   );
 
   console.log(
-    `[lynn-ui playground] mounted ${embedded ? 'embedded' : 'standalone'} -`,
+    '[lynn-ui playground] mounted standalone -',
     GROUPS.reduce((total, group) => total + group.entries.length, 0),
     'playgrounds'
   );

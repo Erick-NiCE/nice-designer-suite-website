@@ -7,16 +7,35 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=10" />
+  <link rel="stylesheet" href="theme.css?v=13" />
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <link rel="stylesheet" href="site-gate.css" />
-  <script src="site-gate.js" defer></script>
-  <script src="nice-effects.js?v=11" defer></script>
+  <script src="nice-effects.js?v=13" defer></script>
 
-  <!-- lynn-ui: powers the "Featured" carousel below -->
-  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css" />
+  <!--
+    ===== lynn-ui: the site chrome, as React components =====
+    The access gate, the nav, the hero, the featured carousel and the footer
+    all come from lynn-ui now - see the single #lynn-app-root mount script at
+    the end of <body>. site-gate.css / site-gate.js are gone with them;
+    `AccessGate` is the same screen and the mount script re-runs the same
+    client-side code check. This page has no doc rail - it is in
+    nice-effects.js's own `DOC_RAIL_SKIP` list, same as before the migration.
+
+    Three things are needed, and none of them affect the rest of the page:
+      1. dist/lynn-ui.css - the package's built stylesheet. Everything in it
+         is either a `--lynn-*` custom property or a `.lynn-*` class, so it
+         cannot collide with this page's own tokens/classes.
+      2. the import map  - React, ReactDOM and matter-js as CDN ESM.
+         `?external=react` on react-dom stops a second copy of React being
+         pulled in ("invalid hook call"). matter-js is in the map because
+         dist/index.js is one barrel that also reaches LiquidFill.
+      3. `.lynn-mount` - the chrome renders through portals into placeholder
+         divs left where the old markup was. `display: contents` means those
+         placeholders generate no box, so the sticky nav and the footer's
+         margin still resolve against <body> exactly as before.
+  -->
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=1" />
   <script type="importmap">
   {
     "imports": {
@@ -29,129 +48,36 @@
     }
   }
   </script>
+  <style>.lynn-mount { display: contents; }</style>
+
+  <!--
+    The gate used to be static markup covered by blocking CSS, so it was up
+    before first paint. React arrives as ESM from a CDN, so the component
+    can only mount a tick later - hold the page back until it does, or a
+    locked visitor reads the whole page in the gap. Costs nothing once the
+    session is unlocked (the class is never added), and a 4s failsafe means
+    a CDN that never answers leaves a readable page rather than a blank one.
+  -->
+  <style>html.lynn-gate-pending body { visibility: hidden; }</style>
+  <script>
+    (function () {
+      try {
+        if (sessionStorage.getItem('nice-site-access') === '1') return;
+      } catch (e) { /* blocked storage: fall through and gate */ }
+      var root = document.documentElement;
+      root.classList.add('lynn-gate-pending');
+      setTimeout(function () { root.classList.remove('lynn-gate-pending'); }, 4000);
+    })();
+  </script>
+
   <style>
-    /* ========== HERO ========== */
-    .hero {
-      min-height: 80vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-      text-align: center;
-    }
-
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, #21212B 0%, #170d40 18%, #0d1f6b 38%, #3694FC 55%, #6100FF 72%, #00E2A0 87%, #21212B 100%);
-      background-size: 400% 400%;
-      animation: gradientShift 130s ease infinite;
-    }
-
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    .hero-radial {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at center, transparent 30%, #21212B 80%);
-    }
-
-    .hero-orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.45;
-    }
-
-    .hero-orb-1 {
-      width: 400px;
-      height: 400px;
-      background: var(--blue);
-      top: -100px;
-      left: -100px;
-      animation: orbFloat 80s ease-in-out infinite;
-    }
-
-    .hero-orb-2 {
-      width: 350px;
-      height: 350px;
-      background: var(--indigo);
-      bottom: -80px;
-      right: -80px;
-      animation: orbFloat 80s ease-in-out infinite;
-      animation-delay: -3s;
-    }
-
-    .hero-orb-3 {
-      width: 300px;
-      height: 300px;
-      background: var(--emerald);
-      top: 50%;
-      left: 60%;
-      animation: orbFloat3 80s ease-in-out infinite;
-      animation-delay: -6s;
-    }
-
-    @keyframes orbFloat {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-30px); }
-    }
-
-    @keyframes orbFloat3 {
-      0%, 100% { transform: translate(-50%, -50%) translateY(0px); }
-      50% { transform: translate(-50%, -50%) translateY(-30px); }
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 800px;
-      padding: 60px 32px;
-    }
-
-    .hero-title {
-      font-size: clamp(56px, 9vw, 100px);
-      font-weight: 900;
-      line-height: 1;
-      letter-spacing: -2px;
-      margin-bottom: 24px;
-    }
-
-    .hero-title-nice {
-      display: block;
-      background: linear-gradient(135deg, #ffffff 0%, #3694FC 30%, #B98FFF 60%, #00E2A0 100%);
-      background-size: 200% 200%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: shimmer 40s linear infinite;
-    }
-
-    @keyframes shimmer {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    .hero-title-designer {
-      display: block;
-      color: var(--text);
-    }
-
-    .hero-subtitle {
-      font-size: clamp(15px, 2vw, 18px);
-      font-weight: 400;
-      color: rgba(255, 255, 255, 0.78);
-      line-height: 1.7;
-      max-width: 600px;
-      margin: 0 auto 40px;
-    }
-
+    /* ========== HERO CTAs ========== */
+    /* The hero shell itself (background, orbs, radial mask, title, subtitle)
+       is lynn-ui's <Hero> now (see the mount script) - it was built
+       specifically to match this page's own three-orb look. What is left
+       here is the disabled "Download" pill and the version badge, both of
+       which stay literal markup (not a real <Button>) because downloads.js
+       reads their `data-latest-*` attributes at runtime. */
     .hero-ctas {
       display: flex;
       gap: 16px;
@@ -196,35 +122,21 @@
       box-shadow: none;
     }
 
-    .btn-ghost {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: transparent;
-      color: #fff;
-      text-decoration: none;
-      font-family: 'Be Vietnam Pro', sans-serif;
-      font-size: 15px;
-      font-weight: 600;
-      padding: 14px 32px;
-      border-radius: 100px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      cursor: pointer;
-      transition: border-color 0.2s, background 0.2s, transform 0.15s;
-    }
-
-    .btn-ghost:hover {
-      border-color: rgba(255, 255, 255, 0.6);
-      background: rgba(255, 255, 255, 0.06);
-      transform: translateY(-1px);
-    }
-
     .hero-badge {
       display: inline-block;
       color: var(--emerald);
       font-size: 13px;
       font-weight: 600;
       letter-spacing: 0.5px;
+      text-decoration: none;
+      cursor: pointer;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s, opacity 0.2s;
+    }
+    .hero-badge:hover,
+    .hero-badge:focus-visible {
+      border-bottom-color: currentColor;
+      opacity: 0.85;
     }
 
     /* ========== SECTIONS ========== */
@@ -257,7 +169,7 @@
       max-width: 560px;
     }
 
-    /* ========== PILLARS ========== */
+    /* ========== PILLARS (lynn-ui <IconCard layout="vertical">) ========== */
     .pillars-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -271,44 +183,7 @@
       }
     }
 
-    .pillar-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px;
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.2s;
-    }
-
-    .pillar-card.revealed {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .pillar-card:hover {
-      border-color: rgba(255, 255, 255, 0.18);
-    }
-
-    .pillar-icon {
-      font-size: 36px;
-      margin-bottom: 20px;
-      display: block;
-    }
-
-    .pillar-title {
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-
-    .pillar-desc {
-      font-size: 15px;
-      color: var(--text-secondary);
-      line-height: 1.65;
-    }
-
-    /* ========== DOCS GRID ========== */
+    /* ========== DOCS GRID (lynn-ui <FeatureCard density="compact">) ====== */
     .docs-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -328,84 +203,22 @@
       }
     }
 
-    .doc-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 0;
-      overflow: hidden;
+    /* Each doc card is a real link (the whole `.doc-card` used to be the
+       `<a>`) wrapping a FeatureCard; the arrow row is the one bit of the old
+       markup FeatureCard has no slot for, so it rides in as `children`. */
+    .lynn-doc-card-link {
+      display: block;
       text-decoration: none;
       color: inherit;
-      display: flex;
-      flex-direction: column;
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.2s, box-shadow 0.2s;
+      /* The hover spotlight below (`.tilt-ready::after`) clips to this
+         element's own border-radius, not the `FeatureCard` it wraps - with
+         none set here it defaulted to square corners, so the glow's corner
+         poked out past the card's own rounded one. Match FeatureCard's
+         `--lynn-radius-lg`. */
+      border-radius: var(--lynn-radius-lg);
     }
 
-    .doc-card.revealed {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .doc-card:hover {
-      border-color: rgba(255, 255, 255, 0.2);
-      transform: translateY(-3px);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
-    }
-
-    .doc-card.revealed:hover {
-      transform: translateY(-3px);
-    }
-
-    .doc-accent {
-      height: 4px;
-      width: 100%;
-      flex-shrink: 0;
-    }
-
-    .doc-inner {
-      padding: 28px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .doc-icon-box {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      margin-bottom: 16px;
-      flex-shrink: 0;
-    }
-
-    .doc-category {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--text-secondary);
-      margin-bottom: 8px;
-    }
-
-    .doc-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    .doc-desc {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.6;
-      flex: 1;
-    }
-
-    .doc-arrow {
+    .lynn-doc-card-arrow {
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -416,7 +229,7 @@
       transition: opacity 0.2s, gap 0.2s;
     }
 
-    .doc-card:hover .doc-arrow {
+    .lynn-doc-card-link:hover .lynn-doc-card-arrow {
       opacity: 1;
       gap: 10px;
     }
@@ -426,314 +239,50 @@
         padding: 60px 20px;
       }
     }
-
-    /* ========== STAGGER DELAYS ========== */
-    .stagger-1 { transition-delay: 0.05s; }
-    .stagger-2 { transition-delay: 0.12s; }
-    .stagger-3 { transition-delay: 0.19s; }
-    .stagger-4 { transition-delay: 0.26s; }
-    .stagger-5 { transition-delay: 0.33s; }
-    .stagger-6 { transition-delay: 0.40s; }
   </style>
 </head>
 <body>
 
-  <!-- SITE-WIDE ACCESS GATE (see site-gate.css / site-gate.js) -->
-  <div id="nice-site-gate">
-    <div class="sg-card">
-      <div class="sg-lock"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6" /><path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" /><path d="M8 11v-4a4 4 0 1 1 8 0v4" /></svg></div>
-      <div class="sg-title">NiCE Designer Site Login</div>
-      <div class="sg-subtitle">This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.</div>
-      <div class="sg-input-wrap">
-        <input id="nice-site-gate-input" type="password" placeholder="Enter code" autocomplete="off" />
-      </div>
-      <div class="sg-error" id="nice-site-gate-error"></div>
-      <button id="nice-site-gate-btn" type="button">Unlock</button>
-      <div class="sg-divider"></div>
-      <div class="sg-cta">
-        Don't have the code?<br>
-        <strong>Reach out to Erick Mathews on Teams</strong> to request access.
-        <br>
-        <a class="sg-teams-btn" href="https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com" target="_blank" rel="noopener">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H8a2 2 0 00-2 2v2H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2h2a2 2 0 002-2V4a2 2 0 00-2-2zM4 20V8h12v12H4zm16-4h-2V8a2 2 0 00-2-2H8V4h12v12z" fill="currentColor"/></svg>
-          Message on Teams
-        </a>
-      </div>
-    </div>
-  </div>
+  <!-- lynn-ui chrome. One React root, one ThemeProvider (see the mount
+       script at the end of <body>); the gate renders inside it, everything
+       else portals into the `.lynn-mount` placeholders below. -->
+  <div id="lynn-app-root"></div>
 
-  <!-- NAV -->
-  <nav class="site-nav nav-pre-hero" id="site-nav">
-    <a href="./index.html" class="nav-logo">
-      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span><span class="logo-suite"> Suite</span>
-    </a>
-    <span class="nav-download is-disabled" aria-disabled="true">Download<span class="coming-soon-tag">Coming soon!</span></span>
-  </nav>
+  <!-- NAV (lynn-ui <Nav>). No doc rail on this page - see the comment in
+       <head>. -->
+  <div id="lynn-nav-root" class="lynn-mount"></div>
 
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-radial"></div>
-    <div class="hero-orb hero-orb-1"></div>
-    <div class="hero-orb hero-orb-2"></div>
-    <div class="hero-orb hero-orb-3"></div>
-    <div class="hero-content">
-      <h1 class="hero-title">
-        <span class="hero-title-nice">NiCE</span>
-        <span class="hero-title-designer">Designer</span>
-      </h1>
-      <p class="hero-subtitle">
-        A Figma plugin and Chrome extension that audits design system compliance, applies token fixes, and connects to Claude via MCP for AI-assisted design work. Built for SOL and Lyra.
-      </p>
-      <div class="hero-ctas">
-        <span id="hero-download" class="btn-primary is-disabled" aria-disabled="true"><span class="hero-download-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6" /></svg></span><span data-latest-label>Download v11.1</span></span>
-        <span class="coming-soon-tag">Coming soon!</span>
-      </div>
-      <span class="hero-badge nice-sheen" data-latest-when>v11.1 &middot; August 2026</span>
-    </div>
-  </div>
+  <!-- HERO (lynn-ui <Hero>) -->
+  <div id="lynn-hero-root" class="lynn-mount"></div>
 
-  <!-- FEATURED PAGES -->
-  <div class="page-section" style="padding-bottom: 0;">
+  <!-- FEATURED PAGES (lynn-ui <Carousel>, same React tree/ThemeProvider as
+       the rest of the chrome now - see the mount script for why this used
+       to be a second, independent root and no longer is). -->
+  <div class="page-section reveal" style="padding-bottom: 0;">
     <div class="section-label">Featured</div>
     <h2 class="section-title">Start here</h2>
     <p class="section-subtitle">The most-used pages on the site, one swipe or drag away.</p>
-    <div id="featured-carousel-root" style="max-width: 900px; margin: 0 auto;"></div>
-    <script type="module">
-      import { createElement as h } from 'react';
-      import { createRoot } from 'react-dom/client';
-      import { Carousel, ThemeProvider } from './lynn-ui/dist/index.js';
-
-      const slides = [
-        {
-          image: './images/featured-lynn.png',
-          title: 'Lynn Design System',
-          tagline: 'Tokens, motion, and the live component playground.',
-          ctaLabel: 'Explore Lynn',
-          ctaHref: './lynn.html',
-        },
-        {
-          image: './images/featured-install-guide.png',
-          title: 'Install Guide',
-          tagline: 'Chrome extension, Claude Desktop, and the Figma plugin.',
-          ctaLabel: 'Get set up',
-          ctaHref: './install-guide.html',
-        },
-        {
-          image: './images/featured-marketplace.png',
-          title: 'The Marketplace',
-          tagline: 'Community skills and tools, installed the same way.',
-          ctaLabel: 'Browse skills',
-          ctaHref: './marketplace.html',
-        },
-        {
-          image: './images/featured-faq.png',
-          title: 'FAQ',
-          tagline: 'How the tools work, and how to get set up.',
-          ctaLabel: 'Read the FAQ',
-          ctaHref: './faq.html',
-        },
-      ];
-
-      const root = document.getElementById('featured-carousel-root');
-      createRoot(root).render(
-        h(ThemeProvider, { defaultTheme: 'lynn' }, h(Carousel, { slides }))
-      );
-    </script>
+    <div id="lynn-carousel-root" style="max-width: 900px; margin: 0 auto;"></div>
   </div>
 
-  <!-- WHAT CAN IT DO -->
-  <div class="page-section">
+  <!-- WHAT CAN IT DO (lynn-ui <IconCard layout="vertical">) -->
+  <div class="page-section reveal">
     <div class="section-label">What can it do</div>
     <h2 class="section-title">Built around what you need to get done</h2>
     <p class="section-subtitle">Whatever seat you're in, NiCE Designer takes a specific job off your plate.</p>
-    <div class="pillars-grid">
-      <div class="pillar-card stagger-1">
-        <span class="pillar-icon">&#128202;</span>
-        <h3 class="pillar-title">Product Manager</h3>
-        <p class="pillar-desc">Get a live compliance score across 144 CXone pages, so drift from SOL or Lyra shows up before it ships instead of during a review.</p>
-      </div>
-      <div class="pillar-card stagger-2">
-        <span class="pillar-icon">&#127912;</span>
-        <h3 class="pillar-title">Designer</h3>
-        <p class="pillar-desc">See every off-system color, spacing, and type choice on your Figma frame instantly, then fix it in one click instead of hunting down the right token by hand.</p>
-      </div>
-      <div class="pillar-card stagger-3">
-        <span class="pillar-icon">&#129302;</span>
-        <h3 class="pillar-title">Developer</h3>
-        <p class="pillar-desc">Ask Claude to audit, convert, or export CSS for a page in plain language - it drives the Figma plugin and Chrome extension for you over MCP.</p>
-      </div>
-    </div>
+    <div class="pillars-grid" id="lynn-pillars-root"></div>
   </div>
 
-  <!-- DOCS GRID -->
-  <div class="page-section" style="padding-top: 0;">
+  <!-- DOCS GRID (lynn-ui <FeatureCard density="compact">, each wrapped in
+       its real link) -->
+  <div class="page-section reveal" style="padding-top: 0;">
     <div class="section-label">Documentation</div>
     <h2 class="section-title">Everything you need</h2>
-    <div class="docs-grid">
-
-      <a href="./install-guide.html" class="doc-card stagger-1">
-        <div class="doc-accent" style="background: #3694FC;"></div>
-        <div class="doc-inner">
-          <div class="doc-icon-box" style="background: rgba(54,148,252,0.15);">&#128268;</div>
-          <div class="doc-category">Getting started</div>
-          <div class="doc-title">Install Guide</div>
-          <div class="doc-desc">Step-by-step setup for the Figma plugin, Chrome extension, and local MCP server.</div>
-          <div class="doc-arrow" style="color: #3694FC;">Read guide <span>&#8594;</span></div>
-        </div>
-      </a>
-
-      <a href="./claude-skills.html" class="doc-card stagger-2">
-        <div class="doc-accent" style="background: #B98FFF;"></div>
-        <div class="doc-inner">
-          <div class="doc-icon-box" style="background: rgba(185,143,255,0.15);">&#129302;</div>
-          <div class="doc-category">AI skills</div>
-          <div class="doc-title">Claude Skills</div>
-          <div class="doc-desc">Reference for all 11 Claude skills. Which to load, when to trigger them, and what MCP tools each drives.</div>
-          <div class="doc-arrow" style="color: #B98FFF;">Read guide <span>&#8594;</span></div>
-        </div>
-      </a>
-
-      <a href="./use-cases.html" class="doc-card stagger-3">
-        <div class="doc-accent" style="background: #FF5B8A;"></div>
-        <div class="doc-inner">
-          <div class="doc-icon-box" style="background: rgba(255,91,138,0.15);">&#128161;</div>
-          <div class="doc-category">Workflows</div>
-          <div class="doc-title">Use Cases</div>
-          <div class="doc-desc">Real-world scenarios organized by job: auditing, converting, handoff, parity checks, and QA.</div>
-          <div class="doc-arrow" style="color: #FF5B8A;">Explore <span>&#8594;</span></div>
-        </div>
-      </a>
-
-      <a href="./scoring.html" class="doc-card stagger-4">
-        <div class="doc-accent" style="background: #00E2A0;"></div>
-        <div class="doc-inner">
-          <div class="doc-icon-box" style="background: rgba(0,226,160,0.15);">&#128202;</div>
-          <div class="doc-category">Scoring</div>
-          <div class="doc-title">How Scores Work</div>
-          <div class="doc-desc">How SOL, Lyra, and accessibility compliance scores are calculated and what each number means.</div>
-          <div class="doc-arrow" style="color: #00E2A0;">Read guide <span>&#8594;</span></div>
-        </div>
-      </a>
-
-      <a href="./dashboard.html" class="doc-card stagger-5">
-        <div class="doc-accent" style="background: #3694FC;"></div>
-        <div class="doc-inner">
-          <div class="doc-icon-box" style="background: rgba(54,148,252,0.15);">&#128200;</div>
-          <div class="doc-category">Live data</div>
-          <div class="doc-title">Compliance Dashboard</div>
-          <div class="doc-desc">Live audit scores across 144 CXone pages - SOL, Lyra, and accessibility.</div>
-          <div class="doc-arrow" style="color: #3694FC;">Open dashboard <span>&#8594;</span></div>
-        </div>
-      </a>
-
-      <a href="./roadmap.html" class="doc-card stagger-6">
-        <div class="doc-accent" style="background: #6100FF;"></div>
-        <div class="doc-inner">
-          <div class="doc-icon-box" style="background: rgba(97,0,255,0.15);">&#128506;</div>
-          <div class="doc-category">Planning</div>
-          <div class="doc-title">Product Roadmap</div>
-          <div class="doc-desc">Suite roadmap with phases, stakeholders, and ship gates.</div>
-          <div class="doc-arrow" style="color: #B98FFF;">View roadmap <span>&#8594;</span></div>
-        </div>
-      </a>
-
-      <a href="./the-suite.html" class="doc-card stagger-1">
-        <div class="doc-accent" style="background: #36EAD0;"></div>
-        <div class="doc-inner">
-          <div class="doc-icon-box" style="background: rgba(54,234,208,0.15);">&#129513;</div>
-          <div class="doc-category">What it is</div>
-          <div class="doc-title">The Suite</div>
-          <div class="doc-desc">Tool-by-tool breakdown of the Figma plugin, Chrome extension, and MCP server that make up NiCE Designer.</div>
-          <div class="doc-arrow" style="color: #36EAD0;">See the tools <span>&#8594;</span></div>
-        </div>
-      </a>
-
-      <a href="./release-notes.html" class="doc-card stagger-2">
-        <div class="doc-accent" style="background: #FF5B8A;"></div>
-        <div class="doc-inner">
-          <div class="doc-icon-box" style="background: rgba(255,91,138,0.15);">&#128220;</div>
-          <div class="doc-category">Changelog</div>
-          <div class="doc-title">Release Notes</div>
-          <div class="doc-desc">What shipped in v11.1, v10, v9, and v8 - new features, improvements, and fixes.</div>
-          <div class="doc-arrow" style="color: #FF5B8A;">View notes <span>&#8594;</span></div>
-        </div>
-      </a>
-
-      <a href="./faq.html" class="doc-card stagger-3">
-        <div class="doc-accent" style="background: #f59e0b;"></div>
-        <div class="doc-inner">
-          <div class="doc-icon-box" style="background: rgba(245,158,11,0.15);">&#10067;</div>
-          <div class="doc-category">Common questions</div>
-          <div class="doc-title">FAQ</div>
-          <div class="doc-desc">Answers on how the tools understand the design system, Supercharge, and more.</div>
-          <div class="doc-arrow" style="color: #f59e0b;">Read FAQ <span>&#8594;</span></div>
-        </div>
-      </a>
-
-      <a href="./marketplace.html" class="doc-card stagger-1">
-        <div class="doc-accent" style="background: #00E2A0;"></div>
-        <div class="doc-inner">
-          <div class="doc-icon-box" style="background: rgba(0,226,160,0.15);">&#128717;&#65039;</div>
-          <div class="doc-category">Community</div>
-          <div class="doc-title">Marketplace</div>
-          <div class="doc-desc">Community-built skills that ship with Supercharge - and how to submit your own.</div>
-          <div class="doc-arrow" style="color: #00E2A0;">Browse the Marketplace <span>&#8594;</span></div>
-        </div>
-      </a>
-
-    </div>
+    <div class="docs-grid" id="lynn-docs-grid-root"></div>
   </div>
 
-
-  <script>
-
-    // Scroll reveal via IntersectionObserver
-    var revealTargets = document.querySelectorAll(
-      '.pillar-card, .doc-card'
-    );
-
-    var observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('revealed');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, {
-      threshold: 0.08,
-      rootMargin: '0px 0px -32px 0px'
-    });
-
-    revealTargets.forEach(function(el) {
-      observer.observe(el);
-    });
-
-    // Smooth scroll for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
-      anchor.addEventListener('click', function(e) {
-        var href = anchor.getAttribute('href');
-        if (href === '#') return;
-        var target = document.querySelector(href);
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
-    });
-
-    // Nav bar stays fully hidden until the hero scrolls out of view
-    var heroDownload = document.getElementById('hero-download');
-    var siteNav = document.getElementById('site-nav');
-    if (heroDownload && siteNav) {
-      var heroObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          siteNav.classList.toggle('nav-pre-hero', entry.isIntersecting);
-        });
-      }, { threshold: 0, rootMargin: '-60px 0px 0px 0px' });
-      heroObserver.observe(heroDownload);
-    }
-  </script>
+  <!-- FOOTER (lynn-ui <Footer>) -->
+  <div id="lynn-footer-root" class="lynn-mount"></div>
 
   <!-- NICE POLISH EFFECTS -->
   <style>
@@ -759,8 +308,10 @@
     }
     .tilt-ready:hover::after { opacity: 1; }
 
-    /* Magnetic buttons */
-    .nav-cta, .btn-primary, .cta-btn, .roadmap-link {
+    /* Magnetic buttons. `.nav-cta` / `.cta-btn` / `.roadmap-link` had no
+       matching element left on this page once the nav and its CTA became
+       lynn-ui's <Nav>, so only the hero's disabled download pill remains. */
+    .btn-primary {
       transition: transform 0.15s ease, background 0.25s ease, box-shadow 0.25s ease !important;
     }
 
@@ -782,7 +333,7 @@
       mix-blend-mode: screen;
     }
 
-    /* Improved reveal: slide up instead of just fade */
+    /* Scroll reveal: fade + slide up */
     .reveal {
       opacity: 0;
       transform: translateY(22px);
@@ -810,45 +361,64 @@
     });
     document.addEventListener('mouseleave', function() { glow.style.opacity = '0'; });
 
-    // Apply tilt + spotlight to cards
+    // Apply tilt + spotlight to cards. `.lynn-doc-card-link` is deliberately
+    // NOT in this list even though it is the lynn-ui replacement for
+    // `.doc-card` - unlike every other card here, it is a real navigation
+    // `<a>`, and this effect writes a fresh `transform` on every `mousemove`.
+    // A real click's `mousedown`/`mouseup` are rarely at the exact same
+    // pixel, so the tilt can visibly shift the link out from under the
+    // cursor between the two - the browser then has no single element both
+    // events agree on, and no `click` fires at all. `FeatureCard` already
+    // has its own CSS `:hover` lift, so the card still feels alive without
+    // JS fighting its own hit-testing. The pillar cards were never in this
+    // list even pre-migration (only the generic `.pillar` selector was,
+    // which never matched `.pillar-card`). All mount after this script
+    // runs, so `polish()` is exposed on `window.NicePolish` for the mount
+    // script to call once they exist.
     var SELECTORS = [
       '.tool-card', '.skill-card', '.phase-block', '.case-card',
       '.pillar', '.step-card', '.score-card', '.sp-card',
-      '.sp-callout-card', '.stat-card', '.doc-card', '.dl-card',
+      '.sp-callout-card', '.stat-card', '.dl-card',
       '.faq-item', '.checklist-item', '.tool-mini', '.gate-card',
       '.score-band', '.audit-cat', '.workflow-card', '.case-scenario'
     ].join(', ');
 
-    document.querySelectorAll(SELECTORS).forEach(function(card) {
-      card.classList.add('tilt-ready');
+    function polish(cards) {
+      cards.forEach(function(card) {
+        if (card.dataset.nicePolished === '1') return;
+        card.dataset.nicePolished = '1';
+        card.classList.add('tilt-ready');
 
-      card.addEventListener('mousemove', function(e) {
-        var r = card.getBoundingClientRect();
-        var x = (e.clientX - r.left) / r.width;
-        var y = (e.clientY - r.top) / r.height;
-        // Spotlight CSS vars
-        card.style.setProperty('--mx', (x * 100) + '%');
-        card.style.setProperty('--my', (y * 100) + '%');
-        // 3D tilt (gentle, max 7deg)
-        var tx = (y - 0.5) * -8;
-        var ty = (x - 0.5) * 8;
-        card.style.transform = 'perspective(900px) rotateX(' + tx + 'deg) rotateY(' + ty + 'deg) translateZ(3px)';
-        card.style.transition = 'transform 0.07s ease';
-        // Glow border hint
-        card.style.boxShadow = '0 8px 32px rgba(0,0,0,0.35), 0 0 0 1px rgba(54,148,252,0.18)';
+        card.addEventListener('mousemove', function(e) {
+          var r = card.getBoundingClientRect();
+          var x = (e.clientX - r.left) / r.width;
+          var y = (e.clientY - r.top) / r.height;
+          // Spotlight CSS vars
+          card.style.setProperty('--mx', (x * 100) + '%');
+          card.style.setProperty('--my', (y * 100) + '%');
+          // 3D tilt (gentle, max 7deg)
+          var tx = (y - 0.5) * -8;
+          var ty = (x - 0.5) * 8;
+          card.style.transform = 'perspective(900px) rotateX(' + tx + 'deg) rotateY(' + ty + 'deg) translateZ(3px)';
+          card.style.transition = 'transform 0.07s ease';
+          // Glow border hint
+          card.style.boxShadow = '0 8px 32px rgba(0,0,0,0.35), 0 0 0 1px rgba(54,148,252,0.18)';
+        });
+
+        card.addEventListener('mouseleave', function() {
+          card.style.transform = '';
+          card.style.transition = 'transform 0.45s cubic-bezier(0.23,1,0.32,1)';
+          card.style.boxShadow = '';
+          card.style.setProperty('--mx', '50%');
+          card.style.setProperty('--my', '50%');
+        });
       });
+    }
 
-      card.addEventListener('mouseleave', function() {
-        card.style.transform = '';
-        card.style.transition = 'transform 0.45s cubic-bezier(0.23,1,0.32,1)';
-        card.style.boxShadow = '';
-        card.style.setProperty('--mx', '50%');
-        card.style.setProperty('--my', '50%');
-      });
-    });
+    polish([].slice.call(document.querySelectorAll(SELECTORS)));
 
-    // Magnetic effect on primary action buttons
-    document.querySelectorAll('.nav-cta, .btn-primary, .cta-btn').forEach(function(btn) {
+    // Magnetic effect on the one primary action left on the page
+    document.querySelectorAll('.btn-primary').forEach(function(btn) {
       btn.addEventListener('mousemove', function(e) {
         var r = btn.getBoundingClientRect();
         var dx = (e.clientX - r.left - r.width / 2) * 0.28;
@@ -862,7 +432,9 @@
       });
     });
 
-    // Improved scroll reveal - re-run after any existing observers
+    // Scroll reveal - fires on every `.reveal` element (the three page
+    // sections; the hero, nav, footer and carousel/card content inside them
+    // are lynn-ui now and animate on their own terms).
     var ro = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         if (entry.isIntersecting) {
@@ -875,15 +447,462 @@
       });
     }, { threshold: 0.05, rootMargin: '0px 0px -24px 0px' });
 
-    document.querySelectorAll('.reveal').forEach(function(el, i) {
-      // Stagger siblings in same parent
-      el.dataset.polishDelay = (i % 6) * 55;
-      ro.observe(el);
-    });
+    function observeReveal(els) {
+      els.forEach(function(el, i) {
+        el.dataset.polishDelay = (i % 6) * 55;
+        ro.observe(el);
+      });
+    }
+
+    observeReveal([].slice.call(document.querySelectorAll('.reveal')));
+
+    // Handed to the lynn-ui mount script, whose cards do not exist yet.
+    window.NicePolish = { polish: polish, observeReveal: observeReveal };
   })();
   </script>
 
   <script src="downloads.js"></script>
 
+  <!--
+    ===== lynn-ui mount =====
+    One createRoot, one ThemeProvider, one <App>: the access gate, the nav,
+    the hero, the featured carousel, the pillar cards, the docs grid and the
+    footer. Keeping them in a single root is what keeps the theme in sync
+    between them - the carousel used to mount its own second root and its own
+    ThemeProvider here, which is exactly the two-disconnected-themes bug that
+    was just fixed on lynn.html by consolidating everything into one tree.
+
+    Anything that belongs elsewhere in the document is placed with
+    createPortal into a `.lynn-mount` placeholder rather than rendered here: a
+    footer rendered next to the nav would sit at the top of the page, and a
+    nav rendered inside a 60px wrapper could not be sticky. The carousel and
+    the two card grids portal into their own real (non-`.lynn-mount`) grid
+    containers instead, so the page's own `pillars-grid` / `docs-grid` CSS
+    still lays them out.
+  -->
+  <script type="module">
+    import { createElement as h, Fragment, useEffect, useState } from 'react';
+    import { createPortal } from 'react-dom';
+    import { createRoot } from 'react-dom/client';
+    import {
+      AccessGate,
+      Carousel,
+      FeatureCard,
+      Footer,
+      Hero,
+      IconCard,
+      Nav,
+      ShimmerText,
+      ThemeProvider,
+      ThemeToggle,
+      useLynnTheme,
+    } from './lynn-ui/dist/index.js?v=2';
+
+    const PAGE = 'index.html';
+
+    /* ---- the real gate, ported from site-gate.js ------------------------ */
+    /* Same session key, same password, same message, same Teams link. Still
+       a soft deterrent, not security - the check is client-side and readable
+       right here, exactly as it was in site-gate.js. */
+    const GATE_KEY = 'nice-site-access';
+    const GATE_PASSWORD = 'niceux';
+    const GATE_ERROR = 'Incorrect code. Contact Erick Mathews on Teams for access.';
+    const TEAMS_HREF = 'https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com';
+
+    /* ---- footer --------------------------------------------------------- */
+    /* The same three columns every migrated page passes, with this page
+       ("Overview") marked active. */
+    const FOOTER_COLUMNS = [
+      {
+        title: 'Product',
+        links: [
+          { label: 'Overview', href: './index.html', active: true },
+          { label: 'Install Guide', href: './install-guide.html' },
+          { label: 'Claude Skills', href: './claude-skills.html' },
+          { label: 'The Suite', href: './the-suite.html' },
+        ],
+      },
+      {
+        title: 'Learn',
+        links: [
+          { label: 'Use Cases', href: './use-cases.html' },
+          { label: 'Scoring', href: './scoring.html' },
+          { label: 'Dashboard', href: './dashboard.html' },
+          { label: 'Roadmap', href: './roadmap.html' },
+        ],
+      },
+      {
+        title: 'Reference',
+        links: [
+          { label: 'Release Notes', href: './release-notes.html' },
+          { label: 'FAQ', href: './faq.html' },
+          { label: 'Tools', href: './tools.html' },
+          { label: 'Marketplace', href: './marketplace.html' },
+          { label: 'Lynn', href: './lynn.html' },
+        ],
+      },
+    ];
+
+    const downloadPill = (key) =>
+      h(
+        'span',
+        { key, className: 'nav-download is-disabled', 'aria-disabled': 'true' },
+        'Download',
+        h('span', { className: 'coming-soon-tag' }, 'Coming soon!')
+      );
+
+    /* ThemeProvider stamps `data-lynn-theme` on its own wrapper div, but the
+       portalled chrome lives outside that div - so mirror the attribute onto
+       <html>, where the same `[data-lynn-theme]` rules in lynn-ui.css apply
+       to the whole document. */
+    function ThemeBridge() {
+      const { theme } = useLynnTheme();
+      useEffect(() => {
+        document.documentElement.setAttribute('data-lynn-theme', theme);
+      }, [theme]);
+      return null;
+    }
+
+    function portal(node, id) {
+      const host = document.getElementById(id);
+      return host ? createPortal(node, host) : null;
+    }
+
+    /* ---- icons (real glyphs, no emoji) ----------------------------------
+       Tabler-style 24x24 outline paths, the same convention already used
+       inline on install-guide.html's troubleshooting cards. IconPalette and
+       IconRobot below are the exact paths already verified working on this
+       site (install-guide.html's "Plugin won't open" and "Claude can't see
+       any targets" trouble-card icons); the rest are new glyphs for
+       meanings this page didn't need an icon for before. */
+    const icon = (paths) =>
+      h('svg', {
+        width: 22,
+        height: 22,
+        viewBox: '0 0 24 24',
+        fill: 'none',
+        stroke: 'currentColor',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
+        'aria-hidden': true,
+        style: { display: 'block' },
+        dangerouslySetInnerHTML: { __html: paths },
+      });
+
+    const IconChartBar = icon('<path d="M4 19h16"/><path d="M6 19v-6"/><path d="M10 19v-10"/><path d="M14 19v-4"/><path d="M18 19v-8"/>');
+    const IconChartLine = icon('<path d="M4 19h16"/><path d="M4 15l4 -6l4 3l5 -7"/>');
+    const IconPalette = icon('<path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25"/><path d="M7.5 10.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M11.5 7.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M15.5 10.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>');
+    const IconRobot = icon('<path d="M6 6a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2l0 -4"/><path d="M12 2v2"/><path d="M9 12v9"/><path d="M15 12v9"/><path d="M5 16l4 -2"/><path d="M15 14l4 2"/><path d="M9 18h6"/><path d="M10 8v.01"/><path d="M14 8v.01"/>');
+    const IconPlug = icon('<path d="M9 3v4"/><path d="M15 3v4"/><path d="M6 7h12v5a6 6 0 0 1 -12 0v-5z"/><path d="M12 18v3"/>');
+    const IconBulb = icon('<path d="M3 12h1m8 -9v1m8 8h1m-15.4 -6.4l.7 .7m12.1 -.7l-.7 .7"/><path d="M9 16a5 5 0 1 1 6 0a3.5 3.5 0 0 0 -1 3a2 2 0 0 1 -4 0a3.5 3.5 0 0 0 -1 -3"/><path d="M9.7 17l4.6 0"/>');
+    const IconMapPin = icon('<path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0"/>');
+    const IconTool = icon('<path d="M16.555 3.843l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.643 2.643a2.877 2.877 0 0 1 -4.069 0l-.301 -.301l-6.558 6.558a2 2 0 0 1 -1.239 .578l-.175 .008h-1.172a1 1 0 0 1 -.993 -.883l-.007 -.117v-1.172a2 2 0 0 1 .467 -1.284l.119 -.13l.414 -.414h2v-2h2v-2l2.144 -2.144l-.301 -.301a2.877 2.877 0 0 1 0 -4.069l2.643 -2.643a2.877 2.877 0 0 1 4.069 0"/><path d="M15 9h.01"/>');
+    const IconFileText = icon('<path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/><path d="M9 9l1 0"/><path d="M9 13l6 0"/><path d="M9 17l6 0"/>');
+    const IconQuestionMark = icon('<path d="M12 21a9 9 0 1 0 0 -18a9 9 0 0 0 0 18z"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5 -2.5 2 -2.5 4"/><path d="M12 17h.01"/>');
+    const IconShoppingBag = icon('<path d="M6 8h12l-1 12a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2l-1 -12z"/><path d="M9 8v-2a3 3 0 0 1 6 0v2"/>');
+    const IconDownload = icon('<path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/>');
+
+    /* ---- "What can it do" pillar cards (lynn-ui <IconCard>) -------------- */
+    const PILLARS = [
+      {
+        icon: IconChartBar,
+        title: 'Product Manager',
+        description: "Get a live compliance score across 144 CXone pages, so drift from SOL or Lyra shows up before it ships instead of during a review.",
+      },
+      {
+        icon: IconPalette,
+        title: 'Designer',
+        description: 'See every off-system color, spacing, and type choice on your Figma frame instantly, then fix it in one click instead of hunting down the right token by hand.',
+      },
+      {
+        icon: IconRobot,
+        title: 'Developer',
+        description: "Ask Claude to audit, convert, or export CSS for a page in plain language - it drives the Figma plugin and Chrome extension for you over MCP.",
+      },
+    ];
+
+    /* ---- Documentation grid (lynn-ui <FeatureCard density="compact">, each
+       wrapped in its own real link - preserving the old `.doc-card`'s
+       accent color, category, title, description and href verbatim). The
+       roadmap card's arrow color (#B98FFF) intentionally does not match its
+       own accent (#6100FF) - that mismatch was already there in the source
+       markup, so it is kept rather than "fixed". ---------------------------- */
+    const DOCS = [
+      {
+        href: './install-guide.html',
+        accent: '#3694FC',
+        icon: IconPlug,
+        category: 'Getting started',
+        title: 'Install Guide',
+        description: 'Step-by-step setup for the Figma plugin, Chrome extension, and local MCP server.',
+        arrow: 'Read guide',
+      },
+      {
+        href: './claude-skills.html',
+        accent: '#B98FFF',
+        icon: IconRobot,
+        category: 'AI skills',
+        title: 'Claude Skills',
+        description: 'Reference for all 11 Claude skills. Which to load, when to trigger them, and what MCP tools each drives.',
+        arrow: 'Read guide',
+      },
+      {
+        href: './use-cases.html',
+        accent: '#FF5B8A',
+        icon: IconBulb,
+        category: 'Workflows',
+        title: 'Use Cases',
+        description: 'Real-world scenarios organized by job: auditing, converting, handoff, parity checks, and QA.',
+        arrow: 'Explore',
+      },
+      {
+        href: './scoring.html',
+        accent: '#00E2A0',
+        icon: IconChartBar,
+        category: 'Scoring',
+        title: 'How Scores Work',
+        description: 'How SOL, Lyra, and accessibility compliance scores are calculated and what each number means.',
+        arrow: 'Read guide',
+      },
+      {
+        href: './dashboard.html',
+        accent: '#3694FC',
+        icon: IconChartLine,
+        category: 'Live data',
+        title: 'Compliance Dashboard',
+        description: 'Live audit scores across 144 CXone pages - SOL, Lyra, and accessibility.',
+        arrow: 'Open dashboard',
+      },
+      {
+        href: './roadmap.html',
+        accent: '#6100FF',
+        arrowColor: '#B98FFF',
+        icon: IconMapPin,
+        category: 'Planning',
+        title: 'Product Roadmap',
+        description: 'Suite roadmap with phases, stakeholders, and ship gates.',
+        arrow: 'View roadmap',
+      },
+      {
+        href: './the-suite.html',
+        accent: '#36EAD0',
+        icon: IconTool,
+        category: 'What it is',
+        title: 'The Suite',
+        description: 'Tool-by-tool breakdown of the Figma plugin, Chrome extension, and MCP server that make up NiCE Designer.',
+        arrow: 'See the tools',
+      },
+      {
+        href: './release-notes.html',
+        accent: '#FF5B8A',
+        icon: IconFileText,
+        category: 'Changelog',
+        title: 'Release Notes',
+        description: 'What shipped in v11.1, v10, v9, and v8 - new features, improvements, and fixes.',
+        arrow: 'View notes',
+      },
+      {
+        href: './faq.html',
+        accent: '#f59e0b',
+        icon: IconQuestionMark,
+        category: 'Common questions',
+        title: 'FAQ',
+        description: 'Answers on how the tools understand the design system, Supercharge, and more.',
+        arrow: 'Read FAQ',
+      },
+      {
+        href: './marketplace.html',
+        accent: '#00E2A0',
+        icon: IconShoppingBag,
+        category: 'Community',
+        title: 'Marketplace',
+        description: 'Community-built skills that ship with Supercharge - and how to submit your own.',
+        arrow: 'Browse the Marketplace',
+      },
+    ];
+
+    /* ---- featured carousel ------------------------------------------------ */
+    const SLIDES = [
+      {
+        image: './images/featured-lynn.png',
+        title: 'Lynn Design System',
+        tagline: 'Tokens, motion, and the live component playground.',
+        ctaLabel: 'Explore Lynn',
+        ctaHref: './lynn.html',
+      },
+      {
+        image: './images/featured-install-guide.png',
+        title: 'Install Guide',
+        tagline: 'Chrome extension, Claude Desktop, and the Figma plugin.',
+        ctaLabel: 'Get set up',
+        ctaHref: './install-guide.html',
+      },
+      {
+        image: './images/featured-marketplace.png',
+        title: 'The Marketplace',
+        tagline: 'Community skills and tools, installed the same way.',
+        ctaLabel: 'Browse skills',
+        ctaHref: './marketplace.html',
+      },
+      {
+        image: './images/featured-faq.png',
+        title: 'FAQ',
+        tagline: 'How the tools work, and how to get set up.',
+        ctaLabel: 'Read the FAQ',
+        ctaHref: './faq.html',
+      },
+    ];
+
+    function App() {
+      const [unlocked, setUnlocked] = useState(() => {
+        try {
+          return sessionStorage.getItem(GATE_KEY) === '1';
+        } catch (e) {
+          return false;
+        }
+      });
+      const [error, setError] = useState(undefined);
+
+      useEffect(() => {
+        // The chrome is up; let the page paint (see the gate-pending guard
+        // in <head>).
+        document.documentElement.classList.remove('lynn-gate-pending');
+      }, []);
+
+      const checkCode = (code) => {
+        if (code === GATE_PASSWORD) {
+          try {
+            sessionStorage.setItem(GATE_KEY, '1');
+          } catch (e) { /* unwritable store just means no persistence */ }
+          setError(undefined);
+          setUnlocked(true);
+        } else {
+          setError(GATE_ERROR);
+        }
+      };
+
+      return h(
+        Fragment,
+        null,
+        h(ThemeBridge, { key: 'theme-bridge' }),
+        h(AccessGate, {
+          key: 'gate',
+          title: 'NiCE Designer Site Login',
+          subtitle:
+            'This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.',
+          onSubmit: checkCode,
+          error,
+          unlocked,
+          ctaText: h(
+            Fragment,
+            null,
+            "Don't have the code?",
+            h('br'),
+            h('strong', null, 'Reach out to Erick Mathews on Teams'),
+            ' to request access.'
+          ),
+          ctaHref: TEAMS_HREF,
+        }),
+        portal(
+          h(Nav, {
+            // This is the home page - the wordmark renders as plain text
+            // rather than a self-link.
+            logoHref: null,
+            cta: h(Fragment, null, [
+              h(ThemeToggle, { key: 'theme', showLabels: false }),
+              downloadPill('download'),
+            ]),
+          }),
+          'lynn-nav-root'
+        ),
+        portal(
+          h(
+            Hero,
+            {
+              heading: h(Fragment, null, h(ShimmerText, { as: 'span' }, 'NiCE'), ' Designer'),
+              subtitle:
+                'A Figma plugin and Chrome extension that audits design system compliance, applies token fixes, and connects to Claude via MCP for AI-assisted design work. Built for SOL and Lyra.',
+              actions: h(
+                'div',
+                { className: 'hero-ctas' },
+                h(
+                  'span',
+                  { className: 'btn-primary is-disabled', 'aria-disabled': 'true' },
+                  h('span', { className: 'hero-download-icon', 'aria-hidden': 'true' }, IconDownload),
+                  h('span', { 'data-latest-label': '' }, 'Download v11.4')
+                ),
+                h('span', { className: 'coming-soon-tag' }, 'Coming soon!')
+              ),
+            },
+            h(
+              'a',
+              {
+                className: 'hero-badge nice-sheen',
+                'data-latest-when': '',
+                href: './release-notes.html#changelog',
+                title: "See what's new in this release",
+              },
+              'v11.4 · September 2026'
+            )
+          ),
+          'lynn-hero-root'
+        ),
+        portal(
+          h(Carousel, { slides: SLIDES }),
+          'lynn-carousel-root'
+        ),
+        portal(
+          h(
+            Fragment,
+            null,
+            PILLARS.map((pillar) =>
+              h(IconCard, {
+                key: pillar.title,
+                layout: 'vertical',
+                icon: pillar.icon,
+                title: pillar.title,
+                description: pillar.description,
+              })
+            )
+          ),
+          'lynn-pillars-root'
+        ),
+        portal(
+          h(
+            Fragment,
+            null,
+            DOCS.map((doc) =>
+              h(
+                'a',
+                { key: doc.href, className: 'lynn-doc-card-link', href: doc.href },
+                h(FeatureCard, {
+                  density: 'compact',
+                  icon: doc.icon,
+                  iconGradient: `linear-gradient(135deg, ${doc.accent}, ${doc.accent})`,
+                  accentColor: doc.accent,
+                  name: doc.title,
+                  tagline: doc.category,
+                  whyText: doc.description,
+                  children: h(
+                    'div',
+                    { className: 'lynn-doc-card-arrow', style: { color: doc.arrowColor || doc.accent } },
+                    doc.arrow,
+                    ' →'
+                  ),
+                })
+              )
+            )
+          ),
+          'lynn-docs-grid-root'
+        ),
+        portal(h(Footer, { columns: FOOTER_COLUMNS }), 'lynn-footer-root')
+      );
+    }
+
+    createRoot(document.getElementById('lynn-app-root')).render(
+      h(ThemeProvider, { defaultTheme: 'lynn' }, h(App))
+    );
+  </script>
 </body>
 </html>

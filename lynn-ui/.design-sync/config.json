@@ -1,0 +1,18 @@
+{
+  "projectId": "e2585fa2-c252-443f-8e31-1cdbb6b05523",
+  "shape": "package",
+  "pkg": "lynn-ui",
+  "cssEntry": "./dist/lynn-ui.css",
+  "tokensGlob": "./src/tokens/tokens.css",
+  "provider": {
+    "component": "ThemeProvider",
+    "props": { "defaultTheme": "lynn" }
+  },
+  "overrides": {
+    "Nav": { "cardMode": "single", "viewport": "900x120" },
+    "DocRail": { "cardMode": "single", "viewport": "320x600" },
+    "AccessGate": { "cardMode": "single", "viewport": "500x600" },
+    "Footer": { "cardMode": "column" },
+    "Hero": { "cardMode": "single" }
+  }
+}

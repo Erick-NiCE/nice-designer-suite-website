@@ -40,13 +40,22 @@
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
   z-index: 90;
   font-family: var(--lynn-font-family);
+  /* The 0.15s delay is what makes the collapse button's icon actually
+     visible mid-transform: it and the panel change state in the same click,
+     so without a delay the panel would already be fading/sliding away while
+     the bars are still crossing into an X. Holding the panel still for one
+     beat lets the icon finish, then the panel slides - same delay both ways,
+     so opening reads as a matching beat rather than an instant snap. */
   transition:
-    transform 0.25s var(--lynn-ease),
-    opacity 0.2s var(--lynn-ease);
+    transform 0.32s var(--lynn-ease) 0.15s,
+    opacity 0.26s var(--lynn-ease) 0.15s;
 }
 
 .lynn-doc-rail-collapsed {
-  transform: translateX(-16px);
+  /* Slides fully clear of the rail's own 220px width (plus its 24px left
+     offset) rather than the old 16px nudge, so this reads as the panel
+     sliding off-screen rather than a small opacity fade. */
+  transform: translateX(-260px);
   opacity: 0;
   pointer-events: none;
 }
@@ -166,13 +175,23 @@
   font-size: 14px;
   cursor: pointer;
   z-index: 90;
+  /* Always rendered now (display was a hard, unanimatable swap) - hidden via
+     opacity/transform instead, with the same 0.15s hold as the rail itself so
+     this button's own icon finishes crossing before it slides off. */
+  transform: translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
   transition:
+    transform 0.3s var(--lynn-ease) 0.15s,
+    opacity 0.24s var(--lynn-ease) 0.15s,
     color 0.2s var(--lynn-ease),
     background 0.2s var(--lynn-ease);
 }
 
 .lynn-doc-rail-expand-visible {
-  display: flex;
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .lynn-doc-rail-expand:hover {

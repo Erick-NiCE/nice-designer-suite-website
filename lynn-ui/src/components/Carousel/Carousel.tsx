@@ -142,6 +142,10 @@ export function Carousel(props: CarouselProps) {
 
   const startXRef = useRef(0);
   const travelRef = useRef(0);
+  // Which pointer is currently down, independent of `dragging` - a plain
+  // click is "down" without ever becoming a drag, so this is what
+  // `onPointerMove`/`onPointerUp` key off instead of `dragging` alone.
+  const pointerIdRef = useRef<number | null>(null);
 
   const count = slides.length;
 
@@ -157,31 +161,54 @@ export function Carousel(props: CarouselProps) {
 
   const onPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (count < 2) return;
+    pointerIdRef.current = event.pointerId;
     startXRef.current = event.clientX;
     travelRef.current = 0;
-    setDragging(true);
-    event.currentTarget.setPointerCapture(event.pointerId);
+    // `setPointerCapture` is deliberately NOT called here. Chromium
+    // retargets the `click` that ends a captured-pointer gesture to the
+    // capturing element, even after `releasePointerCapture` runs before that
+    // `click` is dispatched - so a plain click that captured on `pointerdown`
+    // still sees `click.target` become this viewport `div` instead of
+    // whatever was actually under the cursor (the CTA `<a>`'s label span, on
+    // the slide currently in view). `nice-effects.js`'s page-transition
+    // handler reads `e.target.closest('a')`, finds nothing, and silently
+    // does not navigate - which is exactly the bug this used to have: every
+    // click on a slide's real link secretly failed. Capture is claimed below
+    // in `onPointerMove`, only once real movement proves this is a drag.
   };
 
   const onPointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (!dragging) return;
+    if (pointerIdRef.current !== event.pointerId) return;
     const dx = event.clientX - startXRef.current;
     travelRef.current = Math.max(travelRef.current, Math.abs(dx));
+    if (!dragging) {
+      // Still within the click/drag slop - stay uncaptured so this can
+      // still resolve as a plain click if the pointer lifts now.
+      if (travelRef.current <= DRAG_CLICK_SLOP_PX) return;
+      setDragging(true);
+      event.currentTarget.setPointerCapture(event.pointerId);
+    }
     setDrag(dx);
   };
 
-  const release = (event: ReactPointerEvent<HTMLDivElement>) => {
+  const release = () => {
+    pointerIdRef.current = null;
     setDragging(false);
     setDrag(0);
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-      event.currentTarget.releasePointerCapture(event.pointerId);
-    }
   };
 
   const onPointerUp = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (!dragging) return;
+    if (pointerIdRef.current !== event.pointerId) return;
     const dx = event.clientX - startXRef.current;
-    release(event);
+    const wasDragging = dragging;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    release();
+    // Never claimed a drag (capture never engaged) - this was a plain click,
+    // so there is no swipe to resolve; let it become a real `click` on
+    // whatever is under the cursor.
+    if (!wasDragging) return;
     // Clamped, not wrapping: a drag has a direction, and yanking the first
     // slide rightwards into the last one reads as a glitch.
     if (dx <= -SWIPE_THRESHOLD_PX) {
@@ -194,8 +221,11 @@ export function Carousel(props: CarouselProps) {
   // A cancelled pointer carries no meaningful coordinates - `clientX` is 0 -
   // so this has to snap back rather than measure a swipe out of it.
   const onPointerCancel = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (!dragging) return;
-    release(event);
+    if (pointerIdRef.current !== event.pointerId) return;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    release();
   };
 
   const onClickCapture = (event: ReactMouseEvent<HTMLDivElement>) => {

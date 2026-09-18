@@ -17,8 +17,10 @@ export interface GlowPulseProps {
  *
  * Don't: don't apply it to several siblings at once - the halo is a 34px and
  * 60px box-shadow pair, so adjacent glows overlap into a single lit region
- * and the "look here" meaning is gone. And it renders a `div`, so wrapping an
- * inline `Badge` puts a block box in the line; wrap the row, or give it
- * `display: inline-block` through `className`.
+ * and the "look here" meaning is gone. And the halo's own corners are fixed
+ * at `--lynn-radius-pill` to match its two documented targets - wrapping a
+ * square-cornered surface (a `Card`, most buttons) shows the mismatch as a
+ * rounded halo behind straight corners; override `border-radius` through
+ * `className` there.
  */
 export declare function GlowPulse(props: GlowPulseProps): import("react").JSX.Element;

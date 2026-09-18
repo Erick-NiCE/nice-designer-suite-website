@@ -10,20 +10,31 @@
  */
 
 :root {
+  /*
+   * Surfaces and text read the live `--lynn-color-*` custom properties first
+   * (defined on `:root` by lynn-ui.css, which every page now loads, and
+   * re-pointed by the `[data-lynn-theme]` ThemeBridge sets on <html>) so any
+   * leftover page-specific CSS still written against these older names -
+   * `var(--text-secondary)`, `var(--border)` - stays in sync with the
+   * light/dark/lynn toggle instead of staying locked to this file's original
+   * dark-only literals. The literal after the comma is the fallback for the
+   * (now hypothetical) page that never loads lynn-ui.css at all.
+   */
+
   /* Surfaces */
-  --bg:            #21212B;
-  --surface:       #2f2f3d;
-  --card:          #2f2f3d;
+  --bg:            var(--lynn-color-bg, #21212B);
+  --surface:       var(--lynn-color-surface, #2f2f3d);
+  --card:          var(--lynn-color-card, #2f2f3d);
 
   /* Lines & text */
-  --border:            rgba(255, 255, 255, 0.08);
-  --text:              #ffffff;
-  --text-secondary:    rgba(255, 255, 255, 0.58);
-  --text-sec:          rgba(255, 255, 255, 0.58); /* alias */
-  --secondary:         rgba(255, 255, 255, 0.58); /* alias */
-  --sec:               rgba(255, 255, 255, 0.58); /* alias */
-  --muted:             rgba(255, 255, 255, 0.30);
-  --text-muted:        rgba(255, 255, 255, 0.30); /* alias */
+  --border:            var(--lynn-color-border, rgba(255, 255, 255, 0.08));
+  --text:              var(--lynn-color-text, #ffffff);
+  --text-secondary:    var(--lynn-color-text-secondary, rgba(255, 255, 255, 0.58));
+  --text-sec:          var(--text-secondary); /* alias */
+  --secondary:         var(--text-secondary); /* alias */
+  --sec:               var(--text-secondary); /* alias */
+  --muted:             var(--lynn-color-text-muted, rgba(255, 255, 255, 0.30));
+  --text-muted:        var(--muted); /* alias */
 
   /* Brand palette */
   --blue:          #3694FC;
@@ -55,10 +66,49 @@
 html { scroll-behavior: smooth; }
 body {
   font-family: var(--font);
-  background: var(--bg);
-  color: var(--text);
+  /* `--lynn-color-bg`/`--lynn-color-text` are live custom properties that
+     flip with the `[data-lynn-theme]` attribute ThemeBridge sets on <html> -
+     `--bg`/`--text` are this file's own static literals, so they stay put as
+     the fallback for a page that never mounts lynn-ui at all. Without this,
+     light mode's white cards sit on this file's original dark body color
+     showing through every gap between them. */
+  background: var(--lynn-color-bg, var(--bg));
+  color: var(--lynn-color-text, var(--text));
   min-height: 100vh;
   overflow-x: hidden;
+}
+
+/* ========== MAIN SCROLLBAR ========== */
+/* The page's own native scrollbar - not a `ScrollArea` instance, which is
+   for a bounded panel (DocRail, a max-height card) that has real rounded
+   corners for its SVG track to trace. The browser viewport is a plain
+   rectangle with no corner to wrap around, so this is the same rounded-pill
+   thumb in the same tones (`color-mix` against `--lynn-color-text`, matching
+   `ScrollArea`'s own track/thumb/hover weights) rather than an arc.
+   `--lynn-color-*` is defined on `:root` by lynn-ui.css, which every page
+   loads, so this reacts to the light/dark/lynn toggle like everything else -
+   the plain rgba fallbacks only matter if that stylesheet is ever missing. */
+html {
+  scrollbar-width: thin;
+  scrollbar-color:
+    color-mix(in srgb, var(--lynn-color-text, #fff) 26%, transparent)
+    color-mix(in srgb, var(--lynn-color-text, #fff) 7%, transparent);
+}
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: color-mix(in srgb, var(--lynn-color-text, #fff) 7%, transparent);
+}
+::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, var(--lynn-color-text, #fff) 26%, transparent);
+  background-clip: padding-box;
+  border: 3px solid transparent;
+  border-radius: 100px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--lynn-color-text, #fff) 40%, transparent);
 }
 
 /* ========== NAV ========== */
@@ -121,12 +171,17 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255,255,255,0.08);
-  color: rgba(255,255,255,0.4);
+  /* Fixed white overlays here assumed the nav they sit on is always dark -
+     true before the theme toggle existed, not true in light mode, where the
+     real `Nav` this pill lives inside turns white and a white-on-white pill
+     nearly disappears. `--lynn-color-text` flips light/dark with the same
+     toggle, so the overlay contrast stays the same in every mode. */
+  background: color-mix(in srgb, var(--lynn-color-text, #fff) 8%, transparent);
+  color: color-mix(in srgb, var(--lynn-color-text, #fff) 40%, transparent);
   cursor: not-allowed;
 }
 .nav-download.is-disabled:hover {
-  background: rgba(255,255,255,0.08);
+  background: color-mix(in srgb, var(--lynn-color-text, #fff) 8%, transparent);
   transform: none;
 }
 .coming-soon-tag {

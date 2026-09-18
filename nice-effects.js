@@ -464,30 +464,16 @@
   var DOC_PAGES = [
     {
       href: 'lynn.html', label: 'Lynn',
+      // Tokens and Magic Effects used to be their own static groups here,
+      // duplicating (with the same values) what the lynn-ui playground below
+      // now shows live and interactively. lynn.html is a real lynn-ui page
+      // now (not a page embedding one), so its own mount script appends the
+      // playground's `RAIL_GROUPS` (Overview, Tokens, every component
+      // category) straight onto this one group at runtime instead of a
+      // second group listed here - see lynn.html's own script for why.
       groups: [
-        { label: 'Tokens', items: [
-          { id: 'lynn-colors', label: 'Color' },
-          { id: 'lynn-type', label: 'Typography' },
-          { id: 'lynn-space', label: 'Spacing & Radius' },
-          { id: 'lynn-motion', label: 'Motion Tokens' }
-        ] },
         { label: 'Compare', items: [
           { id: 'lynn-compare', label: 'SOL vs. Lyra vs. Lynn' }
-        ] },
-        { label: 'Magic Effects', items: [
-          { id: 'fx-shimmer', label: 'Shimmer & Gradient Drift' },
-          { id: 'fx-orbs', label: 'Floating Orbs' },
-          { id: 'fx-tilt', label: '3D Tilt & Spotlight' },
-          { id: 'fx-magnetic', label: 'Magnetic Buttons' },
-          { id: 'fx-plasma', label: 'Plasma & Motes' },
-          { id: 'fx-liquid', label: 'Liquid Fill' }
-        ] },
-        // The lynn-ui React playground. Only the section wrapper is a real
-        // element at DOMContentLoaded (the 46 per-component demos inside it
-        // are rendered by React, and have their own in-section DocRail), so
-        // this rail links to the section and stops there.
-        { label: 'Interactive Components', items: [
-          { id: 'lynn-playground', label: 'Live Component Playground' }
         ] }
       ]
     },

@@ -30,6 +30,19 @@
   }
 }
 
+/*
+ * The gradient this sits on (`GradientBackground`'s `.lynn-gradient-*`
+ * classes) is fixed literals anchored on this same dark navy in every theme
+ * mode - a deliberate brand moment, not a surface that should flatten to
+ * white in light mode. So the radial mask and the heading/eyebrow text below
+ * stay on that same fixed dark backdrop and its matching light text rather
+ * than the reactive `--lynn-color-*` tokens: `--lynn-color-bg` is near-white
+ * in light mode, which put a light-corners on the mask and dark-in-light-mode
+ * text on the heading while the subtitle stayed a fixed white - two text
+ * colors disagreeing about whether the backdrop was light or dark, both
+ * wrong somewhere. One fixed dark backdrop, one fixed light text color, and
+ * both are right everywhere the gradient itself is.
+ */
 .lynn-hero {
   position: relative;
   min-height: 80vh;
@@ -39,8 +52,8 @@
   overflow: hidden;
   text-align: center;
   font-family: var(--lynn-font-family);
-  background: var(--lynn-color-bg);
-  color: var(--lynn-color-text);
+  background: #21212b;
+  color: #ffffff;
 }
 
 .lynn-hero-bg {
@@ -54,7 +67,7 @@
   background: radial-gradient(
     ellipse at center,
     transparent 30%,
-    var(--lynn-color-bg) 80%
+    #21212b 80%
   );
 }
 

@@ -19,9 +19,13 @@ export interface SheenProps {
  *
  * Don't: don't wrap something that relies on visible overflow - the wrapper
  * sets `overflow: hidden` to clip the band, which also clips an absolutely
- * positioned badge, a `Tooltip` bubble or a `Card`'s hover shadow. And don't
- * reach for it as a hover affordance: the animation is an unconditional
- * infinite loop with no hover selector, so it sweeps whether or not anyone is
- * pointing at it.
+ * positioned badge, a `Tooltip` bubble or a `Card`'s hover shadow. Don't wrap
+ * something on a different corner radius than `Card`'s without overriding
+ * `className` - the wrapper's own `border-radius` is what the `overflow`
+ * clips to, fixed at `--lynn-radius-lg` to match its two documented targets,
+ * so a pill button inside it shows the sweep's square corners poking past the
+ * button's rounded ones. And don't reach for it as a hover affordance: the
+ * animation is an unconditional infinite loop with no hover selector, so it
+ * sweeps whether or not anyone is pointing at it.
  */
 export declare function Sheen(props: SheenProps): import("react").JSX.Element;

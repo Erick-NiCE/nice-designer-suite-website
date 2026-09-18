@@ -1560,10 +1560,10 @@
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
   z-index: 90;
   font-family: var(--lynn-font-family);
-  transition: transform 0.25s var(--lynn-ease), opacity 0.2s var(--lynn-ease);
+  transition: transform 0.32s var(--lynn-ease) 0.15s, opacity 0.26s var(--lynn-ease) 0.15s;
 }
 .lynn-doc-rail-collapsed {
-  transform: translateX(-16px);
+  transform: translateX(-260px);
   opacity: 0;
   pointer-events: none;
 }
@@ -1643,10 +1643,19 @@
   font-size: 14px;
   cursor: pointer;
   z-index: 90;
-  transition: color 0.2s var(--lynn-ease), background 0.2s var(--lynn-ease);
+  transform: translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 0.3s var(--lynn-ease) 0.15s,
+    opacity 0.24s var(--lynn-ease) 0.15s,
+    color 0.2s var(--lynn-ease),
+    background 0.2s var(--lynn-ease);
 }
 .lynn-doc-rail-expand-visible {
-  display: flex;
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
 }
 .lynn-doc-rail-expand:hover {
   color: var(--lynn-color-text);
@@ -2439,6 +2448,8 @@
   }
 }
 .lynn-glow-pulse {
+  display: inline-block;
+  border-radius: var(--lynn-radius-pill);
   animation: lynn-glow-pulse 3s ease-in-out infinite;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -2547,8 +2558,8 @@
   overflow: hidden;
   text-align: center;
   font-family: var(--lynn-font-family);
-  background: var(--lynn-color-bg);
-  color: var(--lynn-color-text);
+  background: #21212b;
+  color: #ffffff;
 }
 .lynn-hero-bg {
   position: absolute;
@@ -2561,7 +2572,7 @@
     radial-gradient(
       ellipse at center,
       transparent 30%,
-      var(--lynn-color-bg) 80%);
+      #21212b 80%);
 }
 .lynn-hero-orb {
   position: absolute;
@@ -3304,6 +3315,7 @@
 .lynn-sheen {
   position: relative;
   overflow: hidden;
+  border-radius: var(--lynn-radius-lg);
 }
 .lynn-sheen::after {
   content: "";

@@ -7,31 +7,31 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=10" />
+  <link rel="stylesheet" href="theme.css?v=13" />
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <link rel="stylesheet" href="site-gate.css" />
-  <script src="site-gate.js" defer></script>
+  <script src="nice-effects.js?v=13" defer></script>
 
   <!--
-    ===== lynn-ui: the real React component package =====
-    The "Interactive components" section near the bottom of this page mounts
-    the lynn-ui playground (lynn-ui/playground/app.js) into
-    #lynn-playground-root. Three things are needed for that, and nothing here
-    affects the rest of the page:
-      1. dist/lynn-ui.css - the package's built stylesheet. Everything in it
-         is either a `--lynn-*` custom property on `:root` or a `.lynn-*`
-         class, so it cannot collide with this page's own tokens/classes.
-      2. playground.css   - the playground's own chrome, shared verbatim with
-         the standalone shell at lynn-ui/playground/index.html.
-      3. the import map   - React, ReactDOM and matter-js as CDN ESM, exactly
-         as the standalone shell loads them. `?external=react` on
-         react-dom/client stops a second copy of React being pulled in
-         ("invalid hook call").
+    ===== lynn-ui: the site chrome AND the page content, as React components =====
+    This page is the design system's own reference, so - unlike a page that
+    just embeds the playground as one section - its nav, doc rail, footer,
+    gate, hero and the playground itself are all one lynn-ui tree now. See the
+    single #lynn-app-root mount script at the end of <body>.
+
+    Three things are needed, and none of them affect the rest of the page:
+      1. dist/lynn-ui.css + playground.css - the package's built stylesheet
+         plus the playground's own chrome, shared verbatim with the
+         standalone shell at lynn-ui/playground/index.html.
+      2. the import map  - React, ReactDOM and matter-js as CDN ESM.
+         `?external=react` on react-dom stops a second copy of React being
+         pulled in ("invalid hook call").
+      3. `.lynn-mount` - the chrome renders through portals into placeholder
+         divs left where the old markup was.
   -->
-  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css" />
-  <link rel="stylesheet" href="./lynn-ui/playground/playground.css" />
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=1" />
+  <link rel="stylesheet" href="./lynn-ui/playground/playground.css?v=1" />
   <script type="importmap">
   {
     "imports": {
@@ -44,96 +44,50 @@
     }
   }
   </script>
+  <style>.lynn-mount { display: contents; }</style>
+
+  <!--
+    The gate used to be static markup covered by blocking CSS, so it was up
+    before first paint. React arrives as ESM from a CDN, so the component can
+    only mount a tick later - hold the page back until it does, or a locked
+    visitor reads the whole page in the gap. Costs nothing once the session is
+    unlocked (the class is never added), and a 4s failsafe means a CDN that
+    never answers leaves a readable page rather than a blank one.
+  -->
+  <style>html.lynn-gate-pending body { visibility: hidden; }</style>
+  <script>
+    (function () {
+      try {
+        if (sessionStorage.getItem('nice-site-access') === '1') return;
+      } catch (e) { /* blocked storage: fall through and gate */ }
+      var root = document.documentElement;
+      root.classList.add('lynn-gate-pending');
+      setTimeout(function () { root.classList.remove('lynn-gate-pending'); }, 4000);
+    })();
+  </script>
 
   <style>
-    :root { --bg-card: #2f2f3d; }
-
-    /* ---- HERO ---- */
-    .hero {
-      position: relative;
-      min-height: 62vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      padding: 100px 24px 64px;
-      text-align: center;
-    }
-    .hero-gradient {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, #21212B 0%, #170d40 18%, #0d1f6b 38%, #3694FC 55%, #6100FF 72%, #00E2A0 87%, #21212B 100%);
-      background-size: 400% 400%;
-      animation: gradientShift 13s ease infinite;
-      opacity: 0.85;
-    }
-    .hero-gradient::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at center, transparent 25%, var(--bg) 78%);
-    }
-    @keyframes gradientShift {
-      0%   { background-position: 0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    .hero-orb { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; }
-    .hero-orb-1 { width: 460px; height: 460px; top: -100px; left: -100px; background: radial-gradient(circle, rgba(54,148,252,0.5), transparent 70%); }
-    .hero-orb-2 { width: 380px; height: 380px; bottom: -80px; right: -60px; background: radial-gradient(circle, rgba(97,0,255,0.4), transparent 70%); }
-    .hero-content { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; }
-    .hero-eyebrow {
-      font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
-      color: var(--emerald); margin-bottom: 20px;
-    }
-    .hero-title { font-size: clamp(56px, 9vw, 110px); font-weight: 900; letter-spacing: -3px; line-height: 0.95; margin-bottom: 20px; }
-    .hero-title .gradient-word {
-      background: linear-gradient(90deg, #fff 0%, var(--blue) 30%, var(--lyra) 60%, var(--emerald) 100%);
-      background-size: 200% auto;
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      animation: shimmer 4s linear infinite;
-    }
-    @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
-    .hero-sub { font-size: 17px; color: rgba(255,255,255,0.68); line-height: 1.7; margin: 0 auto; }
-    .hero-sub code { white-space: nowrap; }
-
     /* ---- SECTION SHELL ---- */
     .lynn-section { max-width: 1160px; margin: 0 auto; padding: 72px 48px; }
-    .lynn-section + .lynn-section { border-top: 1px solid var(--border); }
-    .lynn-label { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--blue); margin-bottom: 12px; }
-    .lynn-title { font-size: clamp(28px, 4vw, 42px); font-weight: 800; letter-spacing: -0.8px; margin-bottom: 14px; }
+    .lynn-section + .lynn-section { border-top: 1px solid var(--lynn-color-border); }
+    .lynn-label { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--lynn-color-blue); margin-bottom: 12px; }
+    .lynn-title { font-size: clamp(28px, 4vw, 42px); font-weight: 800; letter-spacing: -0.8px; margin-bottom: 14px; color: var(--lynn-color-text); }
     .lynn-title span {
-      background: linear-gradient(90deg, var(--blue), var(--lyra));
+      background: linear-gradient(90deg, var(--lynn-color-blue), var(--lynn-color-lynn));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    .lynn-desc { font-size: 15px; color: var(--text-secondary); line-height: 1.7; max-width: 680px; margin-bottom: 40px; }
-
-    /* ---- COLOR TOKENS ---- */
-    .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
-    .swatch { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--bg-card); }
-    .swatch-fill { height: 64px; }
-    .swatch-meta { padding: 10px 12px; }
-    .swatch-name { font-size: 12px; font-weight: 700; margin-bottom: 2px; }
-    .swatch-hex { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11px; color: var(--text-secondary); }
-
-    /* ---- TYPE SCALE ---- */
-    .type-row { display: flex; align-items: baseline; gap: 24px; padding: 16px 0; border-bottom: 1px solid var(--border); }
-    .type-row:last-child { border-bottom: none; }
-    .type-tag { flex: 0 0 190px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-secondary); }
-    .type-sample { flex: 1; color: #fff; }
-
-    /* ---- SPACING / RADIUS ---- */
-    .scale-block { display: flex; align-items: flex-end; gap: 18px; flex-wrap: wrap; margin-bottom: 44px; }
-    .scale-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-    .scale-bar { background: linear-gradient(180deg, var(--blue), var(--indigo)); border-radius: 3px; width: 24px; }
-    .scale-swatch { background: var(--card); border: 1px solid var(--border-md); }
-    .scale-num { font-size: 11px; color: var(--text-secondary); font-family: 'SF Mono', monospace; }
+    .lynn-desc { font-size: 15px; color: var(--lynn-color-text-secondary); line-height: 1.7; max-width: 680px; margin-bottom: 40px; }
 
     /* ---- COMPARE TOGGLE ---- */
-    .compare-toggle { display: inline-flex; gap: 4px; padding: 4px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 100px; margin-bottom: 28px; }
+    /* This sandbox intentionally shows SOL's and Lyra's own real colors next
+       to Lynn's - it is comparing three fixed systems, not previewing Lynn's
+       own light/dark/lynn modes, so `.compare-stage[data-system]` below stays
+       on literal per-system values on purpose even though the shell above it
+       reads Lynn's tokens. */
+    .compare-toggle { display: inline-flex; gap: 4px; padding: 4px; background: color-mix(in srgb, var(--lynn-color-text) 5%, transparent); border: 1px solid var(--lynn-color-border); border-radius: 100px; margin-bottom: 28px; }
     .compare-btn {
-      font-family: var(--font); font-size: 13px; font-weight: 700; padding: 9px 20px; border-radius: 100px;
-      border: none; background: none; color: var(--text-secondary); cursor: pointer; transition: background 0.2s, color 0.2s;
+      font-family: var(--lynn-font-family); font-size: 13px; font-weight: 700; padding: 9px 20px; border-radius: 100px;
+      border: none; background: none; color: var(--lynn-color-text-secondary); cursor: pointer; transition: background 0.2s, color 0.2s;
     }
     .compare-btn.active { background: #fff; color: #14141c; }
     .compare-stage {
@@ -152,7 +106,7 @@
       margin-top: 24px; padding: 20px; font-size: 13px; line-height: 1.6; max-width: 320px;
       transition: background 0.4s ease, border-color 0.4s ease, border-radius 0.4s ease, color 0.4s ease;
     }
-    .compare-meta { margin-top: 20px; font-size: 12px; color: var(--text-secondary); font-family: 'SF Mono', monospace; }
+    .compare-meta { margin-top: 20px; font-size: 12px; color: var(--lynn-color-text-secondary); font-family: 'SF Mono', monospace; }
 
     /* Token values per system, applied via [data-system] on .compare-stage */
     .compare-stage[data-system="sol"] {
@@ -181,234 +135,28 @@
     }
     .compare-card { background: var(--cp-card-bg); border: 1px solid var(--cp-card-border); border-radius: var(--cp-radius); color: var(--cp-body); font-family: var(--cp-font); }
 
-    /* ---- MOTION TOKEN GRID ---- */
-    .motion-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
-    .motion-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
-    .motion-card-name { font-family: 'SF Mono', monospace; font-size: 12px; color: var(--lyra); margin-bottom: 8px; }
-    .motion-card-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
-
-    /* ---- FX DEMOS ---- */
-    .fx-block { margin-bottom: 64px; }
-    .fx-block:last-child { margin-bottom: 0; }
-    .fx-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; }
-    .fx-name { font-size: 18px; font-weight: 700; }
-    .fx-token { font-family: 'SF Mono', monospace; font-size: 12px; color: var(--text-secondary); }
-    .fx-stage {
-      position: relative; border: 1px solid var(--border); border-radius: 18px; overflow: hidden;
-      min-height: 220px; display: flex; align-items: center; justify-content: center; background: var(--bg-card);
-    }
-
-    /* Shimmer demo */
-    .fx-shimmer-text {
-      font-size: clamp(30px, 5vw, 48px); font-weight: 800; letter-spacing: -1px;
-      background: linear-gradient(90deg, #fff 0%, var(--blue) 30%, var(--lyra) 60%, var(--emerald) 100%);
-      background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      animation: shimmer 4s linear infinite;
-    }
-
-    /* Orbs demo */
-    .fx-orb-stage { background: #1b1b24; }
-    .fx-orb { position: absolute; border-radius: 50%; filter: blur(60px); }
-    .fx-orb-a { width: 220px; height: 220px; top: -40px; left: 10%; background: radial-gradient(circle, rgba(54,148,252,0.55), transparent 70%); animation: fxOrb 15s ease-in-out infinite; }
-    .fx-orb-b { width: 190px; height: 190px; bottom: -50px; right: 12%; background: radial-gradient(circle, rgba(97,0,255,0.45), transparent 70%); animation: fxOrb 18s ease-in-out infinite reverse; }
-    .fx-orb-c { width: 150px; height: 150px; top: 45%; left: 55%; background: radial-gradient(circle, rgba(0,226,160,0.35), transparent 70%); animation: fxOrb 20s ease-in-out infinite 4s; }
-    @keyframes fxOrb {
-      0%   { transform: translate(0,0) scale(1); }
-      33%  { transform: translate(40px,-30px) scale(1.1); }
-      66%  { transform: translate(-30px,20px) scale(0.95); }
-      100% { transform: translate(0,0) scale(1); }
-    }
-    .fx-orb-label { position: relative; z-index: 1; font-size: 13px; color: rgba(255,255,255,0.55); }
-
-    /* Tilt demo cards */
-    .fx-tilt-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; width: 100%; padding: 28px; }
-    .tilt-demo-card {
-      background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 22px;
-      transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), box-shadow 0.4s ease;
-    }
-    .tilt-demo-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
-    .tilt-demo-card p { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
-
-    /* Magnetic demo */
-    .fx-magnetic-stage { gap: 20px; }
-    .magnetic-btn {
-      font-family: var(--font); font-size: 14px; font-weight: 700; color: #fff; background: var(--blue);
-      padding: 14px 30px; border-radius: 100px; border: none; cursor: pointer;
-      box-shadow: 0 4px 20px rgba(54,148,252,0.35);
-    }
-
-    /* Plasma + liquid stages */
-    .fx-plasma-stage, .fx-liquid-stage { background: #1b1b24; }
-
-    /* Sparkle / glow-pulse / sheen demo */
-    .fx-sgs-stage { gap: 56px; flex-wrap: wrap; }
-    .fx-sgs-item { display: flex; flex-direction: column; align-items: center; gap: 14px; }
-    .fx-sgs-label { font-family: 'SF Mono', monospace; font-size: 12px; color: var(--text-secondary); }
-    .fx-sgs-glow-demo {
-      display: block; width: 56px; height: 56px; border-radius: 50%;
-      background: var(--card); border: 1px solid var(--border);
-    }
-    .fx-sgs-sheen-demo {
-      display: inline-flex; align-items: center; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8);
-      padding: 10px 22px; border-radius: 100px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14);
-    }
-    .fx-caption { position: relative; z-index: 1; font-size: 13px; color: rgba(255,255,255,0.55); text-align: center; padding: 0 24px; }
-    .fx-liquid-stage { cursor: default; }
-
-    /* ---- LYNN-UI PLAYGROUND MOUNT ---- */
-    /* Only the box the React tree lands in. Everything inside it is styled by
-       dist/lynn-ui.css + lynn-ui/playground/playground.css. */
-    /* Clear the sticky nav when the doc rail jumps here. Scoped to this
-       section on purpose: the page's other sections keep the exact anchor
-       behavior they already had. */
-    #lynn-playground { scroll-margin-top: calc(var(--nav-h) + 24px); }
-    .lynn-playground-mount { min-height: 300px; }
-    .lynn-playground-fallback {
-      padding: 48px 24px;
-      border: 1px dashed var(--border-md);
-      border-radius: 24px;
-      font-size: 13px;
-      line-height: 1.7;
-      color: var(--text-secondary);
-      text-align: center;
-    }
-
     @media (max-width: 768px) {
       .lynn-section { padding: 52px 24px; }
-      .type-row { flex-direction: column; gap: 6px; }
-      .type-tag { flex-basis: auto; }
     }
   </style>
 </head>
 <body>
 
-  <!-- SITE-WIDE ACCESS GATE (see site-gate.css / site-gate.js) -->
-  <div id="nice-site-gate">
-    <div class="sg-card">
-      <div class="sg-lock"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6" /><path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" /><path d="M8 11v-4a4 4 0 1 1 8 0v4" /></svg></div>
-      <div class="sg-title">NiCE Designer Site Login</div>
-      <div class="sg-subtitle">This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.</div>
-      <div class="sg-input-wrap">
-        <input id="nice-site-gate-input" type="password" placeholder="Enter code" autocomplete="off" />
-      </div>
-      <div class="sg-error" id="nice-site-gate-error"></div>
-      <button id="nice-site-gate-btn" type="button">Unlock</button>
-      <div class="sg-divider"></div>
-      <div class="sg-cta">
-        Don't have the code?<br>
-        <strong>Reach out to Erick Mathews on Teams</strong> to request access.
-        <br>
-        <a class="sg-teams-btn" href="https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com" target="_blank" rel="noopener">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H8a2 2 0 00-2 2v2H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2h2a2 2 0 002-2V4a2 2 0 00-2-2zM4 20V8h12v12H4zm16-4h-2V8a2 2 0 00-2-2H8V4h12v12z" fill="currentColor"/></svg>
-          Message on Teams
-        </a>
-      </div>
-    </div>
-  </div>
+  <!-- lynn-ui chrome. One React root, one ThemeProvider; the gate renders
+       here (it is position: fixed, so its place in the DOM is immaterial),
+       the nav/rail/footer portal into the placeholders below, and the
+       playground's own content (Body) renders directly in this same tree. -->
+  <div id="lynn-app-root"></div>
 
-  <!-- NAV -->
-  <nav class="site-nav" id="site-nav">
-    <a href="./index.html" class="nav-logo">
-      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span><span class="logo-suite"> Suite</span>
-    </a>
-    <span class="nav-download is-disabled" aria-disabled="true">Download<span class="coming-soon-tag">Coming soon!</span></span>
-  </nav>
+  <!-- NAV (lynn-ui <Nav>) + DOC RAIL (lynn-ui <DocRail>, position: fixed) -->
+  <div id="lynn-nav-root" class="lynn-mount"></div>
+  <div id="lynn-docrail-root" class="lynn-mount"></div>
 
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-gradient"></div>
-    <div class="hero-orb hero-orb-1"></div>
-    <div class="hero-orb hero-orb-2"></div>
-    <div class="hero-content reveal">
-      <p class="hero-eyebrow">Design System Reference &amp; Live Demo</p>
-      <h1 class="hero-title">Meet <span class="gradient-word">Lynn</span></h1>
-      <p class="hero-sub">
-        Lynn is NiCE Designer Suite's own visual identity - the dark, gradient-driven,
-        motion-rich language you're looking at right now. It isn't a system the Suite audits
-        or converts other work against; SOL and Lyra still are. Lynn is the tool's own skin,
-        documented here in the same token shape.
-      </p>
-    </div>
-  </div>
-
-  <!-- COLOR TOKENS -->
-  <section class="lynn-section reveal" id="lynn-colors">
-    <p class="lynn-label">Tokens</p>
-    <h2 class="lynn-title">Color <span>palette</span></h2>
-    <p class="lynn-desc">Six accents on a dark charcoal base. Text always uses <code>rgba(255,255,255,N)</code> - never a gray hex.</p>
-    <div class="swatch-grid">
-      <div class="swatch"><div class="swatch-fill" style="background:#21212B"></div><div class="swatch-meta"><div class="swatch-name">bg</div><div class="swatch-hex">#21212B</div></div></div>
-      <div class="swatch"><div class="swatch-fill" style="background:#2a2a36"></div><div class="swatch-meta"><div class="swatch-name">surface</div><div class="swatch-hex">#2A2A36</div></div></div>
-      <div class="swatch"><div class="swatch-fill" style="background:#2f2f3d"></div><div class="swatch-meta"><div class="swatch-name">card</div><div class="swatch-hex">#2F2F3D</div></div></div>
-      <div class="swatch"><div class="swatch-fill" style="background:#3694FC"></div><div class="swatch-meta"><div class="swatch-name">blue</div><div class="swatch-hex">#3694FC</div></div></div>
-      <div class="swatch"><div class="swatch-fill" style="background:#6100FF"></div><div class="swatch-meta"><div class="swatch-name">indigo</div><div class="swatch-hex">#6100FF</div></div></div>
-      <div class="swatch"><div class="swatch-fill" style="background:#00E2A0"></div><div class="swatch-meta"><div class="swatch-name">emerald</div><div class="swatch-hex">#00E2A0</div></div></div>
-      <div class="swatch"><div class="swatch-fill" style="background:#36EAD0"></div><div class="swatch-meta"><div class="swatch-name">teal</div><div class="swatch-hex">#36EAD0</div></div></div>
-      <div class="swatch"><div class="swatch-fill" style="background:#FF5B8A"></div><div class="swatch-meta"><div class="swatch-name">coral</div><div class="swatch-hex">#FF5B8A</div></div></div>
-      <div class="swatch"><div class="swatch-fill" style="background:#B98FFF"></div><div class="swatch-meta"><div class="swatch-name">lynn</div><div class="swatch-hex">#B98FFF</div></div></div>
-    </div>
-  </section>
-
-  <!-- TYPOGRAPHY -->
-  <section class="lynn-section reveal" id="lynn-type">
-    <p class="lynn-label">Tokens</p>
-    <h2 class="lynn-title">Typography <span>scale</span></h2>
-    <p class="lynn-desc">Be Vietnam Pro, weights 300–900. Headings never go below weight 700.</p>
-    <div class="type-row">
-      <span class="type-tag">hero-title / 900</span>
-      <span class="type-sample" style="font-size:40px;font-weight:900;letter-spacing:-1.5px;">Aa Gg 123</span>
-    </div>
-    <div class="type-row">
-      <span class="type-tag">section-title / 800</span>
-      <span class="type-sample" style="font-size:30px;font-weight:800;letter-spacing:-0.8px;">Aa Gg 123</span>
-    </div>
-    <div class="type-row">
-      <span class="type-tag">card-title / 700</span>
-      <span class="type-sample" style="font-size:17px;font-weight:700;letter-spacing:-0.2px;">Aa Gg 123</span>
-    </div>
-    <div class="type-row">
-      <span class="type-tag">body / 400–500</span>
-      <span class="type-sample" style="font-size:15px;font-weight:400;color:var(--text-secondary);">The quick brown fox jumps over the lazy dog</span>
-    </div>
-    <div class="type-row">
-      <span class="type-tag">section-label / 700, caps</span>
-      <span class="type-sample" style="font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--blue);">Section label</span>
-    </div>
-    <div class="type-row">
-      <span class="type-tag">code / mono</span>
-      <span class="type-sample" style="font-family:'SF Mono','Fira Code',monospace;font-size:13px;color:var(--text-secondary);">lynn/color/accent/blue</span>
-    </div>
-  </section>
-
-  <!-- SPACING & RADIUS -->
-  <section class="lynn-section reveal" id="lynn-space">
-    <p class="lynn-label">Tokens</p>
-    <h2 class="lynn-title">Spacing &amp; <span>radius</span></h2>
-    <p class="lynn-desc">Card padding sits at lg–xl, grid gaps at md–lg, section padding at 4xl–5xl vertical.</p>
-    <div class="scale-block" aria-label="Spacing scale">
-      <div class="scale-item"><div class="scale-bar" style="height:4px"></div><span class="scale-num">4</span></div>
-      <div class="scale-item"><div class="scale-bar" style="height:8px"></div><span class="scale-num">8</span></div>
-      <div class="scale-item"><div class="scale-bar" style="height:12px"></div><span class="scale-num">12</span></div>
-      <div class="scale-item"><div class="scale-bar" style="height:16px"></div><span class="scale-num">16</span></div>
-      <div class="scale-item"><div class="scale-bar" style="height:24px"></div><span class="scale-num">24</span></div>
-      <div class="scale-item"><div class="scale-bar" style="height:32px"></div><span class="scale-num">32</span></div>
-      <div class="scale-item"><div class="scale-bar" style="height:48px"></div><span class="scale-num">48</span></div>
-      <div class="scale-item"><div class="scale-bar" style="height:64px"></div><span class="scale-num">64</span></div>
-      <div class="scale-item"><div class="scale-bar" style="height:80px"></div><span class="scale-num">80</span></div>
-      <div class="scale-item"><div class="scale-bar" style="height:96px"></div><span class="scale-num">96</span></div>
-    </div>
-    <div class="scale-block" aria-label="Radius scale">
-      <div class="scale-item"><div class="scale-swatch" style="width:56px;height:56px;border-radius:4px"></div><span class="scale-num">xs · 4</span></div>
-      <div class="scale-item"><div class="scale-swatch" style="width:56px;height:56px;border-radius:8px"></div><span class="scale-num">sm · 8</span></div>
-      <div class="scale-item"><div class="scale-swatch" style="width:56px;height:56px;border-radius:12px"></div><span class="scale-num">md · 12</span></div>
-      <div class="scale-item"><div class="scale-swatch" style="width:56px;height:56px;border-radius:16px"></div><span class="scale-num">lg · 16</span></div>
-      <div class="scale-item"><div class="scale-swatch" style="width:56px;height:56px;border-radius:24px"></div><span class="scale-num">xl · 24</span></div>
-      <div class="scale-item"><div class="scale-swatch" style="width:56px;height:56px;border-radius:100px"></div><span class="scale-num">pill · 100</span></div>
-    </div>
-  </section>
+  <!-- HERO (lynn-ui <Hero>) -->
+  <div id="lynn-hero-root" class="lynn-mount"></div>
 
   <!-- COMPARE -->
-  <section class="lynn-section reveal" id="lynn-compare">
+  <section class="lynn-section" id="lynn-compare">
     <p class="lynn-label">Compare</p>
     <h2 class="lynn-title">SOL vs. Lyra vs. <span>Lynn</span></h2>
     <p class="lynn-desc">Same sample heading, body copy, button, badge, and card - re-skinned live with each system's real tokens. Toggle to see the difference.</p>
@@ -430,108 +178,11 @@
     </div>
   </section>
 
-  <!-- MOTION TOKENS -->
-  <section class="lynn-section reveal" id="lynn-motion">
-    <p class="lynn-label">Tokens</p>
-    <h2 class="lynn-title">Motion <span>tokens</span></h2>
-    <p class="lynn-desc">The category SOL and Lyra don't have. Every one of these is demoed live below.</p>
-    <div class="motion-grid">
-      <div class="motion-card"><div class="motion-card-name">lynn/motion/gradient-shift</div><div class="motion-card-desc">13s diagonal drift across a multi-stop hero gradient.</div></div>
-      <div class="motion-card"><div class="motion-card-name">lynn/motion/shimmer</div><div class="motion-card-desc">4s linear gradient-text sweep on one or two key words.</div></div>
-      <div class="motion-card"><div class="motion-card-name">lynn/motion/orb</div><div class="motion-card-desc">Large blurred color blobs drifting behind hero content.</div></div>
-      <div class="motion-card"><div class="motion-card-name">lynn/motion/card-tilt-spotlight</div><div class="motion-card-desc">3D tilt (≤7°) plus a radial spotlight that follows the cursor.</div></div>
-      <div class="motion-card"><div class="motion-card-name">lynn/motion/magnetic-button</div><div class="motion-card-desc">Primary buttons drift toward the cursor, then spring back.</div></div>
-      <div class="motion-card"><div class="motion-card-name">lynn/motion/plasma-lightning</div><div class="motion-card-desc">Canvas plasma-ball filaments that bend toward the cursor, with drifting motes.</div></div>
-      <div class="motion-card"><div class="motion-card-name">lynn/motion/liquid-fill</div><div class="motion-card-desc">Matter.js particle pool that sloshes and fills a container on hover.</div></div>
-      <div class="motion-card"><div class="motion-card-name">lynn/motion/scroll-reveal</div><div class="motion-card-desc">translateY + opacity on enter, cubic-bezier(0.23,1,0.32,1).</div></div>
-      <div class="motion-card"><div class="motion-card-name">lynn/motion/sparkle</div><div class="motion-card-desc">2.6s scale + rotate + opacity pulse on a small icon glyph.</div></div>
-      <div class="motion-card"><div class="motion-card-name">lynn/motion/glow-pulse</div><div class="motion-card-desc">3s breathing box-shadow halo, purple to blue.</div></div>
-      <div class="motion-card"><div class="motion-card-name">lynn/motion/sheen</div><div class="motion-card-desc">4.2s diagonal light sweep across a pill or button.</div></div>
-    </div>
-  </section>
-
-  <!-- MAGIC EFFECTS SHOWCASE -->
-  <section class="lynn-section reveal">
-    <p class="lynn-label">Live demo</p>
-    <h2 class="lynn-title">The magic <span>effects</span></h2>
-    <p class="lynn-desc">Hover, move your cursor across, or just watch each stage below.</p>
-
-    <div class="fx-block" id="fx-shimmer">
-      <div class="fx-head"><span class="fx-name">Shimmer &amp; gradient drift</span><span class="fx-token">lynn/motion/shimmer · gradient-shift</span></div>
-      <div class="fx-stage">
-        <span class="fx-shimmer-text">Shine like this</span>
-      </div>
-    </div>
-
-    <div class="fx-block" id="fx-orbs">
-      <div class="fx-head"><span class="fx-name">Floating orbs</span><span class="fx-token">lynn/motion/orb</span></div>
-      <div class="fx-stage fx-orb-stage">
-        <div class="fx-orb fx-orb-a"></div>
-        <div class="fx-orb fx-orb-b"></div>
-        <div class="fx-orb fx-orb-c"></div>
-        <span class="fx-orb-label">Three blurred blobs, each on its own drift cycle</span>
-      </div>
-    </div>
-
-    <div class="fx-block" id="fx-tilt">
-      <div class="fx-head"><span class="fx-name">3D tilt &amp; spotlight</span><span class="fx-token">lynn/motion/card-tilt-spotlight</span></div>
-      <div class="fx-stage">
-        <div class="fx-tilt-grid">
-          <div class="tilt-demo-card"><h4>Move your cursor</h4><p>The card tilts toward it, up to 7°.</p></div>
-          <div class="tilt-demo-card"><h4>A spotlight follows</h4><p>A soft radial glow tracks the pointer position.</p></div>
-          <div class="tilt-demo-card"><h4>Springs back</h4><p>Release and it eases back with cubic-bezier(0.23,1,0.32,1).</p></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="fx-block" id="fx-magnetic">
-      <div class="fx-head"><span class="fx-name">Magnetic buttons</span><span class="fx-token">lynn/motion/magnetic-button</span></div>
-      <div class="fx-stage fx-magnetic-stage">
-        <button type="button" class="magnetic-btn">Hover near me</button>
-      </div>
-    </div>
-
-    <div class="fx-block" id="fx-plasma">
-      <div class="fx-head"><span class="fx-name">Plasma &amp; motes</span><span class="fx-token">lynn/motion/plasma-lightning</span></div>
-      <div class="fx-stage fx-plasma-stage" id="fx-plasma-stage">
-        <span class="fx-caption">Filaments radiate from the center and bend toward your cursor</span>
-      </div>
-    </div>
-
-    <div class="fx-block" id="fx-liquid">
-      <div class="fx-head"><span class="fx-name">Liquid fill</span><span class="fx-token">lynn/motion/liquid-fill</span></div>
-      <div class="fx-stage fx-liquid-stage" id="fx-liquid-stage">
-        <span class="fx-caption">Hover to fill this container with a sloshing particle pool (Matter.js)</span>
-      </div>
-    </div>
-
-    <div class="fx-block" id="fx-sparkle-glow-sheen">
-      <div class="fx-head"><span class="fx-name">Sparkle, glow &amp; sheen</span><span class="fx-token">lynn/motion/sparkle &middot; glow-pulse &middot; sheen</span></div>
-      <div class="fx-stage fx-sgs-stage">
-        <div class="fx-sgs-item">
-          <span class="nice-sparkle" aria-hidden="true"><svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path class="nice-sparkle-layer nice-sparkle-layer-a" d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2Z" /><path class="nice-sparkle-layer nice-sparkle-layer-b" d="M16 6a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2Z" /><path class="nice-sparkle-layer nice-sparkle-layer-c" d="M9 18a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6Z" /></svg></span>
-          <span class="fx-sgs-label">sparkle</span>
-        </div>
-        <div class="fx-sgs-item">
-          <span class="fx-sgs-glow-demo nice-glow-pulse"></span>
-          <span class="fx-sgs-label">glow-pulse</span>
-        </div>
-        <div class="fx-sgs-item">
-          <span class="fx-sgs-sheen-demo nice-sheen">Pill tag</span>
-          <span class="fx-sgs-label">sheen</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!--
-    INTERACTIVE COMPONENTS - the lynn-ui playground, mounted by React.
-
-    Deliberately NOT `.reveal`: the scroll-reveal observer fires at a 0.05
-    intersection ratio, and this section is thousands of pixels tall, so
-    leaving it opacity-0 until it "enters" would be a coin flip. The section
-    is also the only place on the page with a React tree - the mount div is
-    the whole contract, and everything inside it is real lynn-ui.
+    INTERACTIVE COMPONENTS - the lynn-ui playground's own content, rendered
+    directly (see the mount script): its `Body` (Overview + Tokens +
+    Components) needs no section wrapper of its own here since each of its
+    sections is already `.docs-section`, styled by playground.css.
   -->
   <section class="lynn-section" id="lynn-playground">
     <p class="lynn-label">Live playground</p>
@@ -540,45 +191,13 @@
       Lynn ships as a real React package, <code>lynn-ui</code> - every token above is a
       CSS custom property in it, and every component below is the built package running
       on this page, not a screenshot. Drive the pickers to change props, read the JSX
-      each state generates, and use the theme switch to re-skin all of it live.
+      each state generates, and use the theme switch in the nav to re-skin all of it live.
     </p>
-    <div class="lynn-playground-mount" id="lynn-playground-root">
-      <p class="lynn-playground-fallback">
-        Loading the component playground…<br />
-        It needs JavaScript modules and the <code>lynn-ui/dist</code> build.
-      </p>
-    </div>
+    <div id="lynn-playground-root"></div>
   </section>
 
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="footer-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></div>
-      </div>
-      <nav class="footer-nav">
-        <div class="footer-nav-col">
-          <a href="./index.html">Overview</a>
-          <a href="./install-guide.html">Install Guide</a>
-          <a href="./claude-skills.html">Claude Skills</a>
-          <a href="./the-suite.html">The Suite</a>
-        </div>
-        <div class="footer-nav-col">
-          <a href="./use-cases.html">Use Cases</a>
-          <a href="./scoring.html">Scoring</a>
-          <a href="./dashboard.html">Dashboard</a>
-          <a href="./roadmap.html">Roadmap</a>
-        </div>
-        <div class="footer-nav-col">
-          <a href="./release-notes.html">Release Notes</a>
-          <a href="./faq.html">FAQ</a>
-          <a href="./tools.html">Tools</a>
-          <a href="./marketplace.html">Marketplace</a>
-          <a href="./lynn.html" class="active">Lynn</a>
-        </div>
-      </nav>
-    </div>
-  </footer>
+  <!-- FOOTER (lynn-ui <Footer>) -->
+  <div id="lynn-footer-root" class="lynn-mount"></div>
 
   <script>
     // Scroll reveal via IntersectionObserver
@@ -608,27 +227,8 @@
     });
     document.addEventListener('mouseleave', function() { glow.style.opacity = '0'; });
 
-    // Tilt + spotlight on demo cards
-    document.querySelectorAll('.tilt-demo-card, .swatch, .motion-card').forEach(function(card) {
-      card.style.position = 'relative';
-      card.addEventListener('mousemove', function(e) {
-        var r = card.getBoundingClientRect();
-        var x = (e.clientX - r.left) / r.width;
-        var y = (e.clientY - r.top) / r.height;
-        var tx = (y - 0.5) * -8, ty = (x - 0.5) * 8;
-        card.style.transform = 'perspective(900px) rotateX(' + tx + 'deg) rotateY(' + ty + 'deg) translateZ(3px)';
-        card.style.transition = 'transform 0.07s ease';
-        card.style.boxShadow = '0 8px 32px rgba(0,0,0,0.35), 0 0 0 1px rgba(54,148,252,0.18)';
-      });
-      card.addEventListener('mouseleave', function() {
-        card.style.transform = '';
-        card.style.transition = 'transform 0.45s cubic-bezier(0.23,1,0.32,1)';
-        card.style.boxShadow = '';
-      });
-    });
-
-    // Magnetic effect on primary buttons
-    document.querySelectorAll('.magnetic-btn, .compare-cta').forEach(function(btn) {
+    // Magnetic effect on the compare panel's primary button
+    document.querySelectorAll('.compare-cta').forEach(function(btn) {
       btn.addEventListener('mousemove', function(e) {
         var r = btn.getBoundingClientRect();
         var dx = (e.clientX - r.left - r.width / 2) * 0.28;
@@ -642,21 +242,6 @@
       });
     });
   })();
-  </script>
-
-  <!-- Reusable canvas effects (Matter.js is the physics engine for the liquid demo) -->
-  <script src="https://cdn.jsdelivr.net/npm/matter-js@0.19.0/build/matter.min.js"></script>
-  <!-- v10: DOC_PAGES gained this page's "Interactive Components" group. -->
-  <script src="nice-effects.js?v=11"></script>
-  <script>
-    var plasmaStage = document.getElementById('fx-plasma-stage');
-    if (plasmaStage) {
-      NiceEffects.lightning(plasmaStage, { color: '#B98FFF', glow: '#6100FF', opacity: 0.55, motes: 48 });
-    }
-    var liquidStage = document.getElementById('fx-liquid-stage');
-    if (liquidStage) {
-      NiceEffects.liquidFill(liquidStage, { color: '#3694FC' });
-    }
   </script>
 
   <!-- Compare toggle -->
@@ -685,29 +270,233 @@
   </script>
 
   <!--
-    Interactive components: mount the lynn-ui playground into this page.
+    ===== lynn-ui chrome + content mount =====
+    One createRoot, one ThemeProvider, one <App>. Every piece of chrome on the
+    page - and now the playground's own content - hangs off it, so all three
+    theme modes stay in sync between them (separate roots would each get
+    their own provider and desync, which is exactly the bug this replaces:
+    the playground used to mount its own independent ThemeProvider and its
+    own second DocRail in a right-hand column - one theme toggle for the page
+    chrome and a different one for the playground, two rails competing for
+    space). `RAIL_GROUPS` merges the playground's Overview/Tokens/Component
+    categories into this page's own "Lynn" sub-nav instead.
 
-    `app.js` is the same module the standalone shell at
-    lynn-ui/playground/index.html loads - it exports a mount function and has
-    no side effects, so the only difference here is `embedded: true`, which
-    drops the playground's own Nav (this page has one), moves its ThemeToggle
-    into the section's local header, and turns its DocRail into a sticky
-    right-hand column scoped to this section instead of a second fixed
-    sidebar competing with the site's own .doc-rail.
+    Pieces that belong somewhere else in the document are placed with
+    createPortal into the `.lynn-mount` placeholders rather than rendered
+    here - a footer rendered next to the nav would sit at the top of the
+    page, and a nav rendered inside a 60px-tall wrapper cannot be sticky.
   -->
   <script type="module">
-    const mount = document.getElementById('lynn-playground-root');
+    import { createElement as h, Fragment, useEffect, useState } from 'react';
+    import { createPortal } from 'react-dom';
+    import { createRoot } from 'react-dom/client';
+    import {
+      AccessGate,
+      DocRail,
+      Footer,
+      Hero,
+      Nav,
+      ShimmerText,
+      ThemeProvider,
+      ThemeToggle,
+      useLynnTheme,
+    } from './lynn-ui/dist/index.js?v=2';
+    import { Body, RAIL_GROUPS, RailContext } from './lynn-ui/playground/app.js?v=1';
 
-    import('./lynn-ui/playground/app.js')
-      .then(({ mountPlayground }) => mountPlayground(mount, { embedded: true }))
-      .catch((error) => {
-        // Never leave a silently empty section: say what went wrong in place.
-        console.error('[lynn.html] playground failed to mount', error);
-        mount.innerHTML =
-          '<p class="lynn-playground-fallback">The component playground could not load.' +
-          '<br /><code></code></p>';
-        mount.querySelector('code').textContent = String(error);
+    const PAGE = 'lynn.html';
+
+    /* ---- the real gate, ported from site-gate.js ------------------------ */
+    const GATE_KEY = 'nice-site-access';
+    const GATE_PASSWORD = 'niceux';
+    const GATE_ERROR = 'Incorrect code. Contact Erick Mathews on Teams for access.';
+    const TEAMS_HREF = 'https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com';
+
+    /* ---- doc rail ------------------------------------------------------- */
+    /* Same page table every migrated page reads off nice-effects.js. This
+       page's own "Compare" group (from DOC_PAGES) gets the playground's own
+       RAIL_GROUPS appended after it - Overview, Tokens, and one group per
+       component category - so the whole thing is ONE rail with one set of
+       submenus under "Lynn", not a second rail competing for the right edge. */
+    const RAIL_KEY = 'nice-doc-rail-collapsed';
+    const DOC_PAGES = (window.NiceEffects && window.NiceEffects.docPages) || [];
+    const railPages = DOC_PAGES.map((page) => ({
+      href: './' + page.href,
+      label: page.label,
+    }));
+    const ownGroups = (DOC_PAGES.find((page) => page.href === PAGE) || {}).groups || [];
+    const railGroups = ownGroups.concat(RAIL_GROUPS);
+
+    /* ---- footer --------------------------------------------------------- */
+    const FOOTER_COLUMNS = [
+      {
+        title: 'Product',
+        links: [
+          { label: 'Overview', href: './index.html' },
+          { label: 'Install Guide', href: './install-guide.html' },
+          { label: 'Claude Skills', href: './claude-skills.html' },
+          { label: 'The Suite', href: './the-suite.html' },
+        ],
+      },
+      {
+        title: 'Learn',
+        links: [
+          { label: 'Use Cases', href: './use-cases.html' },
+          { label: 'Scoring', href: './scoring.html' },
+          { label: 'Dashboard', href: './dashboard.html' },
+          { label: 'Roadmap', href: './roadmap.html' },
+        ],
+      },
+      {
+        title: 'Reference',
+        links: [
+          { label: 'Release Notes', href: './release-notes.html' },
+          { label: 'FAQ', href: './faq.html' },
+          { label: 'Tools', href: './tools.html' },
+          { label: 'Marketplace', href: './marketplace.html' },
+          { label: 'Lynn', href: './lynn.html', active: true },
+        ],
+      },
+    ];
+
+    const downloadPill = (key) =>
+      h(
+        'span',
+        { key, className: 'nav-download is-disabled', 'aria-disabled': 'true' },
+        'Download',
+        h('span', { className: 'coming-soon-tag' }, 'Coming soon!')
+      );
+
+    /* ThemeProvider stamps `data-lynn-theme` on its own wrapper div, but the
+       portalled chrome lives outside that div - so mirror the attribute onto
+       <html>, where the same `[data-lynn-theme]` rules in lynn-ui.css apply
+       to the whole document. */
+    function ThemeBridge() {
+      const { theme } = useLynnTheme();
+      useEffect(() => {
+        document.documentElement.setAttribute('data-lynn-theme', theme);
+      }, [theme]);
+      return null;
+    }
+
+    function portal(node, id) {
+      const host = document.getElementById(id);
+      return host ? createPortal(node, host) : null;
+    }
+
+    function App() {
+      const [unlocked, setUnlocked] = useState(() => {
+        try {
+          return sessionStorage.getItem(GATE_KEY) === '1';
+        } catch (e) {
+          return false;
+        }
       });
+      const [error, setError] = useState(undefined);
+      const [railCollapsed, setRailCollapsed] = useState(() => {
+        try {
+          return localStorage.getItem(RAIL_KEY) === '1';
+        } catch (e) {
+          return false;
+        }
+      });
+
+      useEffect(() => {
+        // The chrome is up; let the page paint (see the gate-pending guard
+        // in <head>).
+        document.documentElement.classList.remove('lynn-gate-pending');
+      }, []);
+
+      const checkCode = (code) => {
+        if (code === GATE_PASSWORD) {
+          try {
+            sessionStorage.setItem(GATE_KEY, '1');
+          } catch (e) { /* unwritable store just means no persistence */ }
+          setError(undefined);
+          setUnlocked(true);
+        } else {
+          setError(GATE_ERROR);
+        }
+      };
+
+      const setRail = (collapsed) => {
+        setRailCollapsed(collapsed);
+        try {
+          localStorage.setItem(RAIL_KEY, collapsed ? '1' : '0');
+        } catch (e) { /* no persistence, still collapses for this visit */ }
+      };
+
+      return h(
+        Fragment,
+        null,
+        h(ThemeBridge, { key: 'theme-bridge' }),
+        h(AccessGate, {
+          key: 'gate',
+          title: 'NiCE Designer Site Login',
+          subtitle:
+            'This is the login for the NiCE Designer website as a whole. Enter the site-wide access code to continue.',
+          onSubmit: checkCode,
+          error,
+          unlocked,
+          ctaText: h(
+            Fragment,
+            null,
+            "Don't have the code?",
+            h('br'),
+            h('strong', null, 'Reach out to Erick Mathews on Teams'),
+            ' to request access.'
+          ),
+          ctaHref: TEAMS_HREF,
+        }),
+        portal(
+          h(Nav, {
+            logoHref: './index.html',
+            cta: h(Fragment, null, [
+              h(ThemeToggle, { key: 'theme', showLabels: false }),
+              downloadPill('download'),
+            ]),
+          }),
+          'lynn-nav-root'
+        ),
+        portal(
+          h(DocRail, {
+            mode: 'pages',
+            pages: railPages,
+            groups: railGroups,
+            activeHref: './' + PAGE,
+            searchable: true,
+            collapsed: railCollapsed,
+            onToggle: setRail,
+          }),
+          'lynn-docrail-root'
+        ),
+        portal(
+          h(
+            Hero,
+            {
+              eyebrow: 'Design System Reference & Live Demo',
+              heading: h(Fragment, null, 'Meet ', h(ShimmerText, { as: 'span' }, 'Lynn')),
+              subtitle:
+                "Lynn is NiCE Designer Suite's own visual identity - the dark, gradient-driven, motion-rich language you're looking at right now. It isn't a system the Suite audits or converts other work against; SOL and Lyra still are. Lynn is the tool's own skin, documented here in the same token shape.",
+            },
+          ),
+          'lynn-hero-root'
+        ),
+        // The DocRail-in-Components card demos controlling "this page's real
+        // rail" - it needs the same collapsed/setRail this page's own DocRail
+        // uses, so the playground's content has to sit inside the same
+        // RailContext.Provider rather than the standalone shell's own.
+        h(
+          RailContext.Provider,
+          { key: 'playground', value: { collapsed: railCollapsed, setCollapsed: setRail } },
+          portal(h(Body), 'lynn-playground-root')
+        ),
+        portal(h(Footer, { columns: FOOTER_COLUMNS }), 'lynn-footer-root')
+      );
+    }
+
+    createRoot(document.getElementById('lynn-app-root')).render(
+      h(ThemeProvider, { defaultTheme: 'lynn' }, h(App))
+    );
   </script>
 </body>
 </html>

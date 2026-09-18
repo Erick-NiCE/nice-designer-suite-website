@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NiCE Designer - Tool Catalog</title>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=10" />
+  <link rel="stylesheet" href="theme.css?v=13" />
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <script src="nice-effects.js?v=11" defer></script>
+  <script src="nice-effects.js?v=13" defer></script>
 
   <!--
     ===== lynn-ui: the site chrome, as React components =====
@@ -18,7 +18,7 @@
     site-gate.js are gone with the static gate; `AccessGate` is the same
     screen and the mount script re-runs the same client-side code check.
   -->
-  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css" />
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=1" />
   <script type="importmap">
   {
     "imports": {
@@ -656,7 +656,7 @@
       ThemeProvider,
       ThemeToggle,
       useLynnTheme,
-    } from './lynn-ui/dist/index.js';
+    } from './lynn-ui/dist/index.js?v=2';
 
     const PAGE = 'tools.html';
 

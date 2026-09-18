@@ -1912,10 +1912,13 @@ export const GROUPS = [
           'put text or a control inside it - the span is `aria-hidden` and scales to 1.35x on a loop, so a label in there is unreadable.',
         groups: [],
         defaults: {},
-        el: () => ({
-          t: 'Sparkle',
-          c: { t: 'Badge', p: { tone: 'lynn', icon: { t: 'IconBolt', p: { size: 12 } } }, c: 'Superpowers' },
-        }),
+        // Sparkle beside the badge, not wrapping it: passing children swaps
+        // in the plain scale+opacity fallback (see Sparkle.tsx), which is
+        // not what this demo is meant to show off.
+        el: () => [
+          { t: 'Sparkle' },
+          { t: 'Badge', p: { tone: 'lynn', icon: { t: 'IconBolt', p: { size: 12 } } }, c: 'Superpowers' },
+        ],
       },
       {
         id: 'glow-pulse',
