@@ -350,10 +350,43 @@
        group on the page. */
     const RELEASES = [
       {
+        id: 'release-v11-5',
+        version: 'v11.5',
+        date: 'September 2026',
+        isLatest: true,
+        groups: [
+          {
+            label: 'New features',
+            tone: 'blue',
+            items: [
+              `Claude can now search every tool and skill by keyword in one call, so a vague ask ("something about contrast", "help with dark mode") finds the right one without knowing its exact name`,
+              rich('New skill - <strong>Design System Agent</strong>: builds a screen from real SOL/Lyra components, then keeps auditing and fixing the live page until it hits a compliance target you set'),
+            ],
+          },
+          {
+            label: 'Improvements',
+            tone: 'emerald',
+            items: [
+              `Design System is now one browser instead of a Tokens/Components toggle: colors, type, spacing, radius, and every synced component live in a single searchable rail, components grouped by category`,
+              `Component screenshots in that browser can now actually be zoomed - Fit, 100%, +/- controls, plus drag-to-pan - instead of the old shrink-to-fit-only view`,
+              `Chrome's "not seeing a new tool or skill?" nudge in Supercharge now only shows when the installed Claude Connector is actually behind this build, not on every visit`,
+            ],
+          },
+          {
+            label: 'Fixes',
+            tone: 'coral',
+            items: [
+              `Fixed tour and tutorial callouts rendering off-screen (missing Next/Skip buttons, no visible way to scroll to them) when the spotlighted element was tall enough to leave little room above or below it`,
+              `Fixed hover tooltips getting clipped by scrolling lists or cut off near a panel edge`,
+              `The Marketplace tab in Supercharge no longer disappears when "Hide descriptions" is turned on`,
+            ],
+          },
+        ],
+      },
+      {
         id: 'release-v11-4',
         version: 'v11.4',
         date: 'September 2026',
-        isLatest: true,
         groups: [
           {
             label: 'New features',
