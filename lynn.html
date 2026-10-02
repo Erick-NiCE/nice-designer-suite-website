@@ -311,6 +311,12 @@
     const GATE_ERROR = 'Incorrect code. Contact Erick Mathews on Teams for access.';
     const TEAMS_HREF = 'https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com';
 
+    /* ---- second gate: Lynn is unlisted/in-progress, same password as the
+       roadmap page (and same session key, so unlocking either page unlocks
+       both). ---- */
+    const LYNN_GATE_KEY = 'nice-roadmap-access';
+    const LYNN_GATE_PASSWORD = 'dex';
+
     /* ---- doc rail ------------------------------------------------------- */
     /* Same page table every migrated page reads off nice-effects.js. This
        page's own "Compare" group (from DOC_PAGES) gets the playground's own
@@ -392,6 +398,14 @@
         }
       });
       const [error, setError] = useState(undefined);
+      const [lynnUnlocked, setLynnUnlocked] = useState(() => {
+        try {
+          return sessionStorage.getItem(LYNN_GATE_KEY) === '1';
+        } catch (e) {
+          return false;
+        }
+      });
+      const [lynnError, setLynnError] = useState(undefined);
       const [railCollapsed, setRailCollapsed] = useState(() => {
         try {
           return localStorage.getItem(RAIL_KEY) === '1';
@@ -415,6 +429,18 @@
           setUnlocked(true);
         } else {
           setError(GATE_ERROR);
+        }
+      };
+
+      const checkLynnCode = (code) => {
+        if (code === LYNN_GATE_PASSWORD) {
+          try {
+            sessionStorage.setItem(LYNN_GATE_KEY, '1');
+          } catch (e) { /* unwritable store just means no persistence */ }
+          setLynnError(undefined);
+          setLynnUnlocked(true);
+        } else {
+          setLynnError(GATE_ERROR);
         }
       };
 
@@ -447,50 +473,75 @@
           ),
           ctaHref: TEAMS_HREF,
         }),
-        portal(
-          h(Nav, {
-            logoHref: './index.html',
-            cta: h(Fragment, null, [
-              h(ThemeToggle, { key: 'theme', showLabels: false }),
-              downloadPill('download'),
-            ]),
+        unlocked &&
+          h(AccessGate, {
+            key: 'gate-lynn',
+            title: 'Lynn Design System',
+            subtitle:
+              "Lynn isn't linked from the homepage yet - it's still in progress. Enter the roadmap access code to preview it.",
+            onSubmit: checkLynnCode,
+            error: lynnError,
+            unlocked: lynnUnlocked,
+            ctaText: h(
+              Fragment,
+              null,
+              "Don't have the code?",
+              h('br'),
+              h('strong', null, 'Reach out to Erick Mathews on Teams'),
+              ' to request access.'
+            ),
+            ctaHref: TEAMS_HREF,
           }),
-          'lynn-nav-root'
-        ),
-        portal(
-          h(DocRail, {
-            mode: 'pages',
-            pages: railPages,
-            groups: railGroups,
-            activeHref: './' + PAGE,
-            searchable: true,
-            collapsed: railCollapsed,
-            onToggle: setRail,
-          }),
-          'lynn-docrail-root'
-        ),
-        portal(
+        unlocked &&
+          lynnUnlocked &&
           h(
-            Hero,
-            {
-              eyebrow: 'Design System Reference & Live Demo',
-              heading: h(Fragment, null, 'Meet ', h(ShimmerText, { as: 'span' }, 'Lynn')),
-              subtitle:
-                "Lynn is NiCE Designer Suite's own visual identity - the dark, gradient-driven, motion-rich language you're looking at right now. It isn't a system the Suite audits or converts other work against; SOL and Lyra still are. Lynn is the tool's own skin, documented here in the same token shape.",
-            },
-          ),
-          'lynn-hero-root'
-        ),
-        // The DocRail-in-Components card demos controlling "this page's real
-        // rail" - it needs the same collapsed/setRail this page's own DocRail
-        // uses, so the playground's content has to sit inside the same
-        // RailContext.Provider rather than the standalone shell's own.
-        h(
-          RailContext.Provider,
-          { key: 'playground', value: { collapsed: railCollapsed, setCollapsed: setRail } },
-          portal(h(Body), 'lynn-playground-root')
-        ),
-        portal(h(Footer, { columns: FOOTER_COLUMNS }), 'lynn-footer-root')
+            Fragment,
+            { key: 'chrome' },
+            portal(
+              h(Nav, {
+                logoHref: './index.html',
+                cta: h(Fragment, null, [
+                  h(ThemeToggle, { key: 'theme', showLabels: false }),
+                  downloadPill('download'),
+                ]),
+              }),
+              'lynn-nav-root'
+            ),
+            portal(
+              h(DocRail, {
+                mode: 'pages',
+                pages: railPages,
+                groups: railGroups,
+                activeHref: './' + PAGE,
+                searchable: true,
+                collapsed: railCollapsed,
+                onToggle: setRail,
+              }),
+              'lynn-docrail-root'
+            ),
+            portal(
+              h(
+                Hero,
+                {
+                  eyebrow: 'Design System Reference & Live Demo',
+                  heading: h(Fragment, null, 'Meet ', h(ShimmerText, { as: 'span' }, 'Lynn')),
+                  subtitle:
+                    "Lynn is NiCE Designer Suite's own visual identity - the dark, gradient-driven, motion-rich language you're looking at right now. It isn't a system the Suite audits or converts other work against; SOL and Lyra still are. Lynn is the tool's own skin, documented here in the same token shape.",
+                },
+              ),
+              'lynn-hero-root'
+            ),
+            // The DocRail-in-Components card demos controlling "this page's real
+            // rail" - it needs the same collapsed/setRail this page's own DocRail
+            // uses, so the playground's content has to sit inside the same
+            // RailContext.Provider rather than the standalone shell's own.
+            h(
+              RailContext.Provider,
+              { key: 'playground', value: { collapsed: railCollapsed, setCollapsed: setRail } },
+              portal(h(Body), 'lynn-playground-root')
+            ),
+            portal(h(Footer, { columns: FOOTER_COLUMNS }), 'lynn-footer-root')
+          )
       );
     }
 

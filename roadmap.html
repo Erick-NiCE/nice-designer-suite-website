@@ -1224,6 +1224,51 @@
           },
         ],
       },
+      {
+        status: 'shipped',
+        title: 'Phase 5 – Skills Platform',
+        period: 'Aug – Oct 2026',
+        dependency: 'Phase 4 shipped',
+        description: 'A new axis alongside the four tools: a growing library of Claude skills, delivered through a hosted catalog so a fix or a brand-new skill reaches every install with no reinstall. Four new skills shipped - North Star Fox, Team Strengths, EAC Framework Guide, and Emotional Intelligence - and keyword search now finds the right tool or skill from a vague ask instead of an exact name.',
+        items: [
+          {
+            icon: iAudit,
+            accentColor: '#3694FC',
+            name: 'Hosted Skill Catalog',
+            status: 'Shipped',
+            statusVariant: 'shipped',
+            description: rich('Skills are found and loaded through <code>list_skills</code> / <code>get_skill</code>, which check a small hosted catalog first - so a fix or a brand-new skill reaches every installed connector with no reinstall.'),
+            tags: ['MCP', 'No reinstall'],
+          },
+          {
+            icon: iMcpStorybook,
+            accentColor: '#00E2A0',
+            name: 'Keyword Search',
+            status: 'Shipped',
+            statusVariant: 'shipped',
+            description: 'Claude can search every tool and skill by keyword in one call, so a vague ask ("something about contrast", "help with dark mode") finds the right one without knowing its exact name.',
+            tags: ['Figma', 'Chrome'],
+          },
+          {
+            icon: iMagic,
+            accentColor: '#6100FF',
+            name: 'Design System Agent',
+            status: 'Shipped',
+            statusVariant: 'shipped',
+            description: 'New skill that builds a screen from real SOL/Lyra components, then keeps auditing and fixing the live page until it hits a compliance target you set.',
+            tags: ['New skill', 'Audit + Editor'],
+          },
+          {
+            icon: iDash,
+            accentColor: '#36EAD0',
+            name: 'Usage Analytics',
+            status: 'Shipped',
+            statusVariant: 'shipped',
+            description: 'Anonymous, opt-out usage analytics (Settings - "Share anonymous usage") so we can see which tools and skills actually get used. No node names, file names, page contents, or URLs ever leave your machine.',
+            tags: ['Opt-out', 'Privacy-first'],
+          },
+        ],
+      },
     ];
 
     /* ThemeProvider stamps `data-lynn-theme` on its own wrapper div, but the

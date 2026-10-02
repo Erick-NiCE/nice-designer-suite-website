@@ -7,13 +7,13 @@ same token-shaped format used for SOL and Lyra in `src/tokens.ts` (color /
 typography / spacing / radius), plus one category neither of those systems
 has: **motion**.
 
-Lynn is not one of the systems the Suite audits or converts *other* work
-against - SOL and Lyra still are, and remain the only values accepted by the
-`system: 'sol' | 'lyra'` field across `types.ts`, `tokens.ts`, and `code.ts`.
-Lynn is the identity of the tool itself. (A "beta toggle" that lets Lynn be
-selected as a real third audit/convert target is a plausible future - this
-doc is written so that work has a ready-made source of truth - but it is not
-implemented today.)
+Lynn is not an audit target in Figma: SOL and Lyra remain the only values the
+Figma plugin accepts for `system`, because Lynn ships as a React package styled
+by CSS custom properties and has no Figma library to bind variables to. It **is**
+an audit target in Chrome, behind Settings → Enable beta features: the Audit tab's
+system toggle gains a LYNN button, and the MCP tools accept `system: "lynn"` with
+`target: "chrome"`. The Design System tool lists Lynn's tokens and all of its
+components under the same toggle. Lynn is also the identity of the tool itself.
 
 Companion files:
 - [`DESIGN-SYSTEM.md`](../nice-designer-plugin/DESIGN-SYSTEM.md) (plugin repo
@@ -225,7 +225,7 @@ Live and interactive: [`lynn.html`](./lynn.html) (embedded) and
 | `ProgressBar` | The linear track, determinate or indeterminate, for work whose length you do or do not know. |
 | `GaugeRing` | The radial score dial: an animated arc over a track ring on a raised plate. For a number being read, where `ProgressBar` is for progress being watched. |
 | `Skeleton` | Shimmering placeholder rows that render immediately, so a slow load reads as working rather than broken. Never an empty state. |
-| `Tooltip` | A CSS-only `::after` bubble fed by a data attribute. No portal, no positioning pass, and no escaping an `overflow: hidden` ancestor. |
+| `Tooltip` | A hover/focus bubble portaled to the page and positioned from the target's real rect. It sizes to its text (wrapping past 220px, `\n` for a line break), is never clipped by an `overflow: hidden` ancestor, stays inside the viewport and flips above the target when there is no room below. Ported from the plugin's own `[data-tooltip]`. |
 
 ### Layout
 
@@ -376,7 +376,12 @@ pass `collapsed`.
 As of 2026-09-11, Lynn is a real, built React package (`lynn-ui/`, 72
 exports) with a live interactive playground mounted on `lynn.html`, not just
 reference documentation - see "The component library (lynn-ui)" above for
-the full catalog. No changes were made to `types.ts`, `tokens.ts`, or
-`code.ts` in the plugin repo - `'sol' | 'lyra'` remains the only accepted
-`system` value across the plugin's ~30 message types. Wiring Lynn in as a
-real third audit/convert target there is a separate, larger follow-up.
+the full catalog.
+
+Lynn is bundled with NiCE Designer: the built package, this document and one
+reference file per component ship inside the plugin repo (`vendor/lynn-ui`,
+`skills/lynn-ui-prototyping`), mirrored from here by `npm run sync:lynn`. The
+`lynn-ui-prototyping` skill builds a project from the real components and audits
+it against the Lynn tokens (colors in all three theme modes, type, spacing,
+radius, accessibility) in Chrome. Component detection is not part of the Lynn
+audit, since Lynn components render ordinary elements with no custom tag.
