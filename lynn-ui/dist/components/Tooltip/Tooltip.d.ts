@@ -1,12 +1,16 @@
 import type { CSSProperties, ReactNode } from 'react';
 export type TooltipSide = 'bottom' | 'right';
 export interface TooltipProps {
-    /** The bubble's text. Rendered by CSS from the data attribute. */
+    /**
+     * The bubble's text. Long text wraps (the bubble is capped at 220px) and a
+     * `\n` starts a new line.
+     */
     label: string;
     /**
-     * `bottom` (default) centers the bubble under the target.
-     * `right` right-aligns it, for targets close to a container's right edge
-     * where a centered bubble would overflow.
+     * Where the bubble sits when there is room. `bottom` (default) centers it
+     * under the target; `right` right-aligns it to the target's right edge. In
+     * both cases it is clamped to the viewport, and it flips above the target
+     * when there is no room below.
      */
     side?: TooltipSide;
     /** The element the tooltip describes. */
@@ -17,31 +21,27 @@ export interface TooltipProps {
 /**
  * A hover/focus tooltip.
  *
- * Attribute-driven on purpose: the bubble is a CSS `::after` fed by
- * `content: attr(data-lynn-tooltip)`, so there is no portal, no positioning
- * pass and no state - the same trade the plugin's `[data-tooltip]` makes. The
- * cost is that the bubble is a single line of text that cannot escape an
- * `overflow: hidden` ancestor.
+ * One bubble is portaled to `document.body` and placed from the target's real
+ * `getBoundingClientRect()`, measured before paint. That is what lets it do
+ * three things a CSS-only bubble cannot: it sizes to its text (wrapping past
+ * 220px), it can never be clipped by an `overflow: hidden` or scrolling
+ * ancestor, and it stays inside the viewport, flipping above the target when
+ * there is no room below.
  *
- * When `children` is a single element the attributes are cloned onto it, so
- * the tooltip adds no box to the layout and an already-focusable target
- * (a button, a link) reveals the bubble on keyboard focus too. Anything else
- * - text, a fragment, several children - gets an inline-flex wrapper, which
- * is given `tabIndex={0}` so the bubble stays keyboard-reachable.
+ * When `children` is a single DOM element (`<button>`, `<a>`, `<input>`, ...)
+ * the hover/focus handlers are cloned onto it, so the tooltip adds no box to
+ * the layout and a focusable target reveals the bubble on keyboard focus.
+ * Anything else - text, a fragment, several children, or a lynn-ui component,
+ * none of which forward handlers to the DOM - gets an inline-flex wrapper,
+ * which is given `tabIndex={0}` so the bubble stays keyboard-reachable.
  *
- * Usage: best on a single DOM element that is already focusable - a `<button>`,
- * an `<a>`, an `<input>`. There the two data attributes are cloned straight
- * onto it, so the tooltip adds no box to the layout and the bubble appears on
- * keyboard focus for free. Use `side="right"` for a target near a container's
- * right edge, where the centered bubble would overflow. `label` is plain text
- * because CSS reads it with `content: attr(...)`.
+ * Usage: best on a single focusable DOM element. Use `side="right"` for a
+ * target near a container's right edge. Keep the label short: it explains a
+ * control, it is not a place for content people must read.
  *
- * Don't: don't wrap a lynn-ui component - `cloneElement` passes
- * `data-lynn-tooltip` in as a prop, and none of these components forward
- * unknown props to the DOM, so the attribute is silently dropped and no bubble
- * ever appears. Wrap the component in a `<span>`, or pass the attribute to a
- * real element yourself. And don't use it inside an `overflow: hidden`
- * ancestor (a `Sheen`, a scrolling `CodeBlock`): the bubble is a `::after` on
- * the target, so it cannot escape the clip.
+ * Don't: don't put anything interactive in the label (it is plain text and
+ * ignores the pointer), and don't rely on it for information a touch user
+ * needs - there is no hover on touch, so the same text must be reachable some
+ * other way.
  */
 export declare function Tooltip(props: TooltipProps): import("react").JSX.Element;

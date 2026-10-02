@@ -1053,16 +1053,16 @@ export const GROUPS = [
         id: 'tooltip',
         name: 'Tooltip',
         description:
-          'A CSS-only bubble fed by a `data-lynn-tooltip` attribute - no portal, no positioning pass. The attribute is cloned onto a single element child, so the target must be one that forwards unknown props (a DOM element); anything else, including plain text, gets the keyboard-reachable wrapper span shown here.',
+          'A bubble portaled to the page and placed from the target\'s real position, so it sizes to its text, wraps past 220px, is never clipped by an `overflow: hidden` ancestor, stays inside the viewport and flips above the target when there is no room below.',
         usage:
-          'give it a single focusable DOM element - the attributes clone onto it, so the bubble appears on keyboard focus for free.',
+          'give it a single focusable DOM element - the handlers clone onto it, so the bubble appears on keyboard focus for free. A lynn-ui component, text or several children gets a keyboard-reachable wrapper span instead.',
         dont:
-          'wrap a lynn-ui component - `data-lynn-tooltip` arrives as a prop none of them forward to the DOM, so no bubble appears.',
+          'rely on it alone for something a touch user must know - there is no hover on touch - or put anything interactive in the label, which ignores the pointer.',
         groups: [{ label: 'Side', prop: 'side', options: opts('bottom', 'right') }],
         defaults: { side: 'bottom' },
         el: (s) => ({
           t: 'Tooltip',
-          p: { label: 'Shows on hover and on keyboard focus', side: s.side },
+          p: { label: 'Shows on hover and on keyboard focus.\nSizes to its text and stays on screen.', side: s.side },
           c: 'Hover or focus me',
         }),
       },

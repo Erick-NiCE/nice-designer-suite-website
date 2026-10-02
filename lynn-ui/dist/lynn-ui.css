@@ -4514,41 +4514,33 @@
 }
 
 /* src/components/Tooltip/Tooltip.css */
-[data-lynn-tooltip] {
-  position: relative;
-}
-[data-lynn-tooltip]::after {
-  content: attr(data-lynn-tooltip);
-  position: absolute;
-  left: 50%;
-  top: calc(100% + 6px);
-  transform: translateX(-50%) translateY(-2px);
-  background: #1e1e1e;
+.lynn-tooltip {
+  position: fixed;
+  max-width: 220px;
+  background: var(--lynn-tooltip-bg, #1e1e1e);
   color: #fff;
   font-family: var(--lynn-font-family);
   font-size: 11px;
   font-weight: var(--lynn-font-weight-medium);
-  white-space: nowrap;
+  line-height: 1.4;
+  white-space: pre-line;
   padding: 4px 8px;
   border-radius: var(--lynn-radius-xs);
   pointer-events: none;
-  opacity: 0;
-  transition: opacity 120ms var(--lynn-ease), transform 120ms var(--lynn-ease);
   z-index: 10001;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
-}
-[data-lynn-tooltip]:hover::after,
-[data-lynn-tooltip]:focus-visible::after {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-[data-lynn-tooltip-side=right]::after {
-  left: auto;
-  right: 0;
+  opacity: 0;
   transform: translateY(-2px);
+  transition: opacity 120ms var(--lynn-ease), transform 120ms var(--lynn-ease);
 }
-[data-lynn-tooltip-side=right]:hover::after,
-[data-lynn-tooltip-side=right]:focus-visible::after {
+.lynn-tooltip[data-ready=true] {
+  opacity: 1;
+  transform: translateY(0);
+}
+.lynn-tooltip[data-above=true] {
+  transform: translateY(2px);
+}
+.lynn-tooltip[data-above=true][data-ready=true] {
   transform: translateY(0);
 }
 .lynn-tooltip-wrap {
@@ -4556,12 +4548,10 @@
   align-items: center;
 }
 @media (prefers-reduced-motion: reduce) {
-  [data-lynn-tooltip]::after {
+  .lynn-tooltip,
+  .lynn-tooltip[data-above=true] {
     transition: none;
-    transform: translateX(-50%) translateY(0);
-  }
-  [data-lynn-tooltip-side=right]::after {
-    transform: translateY(0);
+    transform: none;
   }
 }
 
@@ -5332,9 +5322,10 @@
  *     rather than the plugin's `--success` / `--danger` / `--accent`.
  */
 /*!
- * Tooltip - ported from the plugin's `[data-tooltip]` bubble
- * (styles.css:835-876): a `::after` whose text is `attr()`-read straight off
- * the target, so there is no second DOM node to position.
+ * Tooltip - the plugin's `[data-tooltip]` bubble, as a component.
+ *
+ * One element portaled to <body> and positioned in JS (see Tooltip.tsx), so it
+ * sizes to its text, is never clipped by an ancestor, and stays on screen.
  *
  * The bubble keeps its own dark ground and white text in every theme mode -
  * a tooltip is an overlay, not a surface, and the plugin's light mode leaves
