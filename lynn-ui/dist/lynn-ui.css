@@ -627,6 +627,9 @@
   --lynn-badge-bg: var(--lynn-color-card);
   --lynn-badge-fg: var(--lynn-color-text-muted);
 }
+[data-lynn-theme=light] .lynn-badge {
+  color: color-mix(in srgb, var(--lynn-badge-fg) 55%, #000000);
+}
 
 /* src/components/Button/Button.css */
 .lynn-btn {
@@ -2137,6 +2140,9 @@
     transform: none;
   }
 }
+.lynn-feature-card-full .lynn-feature-card-icon {
+  color: #ffffff;
+}
 
 /* src/components/FeaturePanel/FeaturePanel.css */
 .lynn-feature-panel {
@@ -2650,6 +2656,18 @@
   .lynn-hero-orb-3 {
     transform: translate(-50%, -50%);
   }
+}
+.lynn-hero .lynn-btn-secondary {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+.lynn-hero .lynn-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+.lynn-hero .lynn-btn-ghost {
+  color: #ffffff;
 }
 
 /* src/components/IconCard/IconCard.css */

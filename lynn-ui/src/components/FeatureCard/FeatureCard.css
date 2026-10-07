@@ -260,3 +260,10 @@
     transform: none;
   }
 }
+
+/* The icon tile is always a saturated gradient, so its glyph must be white in
+   every theme. It inherited `--lynn-color-text`, which is near-black in
+   `light` mode - a black icon on the purple/blue tile. */
+.lynn-feature-card-full .lynn-feature-card-icon {
+  color: #ffffff;
+}

@@ -150,3 +150,11 @@
   --lynn-badge-bg: var(--lynn-color-card);
   --lynn-badge-fg: var(--lynn-color-text-muted);
 }
+
+/* Light mode: the tone/status foregrounds are the saturated dark-UI accents
+   (e.g. #3694fc, #6100ff) on a 14% tint of the same hue over a near-white
+   page, which lands well under 4.5:1. Darken the text only; the tinted
+   background and border keep each badge's hue. */
+[data-lynn-theme='light'] .lynn-badge {
+  color: color-mix(in srgb, var(--lynn-badge-fg) 55%, #000000);
+}

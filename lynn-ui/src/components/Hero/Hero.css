@@ -155,3 +155,20 @@
     transform: translate(-50%, -50%);
   }
 }
+
+/* The hero is a fixed dark brand surface in every theme (`background: #21212b`,
+   white title), so a Button dropped into `actions` must read as light-on-dark
+   in light mode too. `secondary` takes `--lynn-color-text`, which is near-black
+   in `light` - dark text on the dark hero. Pin it to white here. */
+.lynn-hero .lynn-btn-secondary {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+.lynn-hero .lynn-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+.lynn-hero .lynn-btn-ghost {
+  color: #ffffff;
+}
