@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <script src="nice-effects.js?v=13" defer></script>
+  <script src="nice-effects.js?v=14" defer></script>
 
   <!--
     ===== lynn-ui: the site chrome, as React components =====
@@ -153,7 +153,7 @@
     }
     .mk-card:hover { border-color: rgba(255,255,255,0.16); }
     .mk-header { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 16px; }
-    .mk-icon { font-size: 26px; line-height: 1; flex-shrink: 0; }
+    .mk-icon { flex-shrink: 0; color: var(--skill-color, var(--blue)); }
     .mk-name {
       font-size: 17px; font-weight: 800; color: var(--skill-color, var(--blue));
       font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -287,13 +287,13 @@
   <div class="section" id="current">
     <p class="section-label">In the Marketplace today</p>
     <h2 class="section-title">Available skills</h2>
-    <p class="section-body">Two community-built skills currently ship in the Marketplace. Full trigger phrases, target clients, and the MCP tools each one orchestrates are on the Claude Skills page.</p>
+    <p class="section-body">21 community-built skills currently ship in the Marketplace, each credited to its author. ux-eval and North Star Fox also have full trigger phrases on the Claude Skills page.</p>
 
     <div class="mk-grid">
 
       <div class="mk-card reveal" id="mk-ux-eval" style="--skill-color: var(--emerald);">
         <div class="mk-header">
-          <div class="mk-icon">&#128202;</div>
+          <svg class="mk-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg>
           <div>
             <div class="mk-name">ux-eval</div>
             <div class="mk-author">Ten-question UX eval &middot; by <strong>Bill Bangs</strong></div>
@@ -303,20 +303,19 @@
         </div>
         <p class="mk-question">"Is this good enough to move to the next step, or to dev?"</p>
         <p class="mk-desc">Answers all ten prioritisation questions against real evidence, then states pass / pass-with-conditions / not-yet. For AI-surface designs, also layers in the North Star Fox tenet check.</p>
-        <p class="mk-benefit"><strong>Why it's useful:</strong> a defensible verdict with the reasoning attached - the thing you can actually take to a VP.</p>
+        <p class="mk-benefit"><strong>Why it's useful:</strong> a defensible verdict with the reasoning attached — the thing you can actually take to a VP.</p>
         <div class="mk-meta">
           <div class="mk-meta-label">Key MCP tools</div>
-          <div class="mk-tags">
-            <span class="mk-tag">run_ux_eval</span>
-            <span class="mk-tag">run_full_audit</span>
-          </div>
+          <div class="mk-tags"><span class="mk-tag">run_ux_eval</span><span class="mk-tag">run_full_audit</span></div>
+          <div class="mk-meta-label">Works in</div>
+          <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
         <a class="mk-link" href="./claude-skills.html#skill-ux-eval">Full skill details <span>&#8594;</span></a>
       </div>
 
       <div class="mk-card reveal" id="mk-north-star-fox" style="--skill-color: var(--emerald);">
         <div class="mk-header">
-          <div class="mk-icon">&#129418;</div>
+          <svg class="mk-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg>
           <div>
             <div class="mk-name">north-star-fox</div>
             <div class="mk-author">North Star Fox &middot; by <strong>Janet Gonzales</strong></div>
@@ -326,14 +325,413 @@
         </div>
         <p class="mk-question">"Does this design or JIRA ticket actually hold up against our AI-first tenets?"</p>
         <p class="mk-desc">Scores a CXone AI design, screen, or JIRA ticket against the twelve NiCE AI design tenets, plus Lyra Foundations and NiCE Brand adherence, and returns a fixed-shape pass/fail verdict per section.</p>
-        <p class="mk-benefit"><strong>Why it's useful:</strong> a critical look at designs and JIRA tickets to ensure alignment with our core values around AI architecture at NiCE.</p>
+        <p class="mk-benefit"><strong>Why it's useful:</strong> a critical look at designs and JIRA tickets to ensure alignment with our Core Values around AI architecture at NiCE.</p>
         <div class="mk-meta">
           <div class="mk-meta-label">Key MCP tools</div>
-          <div class="mk-tags">
-            <span class="mk-tag" style="opacity:.6;">None &mdash; pure design/tenet judgment</span>
-          </div>
+          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-meta-label">Works in</div>
+          <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
         <a class="mk-link" href="./claude-skills.html#skill-north-star-fox">Full skill details <span>&#8594;</span></a>
+      </div>
+
+      <div class="mk-card reveal" id="mk-eac-framework-guide" style="--skill-color: var(--emerald);">
+        <div class="mk-header">
+          <svg class="mk-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg>
+          <div>
+            <div class="mk-name">eac-framework-guide</div>
+            <div class="mk-author">EAC Framework Guide &middot; by <strong>EAC Team</strong></div>
+            <!-- "Community skill" pill (lynn-ui <Badge>) -->
+            <span id="lynn-badge-eac-framework-guide" class="lynn-mount"></span>
+          </div>
+        </div>
+        <p class="mk-question">"Which tenet does this fall under, and what do I actually show my manager?"</p>
+        <p class="mk-desc">The eight Personal behaviors cards from the Engagement Orchestration PM framework: purpose, capabilities, and the verbatim &#x27;show your manager&#x27; column, plus routing, calibration prep, self-assessment and manager-side calibration.</p>
+        <p class="mk-benefit"><strong>Why it's useful:</strong> turns a framework you skim once into the specific instance you bring to your next 1:1.</p>
+        <div class="mk-meta">
+          <div class="mk-meta-label">Key MCP tools</div>
+          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-meta-label">Works in</div>
+          <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
+        </div>
+      </div>
+
+      <div class="mk-card reveal" id="mk-ux-research-planning" style="--skill-color: var(--emerald);">
+        <div class="mk-header">
+          <svg class="mk-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg>
+          <div>
+            <div class="mk-name">ux-research-planning</div>
+            <div class="mk-author">Research planning &middot; by <strong>Serena Yang</strong></div>
+            <!-- "Community skill" pill (lynn-ui <Badge>) -->
+            <span id="lynn-badge-ux-research-planning" class="lynn-mount"></span>
+          </div>
+        </div>
+        <p class="mk-question">"What method answers this question, and what do I actually ask?"</p>
+        <p class="mk-desc">Matches a research question to a method, then writes the brief, discussion guide, or screener it needs. Carries the JTBD switching-interview structure and survey/SUS design as reference files.</p>
+        <p class="mk-benefit"><strong>Why it's useful:</strong> a study someone else could run, anchored to the decision it informs instead of to what was easy to schedule.</p>
+        <div class="mk-meta">
+          <div class="mk-meta-label">Key MCP tools</div>
+          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-meta-label">Works in</div>
+          <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
+        </div>
+      </div>
+
+      <div class="mk-card reveal" id="mk-ux-research-synthesis" style="--skill-color: var(--emerald);">
+        <div class="mk-header">
+          <svg class="mk-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg>
+          <div>
+            <div class="mk-name">ux-research-synthesis</div>
+            <div class="mk-author">Research synthesis &middot; by <strong>Serena Yang</strong></div>
+            <!-- "Community skill" pill (lynn-ui <Badge>) -->
+            <span id="lynn-badge-ux-research-synthesis" class="lynn-mount"></span>
+          </div>
+        </div>
+        <p class="mk-question">"I have the sessions back. What does this actually say?"</p>
+        <p class="mk-desc">Thematic analysis, affinity mapping, personas and journey maps from submitted data, split into convergent patterns, contradictions, and thin signals rather than one flat list.</p>
+        <p class="mk-benefit"><strong>Why it's useful:</strong> findings traceable to the data behind them, with the contradictions named instead of averaged into a &quot;mixed reception&quot; theme.</p>
+        <div class="mk-meta">
+          <div class="mk-meta-label">Key MCP tools</div>
+          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-meta-label">Works in</div>
+          <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
+        </div>
+      </div>
+
+      <div class="mk-card reveal" id="mk-ux-research-readouts" style="--skill-color: var(--emerald);">
+        <div class="mk-header">
+          <svg class="mk-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg>
+          <div>
+            <div class="mk-name">ux-research-readouts</div>
+            <div class="mk-author">Research readouts &middot; by <strong>Serena Yang</strong></div>
+            <!-- "Community skill" pill (lynn-ui <Badge>) -->
+            <span id="lynn-badge-ux-research-readouts" class="lynn-mount"></span>
+          </div>
+        </div>
+        <p class="mk-question">"How do I get this in front of stakeholders without it getting waved off?"</p>
+        <p class="mk-desc">Readouts, exec summaries, decks, HTML deliverables and flow diagrams, plus audience tailoring and the writing standards that apply to every research artifact.</p>
+        <p class="mk-benefit"><strong>Why it's useful:</strong> a readout that leads with the conclusion and preempts the three objections every research review gets.</p>
+        <div class="mk-meta">
+          <div class="mk-meta-label">Key MCP tools</div>
+          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-meta-label">Works in</div>
+          <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
+        </div>
+      </div>
+
+      <div class="mk-card reveal" id="mk-emotional-intelligence" style="--skill-color: var(--emerald);">
+        <div class="mk-header">
+          <svg class="mk-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg>
+          <div>
+            <div class="mk-name">emotional-intelligence</div>
+            <div class="mk-author">Emotional intelligence voice &amp; tone &middot; by <strong>Megan Fisher</strong></div>
+            <!-- "Community skill" pill (lynn-ui <Badge>) -->
+            <span id="lynn-badge-emotional-intelligence" class="lynn-mount"></span>
+          </div>
+        </div>
+        <p class="mk-question">"Does this read as clear and human, or defensive and corporate?"</p>
+        <p class="mk-desc">A voice-and-tone guide for leadership writing, feedback, reviews, and difficult conversations — clarity, reasoning over assertion, and named reactions before responses.</p>
+        <p class="mk-benefit"><strong>Why it's useful:</strong> writing that lands as thoughtful and credible instead of performative or tone-deaf.</p>
+        <div class="mk-meta">
+          <div class="mk-meta-label">Key MCP tools</div>
+          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-meta-label">Works in</div>
+          <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
+        </div>
+      </div>
+
+      <div class="mk-card reveal" id="mk-meeting-distiller" style="--skill-color: var(--emerald);">
+        <div class="mk-header">
+          <svg class="mk-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg>
+          <div>
+            <div class="mk-name">meeting-distiller</div>
+            <div class="mk-author">Meeting → design brief &middot; by <strong>Yaara Bar</strong></div>
+            <!-- "Community skill" pill (lynn-ui <Badge>) -->
+            <span id="lynn-badge-meeting-distiller" class="lynn-mount"></span>
+          </div>
+        </div>
+        <p class="mk-question">"I have raw discovery notes — can you turn this into something I can actually design from?"</p>
+        <p class="mk-desc">Layer 1 of the ideation pipeline: transforms raw meeting notes or transcripts into a structured Design Brief.</p>
+        <p class="mk-benefit"><strong>Why it's useful:</strong> a brief the next three pipeline stages can consume, instead of a wall of meeting notes.</p>
+        <div class="mk-meta">
+          <div class="mk-meta-label">Key MCP tools</div>
+          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-meta-label">Works in</div>
+          <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
+        </div>
+      </div>
+
+      <div class="mk-card reveal" id="mk-fast-research-pack" style="--skill-color: var(--emerald);">
+        <div class="mk-header">
+          <svg class="mk-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg>
+          <div>
+            <div class="mk-name">fast-research-pack</div>
+            <div class="mk-author">Fast research pack &middot; by <strong>Yaara Bar</strong></div>
+            <!-- "Community skill" pill (lynn-ui <Badge>) -->
+            <span id="lynn-badge-fast-research-pack" class="lynn-mount"></span>
+          </div>
+        </div>
+        <p class="mk-question">"What has already been tried here, and what patterns should this borrow from?"</p>
+        <p class="mk-desc">Layer 2 of the ideation pipeline: generates analogous solutions, design patterns, competitive landscape, UX heuristics, and anti-patterns from a Design Brief.</p>
+        <p class="mk-benefit"><strong>Why it's useful:</strong> replaces a day or two of secondary research with a few minutes, grounded in the actual brief.</p>
+        <div class="mk-meta">
+          <div class="mk-meta-label">Key MCP tools</div>
+          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-meta-label">Works in</div>
+          <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
+        </div>
+      </div>
+
+      <div class="mk-card reveal" id="mk-proposal-generator" style="--skill-color: var(--emerald);">
+        <div class="mk-header">
+          <svg class="mk-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg>
+          <div>
+            <div class="mk-name">proposal-generator</div>
+            <div class="mk-author">Proposal generator &middot; by <strong>Yaara Bar</strong></div>
+            <!-- "Community skill" pill (lynn-ui <Badge>) -->
+            <span id="lynn-badge-proposal-generator" class="lynn-mount"></span>
+          </div>
+        </div>
+        <p class="mk-question">"Can you give me a few genuinely different directions, not just one idea?"</p>
+        <p class="mk-desc">Layer 3 of the ideation pipeline: generates Conservative / Progressive / Disruptive proposals from a Design Brief and Research Pack, each with concept, journey, screen inventory, and a scoring matrix.</p>
+        <p class="mk-benefit"><strong>Why it's useful:</strong> a real choice between directions with trade-offs spelled out, instead of one idea to react to.</p>
+        <div class="mk-meta">
+          <div class="mk-meta-label">Key MCP tools</div>
+          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-meta-label">Works in</div>
+          <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
+        </div>
+      </div>
+
+      <div class="mk-card reveal" id="mk-wireframe-generator" style="--skill-color: var(--emerald);">
+        <div class="mk-header">
+          <svg class="mk-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg>
+          <div>
+            <div class="mk-name">wireframe-generator</div>
+            <div class="mk-author">Wireframe generator &middot; by <strong>Yaara Bar</strong></div>
+            <!-- "Community skill" pill (lynn-ui <Badge>) -->
+            <span id="lynn-badge-wireframe-generator" class="lynn-mount"></span>
+          </div>
+        </div>
+        <p class="mk-question">"Can I get a clickable prototype out of this proposal?"</p>
+        <p class="mk-desc">Layer 4a of the ideation pipeline: generates a self-contained, annotated, responsive HTML wireframe prototype from a design proposal.</p>
+        <p class="mk-benefit"><strong>Why it's useful:</strong> something to click through and react to, not just a static description of the screens.</p>
+        <div class="mk-meta">
+          <div class="mk-meta-label">Key MCP tools</div>
+          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-meta-label">Works in</div>
+          <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
+        </div>
+      </div>
+
+      <div class="mk-card reveal" id="mk-figma-push" style="--skill-color: var(--emerald);">
+        <div class="mk-header">
+          <svg class="mk-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg>
+          <div>
+            <div class="mk-name">figma-push</div>
+            <div class="mk-author">Push proposal to Figma &middot; by <strong>Yaara Bar</strong></div>
+            <!-- "Community skill" pill (lynn-ui <Badge>) -->
+            <span id="lynn-badge-figma-push" class="lynn-mount"></span>
+          </div>
+        </div>
+        <p class="mk-question">"Can you get this proposal into Figma as real frames?"</p>
+        <p class="mk-desc">Layer 4b of the ideation pipeline: pushes proposal screens into Figma via the Figma MCP as named, auto-laid-out frames bound to design tokens.</p>
+        <p class="mk-benefit"><strong>Why it's useful:</strong> a structured proposal page in the actual design file, ready for a designer to refine instead of rebuild.</p>
+        <div class="mk-meta">
+          <div class="mk-meta-label">Key MCP tools</div>
+          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-meta-label">Works in</div>
+          <div class="mk-tags"><span class="mk-tag">Figma</span></div>
+        </div>
+      </div>
+
+      <div class="mk-card reveal" id="mk-design-ops" style="--skill-color: var(--emerald);">
+        <div class="mk-header">
+          <svg class="mk-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg>
+          <div>
+            <div class="mk-name">design-ops</div>
+            <div class="mk-author">Design ops &middot; by <strong>Yaara Bar</strong></div>
+            <!-- "Community skill" pill (lynn-ui <Badge>) -->
+            <span id="lynn-badge-design-ops" class="lynn-mount"></span>
+          </div>
+        </div>
+        <p class="mk-question">"How should my whole team run this, not just how do I do it once?"</p>
+        <p class="mk-desc">Builds reusable team process for design leads: critique frameworks, sprint planning, handoff process, onboarding plans, working agreements, program reviews.</p>
+        <p class="mk-benefit"><strong>Why it's useful:</strong> a process the team runs every sprint, not a one-off answer that has to be re-derived next time.</p>
+        <div class="mk-meta">
+          <div class="mk-meta-label">Key MCP tools</div>
+          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-meta-label">Works in</div>
+          <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
+        </div>
+      </div>
+
+      <div class="mk-card reveal" id="mk-design-research" style="--skill-color: var(--emerald);">
+        <div class="mk-header">
+          <svg class="mk-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg>
+          <div>
+            <div class="mk-name">design-research</div>
+            <div class="mk-author">Design research &middot; by <strong>Yaara Bar</strong></div>
+            <!-- "Community skill" pill (lynn-ui <Badge>) -->
+            <span id="lynn-badge-design-research" class="lynn-mount"></span>
+          </div>
+        </div>
+        <p class="mk-question">"What research method fits this question, and how do I run it end to end?"</p>
+        <p class="mk-desc">Research planning, interview guides, usability test plans, synthesis, personas, journey maps, card sorting, tree testing, and survey analysis, plus method selection.</p>
+        <p class="mk-benefit"><strong>Why it's useful:</strong> one answer for &quot;how do I find out&quot; across the whole research lifecycle, not just the write-up stage.</p>
+        <div class="mk-meta">
+          <div class="mk-meta-label">Key MCP tools</div>
+          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-meta-label">Works in</div>
+          <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
+        </div>
+      </div>
+
+      <div class="mk-card reveal" id="mk-ux-strategy" style="--skill-color: var(--emerald);">
+        <div class="mk-header">
+          <svg class="mk-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg>
+          <div>
+            <div class="mk-name">ux-strategy</div>
+            <div class="mk-author">UX strategy &middot; by <strong>Yaara Bar</strong></div>
+            <!-- "Community skill" pill (lynn-ui <Badge>) -->
+            <span id="lynn-badge-ux-strategy" class="lynn-mount"></span>
+          </div>
+        </div>
+        <p class="mk-question">"What is our north star, and how does it tie to the business?"</p>
+        <p class="mk-desc">Design principles, UX vision documents, experience maps, and problem framing that connect user needs to business outcomes.</p>
+        <p class="mk-benefit"><strong>Why it's useful:</strong> a strategic artifact that aligns a team for months, not a single decision for one project.</p>
+        <div class="mk-meta">
+          <div class="mk-meta-label">Key MCP tools</div>
+          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-meta-label">Works in</div>
+          <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
+        </div>
+      </div>
+
+      <div class="mk-card reveal" id="mk-product-thinking-partner" style="--skill-color: var(--emerald);">
+        <div class="mk-header">
+          <svg class="mk-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg>
+          <div>
+            <div class="mk-name">product-thinking-partner</div>
+            <div class="mk-author">Product thinking partner &middot; by <strong>Yaara Bar</strong></div>
+            <!-- "Community skill" pill (lynn-ui <Badge>) -->
+            <span id="lynn-badge-product-thinking-partner" class="lynn-mount"></span>
+          </div>
+        </div>
+        <p class="mk-question">"Can you push back on this instead of just agreeing with me?"</p>
+        <p class="mk-desc">A dialogue protocol for product/research/UX work that pressure-tests claims, separates evidence from hypothesis, and challenges framing before it goes in a document.</p>
+        <p class="mk-benefit"><strong>Why it's useful:</strong> catches the bias and the unexamined assumption before it ships in a deck, not after.</p>
+        <div class="mk-meta">
+          <div class="mk-meta-label">Key MCP tools</div>
+          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-meta-label">Works in</div>
+          <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
+        </div>
+      </div>
+
+      <div class="mk-card reveal" id="mk-prism" style="--skill-color: var(--emerald);">
+        <div class="mk-header">
+          <svg class="mk-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg>
+          <div>
+            <div class="mk-name">prism</div>
+            <div class="mk-author">Prism &middot; by <strong>Yaara Bar</strong></div>
+            <!-- "Community skill" pill (lynn-ui <Badge>) -->
+            <span id="lynn-badge-prism" class="lynn-mount"></span>
+          </div>
+        </div>
+        <p class="mk-question">"I have messy notes and a blank page — help me think this through."</p>
+        <p class="mk-desc">Turns raw product inputs into decision-quality thinking and writing: synthesis, positioning, competitive analysis, prioritization, PRDs, stakeholder updates, and strategy briefs.</p>
+        <p class="mk-benefit"><strong>Why it's useful:</strong> structured product thinking before structured product writing, so the document is not built on an unexamined claim.</p>
+        <div class="mk-meta">
+          <div class="mk-meta-label">Key MCP tools</div>
+          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-meta-label">Works in</div>
+          <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
+        </div>
+      </div>
+
+      <div class="mk-card reveal" id="mk-figma-a11y-instructions" style="--skill-color: var(--emerald);">
+        <div class="mk-header">
+          <svg class="mk-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg>
+          <div>
+            <div class="mk-name">figma-a11y-instructions</div>
+            <div class="mk-author">Figma → developer a11y instructions &middot; by <strong>Yaara Bar</strong></div>
+            <!-- "Community skill" pill (lynn-ui <Badge>) -->
+            <span id="lynn-badge-figma-a11y-instructions" class="lynn-mount"></span>
+          </div>
+        </div>
+        <p class="mk-question">"Can you write the accessibility spec for this screen so a developer can just build it?"</p>
+        <p class="mk-desc">Produces a fixed-style HTML accessibility spec from a Figma screen URL: semantic structure, tab order, keyboard patterns, screen-reader text, and a color/contrast table with WCAG-passing recommendations.</p>
+        <p class="mk-benefit"><strong>Why it's useful:</strong> a polished, consistent a11y handoff doc per screen instead of a one-off markdown list that looks different every time.</p>
+        <div class="mk-meta">
+          <div class="mk-meta-label">Key MCP tools</div>
+          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-meta-label">Works in</div>
+          <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
+        </div>
+      </div>
+
+      <div class="mk-card reveal" id="mk-hero-flows-research-os" style="--skill-color: var(--emerald);">
+        <div class="mk-header">
+          <svg class="mk-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg>
+          <div>
+            <div class="mk-name">hero-flows-research-os</div>
+            <div class="mk-author">Research lead operating system &middot; by <strong>Yaara Bar</strong></div>
+            <!-- "Community skill" pill (lynn-ui <Badge>) -->
+            <span id="lynn-badge-hero-flows-research-os" class="lynn-mount"></span>
+          </div>
+        </div>
+        <p class="mk-question">"How do I run a small research team without the process becoming a second job?"</p>
+        <p class="mk-desc">A minimum-viable-rigor operating system for a one-person research lead: three effort-scaled modes, an evidence chain, a decision brief, and a shared knowledge base.</p>
+        <p class="mk-benefit"><strong>Why it's useful:</strong> the lightest process that still produces a traceable, falsifiable decision — scaled to the size of the question, not a fixed heavyweight ritual.</p>
+        <div class="mk-meta">
+          <div class="mk-meta-label">Key MCP tools</div>
+          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-meta-label">Works in</div>
+          <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
+        </div>
+      </div>
+
+      <div class="mk-card reveal" id="mk-nice-present" style="--skill-color: var(--emerald);">
+        <div class="mk-header">
+          <svg class="mk-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg>
+          <div>
+            <div class="mk-name">nice-present</div>
+            <div class="mk-author">NiCE Present &middot; by <strong>Yaara Bar</strong></div>
+            <!-- "Community skill" pill (lynn-ui <Badge>) -->
+            <span id="lynn-badge-nice-present" class="lynn-mount"></span>
+          </div>
+        </div>
+        <p class="mk-question">"Can you build me a deck for this, right here in the chat?"</p>
+        <p class="mk-desc">Creates a polished, NiCE-branded internal presentation as a self-contained interactive HTML slide deck rendered inline — pitches, exec updates, project briefs, roadmap and team updates.</p>
+        <p class="mk-benefit"><strong>Why it's useful:</strong> a presentable deck in the conversation itself, with no separate slide tool round-trip.</p>
+        <div class="mk-meta">
+          <div class="mk-meta-label">Key MCP tools</div>
+          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-meta-label">Works in</div>
+          <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
+        </div>
+      </div>
+
+      <div class="mk-card reveal" id="mk-pm-brain" style="--skill-color: var(--emerald);">
+        <div class="mk-header">
+          <svg class="mk-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg>
+          <div>
+            <div class="mk-name">pm-brain</div>
+            <div class="mk-author">PM Brain &middot; by <strong>Yaara Bar</strong></div>
+            <!-- "Community skill" pill (lynn-ui <Badge>) -->
+            <span id="lynn-badge-pm-brain" class="lynn-mount"></span>
+          </div>
+        </div>
+        <p class="mk-question">"Can you set me up a second brain for this product, not just answer one question about it?"</p>
+        <p class="mk-desc">Scaffolds a markdown-native second brain for a product operator: detects greenfield vs. migration, runs an interview, populates a deterministic folder structure, and self-tests.</p>
+        <p class="mk-benefit"><strong>Why it's useful:</strong> a durable, searchable home for judgment-heavy product work instead of scattered docs and chat history.</p>
+        <div class="mk-meta">
+          <div class="mk-meta-label">Key MCP tools</div>
+          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-meta-label">Works in</div>
+          <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
+        </div>
       </div>
 
     </div>
@@ -800,6 +1198,25 @@ call, what the output should look like, and what to watch for.</pre>
         ),
         portal(communityBadge, 'lynn-badge-ux-eval'),
         portal(communityBadge, 'lynn-badge-north-star-fox'),
+        portal(communityBadge, 'lynn-badge-eac-framework-guide'),
+        portal(communityBadge, 'lynn-badge-ux-research-planning'),
+        portal(communityBadge, 'lynn-badge-ux-research-synthesis'),
+        portal(communityBadge, 'lynn-badge-ux-research-readouts'),
+        portal(communityBadge, 'lynn-badge-emotional-intelligence'),
+        portal(communityBadge, 'lynn-badge-meeting-distiller'),
+        portal(communityBadge, 'lynn-badge-fast-research-pack'),
+        portal(communityBadge, 'lynn-badge-proposal-generator'),
+        portal(communityBadge, 'lynn-badge-wireframe-generator'),
+        portal(communityBadge, 'lynn-badge-figma-push'),
+        portal(communityBadge, 'lynn-badge-design-ops'),
+        portal(communityBadge, 'lynn-badge-design-research'),
+        portal(communityBadge, 'lynn-badge-ux-strategy'),
+        portal(communityBadge, 'lynn-badge-product-thinking-partner'),
+        portal(communityBadge, 'lynn-badge-prism'),
+        portal(communityBadge, 'lynn-badge-figma-a11y-instructions'),
+        portal(communityBadge, 'lynn-badge-hero-flows-research-os'),
+        portal(communityBadge, 'lynn-badge-nice-present'),
+        portal(communityBadge, 'lynn-badge-pm-brain'),
         portal(
           h(CtaBanner, {
             variant: 'gradient',

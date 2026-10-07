@@ -576,7 +576,26 @@
         { label: 'Available Skills', items: [
           { id: 'current', label: 'In the Marketplace today' },
           { id: 'mk-ux-eval', label: 'ux-eval' },
-          { id: 'mk-north-star-fox', label: 'north-star-fox' }
+          { id: 'mk-north-star-fox', label: 'north-star-fox' },
+          { id: 'mk-eac-framework-guide', label: 'eac-framework-guide' },
+          { id: 'mk-ux-research-planning', label: 'ux-research-planning' },
+          { id: 'mk-ux-research-synthesis', label: 'ux-research-synthesis' },
+          { id: 'mk-ux-research-readouts', label: 'ux-research-readouts' },
+          { id: 'mk-emotional-intelligence', label: 'emotional-intelligence' },
+          { id: 'mk-meeting-distiller', label: 'meeting-distiller' },
+          { id: 'mk-fast-research-pack', label: 'fast-research-pack' },
+          { id: 'mk-proposal-generator', label: 'proposal-generator' },
+          { id: 'mk-wireframe-generator', label: 'wireframe-generator' },
+          { id: 'mk-figma-push', label: 'figma-push' },
+          { id: 'mk-design-ops', label: 'design-ops' },
+          { id: 'mk-design-research', label: 'design-research' },
+          { id: 'mk-ux-strategy', label: 'ux-strategy' },
+          { id: 'mk-product-thinking-partner', label: 'product-thinking-partner' },
+          { id: 'mk-prism', label: 'prism' },
+          { id: 'mk-figma-a11y-instructions', label: 'figma-a11y-instructions' },
+          { id: 'mk-hero-flows-research-os', label: 'hero-flows-research-os' },
+          { id: 'mk-nice-present', label: 'nice-present' },
+          { id: 'mk-pm-brain', label: 'pm-brain' }
         ] },
         { label: 'Contributing', items: [
           { id: 'submit', label: 'How to submit a skill' }
