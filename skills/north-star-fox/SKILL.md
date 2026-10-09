@@ -146,7 +146,7 @@ Skip entirely, and say so, when the artifact has no brand layer.
 4. **Gradients.** Freeform gradients use 2 to 3 adjacent-column hues. Never opposite ends of the spectrum (emerald or lime with pink or coral). Never on a logo or the smile mark.
 5. **Neutrals.** Charcoal `#21212B` for text and dark surfaces. Mushroom `#F2F0EB` for panels and bubbles only, never a full-bleed background.
 6. **Shape.** Every interactive element is a full pill. Surfaces 16 to 48px radius. The 6px category-tag chip is the one deliberate exception.
-7. **Logos.** Real lockups only, never re-typeset. Full colour on white, mushroom or charcoal; mono-white on blue, gradients and imagery.
+7. **Logos.** Real lockups only, never re-typeset. Full color on white, mushroom or charcoal; mono-white on blue, gradients and imagery.
 8. **Copy.** Sentence case, "you" for the reader, no emoji, the lowercase brand pun used at most once per view.
 
 ### Three rules that keep B and C honest
