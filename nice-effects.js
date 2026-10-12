@@ -513,11 +513,15 @@
       href: 'use-cases.html', label: 'Use Cases',
       groups: [
         { label: 'Categories', items: [
+          { id: 'start-here', label: 'Three Prompts to Try' },
           { id: 'cat-auditing', label: 'Auditing' },
           { id: 'cat-converting', label: 'Converting' },
           { id: 'cat-handoff', label: 'Design-to-Code Handoff' },
           { id: 'cat-parity', label: 'Figma vs. Live Page Parity' },
-          { id: 'cat-qa', label: 'Chrome Page Polish and QA' },
+          { id: 'cat-qa', label: 'Page Polish and QA' },
+          { id: 'cat-ideas', label: 'Idea to Prototype' },
+          { id: 'cat-team', label: 'Teams and Leadership' },
+          { id: 'how-it-fits', label: 'How It Fits' },
           { id: 'table-reference', label: 'Quick Reference Table' }
         ] }
       ]

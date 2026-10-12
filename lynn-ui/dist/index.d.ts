@@ -17,7 +17,7 @@
  */
 export { designTokens } from './tokens/tokens.js';
 export type { AccentColor, DesignTokens } from './tokens/tokens.js';
-export { IconLock, IconBolt, IconSparkles, IconBulb, IconCheck, IconArrowRight, IconChevronUp, IconChevronDown, IconArrowsSort, IconClipboard, IconEye, IconEyeOff, IconSun, IconMoon, IconNiceSmile, IconSpark, } from './icons/icons.js';
+export { IconLock, IconBolt, IconSparkles, IconBulb, IconCheck, IconArrowRight, IconChevronUp, IconChevronDown, IconArrowsSort, IconClipboard, IconEye, IconEyeOff, IconSun, IconMoon, IconNiceSmile, IconSpark, IconAccessible, IconAdjustments, IconArrowBackUp, IconArrowsExchange, IconBrandChrome, IconBrandFigma, IconBrush, IconChecklist, IconFileCode, IconGitCompare, IconLayersIntersect, IconLayoutBoard, IconLink, IconMessageCircle, IconNotes, IconPackageExport, IconPalette, IconRocket, IconRulerMeasure, IconScan, IconTags, IconTarget, IconUsersGroup, IconUsers, IconWand, IconWorld, } from './icons/icons.js';
 export type { IconProps } from './icons/icons.js';
 export { ThemeProvider, useLynnTheme } from './theme/ThemeProvider.js';
 export type { ThemeProviderProps, LynnTheme, LynnThemeContextValue, } from './theme/ThemeProvider.js';

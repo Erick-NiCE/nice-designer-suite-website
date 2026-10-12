@@ -68,5 +68,57 @@ export declare function IconMoon(props: IconProps): import("react").JSX.Element;
  * where this exact icon marks its equivalent "site" mode).
  */
 export declare function IconNiceSmile(props: IconProps): import("react").JSX.Element;
+/** Tabler `accessible`. */
+export declare function IconAccessible(props: IconProps): import("react").JSX.Element;
+/** Tabler `adjustments`. */
+export declare function IconAdjustments(props: IconProps): import("react").JSX.Element;
+/** Tabler `arrow-back-up`. */
+export declare function IconArrowBackUp(props: IconProps): import("react").JSX.Element;
+/** Tabler `arrows-exchange`. */
+export declare function IconArrowsExchange(props: IconProps): import("react").JSX.Element;
+/** Tabler `brand-chrome`. */
+export declare function IconBrandChrome(props: IconProps): import("react").JSX.Element;
+/** Tabler `brand-figma`. */
+export declare function IconBrandFigma(props: IconProps): import("react").JSX.Element;
+/** Tabler `brush`. */
+export declare function IconBrush(props: IconProps): import("react").JSX.Element;
+/** Tabler `checklist`. */
+export declare function IconChecklist(props: IconProps): import("react").JSX.Element;
+/** Tabler `file-code`. */
+export declare function IconFileCode(props: IconProps): import("react").JSX.Element;
+/** Tabler `git-compare`. */
+export declare function IconGitCompare(props: IconProps): import("react").JSX.Element;
+/** Tabler `layers-intersect`. */
+export declare function IconLayersIntersect(props: IconProps): import("react").JSX.Element;
+/** Tabler `layout-board`. */
+export declare function IconLayoutBoard(props: IconProps): import("react").JSX.Element;
+/** Tabler `link`. */
+export declare function IconLink(props: IconProps): import("react").JSX.Element;
+/** Tabler `message-circle`. */
+export declare function IconMessageCircle(props: IconProps): import("react").JSX.Element;
+/** Tabler `notes`. */
+export declare function IconNotes(props: IconProps): import("react").JSX.Element;
+/** Tabler `package-export`. */
+export declare function IconPackageExport(props: IconProps): import("react").JSX.Element;
+/** Tabler `palette`. */
+export declare function IconPalette(props: IconProps): import("react").JSX.Element;
+/** Tabler `rocket`. */
+export declare function IconRocket(props: IconProps): import("react").JSX.Element;
+/** Tabler `ruler-measure`. */
+export declare function IconRulerMeasure(props: IconProps): import("react").JSX.Element;
+/** Tabler `scan`. */
+export declare function IconScan(props: IconProps): import("react").JSX.Element;
+/** Tabler `tags`. */
+export declare function IconTags(props: IconProps): import("react").JSX.Element;
+/** Tabler `target`. */
+export declare function IconTarget(props: IconProps): import("react").JSX.Element;
+/** Tabler `users-group`. */
+export declare function IconUsersGroup(props: IconProps): import("react").JSX.Element;
+/** Tabler `users`. */
+export declare function IconUsers(props: IconProps): import("react").JSX.Element;
+/** Tabler `wand`. */
+export declare function IconWand(props: IconProps): import("react").JSX.Element;
+/** Tabler `world`. */
+export declare function IconWorld(props: IconProps): import("react").JSX.Element;
 /** The suite's own four-point spark mark - a decorative sparkle glyph. */
 export declare function IconSpark(props: IconProps): import("react").JSX.Element;

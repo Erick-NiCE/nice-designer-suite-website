@@ -71,6 +71,34 @@ Using the right component isn't enough on its own — a prototype can `import` `
 
 Also read the component's own `.stories.tsx` before using it for the first time in a build — it shows real prop combinations rather than ones you'd have to guess.
 
+## 100% Lyra adherence, and what is not available yet
+
+SOL has its own sibling skill (`sol-ui-prototyping`); this is the Lyra counterpart and holds the same bar. A prototype is at 100% when all of these hold. If one cannot, it is written down, never hidden.
+
+1. Every control, menu, dialog, panel, chip, badge and tab is the real library component. No raw `<button>`, `<input>`, `<select>` or hand-built dropdown.
+2. Every prop and variant used exists in the component's `.stories.tsx` or source. No invented props.
+3. Every color, type size, space and radius is a Lyra token (`export_design_tokens({ system: 'lyra' })`). No hex, no arbitrary Tailwind value where a token exists.
+4. `run_full_audit({ target: 'chrome', system: 'lyra' })` on the running prototype scores 100, or each leftover issue is explained in `GAPS.md`. Fix in **source**, never with `convert_*` / `apply_*` / `fix_*` (those patch the live DOM and a reload discards them). Re-audit; stop at 100 or after three passes with no improvement and report what is left. `design-system-agent` has the cap and plateau rules.
+5. Nothing on screen imitates a component the library does not have.
+
+The audit cannot see React components (they render plain elements with no custom tag), so rule 1 is yours to check: grep the JSX for `<button`, `<input`, `<select`, `<textarea`, `role="menu"` and `role="tab"` and replace or justify every hit.
+
+**Not available yet.** Read `references/not-available-yet.md` at the start of every build. It lists SOL components with no Lyra equivalent (for example Wizard, Query Builder, Omnibar, Info Overlay), the library's own recorded debt, and things real screens need that the library does not export (skeleton, uploader, rich text). Declare those up front. Then ship a `GAPS.md` beside the README:
+
+```md
+# Gaps: <prototype name>
+
+lyra-ui commit: <sha>   Built: <date>
+
+| Needed | Why Lyra cannot do it | What the prototype does instead | Evidence |
+|---|---|---|---|
+| Stepper | No wizard/stepper export | Static numbered list, marked placeholder | grep of src/index.ts, Storybook search |
+```
+
+One row per missing thing, named by the thing and not the screen. "Instead" is a real composition or a plainly labelled placeholder, never an unlabeled look-alike. "Evidence" is where you looked, so it can be rechecked. Tell the user the gap count and show the list when the build is done.
+
+There are two Lyras (this library, and the SOL Storybook's `theme:lyra`); `references/not-available-yet.md` explains the difference. Ask which one if the target is unclear.
+
 ## What NOT to do
 
 - Don't modify library source. Library components (`UI/`, `Templates/`, and anything under `Custom Primitives/` or `Headless Primitives/` in Storybook) are read-only from a prototyping session. If a component's real API doesn't support what's being asked, say so plainly rather than patching around it with hand-written CSS or a forked copy — restyling a component's output to match a screenshot (including `text-transform` tricks) is the same bug as hard-coding a value, just aimed at styling instead of content.

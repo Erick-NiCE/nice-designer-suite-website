@@ -350,10 +350,47 @@
        group on the page. */
     const RELEASES = [
       {
+        id: 'release-v11-6',
+        version: 'v11.6',
+        date: 'October 2026',
+        isLatest: true,
+        groups: [
+          {
+            label: 'New features',
+            tone: 'blue',
+            items: [
+              rich('New skill - <strong>SOL UI prototyping</strong>: builds a real coded prototype from the actual SOL components (React first, Angular where React has none), holds it to full SOL adherence, audits the live page in Chrome, and ships a GAPS.md listing everything SOL does not have yet'),
+              `Four new persona skills (Maya Chen, Jordan Reyes, Patricia Odom, Sam Whitfield) so Claude can react to a design as a new agent, a supervisor, an executive, or a coach`,
+              `New Claude Design prompt skill`,
+              `Lyra UI prototyping now ships a GAPS.md too, an honest list of what the library is missing instead of look-alikes standing in for it`,
+            ],
+          },
+          {
+            label: 'Improvements',
+            tone: 'emerald',
+            items: [
+              `Your selection now carries across Audit, Editor, and Spec Mode, and Back returns to the previous selection`,
+              `Audit rows select on click, replace options expand on hover, and color swatches show the hex and matching tokens`,
+              `Settings: automatic update check, credits folded into the settings container, and the codename beside the version number`,
+              `One global tooltip now covers every icon with a title or aria-label`,
+              `The What's new popup closes itself after 10 seconds unless you hover, scroll, or type in it`,
+              `The island navigation collapses fully when autohide is on, with no leftover margin or shadow`,
+            ],
+          },
+          {
+            label: 'Fixes',
+            tone: 'coral',
+            items: [
+              `Editor: dark mode now restores exactly, and the picker no longer clicks page buttons`,
+              `Editor: Save now includes drag, nudge, and opacity changes`,
+            ],
+          },
+        ],
+      },
+      {
         id: 'release-v11-5',
         version: 'v11.5',
         date: 'October 2026',
-        isLatest: true,
         groups: [
           {
             label: 'New features',

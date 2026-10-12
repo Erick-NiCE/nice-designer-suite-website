@@ -37,7 +37,7 @@
          portalled scenario cards, because a portal renders into its real
          DOM position.
   -->
-  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=1" />
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=2" />
   <script type="importmap">
   {
     "imports": {
@@ -212,7 +212,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.35rem;
+      color: var(--cat-color, var(--blue));
       flex-shrink: 0;
       background: var(--cat-color-bg, rgba(54,148,252,0.1));
       border: 1px solid var(--cat-color-border, rgba(54,148,252,0.18));
@@ -251,10 +251,10 @@
       gap: 10px;
       align-items: flex-start;
       font-size: 0.84rem;
-      color: rgba(255,255,255,0.75);
+      color: var(--text);
       line-height: 1.6;
       padding: 5px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
+      border-bottom: 1px solid var(--border);
     }
     .scenario-steps li:last-child { border-bottom: none; }
 
@@ -276,8 +276,8 @@
       font-size: 0.7rem;
       padding: 3px 8px;
       border-radius: 5px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      background: var(--card);
       color: var(--secondary);
     }
 
@@ -329,6 +329,35 @@
        row and cell rhythm - so `.ref-table-wrap` / `.ref-table` have gone
        with the markup, along with `.tbl-badge*` (now <Badge tone>) and
        `.tbl-skill` / `.tbl-tool` (now <InlineCode>). */
+
+    /* START HERE + HOW IT FITS */
+    .starter-grid, .fit-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .fit-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .starter, .fit-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .starter-tier {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 10px;
+    }
+    .starter p { font-size: 1rem; font-weight: 600; color: var(--text); line-height: 1.5; }
+    .starter-note { margin-top: 20px; font-size: 0.88rem; color: var(--secondary); }
+    .fit-card h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .fit-card p { font-size: 0.86rem; color: var(--secondary); line-height: 1.65; }
+    .fit-card.fit-warn { border-color: rgba(255,91,138,0.35); }
+    #start-here { padding-top: 56px; }
 
     /* DIVIDER */
     .section-divider {
@@ -384,8 +413,27 @@
 <header class="hero">
   <p class="hero-eyebrow">Workflows</p>
   <h1 class="hero-title">Use Cases</h1>
-  <p class="hero-subtitle">Everything NiCE Designer can do, organized by job to be done. From auditing a Figma frame to pushing a design live, each scenario tells you which tools to use and in what order.</p>
+  <p class="hero-subtitle">Everything NiCE Designer can do with Claude, organized by job to be done. From auditing a Figma frame to turning raw notes into a clickable prototype, each scenario tells you what to ask, which skills and tools do the work, and what you get back.</p>
 </header>
+
+<!-- START HERE: three prompts from the Supercharge deck -->
+<section class="category-section start-here" id="start-here">
+  <div class="category-header reveal">
+    <div class="category-title-wrap">
+      <div class="category-eyebrow" style="color: var(--coral);">Try it this week</div>
+      <h2 class="category-title">Three prompts to paste today</h2>
+    </div>
+    <div class="category-rule"></div>
+  </div>
+  <div class="starter-grid">
+    <div class="starter reveal"><span class="starter-tier">Start here</span><p>Use the Clifton strengths to help me prep my next 1:1.</p></div>
+    <div class="starter reveal"><span class="starter-tier">Daily driver</span><p>Run a full audit on this page and tell me what to fix first.</p></div>
+    <div class="starter reveal"><span class="starter-tier">Show-stopper</span><p>Is this ready for dev? Run the UX eval.</p></div>
+  </div>
+  <p class="starter-note reveal">Not sure which skill fits? Ask &ldquo;is there something in NiCE Designer for this?&rdquo; and Claude will search the catalog.</p>
+</section>
+
+<div class="section-divider" style="margin-top: 72px;"><hr /></div>
 
 <!-- CATEGORY 1: AUDITING -->
 <section class="category-section" id="cat-auditing" style="--cat-color: var(--blue); --cat-color-bg: rgba(54,148,252,0.1); --cat-color-border: rgba(54,148,252,0.2);">
@@ -467,13 +515,58 @@
     <div class="category-number" style="background: rgba(185,143,255,0.12); color: var(--lyra); border-color: rgba(185,143,255,0.25);">5</div>
     <div class="category-title-wrap">
       <div class="category-eyebrow" style="color: var(--lyra);">QA and maintenance</div>
-      <h2 class="category-title">Chrome page polish and QA</h2>
+      <h2 class="category-title">Page polish and QA</h2>
     </div>
     <div class="category-rule"></div>
   </div>
 
   <!-- SCENARIO CARDS (lynn-ui - see the mount script) -->
   <div id="lynn-cat-qa-root" class="lynn-mount"></div>
+</section>
+
+<div class="section-divider" style="margin-top: 72px;"><hr /></div>
+
+<!-- CATEGORY 6: IDEA TO PROTOTYPE -->
+<section class="category-section" id="cat-ideas" style="--cat-color: var(--blue); --cat-color-bg: rgba(54,148,252,0.1); --cat-color-border: rgba(54,148,252,0.2);">
+  <div class="category-header reveal">
+    <div class="category-number" style="background: rgba(54,148,252,0.12); color: var(--blue); border-color: rgba(54,148,252,0.25);">6</div>
+    <div class="category-title-wrap">
+      <div class="category-eyebrow" style="color: var(--blue);">Notes to Figma</div>
+      <h2 class="category-title">Idea to prototype</h2>
+    </div>
+    <div class="category-rule"></div>
+  </div>
+  <div id="lynn-cat-ideas-root" class="lynn-mount"></div>
+</section>
+
+<div class="section-divider" style="margin-top: 72px;"><hr /></div>
+
+<!-- CATEGORY 7: TEAM AND LEADERSHIP -->
+<section class="category-section" id="cat-team" style="--cat-color: var(--lyra); --cat-color-bg: rgba(185,143,255,0.1); --cat-color-border: rgba(185,143,255,0.22);">
+  <div class="category-header reveal">
+    <div class="category-number" style="background: rgba(185,143,255,0.12); color: var(--lyra); border-color: rgba(185,143,255,0.25);">7</div>
+    <div class="category-title-wrap">
+      <div class="category-eyebrow" style="color: var(--lyra);">Zero setup</div>
+      <h2 class="category-title">Teams and leadership</h2>
+    </div>
+    <div class="category-rule"></div>
+  </div>
+  <div id="lynn-cat-team-root" class="lynn-mount"></div>
+</section>
+
+<!-- HOW IT FITS -->
+<section class="table-section" id="how-it-fits" style="padding-bottom: 0;">
+  <div class="reveal">
+    <p class="table-section-label">How it fits</p>
+    <h2 class="table-section-title">Where NiCE Designer sits in product creation</h2>
+    <p class="table-section-sub">Four things to know about the happy path from idea to live.</p>
+  </div>
+  <div class="fit-grid">
+    <div class="fit-card reveal"><h3>Design happens in Claude</h3><p>Claude Design holds the product design project, with versioning, SSO, rules and sharing. Claude Code works alongside it for PM and UX.</p></div>
+    <div class="fit-card reveal"><h3>The Suite sits in the middle</h3><p>Modules and the Marketplace deliver skills and tools that explain how to use the components coming out of Storybook, and the Suite acts as a proxy for direct GitHub and Storybook access.</p></div>
+    <div class="fit-card reveal"><h3>Handoff is a link</h3><p>UX and PM hand off to R&amp;D via a Claude link, then it runs Dev work (features, hotfix, conversions), Beta branch, then Live.</p></div>
+    <div class="fit-card fit-warn reveal"><h3>Figma is one way</h3><p>Upload a .fig into Claude Design; it is not bidirectional. Direct Figma MCP access for dev work needs dev seats, is not sustainable on license cost, and will be deprecated over time.</p></div>
+  </div>
 </section>
 
 <!-- QUICK REFERENCE TABLE -->
@@ -696,13 +789,42 @@
       DataTable,
       DocRail,
       Footer,
+      IconAccessible,
+      IconAdjustments,
+      IconArrowBackUp,
+      IconArrowsExchange,
+      IconBrandChrome,
+      IconBrandFigma,
+      IconBrush,
+      IconChecklist,
+      IconEye,
+      IconFileCode,
+      IconGitCompare,
+      IconLayersIntersect,
+      IconLayoutBoard,
+      IconLink,
+      IconMessageCircle,
+      IconMoon,
+      IconNotes,
+      IconPackageExport,
+      IconPalette,
+      IconRocket,
+      IconRulerMeasure,
+      IconScan,
+      IconSparkles,
+      IconTags,
+      IconTarget,
+      IconUsers,
+      IconUsersGroup,
+      IconWand,
+      IconWorld,
       InlineCode,
       Nav,
       StepNumber,
       ThemeProvider,
       ThemeToggle,
       useLynnTheme,
-    } from './lynn-ui/dist/index.js?v=2';
+    } from './lynn-ui/dist/index.js?v=3';
 
     const PAGE = 'use-cases.html';
 
@@ -768,45 +890,29 @@
     ];
 
     /* ---- target badges -------------------------------------------------- */
-    /* The three `.target-badge` variants, as lynn-ui <Badge>s. The tints line
-       up one-for-one with Lynn's accents (lyra -> `lynn`, blue -> `blue`,
-       coral -> `coral`) and `bordered` is the 20%-accent outline the source
-       pills carried, so each one keeps its own color. The leading glyph is
-       the source's: the Figma mark as an inline SVG, and the same "○" / "▲"
-       characters for the other two. */
-    const FIGMA_MARK = h(
-      'svg',
-      {
-        width: 12,
-        height: 12,
-        viewBox: '0 0 24 24',
-        fill: 'none',
-        stroke: 'currentColor',
-        strokeWidth: 2,
-        strokeLinecap: 'round',
-        strokeLinejoin: 'round',
-        'aria-hidden': 'true',
-      },
-      h('path', {
-        d: 'M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6',
-      })
-    );
+    /* The target pills, as lynn-ui <Badge>s with Lyra icons in the leading
+       slot: Figma, Chrome, both clients, or a plain Claude chat. `bordered`
+       is the 20%-accent outline the original pills carried. */
+    const TARGETS = {
+      figma: { tone: 'lynn', icon: IconBrandFigma },
+      chrome: { tone: 'blue', icon: IconBrandChrome },
+      both: { tone: 'coral', icon: IconLayersIntersect },
+      claude: { tone: 'emerald', icon: IconSparkles },
+    };
 
     function targetBadge(target, label) {
-      const tone = target === 'figma' ? 'lynn' : target === 'chrome' ? 'blue' : 'coral';
-      const icon = target === 'figma' ? FIGMA_MARK : target === 'chrome' ? '○' : '▲';
-      return h(Badge, { tone, bordered: true, icon }, label);
+      const { tone, icon } = TARGETS[target];
+      return h(Badge, { tone, bordered: true, icon: h(icon, { size: 12 }) }, label);
     }
 
     /* ---- scenario cards -------------------------------------------------- */
-    /* The eighteen scenarios, verbatim from the `.scenario-card` markup this
-       replaces: the same emoji, titles, target labels, "when" sentences,
-       numbered steps and tag chips, in the same order.
+    /* The scenarios, grouped into seven categories. `icon` is a lynn-ui icon
+       component (rendered in `.scenario-icon`, tinted by `--cat-color`) -
+       never an emoji.
 
        `stepColor` is the Lynn accent the category's own `--cat-color` names,
        because <StepNumber> picks its tint from a named accent rather than
-       from an inherited custom property - it is the same hue the source's
-       per-card inline `style="color: var(--emerald)"` set on `.step-num`.
+       from an inherited custom property.
 
        The `.tag` chips deliberately stay as their own spans rather than
        becoming <InlineCode>: skill-tag (lyra) and tool-tag (teal) are the
@@ -819,20 +925,23 @@
         stepColor: 'blue',
         scenarios: [
           {
-            icon: '🔍',
-            title: 'Full compliance audit on a Figma frame',
+            icon: IconScan,
+            title: 'One number for your VP',
             target: 'figma',
             targetLabel: 'Figma',
-            when: 'When you want to know if a frame meets SOL or Lyra standards before handoff.',
+            when: 'When you need a single defensible score for a frame, plus what is dragging it down.',
             steps: [
               'Select the target frame in Figma.',
-              'Open the plugin and click the Audit tab, or ask Claude to run a full audit.',
-              'Review separate scores for Colors, Text, Spacing, Radius, Components, and two a11y scores.',
+              'Ask Claude to run a full audit and give you one number you can show a VP.',
+              'Review the overall score, separate scores for Colors, Text, Spacing, Radius, Components and two a11y scores, and a ranked list of offenders.',
             ],
-            tags: [{ kind: 'tool', label: 'run_full_audit' }],
+            tags: [
+              { kind: 'tool', label: 'run_full_audit' },
+              { kind: 'tool', label: 'lyra_compliance_report' },
+            ],
           },
           {
-            icon: '🌐',
+            icon: IconWorld,
             title: 'Full compliance audit on a live web page',
             target: 'chrome',
             targetLabel: 'Chrome',
@@ -848,7 +957,7 @@
             ],
           },
           {
-            icon: '🎯',
+            icon: IconTarget,
             title: 'Single-dimension audit',
             target: 'both',
             targetLabel: 'Figma or Chrome',
@@ -867,15 +976,15 @@
             ],
           },
           {
-            icon: '⚠',
+            icon: IconAccessible,
             title: 'Accessibility triage',
             target: 'both',
             targetLabel: 'Figma or Chrome',
-            when: 'When you have a long a11y issue list and need to know where to start.',
+            when: 'When you have hundreds of a11y issues and need to know where to start.',
             steps: [
               'Load the a11y-triage skill in Claude.',
-              'Ask Claude to audit and triage accessibility issues.',
-              'Review the output: issues grouped by severity x reach with a prioritized action list.',
+              'Ask Claude where to start.',
+              'Get the top fixes ranked by severity x reach, for example low-contrast secondary buttons on 14 screens, with the long tail parked.',
             ],
             tags: [
               { kind: 'skill', label: 'a11y-triage' },
@@ -889,23 +998,24 @@
         stepColor: 'emerald',
         scenarios: [
           {
-            icon: '🏭',
-            title: 'Convert a whole Figma frame to Lyra tokens',
+            icon: IconWand,
+            title: 'Convert to Lyra, then get honest',
             target: 'figma',
             targetLabel: 'Figma',
-            when: 'When you have a frame built with raw values or SOL tokens and need it in Lyra.',
+            when: 'When you have a frame built with raw values or SOL tokens and need it in Lyra, and want to know exactly what is left for a human.',
             steps: [
               'Load the lyra-visual-patterns skill first to set expectations.',
-              "Ask Claude to migrate the frame directly (there's no dedicated Convert tab in the plugin anymore).",
-              'Choose a mode: tokens-only (safe, swaps tokens and preserves layout) or full (also normalizes layout, components, and a11y).',
+              'Ask Claude to migrate the frame. Choose tokens-only (safe, swaps tokens and preserves layout) or full (also normalizes layout, components and a11y).',
+              'Load manual-fixes-checklist for the honest last mile: the custom charts, unlabeled icon buttons and layout decisions automation cannot settle.',
             ],
             tags: [
               { kind: 'skill', label: 'lyra-visual-patterns' },
+              { kind: 'skill', label: 'manual-fixes-checklist' },
               { kind: 'tool', label: 'migrate_to_lyra' },
             ],
           },
           {
-            icon: '🌏',
+            icon: IconPalette,
             title: 'Convert a live web page to Lyra tokens',
             target: 'chrome',
             targetLabel: 'Chrome',
@@ -918,14 +1028,14 @@
             tags: [{ kind: 'tool', label: 'convert_page_to_lyra' }],
           },
           {
-            icon: '🔧',
+            icon: IconAdjustments,
             title: 'Surgical per-element fixes',
             target: 'both',
             targetLabel: 'Figma or Chrome',
             when: 'When you want to fix individual issues rather than convert everything at once.',
             steps: [
               'In the plugin issue list, click Replace on specific rows, or ask Claude to fix a single property.',
-              'Each fix is logged in the edit history and can be undone per step (since v10).',
+              'Each fix is logged in the edit history and can be undone per step.',
             ],
             tags: [
               { kind: 'tool', label: 'convert_colors' },
@@ -935,7 +1045,7 @@
             ],
           },
           {
-            icon: '🔄',
+            icon: IconArrowsExchange,
             title: 'SOL to Lyra swap',
             target: 'figma',
             targetLabel: 'Figma',
@@ -950,7 +1060,7 @@
             ],
           },
           {
-            icon: '↩',
+            icon: IconArrowBackUp,
             title: 'Undo a conversion',
             target: 'both',
             targetLabel: 'Figma or Chrome',
@@ -968,7 +1078,7 @@
         stepColor: 'teal',
         scenarios: [
           {
-            icon: '📄',
+            icon: IconFileCode,
             title: 'Export a Figma node as production CSS',
             target: 'figma',
             targetLabel: 'Figma',
@@ -985,7 +1095,7 @@
             ],
           },
           {
-            icon: '📊',
+            icon: IconRulerMeasure,
             title: 'Get a developer spec sheet for a browser element',
             target: 'chrome',
             targetLabel: 'Chrome',
@@ -1001,7 +1111,7 @@
             ],
           },
           {
-            icon: '👔',
+            icon: IconPackageExport,
             title: 'Export the full token set',
             target: 'both',
             targetLabel: 'Figma or Chrome',
@@ -1019,30 +1129,37 @@
         stepColor: 'coral',
         scenarios: [
           {
-            icon: '🔎',
-            title: 'Diff a Figma artboard against the live page',
+            icon: IconGitCompare,
+            title: 'Does the live site match Figma?',
             target: 'both',
             targetLabel: 'Both (required)',
-            when: "When you suspect the implementation doesn't match the design and need a concrete diff.",
+            when: 'When something looks off in review but nobody can say why, and you need a concrete per-property diff.',
             steps: [
               'Open both the Figma plugin and the Chrome extension and connect both to MCP.',
               'Load the figma-chrome-parity skill.',
-              'Ask Claude to compare. Receive a side-by-side mismatch report for colors, type, spacing, and layout.',
+              'Ask Claude to compare. Receive a mismatch table per element and property, such as button radius 8px in Figma against 4px live.',
             ],
-            tags: [{ kind: 'skill', label: 'figma-chrome-parity' }],
+            tags: [
+              { kind: 'skill', label: 'figma-chrome-parity' },
+              { kind: 'tool', label: 'extract_dev_details' },
+            ],
           },
           {
-            icon: '🖌',
-            title: 'Push Figma styling onto the live page',
+            icon: IconBrush,
+            title: 'Redesign the real product',
             target: 'both',
             targetLabel: 'Both (required)',
-            when: 'When you want to preview what the page would look like if it matched the design exactly.',
+            when: 'When you want to demo a redesign on the live product in minutes, with no branch and no build.',
             steps: [
-              'Connect both clients to MCP and select the source frame in Figma.',
-              'Load the artboard-to-page skill.',
-              'Ask Claude to apply. CSS overrides matching the Figma frame are applied to the live page instantly.',
+              'Connect both clients to MCP and select the source artboard in Figma.',
+              'Load the artboard-to-page skill and ask Claude to show you the layer-to-selector mapping first.',
+              'Confirm the mapping. CSS overrides are applied to the live page, and one call clears them all.',
             ],
-            tags: [{ kind: 'skill', label: 'artboard-to-page' }],
+            tags: [
+              { kind: 'skill', label: 'artboard-to-page' },
+              { kind: 'tool', label: 'apply_css_overrides' },
+              { kind: 'tool', label: 'clear_css_overrides' },
+            ],
           },
         ],
       },
@@ -1051,20 +1168,23 @@
         stepColor: 'lynn',
         scenarios: [
           {
-            icon: '🌝',
-            title: 'Dark mode parity check',
+            icon: IconMoon,
+            title: 'Check dark mode',
             target: 'chrome',
             targetLabel: 'Chrome only',
-            when: 'When you need to verify the page works correctly in dark mode before shipping.',
+            when: 'When you need to know whether a page works in dark mode, or only in light.',
             steps: [
               'Load the dark-mode-parity skill.',
               'Ask Claude to check dark mode on the current page.',
-              "Receive a report of which elements don't adapt correctly and what token changes are needed.",
+              'Receive only the delta: what breaks in dark, what breaks in light, and the token changes needed. The baseline is restored afterwards.',
             ],
-            tags: [{ kind: 'skill', label: 'dark-mode-parity' }],
+            tags: [
+              { kind: 'skill', label: 'dark-mode-parity' },
+              { kind: 'tool', label: 'audit_colors' },
+            ],
           },
           {
-            icon: '👀',
+            icon: IconEye,
             title: 'Toggle visual overlays for QA',
             target: 'chrome',
             targetLabel: 'Chrome',
@@ -1080,7 +1200,7 @@
             ],
           },
           {
-            icon: '👑',
+            icon: IconTags,
             title: 'Find recurring values worth tokenizing',
             target: 'both',
             targetLabel: 'Figma or Chrome',
@@ -1096,7 +1216,7 @@
             ],
           },
           {
-            icon: '✅',
+            icon: IconChecklist,
             title: "After auto-fixing: what's left to do manually",
             target: 'both',
             targetLabel: 'Figma or Chrome',
@@ -1107,6 +1227,111 @@
               "Receive a human-readable checklist of issues that automation can't safely resolve.",
             ],
             tags: [{ kind: 'skill', label: 'manual-fixes-checklist' }],
+          },
+          {
+            icon: IconRocket,
+            title: 'Is it ready for dev?',
+            target: 'both',
+            targetLabel: 'Figma or Chrome',
+            when: 'When you need a verdict with the reasoning attached before handing a design to engineering.',
+            steps: [
+              'Load the ux-eval and north-star-fox skills.',
+              'Ask Claude whether it is ready for dev: it runs the UX eval and checks the design against the North Star Fox AI tenets.',
+              'Receive a verdict such as pass with conditions, backed by live audit evidence and the conditions to close.',
+            ],
+            tags: [
+              { kind: 'skill', label: 'ux-eval' },
+              { kind: 'skill', label: 'north-star-fox' },
+              { kind: 'tool', label: 'run_ux_eval' },
+              { kind: 'tool', label: 'run_full_audit' },
+            ],
+          },
+        ],
+      },
+      {
+        mount: 'lynn-cat-ideas-root',
+        stepColor: 'blue',
+        scenarios: [
+          {
+            icon: IconNotes,
+            title: 'From raw notes to three directions',
+            target: 'claude',
+            targetLabel: 'Claude chat',
+            when: 'When you have discovery notes and need a brief, research and real options to choose from, without a day or two of synthesis.',
+            steps: [
+              'Paste your notes and ask for a design brief, a research pack and three directions.',
+              'Claude distills the notes, runs the secondary research and drafts conservative, progressive and disruptive proposals.',
+              'Each proposal arrives with a journey, a screen inventory and a scoring matrix.',
+            ],
+            tags: [
+              { kind: 'skill', label: 'meeting-distiller' },
+              { kind: 'skill', label: 'fast-research-pack' },
+              { kind: 'skill', label: 'proposal-generator' },
+            ],
+          },
+          {
+            icon: IconLayoutBoard,
+            title: 'Click it, then push it to Figma',
+            target: 'figma',
+            targetLabel: 'Figma',
+            when: 'When you have picked a direction and want a clickable prototype and real frames for a designer to refine rather than rebuild.',
+            steps: [
+              'Ask Claude to turn the chosen direction into a clickable wireframe.',
+              'Click through the annotated, responsive HTML prototype.',
+              'Ask Claude to push it to Figma: named, auto-laid-out frames with fills, type and spacing bound to design tokens.',
+            ],
+            tags: [
+              { kind: 'skill', label: 'wireframe-generator' },
+              { kind: 'skill', label: 'figma-push' },
+            ],
+          },
+        ],
+      },
+      {
+        mount: 'lynn-cat-team-root',
+        stepColor: 'lynn',
+        scenarios: [
+          {
+            icon: IconUsers,
+            title: 'Manage your people better',
+            target: 'claude',
+            targetLabel: 'Claude chat',
+            when: 'When you want to prep a 1:1 or work better with a specific teammate, using your team CliftonStrengths.',
+            steps: [
+              'Load the team-strengths skill.',
+              'Ask how you can better work with a named teammate as their manager.',
+              'Receive where you click, where it may rub, and concrete things to try in your next 1:1.',
+            ],
+            tags: [{ kind: 'skill', label: 'team-strengths' }],
+          },
+          {
+            icon: IconUsersGroup,
+            title: 'Staff a team on purpose',
+            target: 'claude',
+            targetLabel: 'Claude chat',
+            when: 'When you need to pick people for a sprint or project and want to know what the group will get wrong.',
+            steps: [
+              'Describe the work, the timeline and how many people you need.',
+              'Ask who to put together and what the group will get wrong.',
+              'Receive a suggested group, its predicted blind spot and a fix, not just who happens to be free.',
+            ],
+            tags: [{ kind: 'skill', label: 'team-strengths' }],
+          },
+          {
+            icon: IconMessageCircle,
+            title: 'Say the hard thing well',
+            target: 'claude',
+            targetLabel: 'Claude chat',
+            when: 'When feedback you need to give sounds defensive or like scorekeeping.',
+            steps: [
+              'Paste the draft feedback.',
+              'Ask Claude to rewrite it so it lands as clear and human.',
+              'Receive a before and after, plus a note on what changed: scorekeeping removed, the shared gap named, a next step added.',
+            ],
+            tags: [
+              { kind: 'skill', label: 'emotional-intelligence' },
+              { kind: 'skill', label: 'prompt-guru' },
+            ],
           },
         ],
       },
@@ -1119,7 +1344,7 @@
         h(
           'div',
           { className: 'scenario-top' },
-          h('div', { className: 'scenario-icon' }, scenario.icon),
+          h('div', { className: 'scenario-icon' }, h(scenario.icon, { size: 22 })),
           h(
             'div',
             { className: 'scenario-title-block' },
@@ -1190,7 +1415,7 @@
        An em dash in the source's Skill / Key Tool(s) cells means "none", so
        those are left null and <DataTable> draws its own "-" placeholder. */
     const REF_ROWS = [
-      { useCase: 'Full compliance audit (Figma)', target: 'figma', targetLabel: 'Figma', skill: null, tool: 'run_full_audit' },
+      { useCase: 'One number for your VP (Figma)', target: 'figma', targetLabel: 'Figma', skill: null, tool: 'run_full_audit' },
       { useCase: 'Full compliance audit (live page)', target: 'chrome', targetLabel: 'Chrome', skill: null, tool: 'run_full_audit' },
       { useCase: 'Accessibility triage', target: 'both', targetLabel: 'Both', skill: 'a11y-triage', tool: 'audit_accessibility' },
       { useCase: 'Convert Figma frame to Lyra', target: 'figma', targetLabel: 'Figma', skill: 'lyra-visual-patterns', tool: 'migrate_to_lyra' },
@@ -1202,6 +1427,10 @@
       { useCase: 'Dark mode parity check', target: 'chrome', targetLabel: 'Chrome', skill: 'dark-mode-parity', tool: null },
       { useCase: 'Find values to promote to tokens', target: 'both', targetLabel: 'Both', skill: 'token-candidates', tool: 'export_design_tokens' },
       { useCase: 'Manual fixes checklist post-automation', target: 'both', targetLabel: 'Both', skill: 'manual-fixes-checklist', tool: null },
+      { useCase: 'Is it ready for dev?', target: 'both', targetLabel: 'Both', skill: 'ux-eval', tool: 'run_ux_eval' },
+      { useCase: 'Notes to brief, research and three directions', target: 'claude', targetLabel: 'Claude chat', skill: 'proposal-generator', tool: null },
+      { useCase: 'Wireframe, then push to Figma', target: 'figma', targetLabel: 'Figma', skill: 'figma-push', tool: null },
+      { useCase: 'Prep a 1:1 or staff a team', target: 'claude', targetLabel: 'Claude chat', skill: 'team-strengths', tool: null },
     ];
 
     const REF_COLUMNS = [
@@ -1218,8 +1447,7 @@
        Key Tool(s) column headers are what the two tints were distinguishing. */
     function renderRefCell(row, column) {
       if (column.key === 'target') {
-        const tone = row.target === 'figma' ? 'lynn' : row.target === 'chrome' ? 'blue' : 'coral';
-        return h(Badge, { tone }, row.targetLabel);
+        return h(Badge, { tone: TARGETS[row.target].tone }, row.targetLabel);
       }
       if (column.key === 'skill' || column.key === 'tool') {
         const value = row[column.key];
@@ -1385,7 +1613,7 @@
         portal(
           h(
             Alert,
-            { variant: 'danger', icon: '🔗', className: 'reveal' },
+            { variant: 'danger', icon: h(IconLink, { size: 18 }), className: 'reveal' },
             'These workflows require both the Figma plugin and the Chrome extension to be connected to the MCP server simultaneously. Start the MCP server first (',
             h(InlineCode, null, 'cd packages/mcp-server && node src/index.js'),
             '), then open both clients.'
@@ -1394,6 +1622,8 @@
         ),
         portal(h(ScenarioGrid, { category: CATEGORIES[3] }), CATEGORIES[3].mount),
         portal(h(ScenarioGrid, { category: CATEGORIES[4] }), CATEGORIES[4].mount),
+        portal(h(ScenarioGrid, { category: CATEGORIES[5] }), CATEGORIES[5].mount),
+        portal(h(ScenarioGrid, { category: CATEGORIES[6] }), CATEGORIES[6].mount),
         portal(
           h(DataTable, {
             className: 'reveal',
