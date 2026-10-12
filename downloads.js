@@ -9,6 +9,7 @@
 //   data-latest-download   → set on the actual download link. Its href
 //                             becomes version.json's downloadUrl, and its
 //                             text becomes the zip's filename.
+//   data-latest-link       → href only (pills/buttons that keep their own text).
 //   data-latest-label      → set on anything that just displays a version
 //                             number in its own text (e.g. "Download v10").
 //                             Only the "vX.Y" substring is replaced.
@@ -31,6 +32,10 @@
       if (filename) el.textContent = filename;
     });
 
+    document.querySelectorAll('[data-latest-link]').forEach(function (el) {
+      if (data.downloadUrl) el.setAttribute('href', data.downloadUrl);
+    });
+
     document.querySelectorAll('[data-latest-label]').forEach(function (el) {
       el.textContent = el.textContent.replace(/v[\d.]+/i, 'v' + data.latest);
     });
@@ -48,8 +53,17 @@
     }
   }
 
+  // The nav pill and hero button are mounted by React after this script runs,
+  // so re-apply whenever new nodes appear (debounced to one pass per frame).
+  var latest = null, queued = false;
+  new MutationObserver(function () {
+    if (!latest || queued) return;
+    queued = true;
+    requestAnimationFrame(function () { queued = false; applyVersion(latest); });
+  }).observe(document.documentElement, { childList: true, subtree: true });
+
   fetch(VERSION_URL, { cache: 'no-store' })
     .then(function (res) { return res.ok ? res.json() : null; })
-    .then(applyVersion)
+    .then(function (data) { latest = data; applyVersion(data); })
     .catch(function () { /* keep whatever's already hardcoded in the HTML */ });
 })();

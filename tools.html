@@ -711,10 +711,9 @@
        replaces: the disabled Download pill plus its "Coming soon!" tag. ---- */
     const downloadPill = (key) =>
       h(
-        'span',
-        { key, className: 'nav-download is-disabled', 'aria-disabled': 'true' },
-        'Download',
-        h('span', { className: 'coming-soon-tag' }, 'Coming soon!')
+        'a',
+        { key, className: 'nav-download', href: './downloads/NiCE-Designer-V11.6.zip', 'data-latest-link': '', download: '' },
+        'Download'
       );
 
     /* ---- target badge: figma=blue, chrome=emerald, both=teal, all bordered,
@@ -1136,5 +1135,6 @@
 
   </script>
 
+  <script src="downloads.js"></script>
 </body>
 </html>

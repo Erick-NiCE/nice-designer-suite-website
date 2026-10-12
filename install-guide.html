@@ -580,7 +580,7 @@
           </div>
           <p class="update-best"><strong>Best for</strong> your first install, or updating by hand while keeping your settings, Supercharge connection, welcome-tour state, and anything else stored in the extension.</p>
           <ol class="numbered-list">
-            <li>Download the latest release: <span class="step-link is-disabled" aria-disabled="true" data-latest-download>NiCE-Designer-V11.3.zip</span> <span class="coming-soon-tag">Coming soon!</span></li>
+            <li>Download the latest release: <a class="step-link" href="./downloads/NiCE-Designer-V11.6.zip" data-latest-download download>NiCE-Designer-V11.6.zip</a></li>
             <li>Unzip it - this gives you a new <code>NiCE Designer Chrome</code> folder</li>
             <li><strong>Drag the files out of that new folder and into your existing, already-installed folder</strong> - the same one you originally pointed <strong>Load unpacked</strong> at - overwriting everything when your file manager asks</li>
             <li>Go to <code>chrome://extensions</code> and click <strong>Reload</strong> on NiCE Designer Suite</li>
@@ -1056,7 +1056,7 @@
           section(
             'How to install',
             block(`<ol class="numbered-list">
-                <li>Download the latest release: <span class="step-link is-disabled" aria-disabled="true">NiCE-Designer-V11.2.zip</span> <span class="coming-soon-tag">Coming soon!</span></li>
+                <li>Download the latest release: <a class="step-link" href="./downloads/NiCE-Designer-V11.6.zip" data-latest-download download>NiCE-Designer-V11.6.zip</a></li>
                 <li>Unzip the downloaded package to a location you'll keep it</li>
                 <li>Go to <code>chrome://extensions</code> (or <code>edge://extensions</code>) and enable <strong>Developer Mode</strong></li>
                 <li>Click <strong>"Load unpacked"</strong> and select the <code>NiCE Designer Chrome</code> folder from the unzipped package</li>
@@ -1146,10 +1146,10 @@ winget install OpenJS.NodeJS.LTS</div>
           ),
           section(
             'Turn on Supercharge',
-            block(`<p>Last step, and the one that actually switches everything on. Open the NiCE Designer extension, go to the <strong>Supercharge</strong> panel, and flip the toggle to <strong>On</strong>. The header should show a green dot and <strong>Live at <code>ws://127.0.0.1:7331</code></strong> - that's your confirmation the extension and Claude are talking to each other.</p>
+            block(`<p>Last step, and the one that actually switches everything on. Open the NiCE Designer extension, go to the <strong>Supercharge</strong> panel, and flip the toggle to <strong>On</strong>. The header should show a green dot and the port address <code>ws://127.0.0.1:7331</code> - that's your confirmation the extension and Claude are talking to each other.</p>
               <figure class="step-figure">
-                <img src="./images/install-supercharge-on.png" alt="The Supercharge panel in the NiCE Designer extension. A green dot sits next to the Supercharge heading, the header reads &quot;Live at ws://127.0.0.1:7331&quot;, and the toggle at the right is switched On." loading="lazy" width="736" height="300" />
-                <figcaption><strong>5.</strong> Toggle <strong>Supercharge</strong> on. Green dot plus <strong>Live at <code>ws://127.0.0.1:7331</code></strong> means you're connected. If it stays off or shows no address, check that Claude Desktop is running - it starts the server.</figcaption>
+                <img src="./images/install-supercharge-on.png" alt="The Supercharge panel in the NiCE Designer extension. A green dot sits next to the Supercharge heading, the header shows the port address ws://127.0.0.1:7331, and the toggle at the right is switched On." loading="lazy" width="736" height="300" />
+                <figcaption><strong>5.</strong> Toggle <strong>Supercharge</strong> on. Green dot plus the port address <strong><code>ws://127.0.0.1:7331</code></strong> means you're connected. If it stays off or shows no address, check that Claude Desktop is running - it starts the server.</figcaption>
               </figure>
               <p style="margin-top:12px;">If a tool or skill you expect is missing after an update, use the <strong>"Not seeing a new tool or skill?"</strong> link in that same panel - it points you back at the <code>.mcpb</code> file to reinstall the connector.</p>`)
           ),
@@ -1196,7 +1196,7 @@ node src/index.js</div>
                 </div>
                 <div class="checklist-item">
                   <div class="check-circle"></div>
-                  <span>In the extension's <strong>Supercharge</strong> panel, the toggle is <strong>On</strong> and the header reads <em>Live at ws://127.0.0.1:7331</em> with a green dot - Claude Desktop starts the server itself, so there's nothing to run manually</span>
+                  <span>In the extension's <strong>Supercharge</strong> panel, the toggle is <strong>On</strong> and the header shows the port address <em>ws://127.0.0.1:7331</em> with a green dot - Claude Desktop starts the server itself, so there's nothing to run manually</span>
                 </div>
                 <div class="checklist-item">
                   <div class="check-circle"></div>
@@ -1290,10 +1290,9 @@ node src/index.js</div>
        this pill today. */
     const downloadPill = (key) =>
       h(
-        'span',
-        { key, className: 'nav-download is-disabled', 'aria-disabled': 'true' },
-        'Download',
-        h('span', { className: 'coming-soon-tag' }, 'Coming soon!')
+        'a',
+        { key, className: 'nav-download', href: './downloads/NiCE-Designer-V11.6.zip', 'data-latest-link': '', download: '' },
+        'Download'
       );
 
     /* ThemeProvider stamps `data-lynn-theme` on its own wrapper div, but the

@@ -1256,10 +1256,9 @@
        this pill today. */
     const downloadPill = (key) =>
       h(
-        'span',
-        { key, className: 'nav-download is-disabled', 'aria-disabled': 'true' },
-        'Download',
-        h('span', { className: 'coming-soon-tag' }, 'Coming soon!')
+        'a',
+        { key, className: 'nav-download', href: './downloads/NiCE-Designer-V11.6.zip', 'data-latest-link': '', download: '' },
+        'Download'
       );
 
     /* ThemeProvider stamps `data-lynn-theme` on its own wrapper div, but the

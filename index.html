@@ -545,10 +545,9 @@
 
     const downloadPill = (key) =>
       h(
-        'span',
-        { key, className: 'nav-download is-disabled', 'aria-disabled': 'true' },
-        'Download',
-        h('span', { className: 'coming-soon-tag' }, 'Coming soon!')
+        'a',
+        { key, className: 'nav-download', href: './downloads/NiCE-Designer-V11.6.zip', 'data-latest-link': '', download: '' },
+        'Download'
       );
 
     /* ThemeProvider stamps `data-lynn-theme` on its own wrapper div, but the
@@ -699,7 +698,7 @@
         icon: IconFileText,
         category: 'Changelog',
         title: 'Release Notes',
-        description: 'What shipped in v11.1, v10, v9, and v8 - new features, improvements, and fixes.',
+        description: 'What shipped in v11.6, v11.5, v11.4, and earlier - new features, improvements, and fixes.',
         arrow: 'View notes',
       },
       {
@@ -820,12 +819,11 @@
                 'div',
                 { className: 'hero-ctas' },
                 h(
-                  'span',
-                  { className: 'btn-primary is-disabled', 'aria-disabled': 'true' },
+                  'a',
+                  { className: 'btn-primary', href: './downloads/NiCE-Designer-V11.6.zip', 'data-latest-link': '', download: '' },
                   h('span', { className: 'hero-download-icon', 'aria-hidden': 'true' }, IconDownload),
-                  h('span', { 'data-latest-label': '' }, 'Download v11.4')
-                ),
-                h('span', { className: 'coming-soon-tag' }, 'Coming soon!')
+                  h('span', { 'data-latest-label': '' }, 'Download v11.6')
+                )
               ),
             },
             h(
@@ -836,7 +834,7 @@
                 href: './release-notes.html#changelog',
                 title: "See what's new in this release",
               },
-              'v11.4 · September 2026'
+              'v11.6 · October 2026'
             )
           ),
           'lynn-hero-root'
