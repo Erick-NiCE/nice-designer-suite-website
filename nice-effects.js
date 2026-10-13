@@ -599,7 +599,8 @@
           { id: 'mk-figma-a11y-instructions', label: 'figma-a11y-instructions' },
           { id: 'mk-hero-flows-research-os', label: 'hero-flows-research-os' },
           { id: 'mk-nice-present', label: 'nice-present' },
-          { id: 'mk-pm-brain', label: 'pm-brain' }
+          { id: 'mk-pm-brain', label: 'pm-brain' },
+          { id: 'mk-lyra-ui-prototyping', label: 'lyra-ui-prototyping' }
         ] },
         { label: 'Contributing', items: [
           { id: 'submit', label: 'How to submit a skill' }

@@ -7,11 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=13" />
+  <link rel="stylesheet" href="theme.css?v=19" />
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <script src="nice-effects.js?v=14" defer></script>
+  <script src="nice-effects.js?v=15" defer></script>
 
   <!--
     ===== lynn-ui: the site chrome, as React components =====
@@ -34,7 +34,7 @@
          placeholders generate no box, so the sticky nav and the footer's
          margin still resolve against <body> exactly as before.
   -->
-  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=1" />
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=7" />
   <script type="importmap">
   {
     "imports": {
@@ -72,10 +72,30 @@
   <style>
     body { line-height: 1.6; }
 
+    /* Theme-aware page tokens. Everything below reads --lynn-color-*, which
+       flips with [data-lynn-theme] on <html>, so lynn / light / dark all come
+       from the same rules (theme.css / lynn-ui.css already step the brand
+       accents down for light mode). */
+    :root {
+      --mk-tint: color-mix(in srgb, var(--lynn-color-text) 5%, transparent);
+      --mk-tint-strong: color-mix(in srgb, var(--lynn-color-text) 8%, transparent);
+      --mk-label: color-mix(in srgb, var(--lynn-color-text) 55%, transparent);
+    }
+
     .hero {
       background: linear-gradient(to bottom, #2a1a5e, #21212B);
       padding: 96px 24px 80px;
       text-align: center;
+    }
+
+    /* Light mode: the dark fade above is for lynn/dark. A pale tint of the same hue
+
+       keeps the hero's themed text readable instead of dark-on-dark. */
+
+    [data-lynn-theme="light"] .hero {
+
+      background: linear-gradient(to bottom, #e6defa, var(--lynn-color-bg));
+
     }
     .hero-eyebrow {
       display: inline-block;
@@ -127,9 +147,9 @@
     .intro-highlight {
       display: flex; gap: 14px; align-items: flex-start; margin-top: 20px;
       padding: 16px; border-radius: 12px;
-      background: rgba(185,143,255,0.08); border: 1px solid rgba(185,143,255,0.22);
+      background: color-mix(in srgb, var(--lynn-color-lynn) 10%, transparent); border: 1px solid color-mix(in srgb, var(--lynn-color-lynn) 30%, transparent);
     }
-    .intro-highlight-icon { font-size: 18px; line-height: 1.4; flex-shrink: 0; }
+    .intro-highlight-icon { flex-shrink: 0; margin-top: 1px; color: var(--lyra); }
     .intro-highlight-text { font-size: 13.5px; color: var(--text-sec); }
 
     /* ── Marketplace skill cards ──
@@ -151,7 +171,7 @@
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
       background: var(--skill-color, var(--blue)); opacity: 0.7;
     }
-    .mk-card:hover { border-color: rgba(255,255,255,0.16); }
+    .mk-card:hover { border-color: var(--lynn-color-border-hover); }
     .mk-header { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 16px; }
     .mk-icon { flex-shrink: 0; color: var(--skill-color, var(--blue)); }
     .mk-name {
@@ -182,12 +202,12 @@
     }
     .mk-meta-label {
       font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
-      text-transform: uppercase; color: rgba(255,255,255,0.4);
+      text-transform: uppercase; color: var(--mk-label);
     }
     .mk-tags { display: flex; flex-wrap: wrap; gap: 6px; }
     .mk-tag {
       font-size: 11px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      color: var(--text-sec); background: rgba(255,255,255,0.05);
+      color: var(--text-sec); background: var(--mk-tint);
       border: 1px solid var(--border); border-radius: 6px; padding: 3px 8px;
     }
     .mk-link {
@@ -220,11 +240,11 @@
     .step-text a:hover { text-decoration: underline; }
     .step-text code {
       font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px;
-      background: rgba(255,255,255,0.07); border: 1px solid var(--border);
+      background: var(--mk-tint-strong); border: 1px solid var(--border);
       border-radius: 5px; padding: 1px 5px;
     }
     pre.code-block {
-      margin-top: 12px; background: #1a1a24; border: 1px solid var(--border);
+      margin-top: 12px; background: var(--lynn-color-bg); border: 1px solid var(--border);
       border-radius: 10px; padding: 16px; overflow-x: auto;
       font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
       font-size: 12.5px; line-height: 1.6; color: var(--text-sec);
@@ -273,7 +293,7 @@
       <p>A Marketplace entry is a normal Claude skill - a <code>SKILL.md</code> file that gives Claude a playbook for one specific job. The only difference is who wrote it. Nothing is sandboxed differently and nothing needs a separate install; once an entry is accepted it ships with the suite and every connected Claude session picks it up.</p>
       <p>Marketplace skills require <a href="./the-suite.html">Supercharge</a> to be connected, same as every other skill. Run one by naming it in Claude chat - "run the ux-eval skill", or just "run North Star Fox".</p>
       <div class="intro-highlight">
-        <div class="intro-highlight-icon">&#9888;&#65039;</div>
+        <svg class="intro-highlight-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4"/><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z"/><path d="M12 16h.01"/></svg>
         <div class="intro-highlight-text">
           Marketplace entries are authored independently and aren't reviewed to the same depth as core skills. <strong>Check a card's byline before you rely on its output</strong> - especially for anything you're taking to a stakeholder.
         </div>
@@ -287,7 +307,7 @@
   <div class="section" id="current">
     <p class="section-label">In the Marketplace today</p>
     <h2 class="section-title">Available skills</h2>
-    <p class="section-body">21 community-built skills currently ship in the Marketplace, each credited to its author. ux-eval and North Star Fox also have full trigger phrases on the Claude Skills page.</p>
+    <p class="section-body">22 community-built skills currently ship in the Marketplace, each credited to its author. ux-eval and North Star Fox also have full trigger phrases on the Claude Skills page.</p>
 
     <div class="mk-grid">
 
@@ -328,7 +348,7 @@
         <p class="mk-benefit"><strong>Why it's useful:</strong> a critical look at designs and JIRA tickets to ensure alignment with our Core Values around AI architecture at NiCE.</p>
         <div class="mk-meta">
           <div class="mk-meta-label">Key MCP tools</div>
-          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-tags"><span class="mk-tag" style="color: var(--lynn-color-text-muted);">None &mdash; no MCP tools needed</span></div>
           <div class="mk-meta-label">Works in</div>
           <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
@@ -350,7 +370,7 @@
         <p class="mk-benefit"><strong>Why it's useful:</strong> turns a framework you skim once into the specific instance you bring to your next 1:1.</p>
         <div class="mk-meta">
           <div class="mk-meta-label">Key MCP tools</div>
-          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-tags"><span class="mk-tag" style="color: var(--lynn-color-text-muted);">None &mdash; no MCP tools needed</span></div>
           <div class="mk-meta-label">Works in</div>
           <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
@@ -371,7 +391,7 @@
         <p class="mk-benefit"><strong>Why it's useful:</strong> a study someone else could run, anchored to the decision it informs instead of to what was easy to schedule.</p>
         <div class="mk-meta">
           <div class="mk-meta-label">Key MCP tools</div>
-          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-tags"><span class="mk-tag" style="color: var(--lynn-color-text-muted);">None &mdash; no MCP tools needed</span></div>
           <div class="mk-meta-label">Works in</div>
           <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
@@ -392,7 +412,7 @@
         <p class="mk-benefit"><strong>Why it's useful:</strong> findings traceable to the data behind them, with the contradictions named instead of averaged into a &quot;mixed reception&quot; theme.</p>
         <div class="mk-meta">
           <div class="mk-meta-label">Key MCP tools</div>
-          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-tags"><span class="mk-tag" style="color: var(--lynn-color-text-muted);">None &mdash; no MCP tools needed</span></div>
           <div class="mk-meta-label">Works in</div>
           <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
@@ -413,7 +433,7 @@
         <p class="mk-benefit"><strong>Why it's useful:</strong> a readout that leads with the conclusion and preempts the three objections every research review gets.</p>
         <div class="mk-meta">
           <div class="mk-meta-label">Key MCP tools</div>
-          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-tags"><span class="mk-tag" style="color: var(--lynn-color-text-muted);">None &mdash; no MCP tools needed</span></div>
           <div class="mk-meta-label">Works in</div>
           <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
@@ -434,7 +454,7 @@
         <p class="mk-benefit"><strong>Why it's useful:</strong> writing that lands as thoughtful and credible instead of performative or tone-deaf.</p>
         <div class="mk-meta">
           <div class="mk-meta-label">Key MCP tools</div>
-          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-tags"><span class="mk-tag" style="color: var(--lynn-color-text-muted);">None &mdash; no MCP tools needed</span></div>
           <div class="mk-meta-label">Works in</div>
           <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
@@ -455,7 +475,7 @@
         <p class="mk-benefit"><strong>Why it's useful:</strong> a brief the next three pipeline stages can consume, instead of a wall of meeting notes.</p>
         <div class="mk-meta">
           <div class="mk-meta-label">Key MCP tools</div>
-          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-tags"><span class="mk-tag" style="color: var(--lynn-color-text-muted);">None &mdash; no MCP tools needed</span></div>
           <div class="mk-meta-label">Works in</div>
           <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
@@ -476,7 +496,7 @@
         <p class="mk-benefit"><strong>Why it's useful:</strong> replaces a day or two of secondary research with a few minutes, grounded in the actual brief.</p>
         <div class="mk-meta">
           <div class="mk-meta-label">Key MCP tools</div>
-          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-tags"><span class="mk-tag" style="color: var(--lynn-color-text-muted);">None &mdash; no MCP tools needed</span></div>
           <div class="mk-meta-label">Works in</div>
           <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
@@ -497,7 +517,7 @@
         <p class="mk-benefit"><strong>Why it's useful:</strong> a real choice between directions with trade-offs spelled out, instead of one idea to react to.</p>
         <div class="mk-meta">
           <div class="mk-meta-label">Key MCP tools</div>
-          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-tags"><span class="mk-tag" style="color: var(--lynn-color-text-muted);">None &mdash; no MCP tools needed</span></div>
           <div class="mk-meta-label">Works in</div>
           <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
@@ -518,7 +538,7 @@
         <p class="mk-benefit"><strong>Why it's useful:</strong> something to click through and react to, not just a static description of the screens.</p>
         <div class="mk-meta">
           <div class="mk-meta-label">Key MCP tools</div>
-          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-tags"><span class="mk-tag" style="color: var(--lynn-color-text-muted);">None &mdash; no MCP tools needed</span></div>
           <div class="mk-meta-label">Works in</div>
           <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
@@ -539,7 +559,7 @@
         <p class="mk-benefit"><strong>Why it's useful:</strong> a structured proposal page in the actual design file, ready for a designer to refine instead of rebuild.</p>
         <div class="mk-meta">
           <div class="mk-meta-label">Key MCP tools</div>
-          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-tags"><span class="mk-tag" style="color: var(--lynn-color-text-muted);">None &mdash; no MCP tools needed</span></div>
           <div class="mk-meta-label">Works in</div>
           <div class="mk-tags"><span class="mk-tag">Figma</span></div>
         </div>
@@ -560,7 +580,7 @@
         <p class="mk-benefit"><strong>Why it's useful:</strong> a process the team runs every sprint, not a one-off answer that has to be re-derived next time.</p>
         <div class="mk-meta">
           <div class="mk-meta-label">Key MCP tools</div>
-          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-tags"><span class="mk-tag" style="color: var(--lynn-color-text-muted);">None &mdash; no MCP tools needed</span></div>
           <div class="mk-meta-label">Works in</div>
           <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
@@ -581,7 +601,7 @@
         <p class="mk-benefit"><strong>Why it's useful:</strong> one answer for &quot;how do I find out&quot; across the whole research lifecycle, not just the write-up stage.</p>
         <div class="mk-meta">
           <div class="mk-meta-label">Key MCP tools</div>
-          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-tags"><span class="mk-tag" style="color: var(--lynn-color-text-muted);">None &mdash; no MCP tools needed</span></div>
           <div class="mk-meta-label">Works in</div>
           <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
@@ -602,7 +622,7 @@
         <p class="mk-benefit"><strong>Why it's useful:</strong> a strategic artifact that aligns a team for months, not a single decision for one project.</p>
         <div class="mk-meta">
           <div class="mk-meta-label">Key MCP tools</div>
-          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-tags"><span class="mk-tag" style="color: var(--lynn-color-text-muted);">None &mdash; no MCP tools needed</span></div>
           <div class="mk-meta-label">Works in</div>
           <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
@@ -623,7 +643,7 @@
         <p class="mk-benefit"><strong>Why it's useful:</strong> catches the bias and the unexamined assumption before it ships in a deck, not after.</p>
         <div class="mk-meta">
           <div class="mk-meta-label">Key MCP tools</div>
-          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-tags"><span class="mk-tag" style="color: var(--lynn-color-text-muted);">None &mdash; no MCP tools needed</span></div>
           <div class="mk-meta-label">Works in</div>
           <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
@@ -644,7 +664,7 @@
         <p class="mk-benefit"><strong>Why it's useful:</strong> structured product thinking before structured product writing, so the document is not built on an unexamined claim.</p>
         <div class="mk-meta">
           <div class="mk-meta-label">Key MCP tools</div>
-          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-tags"><span class="mk-tag" style="color: var(--lynn-color-text-muted);">None &mdash; no MCP tools needed</span></div>
           <div class="mk-meta-label">Works in</div>
           <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
@@ -665,7 +685,7 @@
         <p class="mk-benefit"><strong>Why it's useful:</strong> a polished, consistent a11y handoff doc per screen instead of a one-off markdown list that looks different every time.</p>
         <div class="mk-meta">
           <div class="mk-meta-label">Key MCP tools</div>
-          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-tags"><span class="mk-tag" style="color: var(--lynn-color-text-muted);">None &mdash; no MCP tools needed</span></div>
           <div class="mk-meta-label">Works in</div>
           <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
@@ -686,7 +706,7 @@
         <p class="mk-benefit"><strong>Why it's useful:</strong> the lightest process that still produces a traceable, falsifiable decision — scaled to the size of the question, not a fixed heavyweight ritual.</p>
         <div class="mk-meta">
           <div class="mk-meta-label">Key MCP tools</div>
-          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-tags"><span class="mk-tag" style="color: var(--lynn-color-text-muted);">None &mdash; no MCP tools needed</span></div>
           <div class="mk-meta-label">Works in</div>
           <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
@@ -707,7 +727,7 @@
         <p class="mk-benefit"><strong>Why it's useful:</strong> a presentable deck in the conversation itself, with no separate slide tool round-trip.</p>
         <div class="mk-meta">
           <div class="mk-meta-label">Key MCP tools</div>
-          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-tags"><span class="mk-tag" style="color: var(--lynn-color-text-muted);">None &mdash; no MCP tools needed</span></div>
           <div class="mk-meta-label">Works in</div>
           <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
@@ -728,7 +748,28 @@
         <p class="mk-benefit"><strong>Why it's useful:</strong> a durable, searchable home for judgment-heavy product work instead of scattered docs and chat history.</p>
         <div class="mk-meta">
           <div class="mk-meta-label">Key MCP tools</div>
-          <div class="mk-tags"><span class="mk-tag" style="opacity:.6;">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-tags"><span class="mk-tag" style="color: var(--lynn-color-text-muted);">None &mdash; no MCP tools needed</span></div>
+          <div class="mk-meta-label">Works in</div>
+          <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
+        </div>
+      </div>
+
+      <div class="mk-card reveal" id="mk-lyra-ui-prototyping" style="--skill-color: var(--emerald);">
+        <div class="mk-header">
+          <svg class="mk-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/></svg>
+          <div>
+            <div class="mk-name">lyra-ui-prototyping</div>
+            <div class="mk-author">Lyra UI prototyping &middot; by <strong>David Bauer</strong></div>
+            <!-- "Community skill" pill (lynn-ui <Badge>) -->
+            <span id="lynn-badge-lyra-ui-prototyping" class="lynn-mount"></span>
+          </div>
+        </div>
+        <p class="mk-question">"Can I get a working, clickable prototype built from our real components, not a mockup?"</p>
+        <p class="mk-desc">Builds a real coded prototype (React/Tailwind, or a self-contained HTML demo) composed entirely from the actual Lyra UI component library, holds it to full Lyra adherence, and ships a GAPS.md listing what the library does not have yet.</p>
+        <p class="mk-benefit"><strong>Why it's useful:</strong> a demo that looks and behaves like real CXone product, plus an honest list of what is missing instead of look-alikes that drift the moment someone looks closely.</p>
+        <div class="mk-meta">
+          <div class="mk-meta-label">Key MCP tools</div>
+          <div class="mk-tags"><span class="mk-tag" style="color: var(--lynn-color-text-muted);">None &mdash; no MCP tools needed</span></div>
           <div class="mk-meta-label">Works in</div>
           <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
@@ -864,7 +905,7 @@ call, what the output should look like, and what to watch for.</pre>
       inset: 0;
       border-radius: inherit;
       background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%),
-        rgba(255,255,255,0.09) 0%, transparent 70%);
+        color-mix(in srgb, var(--lynn-color-text) 9%, transparent) 0%, transparent 70%);
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.35s ease;
@@ -1216,6 +1257,7 @@ call, what the output should look like, and what to watch for.</pre>
         portal(communityBadge, 'lynn-badge-hero-flows-research-os'),
         portal(communityBadge, 'lynn-badge-nice-present'),
         portal(communityBadge, 'lynn-badge-pm-brain'),
+        portal(communityBadge, 'lynn-badge-lyra-ui-prototyping'),
         portal(
           h(CtaBanner, {
             variant: 'gradient',
