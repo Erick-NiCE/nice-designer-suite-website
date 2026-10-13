@@ -160,7 +160,7 @@
   left: 0;
   width: 26px;
   height: 40px;
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   background: rgba(47, 47, 61, 0.92);
