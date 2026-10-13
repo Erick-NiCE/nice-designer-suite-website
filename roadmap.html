@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NiCE Designer - Product Roadmap</title>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=13" />
+  <link rel="stylesheet" href="theme.css?v=19" />
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <script src="nice-effects.js?v=14" defer></script>
+  <script src="nice-effects.js?v=15" defer></script>
   <!--
     ===== lynn-ui: the site chrome, as React components =====
     The access gate, the nav and (on pages that have them) the footer and the
@@ -32,7 +32,7 @@
          placeholders generate no box, so the sticky nav and the footer's
          margin still resolve against <body> exactly as before.
   -->
-  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=1" />
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=7" />
   <script type="importmap">
   {
     "imports": {
@@ -280,7 +280,7 @@
       font-weight: 800;
       letter-spacing: -1px;
       line-height: 1.05;
-      color: white;
+      color: var(--lynn-color-text);
     }
     .section-title span {
       background: linear-gradient(90deg, var(--blue), var(--indigo), var(--emerald));
@@ -353,7 +353,7 @@
     .tool-name {
       font-size: 22px;
       font-weight: 800;
-      color: white;
+      color: var(--lynn-color-text);
       letter-spacing: -0.3px;
       margin-bottom: 4px;
     }
@@ -414,7 +414,7 @@
       font-weight: 600;
       padding: 3px 9px;
       border-radius: 100px;
-      background: rgba(255,255,255,0.06);
+      background: color-mix(in srgb, var(--lynn-color-text) 6%, transparent);
       color: var(--text-muted);
       border: 1px solid var(--border);
       letter-spacing: 0.3px;
@@ -429,9 +429,10 @@
       border-radius: 100px;
     }
     .tool-status.active   { background: rgba(54,148,252,0.15); color: #6ab4ff; }
-    .tool-status.next     { background: rgba(0,226,160,0.12);  color: #00E2A0; }
-    .tool-status.planned  { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.35); }
-    .tool-status.new      { background: rgba(97,0,255,0.2);    color: #b98fff; }
+    [data-lynn-theme="light"] .tool-status.active { color: var(--lynn-color-blue); }
+    .tool-status.next     { background: rgba(0,226,160,0.12);  color: var(--lynn-color-emerald); }
+    .tool-status.planned  { background: color-mix(in srgb, var(--lynn-color-text) 6%, transparent); color: var(--lynn-color-text-muted); }
+    .tool-status.new      { background: rgba(97,0,255,0.2);    color: var(--lynn-color-lynn); }
 
     /* ========================================================
        DIVIDER
@@ -482,13 +483,13 @@
     .person-entry {
       display: flex; align-items: center; gap: 12px;
       padding: 12px 14px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
+      background: color-mix(in srgb, var(--lynn-color-text) 3%, transparent);
+      border: 1px solid var(--lynn-color-border);
       border-radius: 10px;
       transition: background 0.2s;
     }
-    .person-entry:hover { background: rgba(255,255,255,0.05); }
-    .person-name { font-size: 13px; font-weight: 600; color: white; margin-bottom: 2px; }
+    .person-entry:hover { background: color-mix(in srgb, var(--lynn-color-text) 5%, transparent); }
+    .person-name { font-size: 13px; font-weight: 600; color: var(--lynn-color-text); margin-bottom: 2px; }
     .person-role { font-size: 11px; color: var(--text-muted); }
 
     /* The people list's `.avatar-lg` discs are lynn-ui <Avatar size="lg">
@@ -509,10 +510,10 @@
       border-radius: var(--radius-sm);
       font-size: 12px; color: var(--text-sec); line-height: 1.7;
     }
-    .footer-note strong { color: white; }
+    .footer-note strong { color: var(--lynn-color-text); }
     code {
       font-size: 11px;
-      background: rgba(255,255,255,0.08);
+      background: color-mix(in srgb, var(--lynn-color-text) 8%, transparent);
       padding: 2px 6px; border-radius: 4px;
       font-family: 'SF Mono', 'Fira Code', monospace;
     }
@@ -546,7 +547,7 @@
   <!-- ================================================================
        HERO
   ================================================================ -->
-  <section class="hero">
+  <section class="hero pin-dark">
     <div class="hero-bg"></div>
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
@@ -643,7 +644,7 @@
       inset: 0;
       border-radius: inherit;
       background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%),
-        rgba(255,255,255,0.09) 0%, transparent 70%);
+        color-mix(in srgb, var(--lynn-color-text) 9%, transparent) 0%, transparent 70%);
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.35s ease;

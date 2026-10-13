@@ -7,11 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=13" />
+  <link rel="stylesheet" href="theme.css?v=19" />
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <script src="nice-effects.js?v=14" defer></script>
+  <script src="nice-effects.js?v=15" defer></script>
 
   <!--
     ===== lynn-ui: the site chrome, as React components =====
@@ -34,7 +34,7 @@
          placeholders generate no box, so the sticky nav and the footer's
          margin still resolve against <body> exactly as before.
   -->
-  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=1" />
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=7" />
   <script type="importmap">
   {
     "imports": {
@@ -77,6 +77,11 @@
       background: linear-gradient(to bottom, #0a2a1a, var(--bg));
       padding: 100px 24px 80px;
       text-align: center;
+    }
+    /* Light mode: the dark fade above is for lynn/dark. A pale tint of the same hue
+       keeps the hero's themed text readable instead of dark-on-dark. */
+    [data-lynn-theme="light"] .hero {
+      background: linear-gradient(to bottom, #d4f1e3, var(--lynn-color-bg));
     }
 
     .hero-eyebrow {
@@ -197,7 +202,7 @@
     }
 
     .formula-equation {
-      background: rgba(0,0,0,0.3);
+      background: color-mix(in srgb, var(--lynn-color-text) 4%, transparent);
       border-radius: 10px;
       padding: 20px 24px;
       font-family: 'Be Vietnam Pro', monospace;
@@ -272,7 +277,7 @@
       font-weight: 600;
       padding: 2px 8px;
       border-radius: 20px;
-      background: rgba(255,255,255,0.08);
+      background: color-mix(in srgb, var(--lynn-color-text) 8%, transparent);
       color: var(--text-secondary);
       margin-left: auto;
     }
@@ -601,7 +606,7 @@
           <div class="category-row">
             <div class="category-row-label">What counts as an issue</div>
             <div class="category-row-text">
-              A <strong>raw numeric radius</strong> not matching any radius token; a unified radius not bound to a variable (Figma requires binding all four individual corners, not just <code style="font-size:0.82em;background:rgba(255,255,255,0.07);padding:1px 5px;border-radius:4px;">cornerRadius</code> itself).
+              A <strong>raw numeric radius</strong> not matching any radius token; a unified radius not bound to a variable (Figma requires binding all four individual corners, not just <code style="font-size:0.82em;background:color-mix(in srgb, var(--lynn-color-text) 7%, transparent);padding:1px 5px;border-radius:4px;">cornerRadius</code> itself).
             </div>
           </div>
           <div class="category-row">
@@ -835,7 +840,7 @@
       inset: 0;
       border-radius: inherit;
       background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%),
-        rgba(255,255,255,0.09) 0%, transparent 70%);
+        color-mix(in srgb, var(--lynn-color-text) 9%, transparent) 0%, transparent 70%);
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.35s ease;
@@ -1121,9 +1126,9 @@
         label: 'Mostly OK',
         status: 'good',
         color: 'Yellow-green',
-        colorValue: '#a3e635',
+        colorValue: 'var(--lime)',
         percent: 82,
-        accent: '#a3e635',
+        accent: 'var(--lime)',
         meaning: 'Mostly compliant. Minor issues left to address.',
       },
       {

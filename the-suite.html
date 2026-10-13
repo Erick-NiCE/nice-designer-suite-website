@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=13" />
+  <link rel="stylesheet" href="theme.css?v=19" />
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
@@ -32,7 +32,7 @@
          placeholders generate no box, so the sticky nav and the footer's
          margin still resolve against <body> exactly as before.
   -->
-  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=1" />
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=7" />
   <script type="importmap">
   {
     "imports": {
@@ -276,28 +276,29 @@
       border-radius: 100px;
     }
     .legend-pill.active  { background: rgba(54,148,252,0.15); color: #6ab4ff; }
-    .legend-pill.beta    { background: rgba(245,158,11,0.15); color: #f59e0b; }
-    .legend-pill.planned { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.35); }
+    [data-lynn-theme="light"] .legend-pill.active { color: var(--lynn-color-blue); }
+    .legend-pill.beta    { background: rgba(245,158,11,0.15); color: var(--amber); }
+    .legend-pill.planned { background: color-mix(in srgb, var(--lynn-color-text) 6%, transparent); color: var(--lynn-color-text-muted); }
 
     .legend-desc { font-size: 13px; color: var(--text-sec); }
 
     .dropped-note {
       margin-top: 20px;
       padding: 16px 20px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: color-mix(in srgb, var(--lynn-color-text) 3%, transparent);
+      border: 1px solid var(--lynn-color-border);
       border-radius: 12px;
       font-size: 13px;
       line-height: 1.7;
-      color: rgba(255,255,255,0.6);
+      color: var(--lynn-color-text-secondary);
     }
-    .dropped-note strong { display: block; color: #fff; margin-bottom: 6px; }
+    .dropped-note strong { display: block; color: var(--lynn-color-text); margin-bottom: 6px; }
     .dropped-note a { color: var(--blue); text-decoration: none; }
     .dropped-note a:hover { text-decoration: underline; }
     .dropped-note code {
       font-family: 'Courier New', Courier, monospace;
       font-size: 0.9em;
-      background: rgba(255,255,255,0.08);
+      background: color-mix(in srgb, var(--lynn-color-text) 8%, transparent);
       padding: 1px 6px;
       border-radius: 4px;
     }
@@ -313,7 +314,7 @@
       transition: color 0.2s, gap 0.2s;
       margin-top: 8px;
     }
-    .roadmap-link:hover { color: #fff; gap: 10px; }
+    .roadmap-link:hover { color: var(--lynn-color-text); gap: 10px; }
 
     /* ---- SUPERPOWERS ---- */
     .superpowers-section {
@@ -352,20 +353,20 @@
     .sp-name {
       font-size: 22px;
       font-weight: 800;
-      color: #fff;
+      color: var(--lynn-color-text);
       letter-spacing: -0.3px;
       margin-bottom: 4px;
     }
     .sp-tagline {
       font-size: 13px;
-      color: rgba(255,255,255,0.6);
+      color: var(--lynn-color-text-secondary);
       font-weight: 400;
     }
     .sp-sub {
-      font-size: 15px; color: rgba(255,255,255,0.6); line-height: 1.7;
+      font-size: 15px; color: var(--lynn-color-text-secondary); line-height: 1.7;
       max-width: 700px; margin-bottom: 36px;
     }
-    .sp-sub strong { color: rgba(255,255,255,0.85); }
+    .sp-sub strong { color: var(--lynn-color-text); }
     .sp-grid {
       display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
       gap: 16px; margin-bottom: 32px;
@@ -376,34 +377,34 @@
        the component's own class. (IconCard paints `--lynn-color-card` where
        `.sp-card` painted a translucent white, which is the one deliberate
        difference.) */
-    .lynn-icon-card-desc a { color: #3694FC; text-decoration: none; }
+    .lynn-icon-card-desc a { color: var(--lynn-color-blue); text-decoration: none; }
     .lynn-icon-card-desc a:hover { text-decoration: underline; }
-    .lynn-icon-card-desc code { background: rgba(255,255,255,0.08); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+    .lynn-icon-card-desc code { background: color-mix(in srgb, var(--lynn-color-text) 8%, transparent); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
     .sp-tools-note {
       display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
-      padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.07);
+      padding-top: 24px; border-top: 1px solid var(--lynn-color-border);
     }
     .sp-note-label { font-size: 11px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 1.5px; color: rgba(255,255,255,0.4); margin-right: 4px; }
+      letter-spacing: 1.5px; color: var(--lynn-color-text-secondary); margin-right: 4px; }
     .sp-tag {
       font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 100px;
-      background: rgba(97,0,255,0.15); color: #B98FFF;
+      background: rgba(97,0,255,0.15); color: color-mix(in srgb, var(--lynn-color-lynn) 70%, var(--lynn-color-text));
       border: 1px solid rgba(185,143,255,0.2);
     }
     .sp-marketplace-listing { margin-top: 24px; }
     .sp-marketplace-listing-label {
       font-size: 11px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 1.5px; color: rgba(255,255,255,0.4); margin-bottom: 12px;
+      letter-spacing: 1.5px; color: var(--lynn-color-text-secondary); margin-bottom: 12px;
     }
     .sp-marketplace-item {
       display: flex; gap: 14px;
-      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+      background: color-mix(in srgb, var(--lynn-color-text) 4%, transparent); border: 1px solid var(--lynn-color-border);
       border-radius: 16px; padding: 18px 20px;
     }
-    .sp-marketplace-item-icon { width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px; color: #B98FFF; }
-    .sp-marketplace-item-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px; }
-    .sp-marketplace-item-author { font-weight: 500; color: #B98FFF; font-size: 12px; }
-    .sp-marketplace-item-desc { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.65; }
+    .sp-marketplace-item-icon { width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px; color: var(--lynn-color-lynn); }
+    .sp-marketplace-item-title { font-size: 14px; font-weight: 700; color: var(--lynn-color-text); margin-bottom: 6px; }
+    .sp-marketplace-item-author { font-weight: 500; color: var(--lynn-color-lynn); font-size: 12px; }
+    .sp-marketplace-item-desc { font-size: 13px; color: var(--lynn-color-text-secondary); line-height: 1.65; }
     /* `.sp-marketplace-cta` is lynn-ui <CtaBanner variant="tinted"> now - a
        verbatim port of the panel that used to be styled here, including the
        24px top margin it needs in this section. */
@@ -440,7 +441,7 @@
 
 
   <!-- HERO -->
-  <section class="hero">
+  <section class="hero pin-dark">
     <div class="hero-gradient"></div>
     <div class="hero-orb hero-orb-1"></div>
     <div class="hero-orb hero-orb-2"></div>
@@ -569,7 +570,7 @@
       inset: 0;
       border-radius: inherit;
       background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%),
-        rgba(255,255,255,0.09) 0%, transparent 70%);
+        color-mix(in srgb, var(--lynn-color-text) 9%, transparent) 0%, transparent 70%);
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.35s ease;
@@ -724,7 +725,7 @@
 
   <!-- Reusable canvas effects (Matter.js is the physics engine for the liquid) -->
   <script src="https://cdn.jsdelivr.net/npm/matter-js@0.19.0/build/matter.min.js"></script>
-  <script src="nice-effects.js?v=14"></script>
+  <script src="nice-effects.js?v=15"></script>
   <script>
     // The liquid fill on each tool card moved into the lynn-ui mount script:
     // the cards are <FeatureCard>s now, so they do not exist at this point

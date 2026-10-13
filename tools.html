@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NiCE Designer - Tool Catalog</title>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=13" />
+  <link rel="stylesheet" href="theme.css?v=19" />
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <script src="nice-effects.js?v=14" defer></script>
+  <script src="nice-effects.js?v=15" defer></script>
 
   <!--
     ===== lynn-ui: the site chrome, as React components =====
@@ -18,7 +18,7 @@
     site-gate.js are gone with the static gate; `AccessGate` is the same
     screen and the mount script re-runs the same client-side code check.
   -->
-  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=1" />
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=7" />
   <script type="importmap">
   {
     "imports": {
@@ -31,7 +31,14 @@
     }
   }
   </script>
-  <style>.lynn-mount { display: contents; }</style>
+  <style>.lynn-mount { display: contents; }
+    /* The group headers carry inline slate/teal/rose tints picked for the dark
+       page; they need a deeper stop in light mode. !important is the only way
+       past an inline style. */
+    [data-lynn-theme="light"] [style*="color:#14b8a6"] { color: #0f766e !important; }
+    [data-lynn-theme="light"] [style*="color:#64748b"] { color: #475569 !important; }
+    [data-lynn-theme="light"] [style*="color:#f43f5e"] { color: #be123c !important; }
+  </style>
 
   <!--
     The gate used to be static markup covered by blocking CSS, so it was up
@@ -69,20 +76,20 @@
       position: relative; margin-left: auto;
     }
     .nav-search input {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: color-mix(in srgb, var(--lynn-color-text) 6%, transparent);
+      border: 1px solid var(--lynn-color-border);
       border-radius: 10px; padding: 7px 14px 7px 36px;
-      font-family: var(--font); font-size: 13px; color: #fff; width: 220px;
+      font-family: var(--font); font-size: 13px; color: var(--lynn-color-text); width: 220px;
       outline: none; transition: all 0.2s;
     }
-    .nav-search input::placeholder { color: rgba(255,255,255,0.35); }
+    .nav-search input::placeholder { color: var(--lynn-color-text-muted); }
     .nav-search input:focus {
       border-color: rgba(54,148,252,0.4);
-      background: rgba(255,255,255,0.08); width: 280px;
+      background: color-mix(in srgb, var(--lynn-color-text) 8%, transparent); width: 280px;
     }
     .nav-search-icon {
       position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
-      color: rgba(255,255,255,0.3); font-size: 13px; pointer-events: none;
+      color: var(--lynn-color-text-muted); font-size: 13px; pointer-events: none;
     }
 
     /* ---- LAYOUT ---- */
@@ -111,7 +118,7 @@
     }
     .section-title {
       font-size: 28px; font-weight: 800; letter-spacing: -0.5px;
-      color: #fff; margin-bottom: 8px;
+      color: var(--lynn-color-text); margin-bottom: 8px;
     }
     .section-desc {
       font-size: 14px; color: var(--sec); line-height: 1.7;
@@ -130,7 +137,7 @@
       width: 7px; height: 7px; border-radius: 50%;
     }
     .subsection-note {
-      font-size: 12px; color: rgba(255,255,255,0.3); font-style: italic;
+      font-size: 12px; color: var(--lynn-color-text-muted); font-style: italic;
       margin-left: auto; font-weight: 400; letter-spacing: 0; text-transform: none;
     }
 
@@ -163,12 +170,12 @@
       font-size: 12px; font-weight: 600; letter-spacing: 0.3px;
     }
     .lynn-mcp-desc {
-      font-size: 12.5px; color: rgba(255,255,255,0.52); line-height: 1.65;
+      font-size: 12.5px; color: var(--lynn-color-text-secondary); line-height: 1.65;
     }
     .lynn-mcp-why {
-      margin-top: 8px; font-size: 11px; color: rgba(255,255,255,0.28);
+      margin-top: 8px; font-size: 11px; color: var(--lynn-color-text-muted);
     }
-    .lynn-mcp-why strong { color: rgba(255,255,255,0.4); }
+    .lynn-mcp-why strong { color: var(--lynn-color-text-secondary); }
 
     /* ---- SKILL CARD ----
        `.skill-card` is a Card + Badge composite too, keeping the left accent
@@ -179,7 +186,7 @@
       display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
     }
     .lynn-skill-card-top .lynn-skill-name {
-      font-size: 13.5px; font-weight: 700; color: #fff;
+      font-size: 13.5px; font-weight: 700; color: var(--lynn-color-text);
     }
     .lynn-skill-card-top .lynn-skill-targets {
       display: flex; gap: 4px; margin-left: auto; flex-wrap: wrap;
@@ -188,16 +195,16 @@
       font-size: 12.5px; color: var(--sec); line-height: 1.65; margin-bottom: 10px;
     }
     .lynn-skill-triggers {
-      font-size: 11px; color: rgba(255,255,255,0.3); font-style: italic;
+      font-size: 11px; color: var(--lynn-color-text-muted); font-style: italic;
     }
-    .lynn-skill-triggers strong { color: rgba(255,255,255,0.4); font-style: normal; }
+    .lynn-skill-triggers strong { color: var(--lynn-color-text-secondary); font-style: normal; }
 
     /* ---- INLINE CODE ---- */
     code {
       font-family: 'SF Mono','Fira Code',monospace;
-      font-size: 11.5px; background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.1); padding: 1px 5px;
-      border-radius: 4px; color: rgba(255,255,255,0.85);
+      font-size: 11.5px; background: color-mix(in srgb, var(--lynn-color-text) 7%, transparent);
+      border: 1px solid var(--lynn-color-border); padding: 1px 5px;
+      border-radius: 4px; color: var(--lynn-color-text);
     }
 
     /* ---- DIVIDER ---- */
@@ -209,7 +216,7 @@
     /* ---- NO RESULTS ---- */
     .no-results {
       display: none; text-align: center; padding: 60px 20px;
-      color: rgba(255,255,255,0.3); font-size: 14px;
+      color: var(--lynn-color-text-muted); font-size: 14px;
     }
     .no-results.visible { display: block; }
 
@@ -260,7 +267,7 @@
         <div class="subsection" id="suite-audit">
           <div class="subsection-label">
             <span class="sub-dot" style="background:#3694FC"></span>
-            <span style="color:#3694FC">Frontend Audit</span>
+            <span style="color: var(--lynn-color-blue)">Frontend Audit</span>
             <span class="subsection-note">Read-only - Figma + Chrome</span>
           </div>
           <div class="tool-grid">
@@ -271,7 +278,7 @@
         <div class="subsection" id="suite-editor">
           <div class="subsection-label">
             <span class="sub-dot" style="background:#3694FC"></span>
-            <span style="color:#3694FC">Frontend Editor</span>
+            <span style="color: var(--lynn-color-blue)">Frontend Editor</span>
             <span class="subsection-note">In-context - Chrome only</span>
           </div>
           <div class="tool-grid">
@@ -282,7 +289,7 @@
         <div class="subsection" id="suite-handoff">
           <div class="subsection-label">
             <span class="sub-dot" style="background:#B98FFF"></span>
-            <span style="color:#B98FFF">Spec Mode</span>
+            <span style="color: var(--lynn-color-lynn)">Spec Mode</span>
             <span class="subsection-note">Read-only - Figma + Chrome</span>
           </div>
           <div class="tool-grid">
@@ -293,7 +300,7 @@
         <div class="subsection" id="suite-designSystem">
           <div class="subsection-label">
             <span class="sub-dot" style="background:#36EAD0"></span>
-            <span style="color:#36EAD0">Design System</span>
+            <span style="color: var(--lynn-color-teal)">Design System</span>
             <span class="subsection-note">Read-only - Figma + Chrome</span>
           </div>
           <div class="tool-grid">
@@ -330,7 +337,7 @@
         <div class="subsection" id="mcp-scope">
           <div class="subsection-label">
             <span class="sub-dot" style="background:#3694FC"></span>
-            <span style="color:#3694FC">Choose what to work on</span>
+            <span style="color: var(--lynn-color-blue)">Choose what to work on</span>
             <span class="subsection-note">Set the scope - a whole page, one artboard, or a single inspected element.</span>
           </div>
           <div class="tool-grid">
@@ -342,7 +349,7 @@
         <div class="subsection" id="mcp-measure">
           <div class="subsection-label">
             <span class="sub-dot" style="background:#B98FFF"></span>
-            <span style="color:#B98FFF">Score &amp; measure</span>
+            <span style="color: var(--lynn-color-lynn)">Score &amp; measure</span>
             <span class="subsection-note">Read your current state. The audits return a gauge plus the issue list behind it.</span>
           </div>
           <div class="tool-grid">
@@ -354,7 +361,7 @@
         <div class="subsection" id="mcp-fix-bulk">
           <div class="subsection-label">
             <span class="sub-dot" style="background:#00E2A0"></span>
-            <span style="color:#00E2A0">Fix everything at once</span>
+            <span style="color: var(--lynn-color-emerald)">Fix everything at once</span>
             <span class="subsection-note">Whole-page and whole-frame conversions. Dry-run by default, and they report the score they moved.</span>
           </div>
           <div class="tool-grid">
@@ -366,7 +373,7 @@
         <div class="subsection" id="mcp-fix-one">
           <div class="subsection-label">
             <span class="sub-dot" style="background:#36EAD0"></span>
-            <span style="color:#36EAD0">Fix one thing at a time</span>
+            <span style="color: var(--lynn-color-teal)">Fix one thing at a time</span>
             <span class="subsection-note">Surgical, per-property edits with a clean one-click revert for each.</span>
           </div>
           <div class="tool-grid">
@@ -378,7 +385,7 @@
         <div class="subsection" id="mcp-undo">
           <div class="subsection-label">
             <span class="sub-dot" style="background:#f59e0b"></span>
-            <span style="color:#f59e0b">Undo &amp; history</span>
+            <span style="color: var(--amber)">Undo &amp; history</span>
             <span class="subsection-note">Step back out of any bulk change without leaving the conversation.</span>
           </div>
           <div class="tool-grid">
@@ -390,7 +397,7 @@
         <div class="subsection" id="mcp-restyle">
           <div class="subsection-label">
             <span class="sub-dot" style="background:#FF5B8A"></span>
-            <span style="color:#FF5B8A">Restyle the live page</span>
+            <span style="color: var(--lynn-color-coral)">Restyle the live page</span>
             <span class="subsection-note">Chrome only. Inject CSS, flip dark mode, and switch on accessibility overlays.</span>
           </div>
           <div class="tool-grid">
@@ -437,8 +444,8 @@
         <!-- ESCAPE HATCH -->
         <div class="subsection" id="mcp-escape">
           <div class="subsection-label">
-            <span class="sub-dot" style="background:rgba(255,255,255,0.4)"></span>
-            <span style="color:rgba(255,255,255,0.4)">Escape hatch</span>
+            <span class="sub-dot" style="background:var(--lynn-color-text-muted)"></span>
+            <span style="color: var(--lynn-color-text-secondary)">Escape hatch</span>
             <span class="subsection-note">Raw access for anything the tools above do not cover yet.</span>
           </div>
           <div class="tool-grid">
@@ -463,7 +470,7 @@
         <div class="subsection" id="skills-measure">
           <div class="subsection-label">
             <span class="sub-dot" style="background:#B98FFF"></span>
-            <span style="color:#B98FFF">Score &amp; triage</span>
+            <span style="color: var(--lynn-color-lynn)">Score &amp; triage</span>
             <span class="subsection-note">Turn a pile of issues into a ranked list of what to do first.</span>
           </div>
           <div class="tool-grid">
@@ -475,7 +482,7 @@
         <div class="subsection" id="skills-convert">
           <div class="subsection-label">
             <span class="sub-dot" style="background:#00E2A0"></span>
-            <span style="color:#00E2A0">Convert to Lyra</span>
+            <span style="color: var(--lynn-color-emerald)">Convert to Lyra</span>
             <span class="subsection-note">Set expectations and scope before anything gets rewritten.</span>
           </div>
           <div class="tool-grid">
@@ -499,7 +506,7 @@
         <div class="subsection" id="skills-parity">
           <div class="subsection-label">
             <span class="sub-dot" style="background:#36EAD0"></span>
-            <span style="color:#36EAD0">Design ↔ build parity</span>
+            <span style="color: var(--lynn-color-teal)">Design ↔ build parity</span>
             <span class="subsection-note">Compare what was designed against what actually shipped.</span>
           </div>
           <div class="tool-grid">
@@ -511,7 +518,7 @@
         <div class="subsection" id="skills-qa">
           <div class="subsection-label">
             <span class="sub-dot" style="background:#FF5B8A"></span>
-            <span style="color:#FF5B8A">Live-page QA</span>
+            <span style="color: var(--lynn-color-coral)">Live-page QA</span>
             <span class="subsection-note">Catch what only breaks in the real browser.</span>
           </div>
           <div class="tool-grid">
@@ -523,7 +530,7 @@
         <div class="subsection" id="skills-system">
           <div class="subsection-label">
             <span class="sub-dot" style="background:#3694FC"></span>
-            <span style="color:#3694FC">Design-system maintenance</span>
+            <span style="color: var(--lynn-color-blue)">Design-system maintenance</span>
             <span class="subsection-note">Feed what you learn back into the system itself.</span>
           </div>
           <div class="tool-grid">
@@ -547,7 +554,7 @@
         <div class="subsection" id="skills-knowledge">
           <div class="subsection-label">
             <span class="sub-dot" style="background:#f59e0b"></span>
-            <span style="color:#f59e0b">NICE product knowledge</span>
+            <span style="color: var(--amber)">NICE product knowledge</span>
             <span class="subsection-note">Real context on NICE and its products, so design work is grounded instead of generic.</span>
           </div>
           <div class="tool-grid">
@@ -957,7 +964,7 @@
             h('strong', null, 'Answers:'),
             ' "' + card.answer + '"',
             card.attribution
-              ? h('span', { style: { color: 'rgba(255,255,255,0.35)', fontStyle: 'normal' } }, ' ' + card.attribution)
+              ? h('span', { style: { color: 'var(--lynn-color-text-muted)', fontStyle: 'normal' } }, ' ' + card.attribution)
               : null
           )
         )

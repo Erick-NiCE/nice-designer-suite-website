@@ -7,11 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=13" />
+  <link rel="stylesheet" href="theme.css?v=19" />
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <script src="nice-effects.js?v=14" defer></script>
+  <script src="nice-effects.js?v=15" defer></script>
 
   <!--
     ===== lynn-ui: the site chrome, as React components =====
@@ -34,7 +34,7 @@
          placeholders generate no box, so the sticky nav and the footer's
          margin still resolve against <body> exactly as before.
   -->
-  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=1" />
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=7" />
   <script type="importmap">
   {
     "imports": {
@@ -78,6 +78,11 @@
       background: linear-gradient(to bottom, #1a0d40, var(--bg));
       padding: 100px 32px 80px;
       text-align: center;
+    }
+    /* Light mode: the dark fade above is for lynn/dark. A pale tint of the same hue
+       keeps the hero's themed text readable instead of dark-on-dark. */
+    [data-lynn-theme="light"] .hero {
+      background: linear-gradient(to bottom, #e3dafc, var(--lynn-color-bg));
     }
 
     .hero-eyebrow {
@@ -266,7 +271,7 @@
     .mcp-group-header {
       display: flex; align-items: baseline; gap: 14px;
       margin-bottom: 18px; padding-bottom: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
+      border-bottom: 1px solid var(--lynn-color-border);
     }
     .mcp-group-name {
       font-size: 13px; font-weight: 700; text-transform: uppercase;
@@ -277,9 +282,9 @@
     .mcp-group-name.handoff     { color: var(--teal); }
     .mcp-group-name.introspect  { color: var(--lyra); }
     .mcp-group-name.polish      { color: var(--coral); }
-    .mcp-group-name.escape      { color: rgba(255,255,255,0.4); }
+    .mcp-group-name.escape      { color: var(--lynn-color-text-secondary); }
     .mcp-group-note {
-      font-size: 12px; color: rgba(255,255,255,0.35); font-style: italic;
+      font-size: 12px; color: var(--lynn-color-text-muted); font-style: italic;
     }
     .mcp-tool-grid {
       display: grid;
@@ -287,13 +292,13 @@
       gap: 12px;
     }
     .mcp-tool-card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
+      background: color-mix(in srgb, var(--lynn-color-text) 3%, transparent);
+      border: 1px solid var(--lynn-color-border);
       border-radius: 12px; padding: 16px 18px;
     }
     .mcp-tool-card:hover {
-      background: rgba(255,255,255,0.05);
-      border-color: rgba(255,255,255,0.12);
+      background: color-mix(in srgb, var(--lynn-color-text) 5%, transparent);
+      border-color: var(--lynn-color-border-hover);
     }
     .mcp-tool-top {
       display: flex; align-items: center;
@@ -303,27 +308,27 @@
     .mcp-tool-name {
       font-family: 'SF Mono','Fira Code',monospace;
       font-size: 12.5px; font-weight: 600;
-      color: #fff; letter-spacing: 0.3px;
+      color: var(--lynn-color-text); letter-spacing: 0.3px;
     }
     .mcp-target-badge {
       font-size: 10px; font-weight: 700; padding: 2px 8px;
       border-radius: 100px; white-space: nowrap; flex-shrink: 0;
     }
-    .mcp-target-badge.figma   { background: rgba(54,148,252,0.15); color: #3694FC; border: 1px solid rgba(54,148,252,0.2); }
-    .mcp-target-badge.chrome  { background: rgba(0,226,160,0.12); color: #00E2A0; border: 1px solid rgba(0,226,160,0.2); }
-    .mcp-target-badge.both    { background: rgba(54,226,208,0.12); color: #36EAD0; border: 1px solid rgba(54,226,208,0.2); }
+    .mcp-target-badge.figma   { background: rgba(54,148,252,0.15); color: var(--lynn-color-blue); border: 1px solid rgba(54,148,252,0.2); }
+    .mcp-target-badge.chrome  { background: rgba(0,226,160,0.12); color: var(--lynn-color-emerald); border: 1px solid rgba(0,226,160,0.2); }
+    .mcp-target-badge.both    { background: rgba(54,226,208,0.12); color: var(--lynn-color-teal); border: 1px solid rgba(54,226,208,0.2); }
     .mcp-tool-desc {
-      font-size: 12.5px; color: rgba(255,255,255,0.55); line-height: 1.65;
+      font-size: 12.5px; color: var(--lynn-color-text-secondary); line-height: 1.65;
     }
     .mcp-returns {
-      margin-top: 8px; font-size: 11px; color: rgba(255,255,255,0.3);
+      margin-top: 8px; font-size: 11px; color: var(--lynn-color-text-muted);
     }
-    .mcp-returns strong { color: rgba(255,255,255,0.45); font-weight: 600; }
+    .mcp-returns strong { color: var(--lynn-color-text-secondary); font-weight: 600; }
     @media (max-width: 640px) { .mcp-tool-grid { grid-template-columns: 1fr; } }
 
     /* ---- MCP TOOLS TABLE SECTION ---- */
     .tools-section {
-      background: rgba(0,0,0,0.2);
+      background: color-mix(in srgb, var(--lynn-color-text) 4%, transparent);
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     }
@@ -357,7 +362,7 @@
     .tools-group-name.handoff { color: var(--teal); }
     .tools-group-name.introspection { color: var(--lyra); }
     .tools-group-name.polish { color: var(--coral); }
-    .tools-group-name.escape { color: rgba(255,255,255,0.5); }
+    .tools-group-name.escape { color: var(--lynn-color-text-secondary); }
 
     .tools-group-list {
       display: flex;
@@ -399,9 +404,9 @@
       border: 1px solid rgba(255,91,138,0.15);
     }
     .mcp-tool-tag.escape {
-      background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.6);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: color-mix(in srgb, var(--lynn-color-text) 6%, transparent);
+      color: var(--lynn-color-text-secondary);
+      border: 1px solid var(--lynn-color-border);
     }
 
     .mcp-full-link {
@@ -409,7 +414,7 @@
       text-decoration: none;
       border-bottom: 1px solid rgba(54,148,252,0.3);
     }
-    .mcp-full-link:hover { color: #fff; border-color: #fff; }
+    .mcp-full-link:hover { color: var(--lynn-color-text); border-color: var(--lynn-color-text); }
     .mcp-full-link-cta {
       display: inline-flex;
       align-items: center;
@@ -421,7 +426,7 @@
       font-size: 0.9375rem;
       transition: color 0.2s, gap 0.2s;
     }
-    .mcp-full-link-cta:hover { color: #fff; gap: 10px; }
+    .mcp-full-link-cta:hover { color: var(--lynn-color-text); gap: 10px; }
 
     /* `.tools-note` is <Alert variant="info"> now - the tint, border and
        radius are the component's, so only the 24px gap under the CTA above
@@ -476,8 +481,8 @@
     .tip-body code {
       font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
       font-size: 0.78rem;
-      background: rgba(255,255,255,0.07);
-      color: rgba(255,255,255,0.8);
+      background: color-mix(in srgb, var(--lynn-color-text) 7%, transparent);
+      color: var(--lynn-color-text);
       border: 1px solid var(--border);
       padding: 1px 5px;
       border-radius: 4px;
@@ -565,7 +570,7 @@
     <div class="section reveal" id="mcp">
       <p class="section-label">MCP server</p>
       <h2 class="section-title">57 tools, 12 groups</h2>
-      <p class="section-body">NiCE Designer exposes 57 MCP tools via the local WebSocket server at <code style="font-family:'SF Mono','Fira Code',monospace;font-size:.82rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:2px 6px;border-radius:4px">127.0.0.1:7331</code>. Most accept <code style="font-family:'SF Mono','Fira Code',monospace;font-size:.82rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:2px 6px;border-radius:4px">target: "figma" | "chrome" | "auto"</code> (the skill-lookup tools are the exception - pure introspection, no target needed), organized into 12 groups - connect &amp; diagnose, run a skill, scope, score &amp; measure, bulk fixes, one-at-a-time fixes, undo &amp; history, live-page restyling, Spec Mode, decide &amp; review, keeping the server current, and an escape hatch for anything the typed tools don't cover yet.</p>
+      <p class="section-body">NiCE Designer exposes 57 MCP tools via the local WebSocket server at <code style="font-family:'SF Mono','Fira Code',monospace;font-size:.82rem;background:color-mix(in srgb, var(--lynn-color-text) 7%, transparent);border: 1px solid var(--lynn-color-border);padding:2px 6px;border-radius:4px">127.0.0.1:7331</code>. Most accept <code style="font-family:'SF Mono','Fira Code',monospace;font-size:.82rem;background:color-mix(in srgb, var(--lynn-color-text) 7%, transparent);border: 1px solid var(--lynn-color-border);padding:2px 6px;border-radius:4px">target: "figma" | "chrome" | "auto"</code> (the skill-lookup tools are the exception - pure introspection, no target needed), organized into 12 groups - connect &amp; diagnose, run a skill, scope, score &amp; measure, bulk fixes, one-at-a-time fixes, undo &amp; history, live-page restyling, Spec Mode, decide &amp; review, keeping the server current, and an escape hatch for anything the typed tools don't cover yet.</p>
       <p class="section-body">The full reference - every tool, its group, target client(s), and what it does - lives on the <a href="./tools.html#mcp" class="mcp-full-link">Tools page</a>, generated straight from the MCP server's own catalog so it never drifts out of sync.</p>
       <a href="./tools.html#mcp" class="mcp-full-link-cta">Browse all 55 MCP tools &rarr;</a>
 
@@ -671,7 +676,7 @@
       inset: 0;
       border-radius: inherit;
       background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%),
-        rgba(255,255,255,0.09) 0%, transparent 70%);
+        color-mix(in srgb, var(--lynn-color-text) 9%, transparent) 0%, transparent 70%);
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.35s ease;

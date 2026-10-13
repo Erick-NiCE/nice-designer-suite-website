@@ -20,11 +20,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=13" />
+  <link rel="stylesheet" href="theme.css?v=19" />
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <script src="nice-effects.js?v=14" defer></script>
+  <script src="nice-effects.js?v=15" defer></script>
 
   <!--
     ===== lynn-ui: the site chrome, as React components =====
@@ -47,7 +47,7 @@
          placeholders generate no box, so the sticky nav and the footer's
          margin still resolve against <body> exactly as before.
   -->
-  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=1" />
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=7" />
   <script type="importmap">
   {
     "imports": {
@@ -137,12 +137,12 @@
       color: #fff;
     }
     .nf-btn.ghost {
-      background: rgba(255, 255, 255, 0.05);
+      background: color-mix(in srgb, var(--lynn-color-text) 5%, transparent);
       color: var(--text);
       border: 1px solid var(--border);
     }
     .nf-btn:hover { transform: translateY(-2px); }
-    .nf-btn.ghost:hover { border-color: rgba(255, 255, 255, 0.2); }
+    .nf-btn.ghost:hover { border-color: var(--lynn-color-border-hover); }
   </style>
 </head>
 <body>

@@ -267,3 +267,11 @@
 .lynn-feature-card-full .lynn-feature-card-icon {
   color: #ffffff;
 }
+
+/* The caller's accent is a raw brand hex tuned for the dark surfaces (emerald
+   is 1.4:1 on the light card). Used as *text* in light mode, blend it toward
+   the text color so the hue survives but the label is readable. */
+[data-lynn-theme='light'] .lynn-feature-card-why strong,
+[data-lynn-theme='light'] .lynn-feature-card-bullets-label {
+  color: color-mix(in srgb, var(--lynn-t-color) 45%, var(--lynn-color-text));
+}

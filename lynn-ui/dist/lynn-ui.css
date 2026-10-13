@@ -95,7 +95,12 @@
   --lynn-color-border-subtle: #e2e5e9;
   --lynn-color-text: #1a1d21;
   --lynn-color-text-secondary: #3d4550;
-  --lynn-color-text-muted: #6b7280;
+  --lynn-color-text-muted: #5f6672;
+  --lynn-color-blue: #1155b8;
+  --lynn-color-emerald: #006f4d;
+  --lynn-color-teal: #00695e;
+  --lynn-color-coral: #bd1b55;
+  --lynn-color-lynn: #6d3fd0;
   --lynn-shadow-raised: 7px 7px 16px rgba(168, 174, 185, 0.5), -7px -7px 16px rgba(255, 255, 255, 0.9);
   --lynn-shadow-pressed: inset 7px 7px 14px rgba(168, 174, 185, 0.5), inset -7px -7px 14px rgba(255, 255, 255, 0.9);
 }
@@ -466,6 +471,21 @@
   --lynn-alert-bg: rgba(97, 0, 255, 0.1);
   --lynn-alert-border: rgba(97, 0, 255, 0.25);
   --lynn-alert-title: #b98fff;
+}
+[data-lynn-theme=light] .lynn-alert-info {
+  --lynn-alert-title: var(--lynn-color-blue);
+}
+[data-lynn-theme=light] .lynn-alert-success {
+  --lynn-alert-title: var(--lynn-color-emerald);
+}
+[data-lynn-theme=light] .lynn-alert-warning {
+  --lynn-alert-title: var(--lynn-color-teal);
+}
+[data-lynn-theme=light] .lynn-alert-danger {
+  --lynn-alert-title: var(--lynn-color-coral);
+}
+[data-lynn-theme=light] .lynn-alert-purple {
+  --lynn-alert-title: var(--lynn-color-lynn);
 }
 
 /* src/components/Avatar/Avatar.css */
@@ -2142,6 +2162,10 @@
 }
 .lynn-feature-card-full .lynn-feature-card-icon {
   color: #ffffff;
+}
+[data-lynn-theme=light] .lynn-feature-card-why strong,
+[data-lynn-theme=light] .lynn-feature-card-bullets-label {
+  color: color-mix(in srgb, var(--lynn-t-color) 45%, var(--lynn-color-text));
 }
 
 /* src/components/FeaturePanel/FeaturePanel.css */

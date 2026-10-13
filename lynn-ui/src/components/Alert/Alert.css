@@ -93,3 +93,11 @@
   --lynn-alert-border: rgba(97, 0, 255, 0.25);
   --lynn-alert-title: #b98fff;
 }
+
+/* The titles above are the dark-surface accents (#00e2a0 is 1.4:1 on the
+   light tint); in light mode they follow the mode's own darker accent tokens. */
+[data-lynn-theme='light'] .lynn-alert-info { --lynn-alert-title: var(--lynn-color-blue); }
+[data-lynn-theme='light'] .lynn-alert-success { --lynn-alert-title: var(--lynn-color-emerald); }
+[data-lynn-theme='light'] .lynn-alert-warning { --lynn-alert-title: var(--lynn-color-teal); }
+[data-lynn-theme='light'] .lynn-alert-danger { --lynn-alert-title: var(--lynn-color-coral); }
+[data-lynn-theme='light'] .lynn-alert-purple { --lynn-alert-title: var(--lynn-color-lynn); }

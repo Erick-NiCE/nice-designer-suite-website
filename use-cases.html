@@ -7,11 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=13" />
+  <link rel="stylesheet" href="theme.css?v=19" />
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <script src="nice-effects.js?v=14" defer></script>
+  <script src="nice-effects.js?v=15" defer></script>
 
   <!--
     ===== lynn-ui: the site chrome, as React components =====
@@ -37,7 +37,7 @@
          portalled scenario cards, because a portal renders into its real
          DOM position.
   -->
-  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=2" />
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=7" />
   <script type="importmap">
   {
     "imports": {
@@ -80,6 +80,11 @@
       background: linear-gradient(to bottom, #2a0d1a, var(--bg));
       padding: 100px 32px 80px;
       text-align: center;
+    }
+    /* Light mode: the dark fade above is for lynn/dark. A pale tint of the same hue
+       keeps the hero's themed text readable instead of dark-on-dark. */
+    [data-lynn-theme="light"] .hero {
+      background: linear-gradient(to bottom, #fbdde7, var(--lynn-color-bg));
     }
 
     .hero-eyebrow {
@@ -195,7 +200,7 @@
     .scenario-card:hover {
       transform: translateY(-3px);
       box-shadow: 0 16px 40px rgba(0,0,0,0.35);
-      border-color: rgba(255,255,255,0.13);
+      border-color: var(--lynn-color-border-hover);
     }
 
     .scenario-top {
@@ -623,7 +628,7 @@
       inset: 0;
       border-radius: inherit;
       background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%),
-        rgba(255,255,255,0.09) 0%, transparent 70%);
+        color-mix(in srgb, var(--lynn-color-text) 9%, transparent) 0%, transparent 70%);
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.35s ease;

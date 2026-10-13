@@ -191,7 +191,18 @@
 
   --lynn-color-text: #1a1d21;
   --lynn-color-text-secondary: #3d4550;
-  --lynn-color-text-muted: #6b7280;
+  --lynn-color-text-muted: #5f6672;
+
+  /* The brand accents are tuned for the dark surfaces (#3694FC is 2.9:1 and
+     #00E2A0 is 1.4:1 on #f5f6f8), so as text, borders and link colors they
+     fail on this mode's near-white ground, and white-on-#3694FC buttons sit
+     at 3.1:1. Each is stepped down to the same hue at >= 4.5:1 against both
+     --lynn-color-bg and --lynn-color-card (and white text on the fill). */
+  --lynn-color-blue: #1155b8;
+  --lynn-color-emerald: #006f4d;
+  --lynn-color-teal: #00695e;
+  --lynn-color-coral: #bd1b55;
+  --lynn-color-lynn: #6d3fd0;
 
   /* The only mode with a real light source, so this is the classic
      light+dark pair. The highlight is literally `--lynn-color-surface`

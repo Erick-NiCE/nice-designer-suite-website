@@ -7,11 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=13" />
+  <link rel="stylesheet" href="theme.css?v=19" />
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <script src="nice-effects.js?v=14" defer></script>
+  <script src="nice-effects.js?v=15" defer></script>
 
   <!--
     ===== lynn-ui: the site chrome, as React components =====
@@ -34,7 +34,7 @@
          placeholders generate no box, so the sticky nav and the footer's
          margin still resolve against <body> exactly as before.
   -->
-  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=1" />
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=7" />
   <script type="importmap">
   {
     "imports": {
@@ -77,6 +77,11 @@
       background: linear-gradient(to bottom, #2a1a5e, #21212B);
       padding: 96px 24px 80px;
       text-align: center;
+    }
+    /* Light mode: the dark fade above is for lynn/dark. A pale tint of the same hue
+       keeps the hero's themed text readable instead of dark-on-dark. */
+    [data-lynn-theme="light"] .hero {
+      background: linear-gradient(to bottom, #e6defa, var(--lynn-color-bg));
     }
 
     .hero-eyebrow {
@@ -288,7 +293,7 @@
     code, .inline-code {
       font-family: 'Courier New', Courier, monospace;
       font-size: 0.85em;
-      background: rgba(255,255,255,0.08);
+      background: color-mix(in srgb, var(--lynn-color-text) 8%, transparent);
       color: var(--teal);
       padding: 2px 7px;
       border-radius: 5px;
@@ -309,7 +314,7 @@
     }
 
     .code-block .code-comment {
-      color: var(--muted);
+      color: rgba(255, 255, 255, 0.5);
     }
 
     .code-block .code-key {
@@ -534,7 +539,7 @@
     }
   </style>
 </head>
-<body>
+<body class="page-install">
 
   <!-- lynn-ui chrome. One React root, one ThemeProvider (see the mount
        script at the end of <body>); the gate renders inside it, everything
@@ -740,7 +745,7 @@
       inset: 0;
       border-radius: inherit;
       background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%),
-        rgba(255,255,255,0.09) 0%, transparent 70%);
+        color-mix(in srgb, var(--lynn-color-text) 9%, transparent) 0%, transparent 70%);
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.35s ease;

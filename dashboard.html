@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NiCE CXone Accessibility Audit Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="theme.css?v=13" />
+<link rel="stylesheet" href="theme.css?v=19" />
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <script src="nice-effects.js?v=14" defer></script>
+  <script src="nice-effects.js?v=15" defer></script>
 
   <!--
     ===== lynn-ui: the site chrome, as React components =====
@@ -41,7 +41,7 @@
          placeholders generate no box, so the sticky nav still resolves
          against <body> exactly as before.
   -->
-  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=1" />
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=7" />
   <script type="importmap">
   {
     "imports": {
@@ -173,12 +173,12 @@
     background: rgba(245,158,11,0.07);
     border: 1px solid rgba(245,158,11,0.2);
     border-radius: 10px; padding: 10px 16px;
-    font-size: 12px; color: rgba(255,255,255,0.55);
+    font-size: 12px; color: var(--lynn-color-text-secondary);
     display: flex; gap: 24px;
   }
   .a11y-note-item { display: flex; gap: 8px; align-items: flex-start; }
   .a11y-badge { font-size: 9px; font-weight: 700; text-transform: uppercase; border-radius: 4px; padding: 2px 6px; white-space: nowrap; flex-shrink: 0; margin-top: 1px; }
-  .badge-min  { background: rgba(245,158,11,0.2); color: #f59e0b; }
+  .badge-min  { background: rgba(245,158,11,0.2); color: var(--amber); }
   .badge-full { background: rgba(255,91,138,0.2); color: var(--coral); }
 
   /* TOGGLE - the switch itself is lynn-ui's <Switch> now (see the mount
@@ -187,7 +187,7 @@
   .toggle-bar {
     display: flex; align-items: center; gap: 10px;
     padding: 8px 20px;
-    background: rgba(255,255,255,0.02);
+    background: color-mix(in srgb, var(--lynn-color-text) 2%, transparent);
     border-bottom: 1px solid var(--border);
     font-size: 12px; color: var(--text-sec);
   }
@@ -211,7 +211,7 @@
     text-align: center; flex: 1; min-width: 150px;
     transition: border-color 0.2s;
   }
-  .gauge-card:hover { border-color: rgba(255,255,255,0.14); }
+  .gauge-card:hover { border-color: var(--lynn-color-border-hover); }
   .gauge-card h4 { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
 
   /* SEARCH */
@@ -243,7 +243,7 @@
   <!-- NAV (lynn-ui <Nav>) -->
   <div id="lynn-nav-root" class="lynn-mount"></div>
 
-<div class="header">
+<div class="header pin-dark">
   <div class="header-bg"></div>
   <div class="orb orb-h1"></div>
   <div class="orb orb-h2"></div>
@@ -300,7 +300,7 @@
       inset: 0;
       border-radius: inherit;
       background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%),
-        rgba(255,255,255,0.09) 0%, transparent 70%);
+        color-mix(in srgb, var(--lynn-color-text) 9%, transparent) 0%, transparent 70%);
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.35s ease;
@@ -506,7 +506,7 @@
     const KPI_CARDS = [
       { label: 'Overall SOL Score', value: '89%', sub: 'Token Compliance', accent: 'blue', valueColor: 'var(--blue)' },
       { label: 'Overall LYRA Score', value: '96%', sub: 'Token Compliance', accent: 'lynn', valueColor: 'var(--lyra)' },
-      { label: 'Min A11y Score', value: '61%', sub: 'Excl. contrast & touch', accent: 'blue', fill: '#f59e0b', valueColor: '#f59e0b' },
+      { label: 'Min A11y Score', value: '61%', sub: 'Excl. contrast & touch', accent: 'blue', fill: 'var(--amber)', valueColor: 'var(--amber)' },
       { label: 'Full A11y Score', value: '0%', sub: 'Incl. all checks', accent: 'coral', valueColor: 'var(--coral)' },
       { label: 'Sections', value: '12', sub: 'Product areas', accent: 'emerald', valueColor: 'var(--emerald)' },
       { label: 'SOL / LYRA Issues', value: '241,887', sub: '103,279 LYRA issues', valueColor: 'var(--coral)', valueSize: '18px' },
@@ -639,7 +639,7 @@
           avg.acc !== null &&
             h(
               'span',
-              { className: 'badge', style: { background: 'rgba(245,158,11,0.12)', color: '#f59e0b' } },
+              { className: 'badge', style: { background: 'rgba(245,158,11,0.12)', color: 'var(--amber)' } },
               `Min A11y ${avg.acc}%`
             ),
           avg.full_acc !== null &&
@@ -671,13 +671,13 @@
           h(
             'div',
             { className: 'gauge-card' },
-            h('h4', { style: { color: '#f59e0b' } }, 'Min A11y'),
+            h('h4', { style: { color: 'var(--amber)' } }, 'Min A11y'),
             avg.acc !== null
               ? h(GaugeRing, {
                   value: avg.acc,
                   size: 96,
                   ariaLabel: 'Min A11y',
-                  style: { '--lynn-gauge-accent': '#f59e0b' },
+                  style: { '--lynn-gauge-accent': 'var(--amber)' },
                 })
               : h('span', { style: { color: 'var(--muted)' } }, '-')
           ),

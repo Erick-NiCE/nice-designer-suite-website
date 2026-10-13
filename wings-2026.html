@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=13" />
+  <link rel="stylesheet" href="theme.css?v=19" />
   <link rel="stylesheet" href="nice-effects.css" />
   <!--
     NOTE: this page is intentionally PUBLIC - no site-gate.css / site-gate.js
@@ -45,7 +45,7 @@
          badge/step/button slots inside each walk panel still resolve their
          margins against their real parents exactly as before.
   -->
-  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=1" />
+  <link rel="stylesheet" href="./lynn-ui/dist/lynn-ui.css?v=7" />
   <script type="importmap">
   {
     "imports": {
@@ -167,7 +167,7 @@
       position: absolute; top: 0; left: 0; right: 0; height: 2px;
       background: linear-gradient(90deg, var(--blue), var(--indigo), var(--emerald));
     }
-    .walk-panel:hover { border-color: rgba(255,255,255,0.13); transform: translateY(-1px); }
+    .walk-panel:hover { border-color: var(--lynn-color-border-hover); transform: translateY(-1px); }
     /* The `.walk-badge`s are lynn-ui <Badge tone="lynn"> now (see the mount
        script at the end of <body>) - the component's pill is the same
        185,143,255 tint at 14%, so the fill, the radius and the color have
@@ -199,7 +199,7 @@
     .tool-note {
       display: flex; gap: 10px; align-items: flex-start;
       font-size: 13px; color: var(--text-secondary); line-height: 1.6;
-      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--lynn-color-text) 4%, transparent); border: 1px solid var(--border);
       border-radius: 12px; padding: 14px 16px; max-width: 620px; margin-bottom: 26px;
     }
     .tool-note strong { color: var(--text, #fff); }
@@ -299,7 +299,7 @@
     /* ---- FLOW DIAGRAM ---- */
     .flow-line { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 6px; }
     .flow-line .flow-stage {
-      background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 100px;
+      background: color-mix(in srgb, var(--lynn-color-text) 4%, transparent); border: 1px solid var(--border); border-radius: 100px;
       padding: 8px 16px; font-size: 13px; color: var(--text-secondary); white-space: nowrap;
     }
     .flow-line .flow-arrow { color: var(--text-muted); font-weight: 700; font-size: 14px; }
@@ -338,7 +338,7 @@
   <div id="lynn-docrail-root" class="lynn-mount"></div>
 
   <!-- HERO -->
-  <header class="hero">
+  <header class="hero pin-dark">
     <div class="hero-gradient"></div>
     <div class="hero-orb hero-orb-1"></div>
     <div class="hero-orb hero-orb-2"></div>
@@ -676,7 +676,7 @@
        script at the end of <body>) -->
   <div id="lynn-footer-root" class="lynn-mount"></div>
 
-  <script src="nice-effects.js?v=14"></script>
+  <script src="nice-effects.js?v=15"></script>
   <script>
     // Scroll reveal - lynn/motion/scroll-reveal
     (function () {

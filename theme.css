@@ -37,16 +37,17 @@
   --text-muted:        var(--muted); /* alias */
 
   /* Brand palette */
-  --blue:          #3694FC;
+  --blue:          var(--lynn-color-blue, #3694FC);
   --electric:      #025AFB;
   --electric-blue: #025AFB; /* alias */
   --elblue:        #025AFB; /* alias */
   --indigo:        #6100FF;
-  --emerald:       #00E2A0;
-  --teal:          #36EAD0;
-  --coral:         #FF5B8A;
-  --lyra:          #B98FFF;
+  --emerald:       var(--lynn-color-emerald, #00E2A0);
+  --teal:          var(--lynn-color-teal, #36EAD0);
+  --coral:         var(--lynn-color-coral, #FF5B8A);
+  --lyra:          var(--lynn-color-lynn, #B98FFF);
   --amber:         #f59e0b;
+  --lime:          #a3e635;
 
   /* Shape & layout */
   --radius:        16px;
@@ -55,6 +56,60 @@
 
   /* Type */
   --font: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+/* #f59e0b is ~2:1 on the light ground. */
+[data-lynn-theme="light"] { --amber: #8f4f00; --lime: #3f6b0d; }
+
+/* ========== PINNED-DARK REGIONS ==========
+ * Hero banners and code blocks that keep their dark gradient / dark ground in
+ * every theme. The text and accent tokens above follow the light/dark/lynn
+ * toggle, so in light mode they go dark-on-dark inside these regions. Adding
+ * `.pin-dark` re-pins the *text and accent* tokens to their lynn values for
+ * everything inside (custom properties inherit, so one class on the wrapper
+ * is enough). Surfaces (--bg/--card) are deliberately left alone so a
+ * vignette that fades to the page still fades to the real page color.
+ * The aliases are re-declared here because `var()` in `:root` resolves
+ * against :root's own values, not the descendant's.
+ */
+.pin-dark,
+.page-install .code-block {
+  --lynn-color-text: #ffffff;
+  --lynn-color-text-secondary: rgba(255, 255, 255, 0.58);
+  --lynn-color-text-muted: rgba(255, 255, 255, 0.30);
+  --lynn-color-border: rgba(255, 255, 255, 0.08);
+  --lynn-color-blue: #3694FC;
+  --lynn-color-emerald: #00E2A0;
+  --lynn-color-teal: #36EAD0;
+  --lynn-color-coral: #FF5B8A;
+  --lynn-color-lynn: #B98FFF;
+
+  --text: var(--lynn-color-text);
+  --text-secondary: var(--lynn-color-text-secondary);
+  --text-sec: var(--lynn-color-text-secondary);
+  --secondary: var(--lynn-color-text-secondary);
+  --sec: var(--lynn-color-text-secondary);
+  --muted: var(--lynn-color-text-muted);
+  --text-muted: var(--lynn-color-text-muted);
+  --border: var(--lynn-color-border);
+  --blue: var(--lynn-color-blue);
+  --emerald: var(--lynn-color-emerald);
+  --teal: var(--lynn-color-teal);
+  --coral: var(--lynn-color-coral);
+  --lyra: var(--lynn-color-lynn);
+  --amber: #f59e0b;
+  --lime: #a3e635;
+
+  /* `color` is inherited as an already-computed value, so it has to be
+     re-resolved here against the re-pinned token. */
+  color: #ffffff;
+}
+
+/* A pinned-dark banner needs its own dark ground in light mode: its glow
+   fades out to the page background, which would otherwise leave white text
+   floating on a pale vignette. Pinning --bg makes that fade land on dark. */
+[data-lynn-theme="light"] .pin-dark {
+  background-color: #21212B;
+  --bg: #21212B;
 }
 
 /* ========== BASE ========== */
