@@ -555,7 +555,7 @@
     <div class="reveal">
       <span class="hero-eyebrow">GETTING STARTED</span>
       <h1 class="hero-title">Install Guide</h1>
-      <p class="hero-subtitle">Install the Chrome extension, then connect Claude Desktop to supercharge it. Figma setup is its own section at the bottom of the page. Already installed? Head to the <a href="./update-guide.html" style="color:inherit;text-decoration:underline;">Update Guide</a>.</p>
+      <p class="hero-subtitle">Install the Chrome extension, then connect Claude Desktop to supercharge it. Figma setup is its own section at the bottom of the page.</p>
     </div>
   </section>
 
@@ -564,6 +564,10 @@
     <!-- The three-step walkthrough: lynn-ui <Stepper> (see the mount script
          at the end of <body>). Each step keeps its own id, which is what the
          doc rail's "Steps" group links to. -->
+    <!-- lynn-ui <Alert variant="info">: sends people with an older version to
+         the Update Guide before they start a fresh install -->
+    <div id="lynn-update-pointer" class="lynn-mount" style="display:block;margin-bottom:32px;"></div>
+
     <div id="lynn-steps-root" class="lynn-mount"></div>
 
     <!-- DIVIDER -->
@@ -1519,6 +1523,10 @@ winget install OpenJS.NodeJS.LTS</div>
            hold the entire walkthrough at opacity 0. The steps come in
            already visible; every other `.reveal` on the page (hero,
            dividers, the two sections below) still animates. */
+        portal(
+          note(ICON_REFRESH, '<strong>Already have an older version installed?</strong> Skip this guide and follow the <a href="./update-guide.html" class="step-link">Update Guide</a> instead. It updates your existing install without losing your settings.'),
+          'lynn-update-pointer'
+        ),
         portal(h(Stepper, { steps: STEPS }), 'lynn-steps-root'),
         portal(h(Stepper, { steps: FIGMA_STEPS }), 'lynn-figma-root'),
         portal(h(Footer, { columns: FOOTER_COLUMNS }), 'lynn-footer-root')
