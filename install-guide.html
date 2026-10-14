@@ -1086,24 +1086,6 @@
         children: h(
           Fragment,
           null,
-          h(
-            AccordionItem,
-            {
-              id: 'install-guide-node',
-              title: 'Advanced: Node.js (only if you turned off Claude Desktop\'s built-in Node.js)',
-              defaultOpen: false,
-              persist: false,
-            },
-            block(`<p>You do <strong>not</strong> need to install Node.js. Claude Desktop ships with its own built-in Node.js and uses it to run the connector, so the one-click install below works on a fresh machine. Skip this section unless you (or your IT team) turned that built-in Node.js off in Claude Desktop - then the connector has no <code>node</code> to run and you have to supply one yourself.</p>
-              <p style="margin-top:12px;"><strong>Option A - Download the installer (no terminal).</strong> Go to <a href="https://nodejs.org" class="step-link" target="_blank" rel="noopener">nodejs.org</a>, download the installer for your OS (the big green button - it's the LTS version), and double-click it like any other app installer.</p>
-              <p style="margin-top:12px;"><strong>Option B - Package manager (for developers).</strong></p>
-              <div class="code-block"><span class="code-comment"># macOS (Homebrew)</span>
-brew install node
-
-<span class="code-comment"># Windows (winget)</span>
-winget install OpenJS.NodeJS.LTS</div>
-              <p style="margin-top:12px;">Either option gives you a working <code>node</code> command. You only need to do this once per machine, and you do not need to run <code>npm install</code> or start the server yourself - Claude Desktop starts it automatically.</p>`)
-          ),
           section(
             'One-click install (recommended)',
             block(`<p>The <code>NiCE Designer Chrome</code> folder - the same one you loaded in step 1 - has <strong>"Click to install Claude Connector.mcpb"</strong> sitting directly inside it. Double-click it, confirm the two prompts, and <strong>"nice-designer-mcp"</strong> appears as an installed extension - already running. No file paths, no JSON, no terminal.</p>
@@ -1144,6 +1126,30 @@ winget install OpenJS.NodeJS.LTS</div>
           h(
             AccordionItem,
             {
+              id: 'install-guide-other-clients',
+              title: 'Using Claude Code or VS Code Copilot instead of Claude Desktop',
+              defaultOpen: false,
+              persist: false,
+            },
+            block(`<p>The connector file is only for Claude Desktop. Claude Code and Copilot run the same server straight from the <code>mcp-server</code> folder inside <code>NiCE Designer Chrome</code>, so you register it once and you still turn <strong>Supercharge</strong> on in the extension as above. You need <a href="https://nodejs.org" class="step-link" target="_blank" rel="noopener">Node.js</a> installed for these, because Claude Desktop's built-in copy is not available to them.</p>
+              <p style="margin-top:12px;"><strong>Claude Code (CLI).</strong> Run this once, using the full path to your unzipped folder (keep the quotes, the folder name has spaces):</p>
+              <div class="code-block">claude mcp add --scope user nice-designer -- node "/absolute/path/to/NiCE Designer Chrome/mcp-server/src/index.js"</div>
+              <p style="margin-top:12px;">Then exit your session (<code>/exit</code> or <code>Ctrl+D</code>) and run <code>claude</code> again so it picks up the new server. <code>--scope user</code> makes it available in every project.</p>
+              <p style="margin-top:12px;"><strong>VS Code with GitHub Copilot.</strong> Open the Command Palette and run <strong>MCP: Open User Configuration</strong> (or create <code>.vscode/mcp.json</code> in a project), then add:</p>
+              <div class="code-block">{
+  <span class="code-key">"servers"</span>: {
+    <span class="code-key">"nice-designer"</span>: {
+      <span class="code-key">"type"</span>: <span class="code-str">"stdio"</span>,
+      <span class="code-key">"command"</span>: <span class="code-str">"node"</span>,
+      <span class="code-key">"args"</span>: [<span class="code-str">"/absolute/path/to/NiCE Designer Chrome/mcp-server/src/index.js"</span>]
+    }
+  }
+}</div>
+              <p style="margin-top:12px;">Save, click <strong>Start</strong> above the server entry, then open Copilot Chat in <strong>Agent</strong> mode and make sure the <strong>nice-designer</strong> tools are ticked in the tools picker. Use an absolute path in both cases; relative paths will not work.</p>`)
+          ),
+          h(
+            AccordionItem,
+            {
               id: 'install-guide-manual',
               title: 'Advanced: no .mcpb support, or running the server yourself',
               defaultOpen: false,
@@ -1167,6 +1173,24 @@ cd packages/mcp-server
 npm install
 node src/index.js</div>
               <p style="margin-top:12px;">It listens on <code>ws://127.0.0.1:7331</code>. Set <code>NICE_MCP_WS_PORT</code> first to use a different port, for example <code>NICE_MCP_WS_PORT=8080 node src/index.js</code>.</p>`)
+          ),
+          h(
+            AccordionItem,
+            {
+              id: 'install-guide-node',
+              title: 'Advanced: Node.js (only if you turned off Claude Desktop\'s built-in Node.js)',
+              defaultOpen: false,
+              persist: false,
+            },
+            block(`<p>You do <strong>not</strong> need to install Node.js. Claude Desktop ships with its own built-in Node.js and uses it to run the connector, so the one-click install below works on a fresh machine. Skip this section unless you (or your IT team) turned that built-in Node.js off in Claude Desktop - then the connector has no <code>node</code> to run and you have to supply one yourself.</p>
+              <p style="margin-top:12px;"><strong>Option A - Download the installer (no terminal).</strong> Go to <a href="https://nodejs.org" class="step-link" target="_blank" rel="noopener">nodejs.org</a>, download the installer for your OS (the big green button - it's the LTS version), and double-click it like any other app installer.</p>
+              <p style="margin-top:12px;"><strong>Option B - Package manager (for developers).</strong></p>
+              <div class="code-block"><span class="code-comment"># macOS (Homebrew)</span>
+brew install node
+
+<span class="code-comment"># Windows (winget)</span>
+winget install OpenJS.NodeJS.LTS</div>
+              <p style="margin-top:12px;">Either option gives you a working <code>node</code> command. You only need to do this once per machine, and you do not need to run <code>npm install</code> or start the server yourself - Claude Desktop starts it automatically.</p>`)
           )
         ),
       },
