@@ -196,6 +196,21 @@
     .mk-desc { font-size: 14px; color: var(--text-sec); }
     .mk-benefit { font-size: 13.5px; color: var(--text-sec); margin-top: 12px; }
     .mk-benefit strong { color: var(--text); font-weight: 700; }
+    .mk-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+    .mk-copy .mk-meta-label { margin: 0; }
+    .mk-copy-examples { display: flex; flex-direction: column; gap: 6px; width: 100%; margin-bottom: 8px; }
+    .mk-copy-example {
+      width: 100%;
+      justify-content: flex-start;
+      text-align: left;
+      white-space: normal;
+      height: auto;
+      min-height: 0;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      line-height: 1.4;
+      font-weight: 500;
+    }
     .mk-meta {
       margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border);
       display: flex; flex-direction: column; gap: 10px;
@@ -1299,36 +1314,67 @@ call, what the output should look like, and what to watch for.</pre>
 
     /* "Copy for Claude", the same prompt the plugin's Marketplace rows copy
        from their id chip. One mount per card, filled from this list. */
-    const COPY_SKILLS = [["ux-eval", "Ten-question UX eval"], ["north-star-fox", "North Star Fox"], ["copilot-demo-generator", "Copilot Demo Generator"], ["eac-framework-guide", "EAC Framework Guide"], ["ux-research-planning", "Research planning"], ["ux-research-synthesis", "Research synthesis"], ["ux-research-readouts", "Research readouts"], ["emotional-intelligence", "Emotional intelligence voice & tone"], ["meeting-distiller", "Meeting → design brief"], ["fast-research-pack", "Fast research pack"], ["proposal-generator", "Proposal generator"], ["wireframe-generator", "Wireframe generator"], ["figma-push", "Push proposal to Figma"], ["design-ops", "Design ops"], ["design-research", "Design research"], ["ux-strategy", "UX strategy"], ["product-thinking-partner", "Product thinking partner"], ["prism", "Prism"], ["figma-a11y-instructions", "Figma → developer a11y instructions"], ["hero-flows-research-os", "Research lead operating system"], ["nice-present", "NiCE Present"], ["pm-brain", "PM Brain"], ["lyra-ui-prototyping", "Lyra UI prototyping"], ["adqr-design-review", "ADQR design review"], ["defuddle", "Clean web page extraction"], ["obsidian-power-user", "Obsidian power user"], ["obsidian-markdown", "Obsidian-flavored markdown"], ["obsidian-bases", "Obsidian Bases"], ["obsidian-cli", "Obsidian CLI"], ["json-canvas", "JSON Canvas"]];
+    const COPY_SKILLS = [["ux-eval", "Ten-question UX eval", ["Is this ready for dev?", "Run a UX eval on this design.", "Run the ten-question UX eval on this page."]], ["north-star-fox", "North Star Fox", ["Check this AI design against the NiCE AI design tenets.", "Does this Jira ticket hold up against our AI-first principles?", "Run North Star Fox on this screen and give me pass or fail per section."]], ["copilot-demo-generator", "Copilot Demo Generator", ["Build a Copilot demo where a happy customer gets angry when their car insurance claim is rejected.", "Make an Agent Copilot demo for a billing dispute that ends calm, as a Demo Studio JSON.", "I need a voice Copilot demo for a delayed refund. Generate the file for Copilot Demo Studio."]], ["eac-framework-guide", "EAC Framework Guide", ["Which EAC tenet does this situation fall under?", "What should I show my manager as evidence for this behavior?", "Help me prep for a calibration conversation using the framework."]], ["ux-research-planning", "Research planning", ["What research method answers this question?", "Write me a discussion guide for a usability study on this flow.", "Draft a screener and brief for recruiting admins."]], ["ux-research-synthesis", "Research synthesis", ["I have eight interview transcripts. What themes do you see?", "Turn these notes into personas.", "Build a journey map from these sessions and flag the thin signals."]], ["ux-research-readouts", "Research readouts", ["Turn these findings into a readout for stakeholders.", "Write an executive summary of this study.", "Make this research into an HTML deliverable for the leadership team."]], ["emotional-intelligence", "Emotional intelligence voice & tone", ["Does this feedback read as clear or defensive?", "Rewrite this message so it is direct without being harsh.", "Help me word a hard conversation with a teammate."]], ["meeting-distiller", "Meeting → design brief", ["Turn these discovery meeting notes into a design brief.", "Here is a transcript. What is the problem we should design for?", "Distill this call into goals, constraints and open questions."]], ["fast-research-pack", "Fast research pack", ["What has already been tried for this problem?", "Build a research pack from this design brief.", "Show me analogous solutions and anti-patterns for this flow."]], ["proposal-generator", "Proposal generator", ["Give me three different directions for this brief.", "Generate conservative, progressive and disruptive proposals.", "Compare the options in a scoring matrix."]], ["wireframe-generator", "Wireframe generator", ["Turn this proposal into a clickable prototype.", "Build a responsive HTML wireframe for the progressive option.", "Make an annotated wireframe I can share with the team."]], ["figma-push", "Push proposal to Figma", ["Push this proposal into Figma as real frames.", "Create named, auto-laid-out frames from these screens.", "Get the wireframe into Figma with design tokens bound."]], ["design-ops", "Design ops", ["Set up a critique framework for my design team.", "Write a handoff process for design and engineering.", "Draft an onboarding plan for a new designer."]], ["design-research", "Design research", ["Plan a usability test for this flow end to end.", "Write an interview guide for admins who manage routing.", "Analyze the results of this card sort."]], ["ux-strategy", "UX strategy", ["Help me write design principles for this product area.", "Draft a UX vision that ties to the business goals.", "Frame this problem so it connects to what the company cares about."]], ["product-thinking-partner", "Product thinking partner", ["Push back on this idea instead of agreeing with me.", "Which parts of my claim are evidence and which are hypothesis?", "Pressure-test this framing before I put it in a doc."]], ["prism", "Prism", ["I have messy notes. Help me turn them into a clear position.", "Draft a PRD from these inputs.", "Write a stakeholder update from my rough notes."]], ["figma-a11y-instructions", "Figma → developer a11y instructions", ["Write the accessibility spec for this Figma screen.", "Give me tab order, keyboard patterns and screen reader text for this design.", "Make a contrast table with WCAG-passing recommendations for this frame."]], ["hero-flows-research-os", "Research lead operating system", ["Set up a lightweight research process for a team of one.", "Which effort mode should I use for this small study?", "Help me write a decision brief from this evidence."]], ["nice-present", "NiCE Present", ["Build me a deck for this project update.", "Create an exec update presentation from these notes.", "Make a roadmap slide deck for the team."]], ["pm-brain", "PM Brain", ["Set up a second brain for this product.", "Interview me and build a folder structure for my product notes.", "Migrate my existing notes into a product brain."]], ["lyra-ui-prototyping", "Lyra UI prototyping", ["Use David Bauer's Lyra UI templates to build an admin page demo.", "Make a self-contained HTML demo from the lyra-ui agent workspace template.", "Prototype this dashboard with the lyra-ui chart components."]], ["adqr-design-review", "ADQR design review", ["Is this Figma flow ready for engineering? Here is the requirement.", "Review the page I have open against this PRD and score it.", "Run ADQR on these screens and show me what the requirement is missing."]], ["defuddle", "Clean web page extraction", ["Give me the article from this URL as clean markdown.", "Strip the ads and navigation from this page and summarize what is left.", "Pull the readable content out of this docs page."]], ["obsidian-power-user", "Obsidian power user", ["Build me a project tracker in my Obsidian vault.", "Set up a weekly review template with Templater.", "Create a Dataview query that lists my open research tasks."]], ["obsidian-markdown", "Obsidian-flavored markdown", ["How do I write callouts and embeds in Obsidian?", "Format this note with wikilinks and properties.", "Convert this plain Markdown into Obsidian-flavored notes."]], ["obsidian-bases", "Obsidian Bases", ["Give me a table view of all my meeting notes.", "Create a base with filters for notes tagged research.", "Make a card view of my projects sorted by due date."]], ["obsidian-cli", "Obsidian CLI", ["Search my vault for notes that mention onboarding.", "Create a new note in my running Obsidian from this summary.", "Reload my plugin in Obsidian and screenshot the result."]], ["json-canvas", "JSON Canvas", ["Lay out this process as an Obsidian canvas.", "Turn these ideas into a mind map I can open in Obsidian.", "Create a canvas with groups for each phase of the project."]]];
 
-    function CopyForClaude({ id, title }) {
-      const [copied, setCopied] = useState(false);
-      const text = `Use NiCE Designer Supercharge to run the "${title}" skill (${id}).`;
-      const copy = async () => {
-        try {
-          await navigator.clipboard.writeText(text);
-        } catch (e) {
-          const ta = document.createElement('textarea');
-          ta.value = text;
-          ta.style.position = 'fixed';
-          ta.style.opacity = '0';
-          document.body.appendChild(ta);
-          ta.select();
-          try { document.execCommand('copy'); } catch (err) { /* nothing more to try */ }
-          document.body.removeChild(ta);
-        }
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2200);
+    /* Copies text, falling back to a hidden textarea where the async
+       clipboard API is blocked. */
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (e) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (err) { /* nothing more to try */ }
+        document.body.removeChild(ta);
+      }
+    }
+
+    /* The card's copy controls, mirroring the plugin: three "Try saying"
+       templates that each copy on click, then the run-this-skill prompt. */
+    function CopyForClaude({ id, title, examples }) {
+      const [copied, setCopied] = useState(null);
+      const flash = (key, text) => {
+        copyText(text);
+        setCopied(key);
+        setTimeout(() => setCopied((cur) => (cur === key ? null : cur)), 2200);
       };
+      const runText = `Use NiCE Designer Supercharge to run the "${title}" skill (${id}).`;
       return h(
-        Button,
-        {
-          variant: 'secondary',
-          icon: h(copied ? IconCheck : IconClipboard, { 'aria-hidden': 'true' }),
-          onClick: copy,
-          title: 'Copy a prompt to paste into Claude',
-        },
-        copied ? 'Copied, paste into Claude' : 'Copy for Claude'
+        'div',
+        { className: 'mk-copy' },
+        h('div', { className: 'mk-meta-label' }, 'Try saying'),
+        h(
+          'div',
+          { className: 'mk-copy-examples' },
+          examples.map((ex, i) =>
+            h(
+              Button,
+              {
+                key: ex,
+                variant: 'secondary',
+                icon: h(copied === 'ex' + i ? IconCheck : IconClipboard, { 'aria-hidden': 'true' }),
+                onClick: () => flash('ex' + i, ex),
+                title: 'Click to copy, then paste into Claude',
+                className: 'mk-copy-example',
+              },
+              copied === 'ex' + i ? 'Copied, paste into Claude' : `\u201c${ex}\u201d`
+            )
+          )
+        ),
+        h(
+          Button,
+          {
+            variant: 'secondary',
+            icon: h(copied === 'run' ? IconCheck : IconClipboard, { 'aria-hidden': 'true' }),
+            onClick: () => flash('run', runText),
+            title: 'Copy a prompt that runs this skill',
+          },
+          copied === 'run' ? 'Copied, paste into Claude' : 'Copy for Claude'
+        )
       );
     }
 
@@ -1473,8 +1519,8 @@ call, what the output should look like, and what to watch for.</pre>
           }),
           'lynn-docrail-root'
         ),
-        COPY_SKILLS.map(([id, title]) =>
-          portal(h(CopyForClaude, { key: id, id, title }), 'lynn-copy-' + id)
+        COPY_SKILLS.map(([id, title, examples]) =>
+          portal(h(CopyForClaude, { key: id, id, title, examples }), 'lynn-copy-' + id)
         ),
         portal(communityBadge, 'lynn-badge-ux-eval'),
         portal(communityBadge, 'lynn-badge-north-star-fox'),
