@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <script src="nice-effects.js?v=20" defer></script>
+  <script src="nice-effects.js?v=21" defer></script>
 
   <!--
     ===== lynn-ui: the site chrome, as React components =====
@@ -555,7 +555,7 @@
     <div class="reveal">
       <span class="hero-eyebrow">STAYING CURRENT</span>
       <h1 class="hero-title">Update Guide</h1>
-      <p class="hero-subtitle">Already installed? Pick the fastest way to get the latest build. Your settings stay put as long as you update into the same folder.</p>
+      <p class="hero-subtitle">One command in Claude updates the extension. Then reinstall the Claude connector so the two match.</p>
     </div>
   </section>
 
@@ -563,65 +563,34 @@
   <main class="main-content">
     <!-- UPDATING THE APP -->
     <section id="updating">
-      <p class="update-intro">The Chrome extension is a <strong>Load unpacked</strong> install, so Chrome never updates it for you - that is a browser restriction on sideloaded extensions, not a setting we can switch on. <strong>Settings &gt; Version</strong> has a refresh button that tells you when a newer build is out; below are the three ways to actually take it. The Figma plugin updates through Figma itself, so there is nothing to do there.</p>
+      <p class="update-intro">Chrome never updates a <strong>Load unpacked</strong> extension for you, so every update is two quick jobs: run one command in Claude, then reinstall the Claude connector. To find out you are behind, open <strong>Settings</strong> in the extension and click the refresh icon next to <strong>Version</strong> - when it says <em>"Update available"</em>, come back here.</p>
 
-      <div class="update-grid">
-
-        <div class="update-card" id="update-manual">
-          <div class="update-card-title">
-            <span class="update-card-num">1</span>
-            Download from the website
-          </div>
-          <p class="update-best"><strong>Best for</strong> updating by hand while keeping your settings, Supercharge connection, welcome-tour state, and anything else stored in the extension.</p>
-          <ol class="numbered-list">
-            <li>Download the latest release: <a class="step-link" href="./downloads/NiCE-Designer-V11.6.zip" data-latest-download download>NiCE-Designer-V11.6.zip</a></li>
-            <li>Unzip it - this gives you a new <code>NiCE Designer Chrome</code> folder</li>
-            <li><strong>Drag the files out of that new folder and into your existing, already-installed folder</strong> - the same one you originally pointed <strong>Load unpacked</strong> at - overwriting everything when your file manager asks</li>
-            <li>Go to <code>chrome://extensions</code> and click <strong>Reload</strong> on NiCE Designer Suite</li>
-          </ol>
-          <!-- lynn-ui <Alert variant="warning"> -->
-          <div id="lynn-update-note-folder" class="lynn-mount"></div>
+      <div class="update-card" id="update-claude">
+        <div class="update-card-title">
+          <span class="update-card-num">1</span>
+          Run the update command in Claude
         </div>
-
-        <div class="update-card" id="update-check">
-          <div class="update-card-title">
-            <span class="update-card-num">2</span>
-            Check for updates in Settings
-          </div>
-          <p class="update-best"><strong>Best for</strong> finding out you are behind, then updating on your own terms.</p>
-          <ol class="numbered-list">
-            <li>Open the side panel and go to <strong>Settings</strong></li>
-            <li>Click the refresh icon next to <strong>Version</strong>. It reads the published version and tells you either <em>"You're up to date"</em> or <em>"Update available"</em></li>
-            <li>Click the download link it gives you - it grabs the zip and brings you straight to the <a href="#update-manual" class="step-link">manual walkthrough above</a>, so you land on the same "same folder, drag files in" steps instead of having to find them yourself</li>
-          </ol>
-          <!-- lynn-ui <Alert variant="info"> -->
-          <div id="lynn-update-note-check" class="lynn-mount"></div>
-        </div>
-
-        <div class="update-card" id="update-claude">
-          <div class="update-card-title">
-            <span class="update-card-num">3</span>
-            Ask Claude to do it
-          </div>
-          <p class="update-best"><strong>Best for</strong> the fastest route, if you already use Claude Code on this machine.</p>
-          <ol class="numbered-list">
-            <li>In Claude Code, ask it to update NiCE Designer and point it at your installed extension folder</li>
-            <li>Claude runs <code>self-update.sh</code> from inside that folder. The script compares your installed version against the published one, downloads the new build, and copies it over your folder in place - no unzipping, no dragging files around</li>
-            <li>Go to <code>chrome://extensions</code> and click <strong>Reload</strong>. This last click is always yours - Chrome does not let a script do it</li>
-          </ol>
-          <div id="lynn-update-copy" class="lynn-mount" style="display:block;margin:0 0 16px;"></div>
-          <!-- lynn-ui <Alert variant="warning"> -->
-          <div id="lynn-update-warn-claude" class="lynn-mount"></div>
-        </div>
-
+        <p class="update-best"><strong>Every time.</strong> Claude runs the update script for you - no downloading, unzipping or dragging files around.</p>
+        <ol class="numbered-list">
+          <li>Click <strong>Copy update prompt for Claude</strong> below</li>
+          <li>Paste it into Claude Code and press <strong>Enter</strong>. If Claude does not know where the extension lives, give it the path to the <code>NiCE Designer Chrome</code> folder you loaded originally</li>
+          <li>Claude runs <code>self-update.sh</code> from inside that folder. It compares your installed version with the published one, downloads the new build, and copies it over your folder in place</li>
+          <li>Paste <code>chrome://extensions</code> into your browser's address bar and click <strong>Reload</strong> on NiCE Designer Suite. This last click is always yours - Chrome does not let a script do it</li>
+        </ol>
+        <div id="lynn-update-copy" class="lynn-mount" style="display:block;margin:0 0 16px;"></div>
+        <!-- lynn-ui <Alert variant="warning"> -->
+        <div id="lynn-update-warn-claude" class="lynn-mount"></div>
       </div>
 
       <div class="update-card" id="update-connector" style="margin-top:24px;">
-        <div class="update-card-title">Updating the Claude connector</div>
-        <p class="update-best"><strong>Do this too</strong> whenever a new version ships, so the connector matches your extension. </p>
+        <div class="update-card-title">
+          <span class="update-card-num">2</span>
+          Reinstall the Claude connector
+        </div>
+        <p class="update-best"><strong>Every time</strong>, so the connector matches your extension. The new connector file is inside the folder Claude just updated.</p>
         <ol class="numbered-list">
           <li>In Claude Desktop, open <strong>Settings &gt; Extensions</strong>, click the <strong>...</strong> (three dots) next to <strong>nice-designer-mcp</strong>, and choose <strong>Uninstall</strong></li>
-          <li>Double-click the new <strong>"Click to install Claude Connector.mcpb"</strong> from the updated <code>NiCE Designer Chrome</code> folder, then confirm the two prompts</li>
+          <li>Open the <code>NiCE Designer Chrome</code> folder and double-click <strong>"Click to install Claude Connector.mcpb"</strong>, then confirm the two prompts</li>
           <li><strong>Force quit Claude Desktop</strong> and reopen it - see the warning below</li>
           <li>Still missing a tool or skill? Use the <strong>"Not seeing a new tool or skill?"</strong> link in the extension's Supercharge panel - it points you back at the <code>.mcpb</code> file</li>
         </ol>
@@ -629,6 +598,9 @@
         <div id="lynn-update-warn-uninstall" class="lynn-mount"></div>
         <div id="lynn-update-warn-quit" class="lynn-mount"></div>
       </div>
+
+      <!-- lynn-ui <AccordionItem>: the by-hand fallback, collapsed -->
+      <div id="lynn-update-manual" class="lynn-mount" style="display:block;margin-top:24px;"></div>
 
       <!-- lynn-ui <Alert variant="warning"> -->
       <div id="lynn-update-warn-why" class="lynn-mount"></div>
@@ -851,6 +823,8 @@
     import { createRoot } from 'react-dom/client';
     import {
       AccessGate,
+      Accordion,
+      AccordionItem,
       Alert,
       Button,
       Tabs,
@@ -865,7 +839,7 @@
     } from './lynn-ui/dist/index.js?v=2';
 
     const UPDATE_PROMPT =
-      'Update my NiCE Designer Suite Chrome extension to the latest version. It is the unpacked "NiCE Designer Chrome" folder I loaded in chrome://extensions - if you do not know where it is, ask me for the path. Run self-update.sh from inside that folder, then tell me to click Reload on NiCE Designer Suite in chrome://extensions.';
+      'Update my NiCE Designer Suite Chrome extension to the latest version. It is the unpacked "NiCE Designer Chrome" folder I loaded in chrome://extensions - if you do not know where it is, ask me for the path. Run self-update.sh from inside that folder, then remind me to click Reload on NiCE Designer Suite in chrome://extensions and to uninstall and reinstall the Claude connector from that same folder.';
 
     /* The hero's second action: copies a ready-made prompt for people who
        already have the extension installed. There is no ToastViewport on this
@@ -1233,12 +1207,28 @@
            already visible; every other `.reveal` on the page (hero,
            dividers, the two sections below) still animates. */
         portal(
-          warn(ICON_WARN, '<strong>Don\'t unzip to a new folder and load that instead.</strong> Chrome generates the extension\'s storage identity from the folder\'s path, since a <strong>Load unpacked</strong> install has no fixed ID of its own. Overwrite files <em>inside</em> the folder you already loaded and everything tied to that identity survives untouched - your settings, theme, Supercharge toggle and connection, welcome-tour progress, all of it. Unzip to a <em>new</em> folder and load that instead, and Chrome treats it as a completely different extension: fresh storage, every setting back to default, and you would need to remove the old entry in <code>chrome://extensions</code> yourself to avoid running two copies side by side.'),
-          'lynn-update-note-folder'
-        ),
-        portal(
-          note(ICON_INFO, 'This button <strong>checks and links</strong> - it cannot install anything itself. See <em>Why there is no one-click update</em> below.'),
-          'lynn-update-note-check'
+          h(
+            AccordionItem,
+            {
+              id: 'update-guide-manual',
+              title: 'No Claude connected? Update by hand',
+              defaultOpen: false,
+              persist: false,
+            },
+            h(
+              Fragment,
+              null,
+              block(`<p>Only for people without Claude Code. Claude is the supported way to update, so use this if you cannot run the script.</p>
+                <ol class="numbered-list" style="margin-top:12px;">
+                  <li>Download the latest release: <a class="step-link" href="./downloads/NiCE-Designer-V11.6.zip" data-latest-download download>NiCE-Designer-V11.6.zip</a></li>
+                  <li>Unzip it - this gives you a new <code>NiCE Designer Chrome</code> folder</li>
+                  <li><strong>Drag the files out of that new folder and into your existing, already-installed folder</strong> - the same one you originally pointed <strong>Load unpacked</strong> at - overwriting everything when your file manager asks</li>
+                  <li>Paste <code>chrome://extensions</code> into your browser's address bar and click <strong>Reload</strong> on NiCE Designer Suite</li>
+                </ol>`),
+              warn(ICON_WARN, '<strong>Don\'t unzip to a new folder and load that instead.</strong> Chrome generates the extension\'s storage identity from the folder\'s path, since a <strong>Load unpacked</strong> install has no fixed ID of its own. Overwrite files <em>inside</em> the folder you already loaded and everything tied to that identity survives untouched - your settings, theme, Supercharge toggle and connection, welcome-tour progress, all of it. Unzip to a <em>new</em> folder and load that instead, and Chrome treats it as a completely different extension: fresh storage, every setting back to default, and you would need to remove the old entry in <code>chrome://extensions</code> yourself to avoid running two copies side by side.')
+            )
+          ),
+          'lynn-update-manual'
         ),
         portal(h(CopyUpdateButton), 'lynn-update-copy'),
         portal(

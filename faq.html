@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <script src="nice-effects.js?v=20" defer></script>
+  <script src="nice-effects.js?v=21" defer></script>
 
   <!--
     ===== lynn-ui: the site chrome, as React components =====
@@ -417,7 +417,7 @@
         question: "How do I know when there's a new version, and how do I update?",
         answer: `
           <p>In Chrome, click the refresh icon next to the version number in Settings - it checks the latest published release and shows "You're up to date" or an "Update available" link straight to the download, with a "last checked" timestamp. After updating, a "What's new" popup summarizes the changes automatically (also reachable anytime from the version number).</p>
-          <p>Since the extension is a manually loaded unpacked build (not from the Chrome Web Store), Chrome can't update it for you. The <a href="./update-guide.html">Update Guide</a> walks through the three ways to do it - download and drag the new files into your existing folder, follow the in-app update link, or paste one prompt into Claude Code and let it run the update script - plus how to update the Claude connector. In every case the last step is clicking <strong>Reload</strong> on NiCE Designer Suite at <code>chrome://extensions</code>.</p>
+          <p>Since the extension is a manually loaded unpacked build (not from the Chrome Web Store), Chrome can't update it for you. The <a href="./update-guide.html">Update Guide</a> has the whole routine: paste one prompt into Claude Code and let it run the update script, click <strong>Reload</strong> on NiCE Designer Suite at <code>chrome://extensions</code>, then uninstall and reinstall the Claude connector from the same folder.</p>
         `,
       },
       {

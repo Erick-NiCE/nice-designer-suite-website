@@ -495,11 +495,9 @@
     {
       href: 'update-guide.html', label: 'Update Guide',
       groups: [
-        { label: 'Ways to update', items: [
-          { id: 'update-manual', label: 'Download from the website' },
-          { id: 'update-check', label: 'Check for updates in Settings' },
-          { id: 'update-claude', label: 'Ask Claude to do it' },
-          { id: 'update-connector', label: 'Update the Claude connector' }
+        { label: 'Update steps', items: [
+          { id: 'update-claude', label: 'Run the update command in Claude' },
+          { id: 'update-connector', label: 'Reinstall the Claude connector' }
         ] }
       ]
     },

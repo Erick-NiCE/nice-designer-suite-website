@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <script src="nice-effects.js?v=20" defer></script>
+  <script src="nice-effects.js?v=21" defer></script>
 
   <!--
     ===== lynn-ui: the site chrome, as React components =====
@@ -524,7 +524,7 @@
     } from './lynn-ui/dist/index.js?v=2';
 
     const UPDATE_PROMPT =
-      'Update my NiCE Designer Suite Chrome extension to the latest version. It is the unpacked "NiCE Designer Chrome" folder I loaded in chrome://extensions - if you do not know where it is, ask me for the path. Run self-update.sh from inside that folder, then tell me to click Reload on NiCE Designer Suite in chrome://extensions.';
+      'Update my NiCE Designer Suite Chrome extension to the latest version. It is the unpacked "NiCE Designer Chrome" folder I loaded in chrome://extensions - if you do not know where it is, ask me for the path. Run self-update.sh from inside that folder, then remind me to click Reload on NiCE Designer Suite in chrome://extensions and to uninstall and reinstall the Claude connector from that same folder.';
 
     /* The hero's second action: copies a ready-made prompt for people who
        already have the extension installed. There is no ToastViewport on this
@@ -780,7 +780,7 @@
         icon: IconRefresh,
         category: 'Staying current',
         title: 'Update Guide',
-        description: 'Already installed? Three quick ways to get the latest build, plus how to update the Claude connector.',
+        description: 'Already installed? Run one command in Claude to update, then reinstall the Claude connector.',
         arrow: 'How to update',
       },
     ];
@@ -797,7 +797,7 @@
       {
         image: './images/featured-update-guide.png',
         title: 'Update Guide',
-        tagline: 'Already installed? Three quick ways to get the latest build.',
+        tagline: 'Already installed? One command in Claude, then reinstall the connector.',
         ctaLabel: 'How to update',
         ctaHref: './update-guide.html',
       },
