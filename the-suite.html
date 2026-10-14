@@ -323,8 +323,8 @@
     .sp-inner {
       position: relative;
       overflow: hidden;
-      background: linear-gradient(135deg, rgba(97,0,255,0.12), rgba(54,148,252,0.08));
-      border: 1px solid rgba(97,0,255,0.25);
+      background: linear-gradient(135deg, rgba(249,115,22,0.12), rgba(54,148,252,0.08));
+      border: 1px solid rgba(249,115,22,0.25);
       border-radius: 24px; padding: 52px 48px;
     }
     /* Plasma lightning + edge motes are applied by nice-effects.js
@@ -342,7 +342,7 @@
       width: 52px;
       height: 52px;
       border-radius: 14px;
-      background: linear-gradient(135deg, #6100FF, #B98FFF);
+      background: linear-gradient(135deg, #f97316, #fb923c);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -388,8 +388,8 @@
       letter-spacing: 1.5px; color: var(--lynn-color-text-secondary); margin-right: 4px; }
     .sp-tag {
       font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 100px;
-      background: rgba(97,0,255,0.15); color: color-mix(in srgb, var(--lynn-color-lynn) 70%, var(--lynn-color-text));
-      border: 1px solid rgba(185,143,255,0.2);
+      background: rgba(249,115,22,0.15); color: color-mix(in srgb, #fb923c 70%, var(--lynn-color-text));
+      border: 1px solid rgba(251,146,60,0.25);
     }
     .sp-marketplace-listing { margin-top: 24px; }
     .sp-marketplace-listing-label {
@@ -734,7 +734,7 @@
     // Plasma-ball lightning + floating edge motes on the Supercharge panel.
     var sp = document.querySelector('.superpowers-section .sp-inner');
     if (sp) {
-      NiceEffects.lightning(sp, { color: '#B98FFF', glow: '#6100FF', opacity: 0.5, motes: 54 });
+      NiceEffects.lightning(sp, { color: '#fb923c', glow: '#f97316', opacity: 0.5, motes: 54 });
     }
   </script>
 
@@ -883,8 +883,8 @@
       },
       {
         id: 'tool-editor',
-        accentColor: '#025AFB',
-        iconGradient: 'linear-gradient(135deg,#025AFB,#6100FF)',
+        accentColor: '#0ACF83',
+        iconGradient: 'linear-gradient(135deg,#0ACF83,#3DDC97)',
         delay: '0.10s',
         icon: glyph(26, '<path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25"/><path d="M7.5 10.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M11.5 7.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M15.5 10.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>'),
         name: 'Frontend Editor',
@@ -937,7 +937,7 @@
     /* ---- the four Supercharge cards ------------------------------------- */
     /* `.sp-card-icon` tinted its glyph `#B98FFF`; IconCard's icon slot
        inherits `currentColor`, so the tint rides on the svg itself. */
-    const SP_ICON_STYLE = { color: '#B98FFF' };
+    const SP_ICON_STYLE = { color: '#fb923c' };
     const SP_CARDS = [
       {
         icon: glyph(22, '<path d="M9 15l6 -6"/><path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464"/><path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463"/>', SP_ICON_STYLE),
