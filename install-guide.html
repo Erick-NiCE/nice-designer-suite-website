@@ -805,6 +805,7 @@
       Stepper,
       TabPanel,
       TabPanels,
+      Tabs,
       ThemeProvider,
       ThemeToggle,
       useLynnTheme,
@@ -935,17 +936,25 @@
       const [browser, setBrowser] = useState(() =>
         /Edg\//.test(navigator.userAgent) ? 'edge' : 'chrome'
       );
+      const [os, setOs] = useState(() =>
+        /Win/.test(navigator.userAgent) ? 'windows' : 'mac'
+      );
+      const unzip =
+        os === 'mac'
+          ? 'double-click the zip in your Downloads folder'
+          : 'right-click the zip in your Downloads folder, choose <strong>Extract All</strong>, then click <strong>Extract</strong>';
+      const pick = os === 'mac' ? '<strong>Select</strong>' : '<strong>Select Folder</strong>';
       const panel = (id, address, devMode, loadUnpacked, img, alt, caption) =>
         h(
           TabPanel,
           { id, key: id },
           block(`<ol class="numbered-list">
               <li>Download the latest release: <a class="step-link" href="./downloads/NiCE-Designer-V11.6.zip" data-latest-download download>NiCE-Designer-V11.6.zip</a></li>
-              <li>Unzip it. On Mac, double-click the zip in your Downloads folder. On Windows, right-click it and choose <strong>Extract All</strong>. You now have a folder named <strong>NiCE Designer Chrome</strong>. Move it somewhere you will keep it, for example Documents</li>
+              <li>Unzip it: ${unzip}. You now have a folder named <strong>NiCE Designer Chrome</strong>. Move it somewhere you will keep it, for example Documents</li>
               <li>Open the extensions page. Click the address bar at the top of your browser, paste <code>${address}</code>, and press <strong>Enter</strong></li>
               <li>Turn on <strong>Developer mode</strong> - ${devMode}</li>
               <li>Click <strong>Load unpacked</strong> - ${loadUnpacked}</li>
-              <li>Select the <strong>NiCE Designer Chrome</strong> folder you just unzipped, then click <strong>Select</strong> (Mac) or <strong>Select Folder</strong> (Windows)</li>
+              <li>Select the <strong>NiCE Designer Chrome</strong> folder you just unzipped, then click ${pick}</li>
               <li><strong>NiCE Designer Suite</strong> now appears in your list of extensions. Click the puzzle-piece icon in the top-right of your browser and click the <strong>pin</strong> next to NiCE Designer so its icon stays in your toolbar</li>
             </ol>
             <figure class="step-figure">
@@ -954,6 +963,20 @@
             </figure>`)
         );
       return h(
+        Fragment,
+        null,
+        h(Tabs, {
+          options: [
+            { value: 'mac', label: 'Mac' },
+            { value: 'windows', label: 'Windows' },
+          ],
+          value: os,
+          onChange: setOs,
+          stretch: true,
+          ariaLabel: 'Choose your operating system',
+          style: { margin: '4px 0 8px' },
+        }),
+        h(
         TabPanels,
         {
           tabs: [
@@ -983,6 +1006,7 @@
           './images/install-edge-extensions.png',
           'The edge://extensions page in Microsoft Edge. The Load Unpacked button sits at the top of the Installed extensions list, and the Developer mode toggle is switched on in the bottom-left sidebar.',
           '<strong>Edge</strong> - Developer mode is at the bottom of the left sidebar, and Load Unpacked is at the top of the installed list.'
+        )
         )
       );
     }
