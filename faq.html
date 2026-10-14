@@ -373,18 +373,19 @@
       },
       {
         id: 'faq-generate',
-        question: 'Does NiCE Designer generate designs or pages?',
+        question: 'Can NiCE Designer build coded prototypes, or only audit existing work?',
         answer: `
-          <p>No. NiCE Designer works with pages and designs that already exist - it audits, converts, and annotates them rather than generating new ones from scratch.</p>
-          <p>The philosophy: generation is best left to tools like Claude Code for code and to UX designers for design. NiCE Designer's job is to ensure that what's already been built actually matches the design system.</p>
+          <p>It can do both. Used with its official skills, NiCE Designer builds <strong>coded prototypes</strong> - real React or HTML built from the actual Lyra or SOL components, not look-alikes. Skills like <code>lyra-prototyping</code>, SOL UI prototyping and the Copilot demo generator are the supported route; see the <a href="./marketplace.html">Marketplace</a> and <a href="./claude-skills.html">Claude Skills</a> pages.</p>
+          <p>What makes it different from asking an AI to write a page: the prototype <strong>audits itself and corrects itself in an agentic loop</strong>. Claude builds it, the NiCE Designer tools score it against the design system, and Claude fixes what is off and re-checks until it holds - rather than handing you a first draft to review for drift. Anything the component library does not have yet is listed, not faked.</p>
+          <p>It is still not a free-form design generator. Without a skill loaded there is no loop and no guarantee of design-system adherence, so load one first. It also keeps its original strengths: auditing, converting, and annotating pages and designs that already exist.</p>
         `,
       },
       {
         id: 'faq-supercharge',
         question: 'What is Supercharge?',
         answer: `
-          <p>Supercharge is what happens when NiCE Designer connects to Claude via the local MCP server. On their own, the Figma plugin and Chrome extension can audit designs. With Supercharge connected, Claude can drive both tools simultaneously using natural language - running multi-step workflows like SOL &rarr; Lyra conversion, reasoning across Figma and the live page at the same time, and using the full library of MCP tools and Claude skills.</p>
-          <p>Think of the plugin and extension as the hands, and Supercharge as the brain.</p>
+          <p>Supercharge is what happens when the NiCE Designer Suite browser plugin connects to Claude via the local MCP server. On its own, the plugin's power tools can audit designs and apply fixes. With Supercharge connected, Claude can drive those tools - and the optional Figma plugin - using natural language: running multi-step agentic workflows like SOL &rarr; Lyra conversion, reasoning across Figma and the live page at the same time, and using the full library of MCP tools and Claude skills.</p>
+          <p>Think of the plugin's power tools as the hands, and Claude through Supercharge as the brain.</p>
         `,
       },
       {
@@ -398,9 +399,9 @@
       {
         id: 'faq-mcp-required',
         question:
-          'Do I need the MCP server running to use the Figma plugin or Chrome extension?',
+          'Do I need the MCP server running to use the browser plugin or Figma plugin?',
         answer: `
-          <p>No. The Figma plugin and Chrome extension both work standalone for auditing and applying fixes. Design-system conversion work requires Supercharge, since it's done by asking Claude directly rather than through a dedicated in-app tool. The MCP server is only required for Supercharge - connecting Claude to drive both clients with natural language. See the <a href="./install-guide.html">Install Guide</a> for setup order.</p>
+          <p>No. The browser plugin and the Figma plugin both work standalone for auditing and applying fixes. Design-system conversion work requires Supercharge, since it's done by asking Claude directly rather than through a dedicated in-app tool. The MCP server is only required for Supercharge - connecting Claude to drive the plugin with natural language. See the <a href="./install-guide.html">Install Guide</a> for setup order.</p>
         `,
       },
       {
@@ -415,14 +416,7 @@
         question: "How do I know when there's a new version, and how do I update?",
         answer: `
           <p>In Chrome, click the refresh icon next to the version number in Settings - it checks the latest published release and shows "You're up to date" or an "Update available" link straight to the download, with a "last checked" timestamp. After updating, a "What's new" popup summarizes the changes automatically (also reachable anytime from the version number).</p>
-          <p>Since the extension is a manually loaded unpacked build (not from the Chrome Web Store), updating means downloading the new <code>.zip</code> from the <a href="./install-guide.html">Install Guide</a>, unzipping it, and clicking the reload icon for NiCE Designer on <code>chrome://extensions</code>.</p>
-        `,
-      },
-      {
-        id: 'faq-lite-mode',
-        question: 'What is Lite mode?',
-        answer: `
-          <p>Lite mode is a simpler view that shows just Frontend Audit and Design System, hiding Spec Mode, Supercharge, Documentation, and (in Chrome) the Frontend Editor. Brand-new installs start here by default - a first-launch Welcome screen lets you pick Lite mode or the Full toolkit, then walks through a short guided tour. Toggle it anytime in Settings; nothing is lost when you switch, it just changes what's shown.</p>
+          <p>Since the extension is a manually loaded unpacked build (not from the Chrome Web Store), Chrome can't update it for you. The <a href="./update-guide.html">Update Guide</a> walks through the three ways to do it - download and drag the new files into your existing folder, follow the in-app update link, or paste one prompt into Claude Code and let it run the update script - plus how to update the Claude connector. In every case the last step is clicking <strong>Reload</strong> on NiCE Designer Suite at <code>chrome://extensions</code>.</p>
         `,
       },
       {
@@ -430,13 +424,6 @@
         question: 'Does NiCE Designer work on any Figma file, or only CXone product files?',
         answer: `
           <p>It works on any Figma file, but its audit rules are built against the SOL and Lyra foundation files, so compliance scoring is most meaningful on CXone product work. Running it against a file outside those systems will still surface off-token colors, spacing, and type, but there won't be a matching token to suggest as a fix.</p>
-        `,
-      },
-      {
-        id: 'faq-access',
-        question: 'How do I get access to NiCE Designer?',
-        answer: `
-          <p>This site is currently access-gated. If you don't have the code, reach out to <strong>Erick Mathews on Teams</strong> to request it - see the button on the access screen or the <a href="./install-guide.html">Install Guide</a> for what happens after you're in.</p>
         `,
       },
     ];

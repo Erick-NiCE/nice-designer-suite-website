@@ -559,15 +559,13 @@
       groups: [
         { label: 'Questions', items: [
           { id: 'faq-design-system', label: 'How the tools understand the design system' },
-          { id: 'faq-generate', label: 'Does it generate designs or pages?' },
+          { id: 'faq-generate', label: 'Can it build coded prototypes?' },
           { id: 'faq-supercharge', label: 'What is Supercharge?' },
           { id: 'faq-sol-lyra', label: 'SOL vs. Lyra conversion' },
           { id: 'faq-mcp-required', label: 'Is the MCP server required?' },
           { id: 'faq-disagree-fix', label: 'Disagreeing with a suggested fix' },
           { id: 'faq-update', label: 'Checking for updates' },
-          { id: 'faq-lite-mode', label: 'What is Lite mode?' },
-          { id: 'faq-any-figma-file', label: 'Does it work on any Figma file?' },
-          { id: 'faq-access', label: 'How to get access' }
+          { id: 'faq-any-figma-file', label: 'Does it work on any Figma file?' }
         ] }
       ]
     },
