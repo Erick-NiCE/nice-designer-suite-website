@@ -799,6 +799,9 @@
       AccordionItem,
       Alert,
       Badge,
+      Button,
+      IconCheck,
+      IconClipboard,
       DocRail,
       Footer,
       Nav,
@@ -928,6 +931,40 @@
       h(Alert, { variant: 'warning', icon: glyph }, rich(html));
 
     /* ---- the six steps -------------------------------------------------- */
+    const VERIFY_PROMPT =
+      'Use the nice-designer connector to call list_targets, then tell me which clients are connected. I should see "chrome" in the list.';
+
+    /* Copies the verify prompt. There is no ToastViewport on this page, so the
+       label swaps for a couple of seconds instead of toasting. */
+    function CopyVerifyButton() {
+      const [copied, setCopied] = useState(false);
+      const copy = async () => {
+        try {
+          await navigator.clipboard.writeText(VERIFY_PROMPT);
+        } catch (e) {
+          const ta = document.createElement('textarea');
+          ta.value = VERIFY_PROMPT;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand('copy'); } catch (err) { /* nothing more to try */ }
+          document.body.removeChild(ta);
+        }
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2200);
+      };
+      return h(
+        Button,
+        {
+          variant: 'secondary',
+          icon: h(copied ? IconCheck : IconClipboard, { 'aria-hidden': 'true' }),
+          onClick: copy,
+        },
+        copied ? 'Copied - paste it into Claude' : 'Copy test prompt'
+      );
+    }
+
     /* The Mac/Windows choice, shared by every OS row on the page so picking
        one in step 1 carries to the force-quit warning. It opens on the
        reader's system. */
@@ -1211,12 +1248,16 @@ winget install OpenJS.NodeJS.LTS</div>
                   <div class="check-circle"></div>
                   <span>In the <strong>Supercharge</strong> panel, the toggle is <strong>On</strong> with a green dot and the address <em>ws://127.0.0.1:7331</em></span>
                 </div>
-                <div class="checklist-item">
-                  <div class="check-circle"></div>
-                  <span>Ask Claude: <em>"Call list_targets"</em> - it should list which clients are connected (Figma, Chrome, or both)</span>
-                </div>
               </div>`)
           ),
+          section(
+            'Check that Claude can see the extension',
+            block(`<p>Paste this into Claude (Claude Desktop, Claude Code or Copilot Chat) and press <strong>Enter</strong>:</p>
+              <div class="code-block">Use the nice-designer connector to call list_targets, then tell me which clients are connected. I should see "chrome" in the list.</div>`),
+            h('div', { style: { margin: '12px 0 4px' } }, h(CopyVerifyButton)),
+            block(`<p style="margin-top:12px;">A reply that lists <strong>chrome</strong> means everything is connected end to end. An empty list means Claude cannot see the extension yet - see <a href="./troubleshooting.html" class="step-link">Troubleshooting</a>.</p>`)
+          ),
+          note(ICON_INFO, '<strong>Claude will ask you to approve the tool.</strong> The first time it uses <strong>nice-designer</strong>, it shows a permission prompt - click <strong>Allow</strong> (or <strong>Always allow</strong> to stop being asked). You only skip this if your Claude is in auto mode.'),
           tip(ICON_BULB, '<strong>Best practice:</strong> load a skill before using MCP tools. For example, tell Claude <em>"Load the lyra-visual-patterns skill"</em> before starting a Lyra conversion workflow. Something not working? See <a href="./troubleshooting.html" class="step-link">Troubleshooting</a>.')
         ),
       },
