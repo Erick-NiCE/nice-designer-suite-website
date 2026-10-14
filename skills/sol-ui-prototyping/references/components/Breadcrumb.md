@@ -21,6 +21,12 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | --- | --- | --- |
 | `onItemClicked` | `{ item: BreadcrumbItem; event: Event }` | Emits when a breadcrumb item with a path is clicked. Use this to handle custom navigation logic. |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [All Scenarios](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-breadcrumb-examples--all-scenarios)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -33,4 +39,8 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | Name | Type | Description |
 | --- | --- | --- |
 | `itemClicked` | `{ item: BreadcrumbItem; event: Event }` | Emits when a breadcrumb item with a path is clicked. Use this to handle custom navigation logic. |
+
+## Angular reference stories
+
+- [All Scenarios](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-breadcrumb-examples--all-scenarios)
 

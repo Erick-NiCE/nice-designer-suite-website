@@ -34,6 +34,13 @@ No React API is documented for Numeric Selector. In a React build this component
 
 _None documented._
 
+## Angular reference stories
+
+- [Default With Label And Info Text](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-numeric-selector-examples--default-with-label-and-info-text)
+- [All Other Modes](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-numeric-selector-examples--all-other-modes)
+- [Ng Model](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-numeric-selector-examples--ng-model)
+- [Reactive Form](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-numeric-selector-examples--reactive-form)
+
 ## Migration notes (Angular)
 
 - Migrating to V16: There are some breaking changes in the SOL Numeric Selector from version 15 to 16.; Changes to input names: errorMessageText ➜ errorMessage; errorMessageText ➜ errorMessage; The buttonType input has been removed. Only arrow buttons are now supported. Remove: buttonType: 'math' or buttonType: 'arrow'; Remove: buttonType: 'math' or buttonType: 'arrow'

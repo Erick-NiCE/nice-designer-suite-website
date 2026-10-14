@@ -32,3 +32,8 @@ No React API is documented for Card. In a React build this component is **not av
 
 _None documented._
 
+## Angular reference stories
+
+- [Card With Body And Footer](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-card-examples--card-with-body-and-footer)
+- [Card With Only Body](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-card-examples--card-with-only-body)
+

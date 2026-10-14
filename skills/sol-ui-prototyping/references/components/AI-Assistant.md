@@ -47,3 +47,12 @@ No React API is documented for AI Assistant. In a React build this component is 
 | `feedbackChange` | `EventEmitter<{ messageId: string; feedback: 'up' \| 'down' \| null }>` | Fires on every thumbs up/down toggle, including clearing (clicking the already-active thumb). |
 | `retryRequested` | `EventEmitter<string>` | Fires with the message id when Retry is clicked on an errored message (all error kinds except rate-limit). |
 
+## Angular reference stories
+
+- [Default](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-ai-assistant-examples--default)
+- [Empty Conversation](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-ai-assistant-examples--empty-conversation)
+- [Markdown Formatter](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-ai-assistant-examples--markdown-formatter)
+- [Html Formatter Queue Status](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-ai-assistant-examples--html-formatter-queue-status)
+- [Custom Formatter](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-ai-assistant-examples--custom-formatter)
+- [Action Buttons](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-ai-assistant-examples--action-buttons)
+

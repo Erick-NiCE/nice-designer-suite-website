@@ -35,6 +35,13 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `onDeleteAllClicked` | `` | Event emitted when Clear all button is pressed. |
 | `onLastTagDeleted` | `` | Event emitted when the last chip is deleted and no focusable element (e.g. the Clear button) remains inside the chip group. The parent should use this to restore focus to an appropriate external control. |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [With Chips Expansion](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-chip-group-examples--with-chips-expansion)
+- [With Popover](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-chip-group-examples--with-popover)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -60,4 +67,9 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `tagDeleted` | `` | Event emitted when any tag is deleted. Emits the deleted tag value. |
 | `deleteAllClicked` | `` | Event emitted when Clear all button is pressed. |
 | `lastTagDeleted` | `` | Event emitted when the last chip is deleted. |
+
+## Angular reference stories
+
+- [With Chips Expansion](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-chip-group-examples--with-chips-expansion)
+- [With Popover](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-chip-group-examples--with-popover)
 

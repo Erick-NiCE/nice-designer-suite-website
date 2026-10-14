@@ -39,6 +39,20 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `onSaveState` | `(state: ColumnState[]) => void` | Fires on column resize finish, drag-stopped, column visible, or column changed. |
 | `onSaveSort` | `(sort: ColumnState[]) => void` | Fires on sort change. |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [Client Side (100 items + Omnibar)](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-grid-examples--client-side-with-omnibar)
+- [Client Side (100 items + Filterbar)](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-grid-examples--client-side-with-filterbar)
+- [Client Side (Filterbar, Default Filters)](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-grid-examples--client-side-filterbar-default)
+- [Client Side (Single Row Selection, No Checkboxes)](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-grid-examples--client-side-single-row-selection)
+- [Client Side (No Row Selection)](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-grid-examples--client-side-no-row-selection)
+- [Server Side (Infinite Scroll)](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-grid-examples--server-side-infinite-scroll)
+- [Server Side (Pagination)](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-grid-examples--server-side-pagination)
+- [Loading / Empty / Error States](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-grid-examples--loading-empty-error-states)
+- [AG Grid Localization (with Pagination)](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-grid-examples--ag-grid-localization)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -85,4 +99,15 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `filterModelChange` | `EventEmitter<QueryBuilderOutput>` | Emitted when the Filterbar's selection model changes. |
 | `filterApplied` | `EventEmitter<GridFilterAppliedEvent>` | Emitted with { search, filterModel } whenever search or filter criteria are applied. |
 | `selectionChange` | `EventEmitter<GridSelectionChangedEvent>` | Emitted with { selectedCount, selectedRows } whenever row selection changes. |
+
+## Angular reference stories
+
+- [Client Side (100 items + Omnibar)](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-grid-examples--client-side-with-omnibar)
+- [Client Side (100 items + Filterbar)](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-grid-examples--client-side-with-filterbar)
+- [Client Side (Filterbar, Default Filters)](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-grid-examples--client-side-filterbar-default)
+- [Client Side (Single Row Selection, No Checkboxes)](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-grid-examples--client-side-single-row-selection)
+- [Client Side (No Row Selection)](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-grid-examples--client-side-no-row-selection)
+- [Server Side (Infinite Scroll)](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-grid-examples--server-side-infinite-scroll)
+- [Server Side (Pagination)](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-grid-examples--server-side-pagination)
+- [Loading / Empty / Error States](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-grid-examples--loading-empty-error-states)
 

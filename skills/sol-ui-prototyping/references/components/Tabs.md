@@ -29,3 +29,10 @@ No React API is documented for Tabs. In a React build this component is **not av
 | --- | --- | --- |
 | `selectedTabChange` | `EventEmitter` | Event emitted when the tab selection has changed. |
 
+## Angular reference stories
+
+- [Tab With Error](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-tabs-examples--tab-with-error)
+- [Icon Only](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-tabs-examples--icon-only)
+- [Default Icon Text](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-tabs-examples--default-icon-text)
+- [Small Icon Text](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-tabs-examples--small-icon-text)
+

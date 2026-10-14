@@ -40,6 +40,16 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `className` | `string` | Extra CSS class applied to the root element. |
 | `style` | `string \| CSSProperties` | Inline style applied to the root element. Accepts a CSS string (Angular parity) or a React CSSProperties object. |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [Basic Date Range Picker](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-date-range-picker-examples--basic-date-range-picker)
+- [Date Range Picker With Constraints](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-date-range-picker-examples--date-range-picker-with-constraints)
+- [Date Range Picker With Time](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-date-range-picker-examples--date-range-picker-with-time)
+- [Date Range Picker States](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-date-range-picker-examples--date-range-picker-states)
+- [Date Range Picker With Presets](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-date-range-picker-examples--date-range-picker-with-presets)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -72,6 +82,15 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | Name | Type | Description |
 | --- | --- | --- |
 | `ngModelChange` | `DateRange` | Emitted when the selected date range changes. The emitted value is a DateRange object with start and end properties, each being a Date object.Example: { start: Date, end: Date } |
+
+## Angular reference stories
+
+- [Basic Date Range Picker](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-date-range-picker-examples--basic-date-range-picker)
+- [Date Range Picker With Constraints](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-date-range-picker-examples--date-range-picker-with-constraints)
+- [Date Range Picker With Time](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-date-range-picker-examples--date-range-picker-with-time)
+- [Date Range Picker States](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-date-range-picker-examples--date-range-picker-states)
+- [Date Range Picker With Presets](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-date-range-picker-examples--date-range-picker-with-presets)
+- [Reactive Form Date Range Picker](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-date-range-picker-examples--reactive-form-date-range-picker)
 
 ## Migration notes (Angular)
 

@@ -141,19 +141,30 @@
     "files": []
   },
   {
-    "id": "ux-eval",
-    "title": "Ten-question UX eval",
-    "question": "Is this good enough to move to the next step, or to dev?",
-    "what": "Answers all ten prioritisation questions against real evidence, then states pass / pass-with-conditions / not-yet. For AI-surface designs, also layers in the North Star Fox tenet check.",
-    "benefit": "A defensible verdict with the reasoning attached, the thing you can actually take to a VP.",
+    "id": "adqr-design-review",
+    "title": "ADQR design review",
+    "question": "Is this design ready to hand to engineering, judged against its requirement and goals?",
+    "what": "Captures the design from Figma or Chrome, judges 33 checks against written anchors (business alignment, requirement coverage traced part by part, UX heuristics, AI experience), then scores them with fixed rules into four separate scores, a confidence level and a ship verdict, shown as a scorecard in chat.",
+    "benefit": "A review a PM can act on: every score cites what it saw, missing context lowers confidence instead of being guessed, and one weak area cannot hide behind three strong ones.",
     "clients": "both",
     "tools": [
-      "run_ux_eval",
-      "run_full_audit"
+      "list_targets",
+      "get_selection_info",
+      "select_page",
+      "screenshot_page",
+      "audit_accessibility",
+      "score_design_review"
     ],
-    "author": "Bill Bangs",
+    "author": "Prafull Mane",
     "thirdParty": true,
-    "files": []
+    "files": [
+      "references/ai-experience.md",
+      "references/business-alignment.md",
+      "references/flow-states.md",
+      "references/modality-caps.md",
+      "references/requirement-coverage.md",
+      "references/ux-experience.md"
+    ]
   },
   {
     "id": "north-star-fox",
@@ -247,6 +258,18 @@
     ]
   },
   {
+    "id": "copilot-demo-generator",
+    "title": "Copilot demo generator",
+    "question": "Can you turn a one-line customer scenario into an Agent Copilot demo?",
+    "what": "Turns a one-line scenario into a ready-to-import Copilot Demo Studio JSON file: it picks the arc, chooses 7 to 10 of the 14 Copilot tile types, writes a 15 to 20 step story with presenter notes, and validates the file before handing it over.",
+    "benefit": "A presentable Agent Copilot demo in minutes, not a hand-built JSON file, with the emotional turn and the Copilot assist already staged for the presenter.",
+    "clients": "both",
+    "tools": [],
+    "author": "Janet Gonzales",
+    "thirdParty": true,
+    "files": []
+  },
+  {
     "id": "ux-research-readouts",
     "title": "Research readouts",
     "question": "How do I get this in front of stakeholders without it getting waved off?",
@@ -266,8 +289,8 @@
     "benefit": "Cuts token usage on any URL fetch that is not already markdown, without losing the actual content.",
     "clients": "both",
     "tools": [],
-    "author": "NiCE Designer",
-    "thirdParty": false,
+    "author": "Steph Ango",
+    "thirdParty": true,
     "files": []
   },
   {
@@ -317,8 +340,8 @@
     "benefit": "One skill for the whole vault, so a request does not have to be pre-sorted into canvas vs. base vs. note.",
     "clients": "both",
     "tools": [],
-    "author": "NiCE Designer",
-    "thirdParty": false,
+    "author": "Steph Ango",
+    "thirdParty": true,
     "files": [
       "references/core-plugins.md",
       "references/import.md",
@@ -334,8 +357,8 @@
     "benefit": "Notes that render correctly in Obsidian the first time, not after a round of fixing broken syntax.",
     "clients": "both",
     "tools": [],
-    "author": "NiCE Designer",
-    "thirdParty": false,
+    "author": "Steph Ango",
+    "thirdParty": true,
     "files": [
       "references/CALLOUTS.md",
       "references/EMBEDS.md",
@@ -350,8 +373,8 @@
     "benefit": "A working Base on the first try, since Base YAML fails silently on quoting mistakes.",
     "clients": "both",
     "tools": [],
-    "author": "NiCE Designer",
-    "thirdParty": false,
+    "author": "Steph Ango",
+    "thirdParty": true,
     "files": [
       "references/FUNCTIONS_REFERENCE.md"
     ]
@@ -364,8 +387,8 @@
     "benefit": "Vault operations that touch the live app, not just files on disk.",
     "clients": "both",
     "tools": [],
-    "author": "NiCE Designer",
-    "thirdParty": false,
+    "author": "Steph Ango",
+    "thirdParty": true,
     "files": []
   },
   {
@@ -376,8 +399,8 @@
     "benefit": "A canvas file that opens correctly in Obsidian, not just visually-plausible JSON.",
     "clients": "both",
     "tools": [],
-    "author": "NiCE Designer",
-    "thirdParty": false,
+    "author": "Steph Ango",
+    "thirdParty": true,
     "files": [
       "references/EXAMPLES.md"
     ]
@@ -602,10 +625,76 @@
     ]
   },
   {
-    "id": "lyra-ui-prototyping",
+    "id": "lyra-prototyping",
     "title": "Lyra UI prototyping",
-    "question": "Can I get a working, clickable prototype built from our real components, not a mockup?",
-    "what": "Builds a real coded prototype (React/Tailwind, or a self-contained HTML demo) composed entirely from the actual Lyra UI component library, holds it to full Lyra adherence, and ships a GAPS.md listing what the library does not have yet.",
+    "question": "Can Claude build a working prototype from the real Lyra components, at 100% Lyra, and tell me what Lyra cannot do yet?",
+    "what": "The official skill for coded prototypes. Builds a real, clickable prototype (React first, Angular where React has no component) from the actual Lyra components in the Storybook the plugin syncs, holds it to 100% Lyra tokens and components, audits the live page in Chrome until it scores 100, and ships a GAPS.md listing everything Lyra does not have.",
+    "benefit": "A demo that is actually Lyra, proven by a live audit score, plus an honest list of what is missing instead of look-alikes standing in for it.",
+    "clients": "both",
+    "tools": [
+      "list_targets",
+      "select_page",
+      "run_full_audit",
+      "export_design_tokens",
+      "extract_token_css",
+      "get_storybook_sync_status"
+    ],
+    "author": "NiCE Designer",
+    "thirdParty": false,
+    "files": [
+      "references/component-index.md",
+      "references/components/AI-Assistant.md",
+      "references/components/Accordion.md",
+      "references/components/Action-Bar.md",
+      "references/components/Autocomplete.md",
+      "references/components/Breadcrumb.md",
+      "references/components/Button.md",
+      "references/components/Calendar.md",
+      "references/components/Card.md",
+      "references/components/Checkbox-Group.md",
+      "references/components/Checkbox.md",
+      "references/components/Chip-Group.md",
+      "references/components/Chip.md",
+      "references/components/Conversation-UI.md",
+      "references/components/Date-Picker.md",
+      "references/components/Date-Range-Picker.md",
+      "references/components/Dropdown.md",
+      "references/components/Grid.md",
+      "references/components/Icon.md",
+      "references/components/Info-Overlay.md",
+      "references/components/Inline-Notification.md",
+      "references/components/Label.md",
+      "references/components/Menu.md",
+      "references/components/Modal.md",
+      "references/components/Numeric-Selector.md",
+      "references/components/Omnibar.md",
+      "references/components/Panel.md",
+      "references/components/Popover.md",
+      "references/components/Progress-Bar.md",
+      "references/components/Query-Builder.md",
+      "references/components/RadioButtonGroup.md",
+      "references/components/Range-Slider.md",
+      "references/components/Select.md",
+      "references/components/Side-Panel.md",
+      "references/components/Spinner.md",
+      "references/components/Switch.md",
+      "references/components/Tabs.md",
+      "references/components/Text-Input.md",
+      "references/components/Textarea.md",
+      "references/components/Time-Picker.md",
+      "references/components/Toastr-Notification.md",
+      "references/components/Toggle-Group.md",
+      "references/components/Tooltip.md",
+      "references/components/Wizard.md",
+      "references/known-gaps.md",
+      "references/not-available.md"
+    ]
+  },
+  {
+    "id": "lyra-ui-prototyping",
+    "title": "Lyra design with template",
+    "question": "Can I get a clickable demo built from David Bauer's Lyra UI templates?",
+    "what": "Builds a coded demo (React/Tailwind, or a self-contained HTML file) from David Bauer's separate `@nicecxone/lyra-ui` template library, starting from its admin and agent page templates. For an official, 100% Lyra prototype use Lyra UI prototyping instead.",
     "benefit": "A demo that looks and behaves like real CXone product, plus an honest list of what is missing instead of look-alikes that drift the moment someone looks closely.",
     "clients": "both",
     "tools": [],

@@ -24,6 +24,13 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `tooltipConfig` | `{placement: TooltipPlacementappendTo: string \| Element}` | If your icon has a tooltip, you can configure the placement and the appendTo properties of that tooltip with this input. (See the SOL Tooltip API page for details.) |
 | `iconClick` | `() => void` | When provided, the icon is rendered inside a button element that invokes this callback when clicked. |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [String Input](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-icon-examples--string-input)
+- [Template Input](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-icon-examples--template-input)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -41,6 +48,11 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 ## Angular outputs
 
 _None documented._
+
+## Angular reference stories
+
+- [String Input](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-icon-examples--string-input)
+- [Template Input](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-icon-examples--template-input)
 
 ## Migration notes (Angular)
 

@@ -37,6 +37,14 @@ No React API is documented for Tooltip. In a React build this component is **not
 
 _None documented._
 
+## Angular reference stories
+
+- [Tooltip](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-tooltip-examples--tooltip)
+- [Overflow Tooltip](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-tooltip-examples--overflow-tooltip)
+- [Tooltip With Binding](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-tooltip-examples--tooltip-with-binding)
+- [Tooltip With Function](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-tooltip-examples--tooltip-with-function)
+- [Tooltip With View Child](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-tooltip-examples--tooltip-with-view-child)
+
 ## Migration notes (Angular)
 
 - Migrating to V9: Sol Tooltip Inputs changed in v9:; solTooltipId ➜ tooltipId; An empty solTooltip attribute is no longer needed. Instead, solTooltip should now have the content from the tooltip.; popoverTemplate (any) ➜ solTooltip or solPopover (string \| TemplateRef); content (string \| null) ➜ solTooltip or solPopover  (string \| TemplateRef); position ➜ placement; overflowTooltip ➜ overflowOnly; closeOnOutsideClick ➜ hideOnOutsideClick

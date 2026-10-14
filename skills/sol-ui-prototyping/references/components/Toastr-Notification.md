@@ -30,6 +30,13 @@ No React API is documented for Toastr Notification. In a React build this compon
 | `onShown` | `Observable<void>` | Emits when the toast is shown |
 | `onHidden` | `Observable<void>` | Emits when the toast is hidden |
 
+## Angular reference stories
+
+- [Warning](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-toastr-notification-examples--warning)
+- [Error](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-toastr-notification-examples--error)
+- [Info](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-toastr-notification-examples--info)
+- [Success](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-toastr-notification-examples--success)
+
 ## Migration notes (Angular)
 
 - Migrating to V11: Changes to input names: SolToastrService ➜ ToastrManager customToastrConfig ➜ options; SolToastrService ➜ ToastrManager; customToastrConfig ➜ options

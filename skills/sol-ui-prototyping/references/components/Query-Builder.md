@@ -28,6 +28,20 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | --- | --- | --- |
 | `onSelectionChanged` | `(value: QueryBuilderOutput) => void` | Called when the selection changes. Fires selection and isValid. When new criteria is added, fires after the overlay closes. |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [No Filters Selected](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-query-builder-examples--no-filters-selected)
+- [Saved Filters](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-query-builder-examples--saved-filters)
+- [Test Filter Display](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-query-builder-examples--test-filter-display)
+- [Readonly Filter Display](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-query-builder-examples--readonly-filter-display)
+- [Mandatory And Default Filters](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-query-builder-examples--mandatory-and-default-filters)
+- [Multi filters change](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-query-builder-examples--multi-filters-change)
+- [Filter With Operators](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-query-builder-examples--filter-with-operators)
+- [Multi-value overflow (+N)](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-query-builder-examples--multi-value-overflow)
+- [Borderless variant](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-query-builder-examples--borderless-variant)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -46,6 +60,18 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | Name | Type | Description |
 | --- | --- | --- |
 | `selectionChanged` | `QueryBuilderOutput` | event gets emitted when value is changed. It emits selection and isValid. When new criteria is added then event will fire after closing the overlay. |
+
+## Angular reference stories
+
+- [No Filters Selected](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-query-builder-examples--no-filters-selected)
+- [Saved Filters](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-query-builder-examples--saved-filters)
+- [Test Filter Display](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-query-builder-examples--test-filter-display)
+- [Readonly Filter Display](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-query-builder-examples--readonly-filter-display)
+- [Mandatory And Default Filters](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-query-builder-examples--mandatory-and-default-filters)
+- [Multi Filters Change](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-query-builder-examples--multi-filters-change)
+- [Filter With Operators](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-query-builder-examples--filter-with-operators)
+- [Multi-value overflow (+N)](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-query-builder-examples--multi-value-overflow)
+- [Borderless variant](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-query-builder-examples--borderless-variant)
 
 ## Migration notes (Angular)
 

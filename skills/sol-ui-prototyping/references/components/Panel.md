@@ -21,3 +21,18 @@ _None documented._
 
 _None documented._
 
+## Angular reference stories
+
+- [Panel Content Dynamic](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-panel-examples--panel-content-dynamic)
+- [Panel Form](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-panel-examples--panel-form)
+- [Panel Scrollable](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-panel-examples--panel-scrollable)
+- [Panel Omnibar With Grid](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-panel-examples--panel-omnibar-with-grid)
+- [Body Only](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-panel-examples--panel-body-only-example)
+- [Header + Body](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-panel-examples--panel-header-body-example)
+- [Body + Footer](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-panel-examples--panel-body-footer-example)
+- [Header + Body + Footer](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-panel-examples--panel-all-sections-example)
+- [Generic Header](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-panel-examples--panel-generic-header-example)
+- [Scrollable](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-panel-examples--panel-scrollable-example)
+- [Grid Block](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-panel-examples--panel-grid-block-example)
+- [Panel Tabs](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-panel-examples--panel-tabs)
+

@@ -38,6 +38,15 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `onClosed (callback prop)` | `() => void` | Callback for when the modal is closed with a positive intent. Equivalent to Angular's closed output. |
 | `onDismissed (callback prop)` | `() => void` | Callback for when the modal is cancelled or dismissed. Equivalent to Angular's dismissed output. |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [All Modal Types](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-modal-examples--all-modal-types)
+- [Custom Modal](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-modal-examples--custom-modal)
+- [Restricted Close](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-modal-examples--restricted-close)
+- [Multiple Modals](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-modal-examples--multiple-modals)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -61,4 +70,11 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | --- | --- | --- |
 | `closed` | `EventEmitter` | Event handler for when the modal is closed with a positive intent |
 | `dismissed` | `EventEmitter` | Event handler for when the modal is cancelled or dismissed |
+
+## Angular reference stories
+
+- [All Modal Types](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-modal-examples--all-modal-types)
+- [Custom Modal](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-modal-examples--custom-modal)
+- [Restricted Close](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-modal-examples--restricted-close)
+- [Multiple Modals](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-modal-examples--multiple-modals)
 

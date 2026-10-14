@@ -25,6 +25,16 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `showItemCount` | `boolean` | Determines whether the count badge is visible. Defaults to true. Only affects the visible badge — the screen-reader announcement of itemCountLabel/selectedItemCountLabel always fires regardless of this value. If you set showItemCount= because you render your own count UI elsewhere, don't also pass itemCountLabel/selectedItemCountLabel — doing so announces the count twice. |
 | `filtersSelectedCount` | `number` | Number of filters selected |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [Omnibar With Filters](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-omnibar-examples--omnibar-with-filters)
+
+## Migration notes (React)
+
+- Migrating to V16: SOL Omnibar has the following breaking changes from SOL 15 to SOL 16:; The filtersSelected boolean input has been removed. Use filtersSelectedCount instead to indicate the number of active filters.; The filter badge visibility is now automatically computed based on whether filtersSelectedCount is greater than 0.
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -44,6 +54,10 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 ## Angular outputs
 
 _None documented._
+
+## Angular reference stories
+
+- [Omnibar With Filters](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-omnibar-examples--omnibar-with-filters)
 
 ## Migration notes (Angular)
 

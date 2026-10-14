@@ -47,6 +47,25 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `onSelectAllToggled` | `boolean` | Fires when the Select All toggle is clicked. true = all selected, false = all deselected. |
 | `onTabKeyNavigation` | `{ shiftKey: boolean }` | Fires on Tab / Shift+Tab keydown at the component boundary for single and multi-select, including search-enabled and projected-content variants. |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [Single / Multi Select](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-select-examples--single-and-multi-select)
+- [Single Select Only](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-select-examples--single-select-only)
+- [Multi Select with Footer](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-select-examples--multi-select-with-footer)
+- [Custom Template with Icons](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-select-examples--custom-template-with-icons)
+- [Groups + Max Limit](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-select-examples--groups-and-max-limit)
+- [Read Only](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-select-examples--read-only)
+- [Empty State](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-select-examples--empty-state)
+- [Error State](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-select-examples--error-state)
+- [Loading State](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-select-examples--loading-state)
+- [No Results State](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-select-examples--no-results)
+- [Single Select With Ids](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-select-examples--single-select-with-ids)
+- [Multi Select With Ids](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-select-examples--multi-select-with-ids)
+- [Single Select Projected](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-select-examples--single-select-projected)
+- [Multi Select Projected](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-select-examples--multi-select-projected)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -81,4 +100,21 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `onExternalSearch` | `` | Fires for async search: { searchQuery: string, selectedItem: any[] }. |
 | `selectAllToggled` | `` | Fires when the Select All toggle is clicked: true = all selected, false = all deselected. |
 | `onTabKeyNavigation` | `` | Fires on Tab / Shift+Tab key-down at the panel boundary for single and multi-select, including search-enabled and projected-content variants. |
+
+## Angular reference stories
+
+- [Single / Multi Select](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-select-examples--single-and-multi-select)
+- [Single Select Only](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-select-examples--single-select-only)
+- [Multi Select with Footer](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-select-examples--multi-select-with-footer)
+- [Custom Template with Icons](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-select-examples--custom-template-with-icons)
+- [Groups + Max Limit](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-select-examples--groups-and-max-limit)
+- [Read Only](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-select-examples--read-only)
+- [Empty State](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-select-examples--empty-state)
+- [Error State](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-select-examples--error-state)
+- [Loading State](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-select-examples--loading-state)
+- [No Results State](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-select-examples--no-results)
+- [Single Select Projected](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-select-examples--single-select-projected)
+- [Multi Select Projected](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-select-examples--multi-select-projected)
+- [Single Select With Ids](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-select-examples--single-select-with-ids)
+- [Multi Select With Ids](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-select-examples--multi-select-with-ids)
 

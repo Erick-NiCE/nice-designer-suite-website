@@ -35,6 +35,14 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | --- | --- | --- |
 | `onActiveIndexChanged` | `(index: number) => void` | Fires with the index of the currently active/focused option during keyboard navigation. Used internally to update aria-activedescendant on the combobox input. |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [Basic Time Picker](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-time-picker-examples--basic-time-picker-closed)
+- [Basic Time Picker always opened](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-time-picker-examples--basic-time-picker-always-open)
+- [Time Picker with Error](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-time-picker-examples--error-mode)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -57,6 +65,12 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | Name | Type | Description |
 | --- | --- | --- |
 | `activeIndexChanged` | `number` | Emits the index of the currently active/focused option during keyboard navigation. Used internally to update aria-activedescendant on the combobox input. |
+
+## Angular reference stories
+
+- [Basic Time Picker](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-time-picker-examples--basic-time-picker-closed)
+- [Basic Time Picker always opened](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-time-picker-examples--basic-time-picker-always-open)
+- [Time Picker with Error](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-time-picker-examples--error-mode)
 
 ## Migration notes (Angular)
 

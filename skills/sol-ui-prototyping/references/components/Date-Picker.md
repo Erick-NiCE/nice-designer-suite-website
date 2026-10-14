@@ -39,6 +39,15 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `className` | `string` | Extra CSS class applied to the root element. |
 | `style` | `string \| CSSProperties` | Inline style applied to the root element. Accepts a CSS string (Angular parity) or a React CSSProperties object. |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [Basic Date Picker](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-date-picker-examples--basic-date-picker)
+- [Date Picker With Time](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-date-picker-examples--date-picker-with-time)
+- [Date Picker With Constraints](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-date-picker-examples--date-picker-with-constraints)
+- [Date Picker With States](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-date-picker-examples--date-picker-with-states)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -68,6 +77,13 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 ## Angular outputs
 
 _None documented._
+
+## Angular reference stories
+
+- [Basic Date Picker](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-date-picker-examples--basic-date-picker)
+- [Date Picker With Time](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-date-picker-examples--date-picker-with-time)
+- [Date Picker With Constraints](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-date-picker-examples--date-picker-with-constraints)
+- [Date Picker With States](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-date-picker-examples--date-picker-with-states)
 
 ## Migration notes (Angular)
 

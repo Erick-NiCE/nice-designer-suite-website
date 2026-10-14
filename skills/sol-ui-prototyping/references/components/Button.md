@@ -35,6 +35,15 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `className` | `string` | Additional CSS classes to apply. |
 | `style` | `React.CSSProperties` | Inline styles to apply. |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [Button Styles](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-button-examples--button-styles)
+- [Button Sizes](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-button-examples--button-sizes)
+- [Button States](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-button-examples--button-states)
+- [Button Icon](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-button-examples--button-icon)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -63,6 +72,13 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 ## Angular outputs
 
 _None documented._
+
+## Angular reference stories
+
+- [Button Styles](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-button-examples--button-styles)
+- [Button Sizes](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-button-examples--button-sizes)
+- [Button States](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-button-examples--button-states)
+- [Button Icon](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-button-examples--button-icon)
 
 ## Migration notes (Angular)
 

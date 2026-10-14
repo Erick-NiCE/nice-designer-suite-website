@@ -39,3 +39,9 @@ No React API is documented for Popover. In a React build this component is **not
 | `onShown()` | `EventEmitter` | Emitted when the tooltip or popover has finished the transition to being shown. |
 | `onHidden()` | `EventEmitter` | Emitted when the tooltip or popover has finished the transition to being hidden. |
 
+## Angular reference stories
+
+- [Max height Popover](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-popover-examples--max-height-popover)
+- [Max width Popover](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-popover-examples--max-width-popover)
+- [Simple popover](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-popover-examples--simple-popover)
+

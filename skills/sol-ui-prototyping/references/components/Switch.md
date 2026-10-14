@@ -36,6 +36,15 @@ No React API is documented for Switch. In a React build this component is **not 
 | --- | --- | --- |
 | `checkedChange` | `EventEmitter` | Emits an event when Switch is changed using click. |
 
+## Angular reference stories
+
+- [Switch](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-switch-examples--switch-toggle)
+- [All States](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-switch-examples--all-states)
+- [Ng Model](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-switch-examples--ng-model)
+- [Template Form](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-switch-examples--template-form)
+- [Reactive Form](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-switch-examples--reactive-form)
+- [Required With Error](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-switch-examples--required-with-error)
+
 ## Migration notes (Angular)
 
 - Migrating to V14: There are a some breaking changes in the SOL Switch from version 13 to 14.; Changes to input names: label ➜ title; label ➜ title

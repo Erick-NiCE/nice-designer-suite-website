@@ -33,3 +33,12 @@ No React API is documented for Calendar. In a React build this component is **no
 | --- | --- | --- |
 | `dateSelected` | `Date \| Date[] \| DateRange \| DateRange[]` | Event emitted when a date selection changes. The emitted value type matches the selection mode. |
 
+## Angular reference stories
+
+- [Single Selection](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-calendar-examples--single-selection)
+- [Week Selection](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-calendar-examples--week-selection)
+- [Multi Single Selection](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-calendar-examples--multi-single-selection)
+- [Multi Week Selection](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-calendar-examples--multi-week-selection)
+- [Special Dates](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-calendar-examples--special-dates)
+- [Range Selection](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-calendar-examples--range-selection)
+

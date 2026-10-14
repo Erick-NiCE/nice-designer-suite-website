@@ -28,4 +28,4 @@ A React-first build cannot use these. Each has an Angular component.
 
 ## Not documented in the seed
 
-The seed holds props and callbacks only. It has **no** overview text, do/don't guidance or variant descriptions for any component, so those rules are not here. Read the component's Storybook docs page (links in each component file) before relying on a prop's behaviour.
+The seed holds props, callbacks and reference stories only. It has **no** overview text, do/don't guidance or variant descriptions for any component, so those rules are not here. Read the component's Storybook docs page (links in each component file) before relying on a prop's behaviour.

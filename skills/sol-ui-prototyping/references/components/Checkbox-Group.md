@@ -25,6 +25,15 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | --- | --- | --- |
 | `onClicked` | `(value: string[]) => void` | Fires with an array of selected values whenever a checkbox in the group changes state |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [Checkbox Group With Options](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-checkbox-group-examples--checkbox-group-with-options)
+- [Checkbox Group With Selected](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-checkbox-group-examples--checkbox-group-with-selected)
+- [Reactive Forms](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-checkbox-group-examples--reactive-forms)
+- [Template Form With Options](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-checkbox-group-examples--template-form-with-options)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -40,4 +49,11 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | Name | Type | Description |
 | --- | --- | --- |
 | `clicked` | `EventEmitter<string[]>` | Emits an array of selected values whenever a checkbox in the group changes state |
+
+## Angular reference stories
+
+- [Reactive Forms](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-checkbox-group-examples--reactive-forms)
+- [Template Form With Options](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-checkbox-group-examples--template-form-with-options)
+- [Checkbox Group With Options](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-checkbox-group-examples--checkbox-group-with-options)
+- [Checkbox Group With Selected](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-checkbox-group-examples--checkbox-group-with-selected)
 

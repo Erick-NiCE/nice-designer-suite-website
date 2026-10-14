@@ -31,6 +31,14 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `onChange` | `(value: string) => void` | Fired as the search text changes. |
 | `onDropdownVisible` | `(visible: boolean) => void` | Fired when the dropdown opens (true) or closes (false). |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [Autocomplete Bottom Position](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-autocomplete-examples--autocomplete-bottom-position)
+- [Autocomplete With Search Item](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-autocomplete-examples--autocomplete-with-search-item)
+- [Autocomplete Mock Backend Search](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-autocomplete-examples--autocomplete-mock-backend-search)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -48,6 +56,12 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `optionSelected` | `EventEmitter<any>` | Event emitted when an option is selected from the dropdown. |
 | `clearedSearchText` | `EventEmitter<void>` | Event emitted when the clear button is clicked to remove search text. |
 | `dropdownVisible` | `EventEmitter<boolean>` | Event emitted when the dropdown opens (true) or closes (false). |
+
+## Angular reference stories
+
+- [Autocomplete Bottom Position](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-autocomplete-examples--autocomplete-bottom-position)
+- [Autocomplete With Search Item](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-autocomplete-examples--autocomplete-with-search-item)
+- [Autocomplete Mock Backend Search](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-autocomplete-examples--autocomplete-mock-backend-search)
 
 ## Migration notes (Angular)
 

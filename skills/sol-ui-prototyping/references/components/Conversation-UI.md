@@ -33,3 +33,10 @@ No React API is documented for Conversation UI. In a React build this component 
 | --- | --- | --- |
 | `actionButtonClicked` | `EventEmitter<string>` | Emits the input text value when the submit button is clicked. |
 
+## Angular reference stories
+
+- [Async Fetch Suggestion](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-conversation-ui-examples--async-fetch-suggestion)
+- [Conversation Card Demo](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-conversation-ui-examples--conversation-card-demo)
+- [Conversation Prompt Basic](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-conversation-ui-examples--conversation-prompt-basic)
+- [Show Pixie Icon](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-conversation-ui-examples--show-pixie-icon)
+

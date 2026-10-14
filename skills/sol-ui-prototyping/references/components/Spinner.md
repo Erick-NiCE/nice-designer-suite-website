@@ -27,3 +27,9 @@ No React API is documented for Spinner. In a React build this component is **not
 
 _None documented._
 
+## Angular reference stories
+
+- [Multiple Spinner](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-spinner-examples--multiple-spinner)
+- [Spinner Bar](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-spinner-examples--spinner-bar)
+- [Spinner Circle](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-spinner-examples--spinner-circle)
+

@@ -27,3 +27,13 @@ No React API is documented for Info Overlay. In a React build this component is 
 | --- | --- | --- |
 | `This component does not emit any outputs.` | `` |  |
 
+## Angular reference stories
+
+- [Self Config](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-info-overlay-examples--self-config)
+- [Sol Icon Config](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-info-overlay-examples--sol-icon-config)
+- [Cannot Load](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-info-overlay-examples--cannot-load)
+- [No Result](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-info-overlay-examples--no-result)
+- [No Created](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-info-overlay-examples--no-created)
+- [No Permission](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-info-overlay-examples--no-permission)
+- [Loading Items](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-info-overlay-examples--loading-items)
+

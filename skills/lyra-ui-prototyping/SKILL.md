@@ -1,7 +1,9 @@
 ---
 name: lyra-ui-prototyping
-description: Build a real, working coded prototype (React + Tailwind, or a self-contained HTML demo) out of the actual Lyra UI component library — not a static wireframe, not a Figma mockup. Use when the user wants something clickable/runnable that looks and behaves like a real CXone screen: "build a working prototype of X", "make me a live demo I can click through", "code this up with the design system", "spin up a quick app using our components". Third-party library by David Bauer (github.com/davidbauerjr991/lyra-ui) — ~95 components (primitives, charts, full page templates) built on Radix + Tailwind, with a live Storybook.
+description: Build a real, working coded prototype (React + Tailwind, or a self-contained HTML demo) out of the actual Lyra UI component library — not a static wireframe, not a Figma mockup. Use only when the user asks for David Bauer's library or its templates by name ("use the lyra-ui templates", "build it with David's Lyra UI", "start from the AdminShell template"). For any other coded prototype on Lyra, use lyra-prototyping, the official skill. Third-party library by David Bauer (github.com/davidbauerjr991/lyra-ui) — ~95 components (primitives, charts, full page templates) built on Radix + Tailwind, with a live Storybook.
 ---
+
+> **Not the official Lyra prototyping skill.** This wraps David Bauer's separate template library, whose components are not in the SOL/Lyra Storybook. Use it only when the user asks for his library or templates. Every other coded prototype on Lyra goes through `lyra-prototyping`.
 
 # Lyra UI prototyping
 

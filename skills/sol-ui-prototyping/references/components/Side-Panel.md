@@ -41,3 +41,11 @@ No React API is documented for Side Panel. In a React build this component is **
 | `closed` | `EventEmitter<void>` | Fires after slide-out transition completes. |
 | `widthChange` | `EventEmitter<string>` | Fires after drag-resize ends with the new width as a rem string (e.g. '32rem'). |
 
+## Angular reference stories
+
+- [Playground](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-side-panel-examples--playground)
+- [Header And Footer Actions](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-side-panel-examples--header-and-footer-actions)
+- [Resizable](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-side-panel-examples--resizable)
+- [As Secondary Sidebar](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-side-panel-examples--as-secondary-sidebar)
+- [Accessibility](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-side-panel-examples--accessibility)
+

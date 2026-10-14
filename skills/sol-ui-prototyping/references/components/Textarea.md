@@ -47,6 +47,13 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | --- | --- | --- |
 | `onValueChange` | `(value: string) => void` | Callback invoked when the textarea value changes. Receives the new value. |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [With Value](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-textarea-examples--with-value)
+- [With Error Message](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-textarea-examples--with-error-message)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -79,4 +86,9 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | Name | Type | Description |
 | --- | --- | --- |
 | `valueChange` | `EventEmitter<string>` | Event emitted when the textarea value changes. |
+
+## Angular reference stories
+
+- [With Value](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-textarea-examples--with-value)
+- [With Error Message](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-textarea-examples--with-error-message)
 

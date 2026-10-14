@@ -55,6 +55,15 @@ No React API is documented for Range Slider. In a React build this component is 
 | `endEvent` | `EventEmitter` | Event handler for change in value on slider end. |
 | `changeEvent` | `EventEmitter` | Event handler for change in value. |
 
+## Angular reference stories
+
+- [Range Slider In Reactive Form](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-range-slider-examples--range-slider-in-reactive-form)
+- [Range Slider Multi](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-range-slider-examples--range-slider-multi)
+- [Non Linear Range Slider](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-range-slider-examples--non-linear-range-slider)
+- [Basic Range Slider](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-range-slider-examples--basic-range-slider)
+- [Range Slider With Step](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-range-slider-examples--range-slider-with-step)
+- [Range Slider With Min Max](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-range-slider-examples--range-slider-with-min-max)
+
 ## Migration notes (Angular)
 
 - Migrating to V17: Input rename: ariaLabelledBy → ariaLabelledby (lowercase 'b' for consistency with other SOL components); Input rename: ariaDescribedBy → ariaDescribedby (lowercase 'b' for consistency with other SOL components)

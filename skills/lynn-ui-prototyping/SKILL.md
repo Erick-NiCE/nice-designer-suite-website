@@ -1,6 +1,6 @@
 ---
 name: lynn-ui-prototyping
-description: Build or edit a project's UI out of the real Lynn components (the `lynn-ui` React package) and follow Lynn's design-system rules exactly, then audit the live page against Lynn tokens until it is clean. Use when the user wants something built "in Lynn", on the Suite's own look (dark, gradient, motion-driven), or asks to use lynn-ui, the Lynn design system, or the Lynn components for a project, site, tool or prototype. Not for CXone product screens (use lyra-ui-prototyping) and not for SOL/Lyra conversion.
+description: Build or edit a project's UI out of the real Lynn components (the `lynn-ui` React package) and follow Lynn's design-system rules exactly, then audit the live page against Lynn tokens until it is clean. Use when the user wants something built "in Lynn", on the Suite's own look (dark, gradient, motion-driven), or asks to use lynn-ui, the Lynn design system, or the Lynn components for a project, site, tool or prototype. Not for CXone product screens (use lyra-prototyping) and not for SOL/Lyra conversion.
 ---
 
 # Lynn UI prototyping
@@ -11,7 +11,7 @@ Which system for which job:
 
 | The work is | Use |
 |---|---|
-| A CXone product screen, admin UI, agent workspace | `lyra-ui-prototyping` (Lyra) |
+| A CXone product screen, admin UI, agent workspace | `lyra-prototyping` (Lyra, official) |
 | A page, tool, site, dashboard or prototype that should look like the Suite itself | **this skill** (Lynn) |
 | Converting an existing page or Figma file to SOL or Lyra | `lyra-visual-patterns` + the convert tools |
 

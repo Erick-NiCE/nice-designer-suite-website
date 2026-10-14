@@ -30,6 +30,11 @@ No React API is documented for Inline Notification. In a React build this compon
 | --- | --- | --- |
 | `close` | `EventEmitter` | Emits an event when Inline Notification is closed. |
 
+## Angular reference stories
+
+- [Inline](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-inline-notification-examples--inline)
+- [All Inline](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-inline-notification-examples--all-inline)
+
 ## Migration notes (Angular)
 
 - Migrating to V11: There are a number of breaking changes in the SOL Inline Notification from version 10 to 11.; Changes to input names: title ➜ messageTitle message ➜ messageData type ➜ messageType; title ➜ messageTitle; message ➜ messageData; type ➜ messageType

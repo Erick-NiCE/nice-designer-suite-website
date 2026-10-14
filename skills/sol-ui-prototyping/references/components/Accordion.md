@@ -24,6 +24,13 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `onClosed` | `() => void` | Callback fired every time the AccordionItem is closed. |
 | `onToggle` | `() => void` | Callback fired every time the AccordionItem is toggled. |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [Single](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-accordion-examples--single)
+- [Multiple](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-accordion-examples--multiple)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -38,4 +45,9 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `opened` | `EventEmitter` | Event emitted every time the AccordionItem is opened. |
 | `closed` | `EventEmitter` | Event emitted every time the AccordionItem is closed. |
 | `toggle` | `EventEmitter` | Event emitted every time the AccordionItem is toggled. |
+
+## Angular reference stories
+
+- [Single](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-accordion-examples--single)
+- [Multiple](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-accordion-examples--multiple)
 

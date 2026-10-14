@@ -32,3 +32,7 @@ No React API is documented for Action Bar. In a React build this component is **
 | --- | --- | --- |
 | `buttonClicked` | `EventEmitter<void>` | Emits when the action bar button is clicked. |
 
+## Angular reference stories
+
+- [Action Bar](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-action-bar-examples--action-bar)
+

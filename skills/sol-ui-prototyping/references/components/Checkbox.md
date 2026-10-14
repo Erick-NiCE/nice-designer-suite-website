@@ -42,6 +42,11 @@ No React API is documented for Checkbox. In a React build this component is **no
 | `blur` | `EventEmitter` | Emits an event when checkbox is blured. |
 | `focus` | `EventEmitter` | Emits an event when checkbox is focused. |
 
+## Angular reference stories
+
+- [Checkbox With Reactive Form](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-checkbox-examples--checkbox-with-reactive-form)
+- [Checkbox](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-checkbox-examples--checkbox)
+
 ## Migration notes (Angular)
 
 - Migrating to V16: SOL Checkbox has the following breaking changes from SOL 14 to SOL 16:; readOnly has been renamed to readonly

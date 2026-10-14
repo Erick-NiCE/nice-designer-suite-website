@@ -20,6 +20,12 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `disabled` | `boolean` | false |
 | `readonly` | `boolean` | false |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [Default](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-label-examples--default)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -34,4 +40,8 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 ## Angular outputs
 
 _None documented._
+
+## Angular reference stories
+
+- [Default](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-label-examples--default)
 

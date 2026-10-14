@@ -28,6 +28,18 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `onSelectedChange` | `(value: string \| string[]) => void` | Fires when the group's value changes. |
 | `onToggleClicked` | `(event: ToggleGroupChangeEvent) => void` | Fires when any toggle is clicked, with { source, value }. |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [Template With Single Selection](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-toggle-group-examples--template-with-single-selection)
+- [Template With Multiple Selection](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-toggle-group-examples--template-with-multiple-selection)
+- [Reactive Forms Toggle](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-toggle-group-examples--reactive-forms-toggle)
+- [Single Selection](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-toggle-group-examples--single-selection)
+- [Multiple Selection](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-toggle-group-examples--multiple-selection)
+- [Icons With Text](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-toggle-group-examples--icons-with-text)
+- [Icons Only](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-toggle-group-examples--icons-only)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -47,6 +59,16 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | --- | --- | --- |
 | `onSelectedChange` | `EventEmitter<string \| []>` | Event emitted when the group's value changes. |
 | `onToggleClicked` | `EventEmitter<MatButtonToggleChange>` | Emits the toggle button source and value change. |
+
+## Angular reference stories
+
+- [Template With Single Selection](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-toggle-group-examples--template-with-single-selection)
+- [Template With Multiple Selection](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-toggle-group-examples--template-with-multiple-selection)
+- [Reactive Forms Toggle](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-toggle-group-examples--reactive-forms-toggle)
+- [Single Selection](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-toggle-group-examples--single-selection)
+- [Multiple Selection](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-toggle-group-examples--multiple-selection)
+- [Icons With Text](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-toggle-group-examples--icons-with-text)
+- [Icons Only](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-toggle-group-examples--icons-only)
 
 ## Migration notes (Angular)
 

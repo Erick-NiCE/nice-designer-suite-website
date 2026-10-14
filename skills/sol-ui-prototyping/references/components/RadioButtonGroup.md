@@ -27,6 +27,20 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `onClicked` | `(value: string) => void` | Fired when the group value changes due to user interaction with a radio button. |
 | `onValueChange` | `(value: string) => void` | Onchange-style callback fired alongside onClicked with the same payload — useful when binding the group to controlled state. |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [Basic Radio Button Group](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-radiobuttongroup-examples--basic-radio-button-group)
+- [Fully Disabled Group](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-radiobuttongroup-examples--fully-disabled-group)
+- [Selectively Disabled Items](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-radiobuttongroup-examples--selectively-disabled-items)
+- [Vertical Radio Button](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-radiobuttongroup-examples--vertical-radio-button)
+- [Horizontal Radio Button](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-radiobuttongroup-examples--horizontal-radio-button)
+- [With Error Message](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-radiobuttongroup-examples--with-error-message)
+- [Horizontal Responsive](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-radiobuttongroup-examples--horizontal-responsive)
+- [Template Form](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-radiobuttongroup-examples--template-form)
+- [Reactive Forms](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-radiobuttongroup-examples--reactive-forms)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -43,6 +57,18 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | Name | Type | Description |
 | --- | --- | --- |
 | `clicked` | `EventEmitter` | Event emitted when the group value changes. Change events are only emitted when the value changes due to user interaction with a radio button. |
+
+## Angular reference stories
+
+- [Template Form](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-radiobuttongroup-examples--template-form)
+- [Reactive Forms](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-radiobuttongroup-examples--reactive-forms)
+- [Basic Radio Button Group](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-radiobuttongroup-examples--basic-radio-button-group)
+- [Fully Disabled Group](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-radiobuttongroup-examples--fully-disabled-group)
+- [Selectively Disabled Items](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-radiobuttongroup-examples--selectively-disabled-items)
+- [Vertical Radio Button](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-radiobuttongroup-examples--vertical-radio-button)
+- [Horizontal Radio Button](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-radiobuttongroup-examples--horizontal-radio-button)
+- [With Error Message](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-radiobuttongroup-examples--with-error-message)
+- [Horizontal Responsive](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-radiobuttongroup-examples--horizontal-responsive)
 
 ## Migration notes (Angular)
 

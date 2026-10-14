@@ -25,6 +25,14 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `removeIconAriaLabel` | `string` | Accessible label for the remove button, also used as its tooltip text. Default: 'Remove'. |
 | `tooltipAppendTo` | `string \| Element` | appendTo target for all internal tooltips (label, error icon, remove button). Use 'body' when the chip is inside an overflow-clipping container. Default: '' (appended within the component). |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [Simple Chip](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-chip-examples--simple-chip)
+- [Chip With Close](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-chip-examples--chip-with-close)
+- [Chip Error State](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-chip-examples--chip-error-state)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -44,6 +52,12 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 ## Angular outputs
 
 _None documented._
+
+## Angular reference stories
+
+- [Simple Chip](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-chip-examples--simple-chip)
+- [Chip With Close](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-chip-examples--chip-with-close)
+- [Chip Error State](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-chip-examples--chip-error-state)
 
 ## Migration notes (Angular)
 

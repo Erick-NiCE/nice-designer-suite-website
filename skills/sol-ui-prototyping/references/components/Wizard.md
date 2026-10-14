@@ -26,6 +26,13 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | --- | --- | --- |
 | `onStepChanged` | `(step: StepChangedData) => void` | Fires whenever the active step changes. Receives a snapshot of the newly active step's state: id, label, stepIndex, stepNumber, active, visited, completed, stepCompleted, stepNotCompleted, disabled, parallelStep, activeParallelBranch, mainBranchCompleted, parallelBranchCompleted. |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [Wizard Parallel](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-wizard-examples--wizard-parallel)
+- [Wizard](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-wizard-examples--wizard)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -37,4 +44,9 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | Name | Type | Description |
 | --- | --- | --- |
 | `stepChanged` | `EventEmitter` | Emits the changed steps |
+
+## Angular reference stories
+
+- [Wizard Parallel](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-wizard-examples--wizard-parallel)
+- [Wizard](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-wizard-examples--wizard)
 

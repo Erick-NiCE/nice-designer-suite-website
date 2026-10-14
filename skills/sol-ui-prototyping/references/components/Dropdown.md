@@ -61,6 +61,36 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `onExternalSearch` | `` | Event emitted for performing external search and update options. It contains searchQuery and selectedItem. |
 | `onSelectAllToggled` | `` | Boolean event emitted when select all on the multiselect is clicked. True when all options selected false when no options selected. |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [Single Select](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--single-select)
+- [Single Select Sort](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--single-select-sort)
+- [Single Select Read Only](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--single-select-read-only)
+- [Single Select Disabled](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--single-select-disabled)
+- [Single Select Error Message](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--single-select-error-message)
+- [Multi Select](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--multi-select)
+- [Multi Select Search](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--multi-select-search)
+- [Custom Search](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--custom-search)
+- [Multi Select With Large Set Items](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--multi-select-with-large-set-items)
+- [Multi Select With Max Items Limit](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--multi-select-with-max-items-limit)
+- [Multi Select With Max Selection Limit](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--multi-select-with-max-selection-limit)
+- [Dropdown Bottom Position](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--dropdown-bottom-position)
+- [Single Select Custom Template](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--single-select-custom-template)
+- [Multiple Select Custom Template](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--multiple-select-custom-template)
+- [Icon In Dropdown Options](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--icon-in-dropdown-options)
+- [Multi Select With Categories](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--multi-select-with-categories)
+- [Multi Select With Categories And Max Selection Limit](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--multi-select-with-categories-and-max-selection-limit)
+- [Long Options Dropdown](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--long-options-dropdown)
+- [External Search](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--external-search)
+- [Single Select Multi Line Custom Template](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--single-select-multi-line-custom-template)
+- [Multi Select Multi Line Custom Template](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--multi-select-multi-line-custom-template)
+- [Multi Select Search With Same Name](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--multi-select-search-with-same-name)
+- [Dropdown Custom Item Height Template](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--dropdown-custom-item-height-template)
+- [Reactive Form](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--reactive-form)
+- [Dynamic Options Test](https://na1.dev.nice-incontact.com/sol/?path=/story/react_dropdown--dynamic-options-test)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -104,6 +134,34 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `searchChanged` | `` | Event emitted when the search value changes. |
 | `onExternalSearch` | `` | Event emitted for performing external search and update options. It contains searchQuery and selectedItem. |
 | `selectAllToggled` | `` | Boolean event emitted when select all on the multiselect is clicked. True when all options selected false when no options selected. |
+
+## Angular reference stories
+
+- [Single Select](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--single-select)
+- [Single Select Sort](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--single-select-sort)
+- [Single Select Read Only](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--single-select-read-only)
+- [Single Select Disabled](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--single-select-disabled)
+- [Single Select Error Message](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--single-select-error-message)
+- [Multi Select](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--multi-select)
+- [Multi Select Search](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--multi-select-search)
+- [Custom Search](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--custom-search)
+- [Multi Select With Large Set Items](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--multi-select-with-large-set-items)
+- [Multi Select With Max Items Limit](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--multi-select-with-max-items-limit)
+- [Multi Select With Max Selection Limit](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--multi-select-with-max-selection-limit)
+- [Dropdown Bottom Position](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--dropdown-bottom-position)
+- [Single Select Custom Template](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--single-select-custom-template)
+- [Multiple Select Custom Template](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--multiple-select-custom-template)
+- [Icon In Dropdown Options](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--icon-in-dropdown-options)
+- [Multi Select With Categories](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--multi-select-with-categories)
+- [Multi Select With Categories And Max Selection Limit](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--multi-select-with-categories-and-max-selection-limit)
+- [Long Options Dropdown](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--long-options-dropdown)
+- [Reactive Form](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--reactive-form)
+- [External Search](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--external-search)
+- [Single Select Multi Line Custom Template](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--single-select-multi-line-custom-template)
+- [Multi Select Multi Line Custom Template](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--multi-select-multi-line-custom-template)
+- [Dynamic Options Test](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--dynamic-options-test)
+- [Multi Select Search With Same Name](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--multi-select-search-with-same-name)
+- [Dropdown Custom Item Height Template](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_dropdown--dropdown-custom-item-height-template)
 
 ## Migration notes (Angular)
 

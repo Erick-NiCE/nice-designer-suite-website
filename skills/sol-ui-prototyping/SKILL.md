@@ -1,6 +1,6 @@
 ---
 name: sol-ui-prototyping
-description: Build a real, working coded prototype out of the actual SOL component library (React first, Angular where React has no component) and hold it to 100% SOL adherence, with every missing piece written down instead of faked. Use when the user wants something clickable/runnable on SOL: "build a working SOL prototype of X", "code this up in SOL", "live demo using the SOL components". Not for Lyra (use lyra-ui-prototyping), not for the Suite's own look (use lynn-ui-prototyping), not a static wireframe.
+description: Build a real, working coded prototype out of the actual SOL component library (React first, Angular where React has no component) and hold it to 100% SOL adherence, with every missing piece written down instead of faked. Use when the user wants something clickable/runnable on SOL: "build a working SOL prototype of X", "code this up in SOL", "live demo using the SOL components". Not for Lyra (use lyra-prototyping), not for the Suite's own look (use lynn-ui-prototyping), not a static wireframe.
 ---
 
 # SOL UI prototyping
@@ -10,7 +10,7 @@ SOL is the NiCE CXone design system. Its real components live in the internal **
 | The work is | Use |
 |---|---|
 | A coded prototype on **SOL** | **this skill** |
-| A coded prototype on **Lyra** | `lyra-ui-prototyping` |
+| A coded prototype on **Lyra** | `lyra-prototyping` (the official one) |
 | A page or tool in the Suite's own look | `lynn-ui-prototyping` |
 | Converting an existing page or Figma file to SOL/Lyra | `lyra-visual-patterns` + the convert tools |
 
@@ -108,7 +108,7 @@ Do not edit SOL source or a vendored copy. If a component's real API cannot do w
 ## Reference files
 
 - `references/component-index.md`: every component, React availability, selector. Generated.
-- `references/components/<Name>.md`: props, callbacks, migration notes. Generated.
+- `references/components/<Name>.md`: props, callbacks, reference stories, migration notes. Generated.
 - `references/not-available.md`: React gaps and what the seed cannot tell you. Generated.
 - `references/known-gaps.md`: curated list of what a CXone screen usually needs that SOL's component set does not have.
 

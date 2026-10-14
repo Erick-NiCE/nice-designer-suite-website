@@ -58,6 +58,15 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `onValueChange` | `(value: string) => void` | Callback invoked when the input value changes. Receives the new value. |
 | `onHighlightedText` | `(text: string) => void` | Callback invoked when text is selected/highlighted inside the input. Receives the selected text. |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [Default Input](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-text-input-examples--default-input)
+- [Search Input](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-text-input-examples--search-input)
+- [Password Input](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-text-input-examples--password-input)
+- [Reactive Form](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-text-input-examples--reactive-form)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -100,6 +109,14 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `blurEvent` | `void` | Event emitted when the sol-text-input element loses focus |
 | `valueChange` | `string` | Event emitted when the sol-text-input element value is changed, returns the input new value |
 | `highlightedText` | `string` | Event emitted when the sol-text-input element text is highlighted, returns the highlighted text inside the input |
+
+## Angular reference stories
+
+- [Reactive Form](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-text-input-examples--reactive-form)
+- [Default Input](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-text-input-examples--default-input)
+- [Medium Input](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-text-input-examples--medium-input)
+- [Search Input](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-text-input-examples--search-input)
+- [Password Input](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-text-input-examples--password-input)
 
 ## Migration notes (Angular)
 

@@ -19,6 +19,13 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 | `className` | `string` | Additional CSS classes to apply to the progress bar root. |
 | `style` | `React.CSSProperties` | Inline styles to apply to the progress bar root. |
 
+## React reference stories
+
+Copy open/close/select behavior from these, not from what seems reasonable.
+
+- [Progress Bar Determinate](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-progress-bar-examples--progress-bar-determinate)
+- [Multiple Progress Bar Determinate](https://na1.dev.nice-incontact.com/sol/?path=/story/react_components-progress-bar-examples--multiple-progress-bar-determinate)
+
 ## Angular inputs
 
 | Name | Type | Description |
@@ -30,4 +37,9 @@ These docs are on the internal SOL Storybook (VPN). If a prop below is not enoug
 ## Angular outputs
 
 _None documented._
+
+## Angular reference stories
+
+- [Progress Bar Determinate](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-progress-bar-examples--progress-bar-determinate)
+- [Multiple Progress Bar Determinate](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-progress-bar-examples--multiple-progress-bar-determinate)
 

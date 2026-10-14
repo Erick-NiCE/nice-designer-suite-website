@@ -26,3 +26,8 @@ No React API is documented for Menu. In a React build this component is **not av
 | --- | --- | --- |
 | `tabKeyPressed` | `EventEmitter<void>` | Emits when the Tab key is pressed within the menu. |
 
+## Angular reference stories
+
+- [Multiple Level Menu](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-menu-examples--multiple-level-menu)
+- [Single Level Menu](https://na1.dev.nice-incontact.com/sol/?path=/story/angular_components-menu-examples--single-level-menu)
+
