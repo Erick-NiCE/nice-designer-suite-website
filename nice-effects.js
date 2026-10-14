@@ -482,13 +482,30 @@
       groups: [
         { label: 'Steps', items: [
           { id: 'step-chrome', label: 'Install the Chrome Extension' },
-          { id: 'step-node', label: 'Install Node.js' },
           { id: 'step-claude', label: 'Connect Claude Desktop' },
-          { id: 'step-verify', label: 'Verify Everything Is Working' },
+          { id: 'step-verify', label: 'Verify Everything Is Working' }
+        ] },
+        { label: 'Figma', items: [
           { id: 'step-figma', label: 'Install the Figma Plugin' },
-          { id: 'step-issues', label: 'Common Issues' }
+          { id: 'step-fig-export', label: 'Work without a plugin' },
+          { id: 'step-fig-claude-design', label: 'Read a design in Claude Design' }
         ] }
       ]
+    },
+    {
+      href: 'update-guide.html', label: 'Update Guide',
+      groups: [
+        { label: 'Ways to update', items: [
+          { id: 'update-manual', label: 'Download from the website' },
+          { id: 'update-check', label: 'Check for updates in Settings' },
+          { id: 'update-claude', label: 'Ask Claude to do it' },
+          { id: 'update-connector', label: 'Update the Claude connector' }
+        ] }
+      ]
+    },
+    {
+      href: 'troubleshooting.html', label: 'Troubleshooting',
+      groups: []
     },
     {
       href: 'claude-skills.html', label: 'Claude Skills',

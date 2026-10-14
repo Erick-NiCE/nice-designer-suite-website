@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <script src="nice-effects.js?v=15" defer></script>
+  <script src="nice-effects.js?v=20" defer></script>
 
   <!--
     ===== lynn-ui: the site chrome, as React components =====
@@ -126,7 +126,7 @@
     }
 
     /* ---- STEPS ---- */
-    /* The six-step walkthrough is lynn-ui's <Stepper> now (see the mount
+    /* The three-step walkthrough is lynn-ui's <Stepper> now (see the mount
        script at the end of <body>), so the `.steps-list` / `.step` /
        `.step-sidebar` / `.step-number-badge` / `.step-line` / `.step-body` /
        `.step-header` / `.step-title` / `.step-card` CSS that used to live
@@ -555,13 +555,13 @@
     <div class="reveal">
       <span class="hero-eyebrow">GETTING STARTED</span>
       <h1 class="hero-title">Install Guide</h1>
-      <p class="hero-subtitle">Start with the Chrome extension, then connect Claude Desktop to supercharge it. The Figma plugin is a separate install at the bottom - grab it whenever you need it.</p>
+      <p class="hero-subtitle">Install the Chrome extension, then connect Claude Desktop to supercharge it. Figma setup is its own section at the bottom of the page. Already installed? Head to the <a href="./update-guide.html" style="color:inherit;text-decoration:underline;">Update Guide</a>.</p>
     </div>
   </section>
 
   <!-- MAIN -->
   <main class="main-content">
-    <!-- The six-step walkthrough: lynn-ui <Stepper> (see the mount script
+    <!-- The three-step walkthrough: lynn-ui <Stepper> (see the mount script
          at the end of <body>). Each step keeps its own id, which is what the
          doc rail's "Steps" group links to. -->
     <div id="lynn-steps-root" class="lynn-mount"></div>
@@ -569,138 +569,15 @@
     <!-- DIVIDER -->
     <div class="section-divider reveal"></div>
 
-    <!-- UPDATING THE APP -->
-    <section class="reveal" id="updating">
-      <div class="section-eyebrow update-eyebrow">Staying current</div>
-      <h2 class="section-title">Updating the App</h2>
-
-      <p class="update-intro">The Chrome extension is a <strong>Load unpacked</strong> install, so Chrome never updates it for you - that is a browser restriction on sideloaded extensions, not a setting we can switch on. <strong>Settings &gt; Version</strong> has a refresh button that tells you when a newer build is out; below are the three ways to actually take it. The Figma plugin is different - it updates through Figma itself, so there is nothing to do there.</p>
-
-      <div class="update-grid">
-
-        <div class="update-card" id="update-manual">
-          <div class="update-card-title">
-            <span class="update-card-num">1</span>
-            Download from the website
-          </div>
-          <p class="update-best"><strong>Best for</strong> your first install, or updating by hand while keeping your settings, Supercharge connection, welcome-tour state, and anything else stored in the extension.</p>
-          <ol class="numbered-list">
-            <li>Download the latest release: <a class="step-link" href="./downloads/NiCE-Designer-V11.6.zip" data-latest-download download>NiCE-Designer-V11.6.zip</a></li>
-            <li>Unzip it - this gives you a new <code>NiCE Designer Chrome</code> folder</li>
-            <li><strong>Drag the files out of that new folder and into your existing, already-installed folder</strong> - the same one you originally pointed <strong>Load unpacked</strong> at - overwriting everything when your file manager asks</li>
-            <li>Go to <code>chrome://extensions</code> and click <strong>Reload</strong> on NiCE Designer Suite</li>
-          </ol>
-          <!-- lynn-ui <Alert variant="info"> -->
-          <div id="lynn-update-note-folder" class="lynn-mount"></div>
-        </div>
-
-        <div class="update-card">
-          <div class="update-card-title">
-            <span class="update-card-num">2</span>
-            Check for updates in Settings
-          </div>
-          <p class="update-best"><strong>Best for</strong> finding out you are behind, then updating on your own terms.</p>
-          <ol class="numbered-list">
-            <li>Open the side panel and go to <strong>Settings</strong></li>
-            <li>Click the refresh icon next to <strong>Version</strong>. It reads the published version and tells you either <em>"You're up to date"</em> or <em>"Update available"</em></li>
-            <li>Click the download link it gives you - it grabs the zip and brings you straight to the <a href="#update-manual" class="step-link">manual walkthrough above</a>, so you land on the same "same folder, drag files in" steps instead of having to find them yourself</li>
-          </ol>
-          <!-- lynn-ui <Alert variant="info"> -->
-          <div id="lynn-update-note-check" class="lynn-mount"></div>
-        </div>
-
-        <div class="update-card">
-          <div class="update-card-title">
-            <span class="update-card-num">3</span>
-            Ask Claude to do it
-          </div>
-          <p class="update-best"><strong>Best for</strong> the fastest route, if you already use Claude Code on this machine.</p>
-          <ol class="numbered-list">
-            <li>In Claude Code, ask it to update NiCE Designer and point it at your installed extension folder</li>
-            <li>Claude runs <code>self-update.sh</code> from inside that folder. The script compares your installed version against the published one, downloads the new build, and copies it over your folder in place - no unzipping, no dragging files around</li>
-            <li>Go to <code>chrome://extensions</code> and click <strong>Reload</strong>. This last click is always yours - Chrome does not let a script do it</li>
-          </ol>
-          <!-- lynn-ui <Alert variant="warning"> -->
-          <div id="lynn-update-warn-claude" class="lynn-mount"></div>
-        </div>
-
-      </div>
-
-      <!-- lynn-ui <Alert variant="warning"> -->
-      <div id="lynn-update-warn-why" class="lynn-mount"></div>
-    </section>
-
-    <!-- DIVIDER -->
-    <div class="section-divider reveal"></div>
-
-    <!-- TROUBLESHOOTING -->
-    <section class="reveal" id="step-issues">
-      <div class="section-eyebrow">Troubleshooting</div>
-      <h2 class="section-title">Common Issues</h2>
-
-      <div class="trouble-grid">
-
-        <div class="trouble-card trouble-card-full">
-          <div class="trouble-card-title">
-            <svg class="trouble-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 21l15 -15l-3 -3l-15 15l3 3"/><path d="M15 6l3 3"/><path d="M9 3a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2"/><path d="M19 13a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2"/></svg>
-            Reading a Figma design that is open in Claude Design
-          </div>
-          <div class="trouble-card-body">
-            <p>Claude Design renders a real page, unlike figma.com, whose canvas is one WebGL element with no readable markup. That means the Chrome extension works there normally: click <strong>Pick</strong>, select any element, and Spec Mode reads it, with the same data available to Claude through the MCP tools. This is the shortest route from a Figma design to code, and it is available on a view-only Figma seat.</p>
-
-            <figure class="step-figure">
-              <img src="./images/claude-design-select-element.png" alt="A dashboard open in Claude Design with the NiCE Designer Suite side panel beside it. A div is selected and Spec Mode lists its layout, fills, strokes, typography and auto layout values, with Copy CSS at the bottom." loading="lazy" width="2000" height="1260" />
-              <figcaption><strong>Option 1 - select elements in place.</strong> Pick any element and Spec Mode gives you its measurements, colours, typography and CSS, exactly as it would on a live web page. Charts and gauges work too: an SVG reports every painted fill and stroke plus its markup. Use this when you want to work element by element, or drive it from Claude over MCP.</figcaption>
-            </figure>
-
-            <figure class="step-figure">
-              <img src="./images/claude-design-export-claude-code.png" alt="The Claude Design export menu, listing Claude Code with a Send action, PDF, Project HTML as a zip or standalone, PowerPoint, and More formats and apps." loading="lazy" width="836" height="608" />
-              <figcaption><strong>Option 2 - send the whole thing to Claude Code.</strong> Use <strong>Share &gt; Export &gt; Claude Code</strong> to hand the entire design over in one step. Best when you want all of the design files at once and do not need what Claude Design itself provides: a shareable link, comments, and a designer or PM editing the design in place.</figcaption>
-            </figure>
-          </div>
-        </div>
-
-        <div class="trouble-card">
-          <div class="trouble-card-title">
-            <svg class="trouble-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"/><path d="M3.6 9h16.8"/><path d="M3.6 15h16.8"/><path d="M11.5 3a17 17 0 0 0 0 18"/><path d="M12.5 3a17 17 0 0 1 0 18"/></svg>
-            Chrome extension not loading
-          </div>
-          <div class="trouble-card-body">
-            Verify that Developer Mode is enabled in <code>chrome://extensions</code> (top-right in Chrome, bottom of the left sidebar in Edge). If the extension still won't load, try removing it and re-loading the unpacked folder. Make sure you're selecting the <code>NiCE Designer Chrome</code> folder itself - the one containing <code>manifest.json</code> - not the folder above it.
-          </div>
-        </div>
-
-        <div class="trouble-card">
-          <div class="trouble-card-title">
-            <svg class="trouble-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.785 6l8.215 8.215l-2.054 2.054a5.81 5.81 0 1 1 -8.215 -8.215l2.054 -2.054"/><path d="M4 20l3.5 -3.5"/><path d="M15 4l-3.5 3.5"/><path d="M20 9l-3.5 3.5"/></svg>
-            MCP server not connecting
-          </div>
-          <div class="trouble-card-body">
-            Check that port <code>7331</code> is not already in use by another process. Use <code>NICE_MCP_WS_PORT=7332 node src/index.js</code> to run on a different port. Make sure the path in <code>claude_desktop_config.json</code> is an absolute path, not relative.
-          </div>
-        </div>
-
-        <div class="trouble-card">
-          <div class="trouble-card-title">
-            <svg class="trouble-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2l0 -4"/><path d="M12 2v2"/><path d="M9 12v9"/><path d="M15 12v9"/><path d="M5 16l4 -2"/><path d="M15 14l4 2"/><path d="M9 18h6"/><path d="M10 8v.01"/><path d="M14 8v.01"/></svg>
-            Claude can't see any targets
-          </div>
-          <div class="trouble-card-body">
-            At least one client - the Chrome extension or the Figma plugin - must be open and connected to the MCP server. Call <code>list_targets</code> first - it will tell you exactly which clients are currently registered. If the list is empty, check the connections in each client.
-          </div>
-        </div>
-
-        <div class="trouble-card">
-          <div class="trouble-card-title">
-            <svg class="trouble-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25"/><path d="M7.5 10.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M11.5 7.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M15.5 10.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/></svg>
-            Plugin won't open
-          </div>
-          <div class="trouble-card-body">
-            Make sure you installed from the Figma Community (not a local unpacked version). Check that the plugin isn't in your organization's blocked plugin list - contact your Figma admin if unsure.
-          </div>
-        </div>
-
-      </div>
+    <!-- FIGMA: not part of the install flow above. Plugin install and the
+         no-plugin route share one lettered lynn-ui <Stepper> (see the mount
+         script). No `reveal` on the section, for the same reason as the
+         steps list at the top. -->
+    <section id="figma">
+      <div class="section-eyebrow">Figma</div>
+      <h2 class="section-title">Working with Figma</h2>
+      <p class="update-intro">Nothing here is needed for the Chrome extension or Supercharge. Pick the route that matches your Figma seat: install the plugin if you can edit, or skip it and work from a saved file if you are on a view-only seat.</p>
+      <div id="lynn-figma-root" class="lynn-mount"></div>
     </section>
 
   </main>
@@ -902,7 +779,7 @@
   <!--
     ===== lynn-ui mount =====
     One createRoot, one ThemeProvider, one <App>: the access gate, the nav,
-    the doc rail, the footer, the six-step walkthrough and every callout on
+    the doc rail, the footer, the three-step walkthrough and every callout on
     the page. Keeping them in a single root is what keeps the theme in sync
     between them - separate roots would each get their own provider and drift
     apart.
@@ -910,9 +787,7 @@
     Anything that belongs elsewhere in the document is placed with
     createPortal into a `.lynn-mount` placeholder rather than rendered here:
     a footer rendered next to the nav would sit at the top of the page, and a
-    nav rendered inside a 60px wrapper could not be sticky. The four callouts
-    in "Updating the App" portal into placeholders inside the static cards
-    they belong to, so they are the same <Alert> as the ones in the steps.
+    nav rendered inside a 60px wrapper could not be sticky. The 
   -->
   <script type="module">
     import { createElement as h, Fragment, useEffect, useState } from 'react';
@@ -920,6 +795,8 @@
     import { createRoot } from 'react-dom/client';
     import {
       AccessGate,
+      Accordion,
+      AccordionItem,
       Alert,
       Badge,
       DocRail,
@@ -946,7 +823,7 @@
     /* The page table is read straight off nice-effects.js (which publishes
        its own DOC_PAGES as NiceEffects.docPages) rather than hand-copied, so
        adding a section anchor there still updates this rail. This page's own
-       "Steps" group links to the six `#step-*` ids, which are the Stepper
+       "Steps" group links to the three `#step-*` ids, which are the Stepper
        step ids below. Collapse state shares nice-effects.js's own
        localStorage key, which is also the one embed.js stashes. */
     const RAIL_KEY = 'nice-doc-rail-collapsed';
@@ -967,6 +844,7 @@
         links: [
           { label: 'Overview', href: './index.html' },
           { label: 'Install Guide', href: './install-guide.html', active: true },
+          { label: 'Update Guide', href: './update-guide.html' },
           { label: 'Claude Skills', href: './claude-skills.html' },
           { label: 'The Suite', href: './the-suite.html' },
         ],
@@ -984,6 +862,7 @@
         title: 'Reference',
         links: [
           { label: 'Release Notes', href: './release-notes.html' },
+          { label: 'Troubleshooting', href: './troubleshooting.html' },
           { label: 'FAQ', href: './faq.html' },
           { label: 'Tools', href: './tools.html' },
           { label: 'Marketplace', href: './marketplace.html' },
@@ -1056,18 +935,29 @@
           null,
           section(
             'Prerequisites',
-            block('<p>Chrome or Edge (Chromium-based) with Developer Mode enabled in <code>chrome://extensions</code>.</p>')
+            block('<p>Google Chrome or Microsoft Edge. You do not need to turn anything on ahead of time - the steps below walk you through it.</p>')
           ),
           section(
             'How to install',
             block(`<ol class="numbered-list">
                 <li>Download the latest release: <a class="step-link" href="./downloads/NiCE-Designer-V11.6.zip" data-latest-download download>NiCE-Designer-V11.6.zip</a></li>
-                <li>Unzip the downloaded package to a location you'll keep it</li>
-                <li>Go to <code>chrome://extensions</code> (or <code>edge://extensions</code>) and enable <strong>Developer Mode</strong></li>
-                <li>Click <strong>"Load unpacked"</strong> and select the <code>NiCE Designer Chrome</code> folder from the unzipped package</li>
-                <li>The NiCE Designer icon appears in your Chrome toolbar</li>
+                <li>Unzip it. On Mac, double-click the zip in your Downloads folder. On Windows, right-click it and choose <strong>Extract All</strong>. You now have a folder named <strong>NiCE Designer Chrome</strong>. Move it somewhere you will keep it (for example, Documents) - if you delete it later, the extension stops working</li>
+                <li>Open your extensions page. Click the address bar at the top of your browser (where you type web addresses), paste the address for your browser, and press <strong>Enter</strong>:
+                  <ul style="margin-top:8px;">
+                    <li><strong>Chrome:</strong> <code>chrome://extensions</code></li>
+                    <li><strong>Edge:</strong> <code>edge://extensions</code></li>
+                  </ul>
+                  These addresses cannot be opened by clicking a link on a web page, so copy and paste them into the address bar.</li>
+                <li>Turn on <strong>Developer mode</strong>:
+                  <ul style="margin-top:8px;">
+                    <li><strong>Chrome:</strong> flip the <strong>Developer mode</strong> switch in the <strong>top-right corner</strong> of the page so it turns blue</li>
+                    <li><strong>Edge:</strong> flip the <strong>Developer mode</strong> switch at the <strong>bottom of the left-hand sidebar</strong> so it turns on</li>
+                  </ul></li>
+                <li>Click <strong>Load unpacked</strong>. In Chrome it is a button in the <strong>top-left</strong> of the page, under the "Extensions" title. In Edge it is a button at the top of the installed extensions list. It only appears after Developer mode is on</li>
+                <li>A file window opens. Find and select the <strong>NiCE Designer Chrome</strong> folder you just unzipped, then click <strong>Select</strong> (Mac) or <strong>Select Folder</strong> (Windows). Pick the folder itself - do not open it first and do not pick the zip file</li>
+                <li><strong>NiCE Designer Suite</strong> now appears in your list of extensions. Click the puzzle-piece icon in the top-right of your browser and click the <strong>pin</strong> next to NiCE Designer so its icon stays in your toolbar</li>
               </ol>`),
-            note(ICON_PIN, '<strong>Where is Developer Mode?</strong> Top-right in Chrome, bottom of the left sidebar in Edge - and <strong>Load unpacked</strong> only appears once it\'s on. Both are marked up below.'),
+            note(ICON_PIN, '<strong>Can\'t find a button?</strong> Both are marked up below. The two browsers put the same controls in different places.'),
             block(`<figure class="step-figure">
                 <img src="./images/install-chrome-extensions.png" alt="The top of the chrome://extensions page. A red box highlights the Load unpacked button on the left of the toolbar, and another highlights the Developer mode toggle switched on at the far right." loading="lazy" width="1400" height="171" />
                 <figcaption><strong>Chrome</strong> - <strong>Developer mode</strong> is the toggle at the top right. Switch it on and the toolbar row appears, with <strong>Load unpacked</strong> at the top left.</figcaption>
@@ -1082,34 +972,7 @@
             block('<p>Navigate to any web page and click the NiCE Designer icon in the toolbar. The inspection panel opens alongside the page. For a dedicated second-monitor view, click the pop-out icon in the extension settings panel.</p>')
           ),
           note(ICON_INFO, 'The extension persists per window. No reset is needed when switching tabs or navigating to a different page.'),
-          tip(ICON_BULB, '<strong>First launch:</strong> a Welcome screen offers <strong>Simple</strong> (Lite mode - just Frontend Audit and Design System) or the <strong>Full toolkit</strong>, followed by a short guided tour. Switch modes or replay the tour anytime from Settings.')
-        ),
-      },
-      {
-        id: 'step-node',
-        title: 'Install Node.js',
-        children: h(
-          Fragment,
-          null,
-          section(
-            'What it does',
-            block('<p>Claude Desktop needs Node.js on your machine to run the local MCP server that connects Claude to the Figma plugin and Chrome extension. The Figma plugin and Chrome extension still work fully as standalone tools without it - this step only unlocks Supercharge.</p>')
-          ),
-          section(
-            'Option A - Download the installer (recommended, no terminal)',
-            block(`<p>Go to <a href="https://nodejs.org" class="step-link" target="_blank" rel="noopener">nodejs.org</a>, download the installer for your OS (the big green button - it's the LTS version), and double-click it like any other app installer. That's it - no terminal, no typing commands.</p>`)
-          ),
-          section(
-            'Option B - Install via npm/a package manager (for developers)',
-            block(`<p>If you're comfortable with a terminal and already use a package manager, that works too:</p>
-              <div class="code-block"><span class="code-comment"># macOS (Homebrew)</span>
-brew install node
-
-<span class="code-comment"># Windows (winget)</span>
-winget install OpenJS.NodeJS.LTS</div>
-              <p style="margin-top:12px;">Either option gives you the same thing: a working <code>node</code> command that Claude Desktop can call. You only need to do this once per machine.</p>`)
-          ),
-          note(ICON_INFO, 'You do <strong>not</strong> need to run <code>npm install</code> or start the server yourself - the downloaded package already includes its dependencies, and Claude Desktop starts the server automatically in the next step.')
+          tip(ICON_BULB, '<strong>Advanced mode:</strong> the plugin has an Advanced mode in Settings that unlocks more tools and shows more detail in audits. Turn it on whenever you want the extra depth.')
         ),
       },
       {
@@ -1123,6 +986,24 @@ winget install OpenJS.NodeJS.LTS</div>
         children: h(
           Fragment,
           null,
+          h(
+            AccordionItem,
+            {
+              id: 'install-guide-node',
+              title: 'Advanced: Node.js (only if you turned off Claude Desktop\'s built-in Node.js)',
+              defaultOpen: false,
+              persist: false,
+            },
+            block(`<p>You do <strong>not</strong> need to install Node.js. Claude Desktop ships with its own built-in Node.js and uses it to run the connector, so the one-click install below works on a fresh machine. Skip this section unless you (or your IT team) turned that built-in Node.js off in Claude Desktop - then the connector has no <code>node</code> to run and you have to supply one yourself.</p>
+              <p style="margin-top:12px;"><strong>Option A - Download the installer (no terminal).</strong> Go to <a href="https://nodejs.org" class="step-link" target="_blank" rel="noopener">nodejs.org</a>, download the installer for your OS (the big green button - it's the LTS version), and double-click it like any other app installer.</p>
+              <p style="margin-top:12px;"><strong>Option B - Package manager (for developers).</strong></p>
+              <div class="code-block"><span class="code-comment"># macOS (Homebrew)</span>
+brew install node
+
+<span class="code-comment"># Windows (winget)</span>
+winget install OpenJS.NodeJS.LTS</div>
+              <p style="margin-top:12px;">Either option gives you a working <code>node</code> command. You only need to do this once per machine, and you do not need to run <code>npm install</code> or start the server yourself - Claude Desktop starts it automatically.</p>`)
+          ),
           section(
             'One-click install (recommended)',
             block(`<p>The <code>NiCE Designer Chrome</code> folder - the same one you loaded in step 1 - has <strong>"Click to install Claude Connector.mcpb"</strong> sitting directly inside it. Double-click it, confirm the two prompts, and <strong>"nice-designer-mcp"</strong> appears as an installed extension - already running. No file paths, no JSON, no terminal.</p>
@@ -1147,8 +1028,7 @@ winget install OpenJS.NodeJS.LTS</div>
                 <figcaption><strong>4.</strong> Done. <strong>nice-designer-mcp</strong> now shows under <em>Installed on your computer</em> in <strong>Settings &gt; Extensions</strong>. The <strong>...</strong> (three dots) menu next to it opens Details, where you can re-check the version - and it's the same menu you click to <strong>Uninstall</strong> when a new version ships.</figcaption>
               </figure>`),
             note(ICON_TOOL, '<strong>Double-click not working?</strong> If the <code>.mcpb</code> file does nothing or opens in the wrong app, install it from inside Claude Desktop instead: open <strong>Settings &gt; Extensions</strong>, scroll to <strong>Extension developer</strong> (you may need to open <strong>Advanced settings</strong> first), click <strong>Install extension</strong>, and pick <strong>"Click to install Claude Connector.mcpb"</strong> from the <code>NiCE Designer Chrome</code> folder. You\'ll get the same preview and confirm prompts as steps 2-4 above.<figure class="step-figure"><img src="./images/install-connector-extensions-settings.png" alt="Claude Desktop Settings on the Extensions page. Under Extension developer, the Install extension button sits at the left of a row of buttons including Install unpacked extension and Open extensions folder." loading="lazy" width="800" height="745" /><figcaption>Settings &gt; Extensions &gt; Extension developer &gt; <strong>Install extension</strong>. Ignore the developer-tools warning - you are only installing the connector file.</figcaption></figure>'),
-            warn(ICON_WARN, '<strong>Now force quit Claude Desktop - this part is not optional.</strong> The connector only loads on a completely fresh start, and closing the window or pressing <strong>Cmd + Q</strong> often leaves it running in the background. On Mac: <strong>right-click the Claude icon in the Dock</strong>, hold <strong>Option</strong>, and choose <strong>Force Quit</strong>. Then reopen Claude. If the tools still aren\'t there, force quit once more - it\'s almost always this.'),
-            note(ICON_REFRESH, '<strong>Updating the connector:</strong> there\'s no in-place upgrade. When a new version ships, uninstall the old one first: open <strong>Settings &gt; Extensions</strong> in Claude Desktop, click the <strong>...</strong> (three dots) next to <strong>nice-designer-mcp</strong>, and choose <strong>Uninstall</strong>. Once it\'s gone, double-click the new <code>.mcpb</code> file to install it - then force quit Claude Desktop again, exactly as above.')
+            warn(ICON_WARN, '<strong>Now force quit Claude Desktop - this part is not optional.</strong> The connector only loads on a completely fresh start, and closing the window or pressing <strong>Cmd + Q</strong> often leaves it running in the background. On Mac: <strong>right-click the Claude icon in the Dock</strong>, hold <strong>Option</strong>, and choose <strong>Force Quit</strong>. Then reopen Claude. If the tools still aren\'t there, force quit once more - it\'s almost always this.')
           ),
           section(
             'Turn on Supercharge',
@@ -1156,12 +1036,17 @@ winget install OpenJS.NodeJS.LTS</div>
               <figure class="step-figure">
                 <img src="./images/install-supercharge-on.png" alt="The Supercharge panel in the NiCE Designer extension. A green dot sits next to the Supercharge heading, the header shows the port address ws://127.0.0.1:7331, and the toggle at the right is switched On." loading="lazy" width="736" height="300" />
                 <figcaption><strong>5.</strong> Toggle <strong>Supercharge</strong> on. Green dot plus the port address <strong><code>ws://127.0.0.1:7331</code></strong> means you're connected. If it stays off or shows no address, check that Claude Desktop is running - it starts the server.</figcaption>
-              </figure>
-              <p style="margin-top:12px;">If a tool or skill you expect is missing after an update, use the <strong>"Not seeing a new tool or skill?"</strong> link in that same panel - it points you back at the <code>.mcpb</code> file to reinstall the connector.</p>`)
+              </figure>`)
           ),
-          section(
-            'Manual config (advanced / no .mcpb support / running from source)',
-            block(`<p>If you're on a Claude Desktop version that doesn't support <code>.mcpb</code> connector files yet, add the server entry to <code>claude_desktop_config.json</code> by hand instead - Claude Desktop will still start the server itself, same as the one-click path:</p>
+          h(
+            AccordionItem,
+            {
+              id: 'install-guide-manual',
+              title: 'Advanced: no .mcpb support, or running the server yourself',
+              defaultOpen: false,
+              persist: false,
+            },
+            block(`<p><strong>Older Claude Desktop without .mcpb support.</strong> Add the server entry to <code>claude_desktop_config.json</code> by hand - Claude Desktop still starts the server itself, same as the one-click path:</p>
               <div class="code-block"><span class="code-comment">// claude_desktop_config.json</span>
 {
   <span class="code-key">"mcpServers"</span>: {
@@ -1171,68 +1056,61 @@ winget install OpenJS.NodeJS.LTS</div>
     }
   }
 }</div>
-              <p style="margin-top:12px;">Use an <strong>absolute path</strong> to the <code>index.js</code> file. Relative paths will not work. Restart Claude Desktop after saving.</p>`)
-          ),
-          section(
-            'Running it yourself in a terminal (developers / non-Claude-Desktop MCP clients)',
-            block(`<p>Neither option above is needed if you just want to run the server standalone - for example to connect a different MCP client, or if you're working from a git clone instead of the downloaded package:</p>
-              <div class="code-block"><span class="code-comment"># only needed from a fresh git clone - the downloaded package</span>
-<span class="code-comment"># already includes node_modules</span>
+              <p style="margin-top:12px;">Use an <strong>absolute path</strong> to <code>index.js</code>; relative paths will not work. Restart Claude Desktop after saving.</p>
+              <p style="margin-top:12px;"><strong>Other MCP clients, or a git clone.</strong> To run the server standalone:</p>
+              <div class="code-block"><span class="code-comment"># npm install is only needed from a fresh git clone - the</span>
+<span class="code-comment"># downloaded package already includes node_modules</span>
 cd packages/mcp-server
 npm install
 node src/index.js</div>
-              <p style="margin-top:12px;">The server starts on <code>ws://127.0.0.1:7331</code>. Set <code>NICE_MCP_WS_PORT</code> before starting to use a different port:</p>
-              <div class="code-block">NICE_MCP_WS_PORT=8080 node src/index.js</div>`)
-          ),
-          section(
-            'Best practice',
-            block('<p>Load a skill before using MCP tools for the best results. For example, tell Claude: <em>"Load the lyra-visual-patterns skill"</em> before starting a Lyra conversion workflow.</p>')
+              <p style="margin-top:12px;">It listens on <code>ws://127.0.0.1:7331</code>. Set <code>NICE_MCP_WS_PORT</code> first to use a different port, for example <code>NICE_MCP_WS_PORT=8080 node src/index.js</code>.</p>`)
           )
         ),
       },
       {
         id: 'step-verify',
         title: 'Verify Everything Is Working',
-        children: section(
-          'Quick checks',
-          block(`<div class="checklist">
+        children: h(
+          Fragment,
+          null,
+          section(
+            'Quick checks',
+            block(`<div class="checklist">
                 <div class="checklist-item">
                   <div class="check-circle"></div>
                   <span>Open the Chrome extension on a web page - the toolbar should appear with inspection controls</span>
                 </div>
                 <div class="checklist-item">
                   <div class="check-circle"></div>
-                  <span>In the extension's <strong>Supercharge</strong> panel, the toggle is <strong>On</strong> and the header shows the port address <em>ws://127.0.0.1:7331</em> with a green dot - Claude Desktop starts the server itself, so there's nothing to run manually</span>
+                  <span>In the <strong>Supercharge</strong> panel, the toggle is <strong>On</strong> with a green dot and the address <em>ws://127.0.0.1:7331</em></span>
                 </div>
                 <div class="checklist-item">
                   <div class="check-circle"></div>
-                  <span>Ask Claude: <em>"Call list_targets"</em> - it should respond listing which clients are currently connected (Figma, Chrome, or both)</span>
-                </div>
-                <div class="checklist-item">
-                  <div class="check-circle"></div>
-                  <span>In Chrome, click the refresh icon next to the version number in Settings to confirm the update checker reaches the latest release - see <a href="./release-notes.html" class="step-link">Release Notes</a> for what's new.</span>
-                </div>
-                <div class="checklist-item">
-                  <div class="check-circle"></div>
-                  <span>Open the Figma plugin on a frame - if you installed it, the audit panel should appear with color, type, and spacing scores</span>
+                  <span>Ask Claude: <em>"Call list_targets"</em> - it should list which clients are connected (Figma, Chrome, or both)</span>
                 </div>
               </div>`)
+          ),
+          tip(ICON_BULB, '<strong>Best practice:</strong> load a skill before using MCP tools. For example, tell Claude <em>"Load the lyra-visual-patterns skill"</em> before starting a Lyra conversion workflow. Something not working? See <a href="./troubleshooting.html" class="step-link">Troubleshooting</a>.')
         ),
       },
+    ];
+
+    const FIGMA_STEPS = [
       {
         id: 'step-figma',
+        number: 'A',
         title: h(
           Fragment,
           null,
           'Install the Figma Plugin',
-          h(Badge, { status: 'optional' }, 'Separate install')
+          h(Badge, { status: 'optional' }, 'Edit seats')
         ),
         children: h(
           Fragment,
           null,
           section(
             'How to install',
-            block(`<p>Independent of everything above - the plugin installs straight from the Figma Community and needs none of the steps 1-4. Do it whenever you want to audit designs on the Figma canvas as well as in the browser.</p>
+            block(`<p>Needs a Figma seat that can edit. The plugin installs straight from the Figma Community and does not depend on the Chrome extension or Claude Desktop. Do it whenever you want to audit designs on the Figma canvas as well as in the browser.</p>
               <p>Open Figma, right-click the canvas (or open the main menu) and go to <strong>Plugins</strong>. Search for <strong>"NiCE Designer"</strong> and click Install.</p>
               <p>Or open the plugin directly on the Figma Community page:</p>
               <p><a href="https://www.figma.com/community/plugin/1623361730572479462" class="step-link" target="_blank" rel="noopener">figma.com/community/plugin/1623361730572479462</a></p>`)
@@ -1249,6 +1127,7 @@ node src/index.js</div>
       },
       {
         id: 'step-fig-export',
+        number: 'B',
         title: h(
           Fragment,
           null,
@@ -1283,6 +1162,27 @@ node src/index.js</div>
             'Notes',
             block(`<p>Claude Design is in beta, so availability may vary by account.</p>
               <p>Figma's REST API is not an alternative here. It rate limits file reads by seat type, and a view or collab seat gets roughly 20 file reads <em>per month</em> on every plan, including Enterprise. See <a href="https://developers.figma.com/docs/rest-api/rate-limits/" class="step-link" target="_blank" rel="noopener">Figma's rate limit documentation</a>.</p>`)
+          )
+        ),
+      },
+      {
+        id: 'step-fig-claude-design',
+        number: 'C',
+        title: 'Read a Figma design that is open in Claude Design',
+        children: h(
+          Fragment,
+          null,
+          section(
+            null,
+            block(`<p>Claude Design renders a real page, unlike figma.com, whose canvas is one WebGL element with no readable markup. That means the Chrome extension works there normally: click <strong>Pick</strong>, select any element, and Spec Mode reads it, with the same data available to Claude through the MCP tools. This is the shortest route from a Figma design to code, and it is available on a view-only Figma seat.</p>
+              <figure class="step-figure">
+                <img src="./images/claude-design-select-element.png" alt="A dashboard open in Claude Design with the NiCE Designer Suite side panel beside it. A div is selected and Spec Mode lists its layout, fills, strokes, typography and auto layout values, with Copy CSS at the bottom." loading="lazy" width="2000" height="1260" />
+                <figcaption><strong>Option 1 - select elements in place.</strong> Pick any element and Spec Mode gives you its measurements, colours, typography and CSS, exactly as it would on a live web page. Charts and gauges work too: an SVG reports every painted fill and stroke plus its markup. Use this when you want to work element by element, or drive it from Claude over MCP.</figcaption>
+              </figure>
+              <figure class="step-figure">
+                <img src="./images/claude-design-export-claude-code.png" alt="The Claude Design export menu, listing Claude Code with a Send action, PDF, Project HTML as a zip or standalone, PowerPoint, and More formats and apps." loading="lazy" width="836" height="608" />
+                <figcaption><strong>Option 2 - send the whole thing to Claude Code.</strong> Use <strong>Share &gt; Export &gt; Claude Code</strong> to hand the entire design over in one step. Best when you want all of the design files at once and do not need what Claude Design itself provides: a shareable link, comments, and a designer or PM editing the design in place.</figcaption>
+              </figure>`)
           )
         ),
       },
@@ -1452,22 +1352,7 @@ node src/index.js</div>
            already visible; every other `.reveal` on the page (hero,
            dividers, the two sections below) still animates. */
         portal(h(Stepper, { steps: STEPS }), 'lynn-steps-root'),
-        portal(
-          note(ICON_TOOL, '<strong>Why the same folder matters.</strong> Chrome generates the extension\'s storage identity from the folder\'s path, since a <strong>Load unpacked</strong> install has no fixed ID of its own. Overwrite files <em>inside</em> the folder you already loaded and everything tied to that identity survives untouched - your settings, theme, Supercharge toggle and connection, welcome-tour progress, all of it. Unzip to a <em>new</em> folder and load that instead, and Chrome treats it as a completely different extension: fresh storage, every setting back to default, and you would need to remove the old entry in <code>chrome://extensions</code> yourself to avoid running two copies side by side.'),
-          'lynn-update-note-folder'
-        ),
-        portal(
-          note(ICON_INFO, 'This button <strong>checks and links</strong> - it cannot install anything itself. See <em>Why there is no one-click update</em> below.'),
-          'lynn-update-note-check'
-        ),
-        portal(
-          warn(ICON_WARN, 'This needs a Claude that can run shell commands, which means <strong>Claude Code</strong>. Supercharge on its own is not enough: the MCP server\'s <code>install_update</code> tool is a separate thing that updates <em>the MCP server</em> from a git clone, not the Chrome extension.'),
-          'lynn-update-warn-claude'
-        ),
-        portal(
-          warn(ICON_LOCK, '<strong>Why there is no one-click update.</strong> Chrome deliberately blocks a sideloaded extension from replacing its own files or reloading itself, and extensions get no shell access and no write access to their own install folder. So no button inside the app can ever install a build for you. <code>self-update.sh</code> collapses download, unzip and copy into a single command, but the final <strong>Reload</strong> in <code>chrome://extensions</code> is always a manual click.'),
-          'lynn-update-warn-why'
-        ),
+        portal(h(Stepper, { steps: FIGMA_STEPS }), 'lynn-figma-root'),
         portal(h(Footer, { columns: FOOTER_COLUMNS }), 'lynn-footer-root')
       );
     }
