@@ -803,6 +803,8 @@
       Footer,
       Nav,
       Stepper,
+      TabPanel,
+      TabPanels,
       ThemeProvider,
       ThemeToggle,
       useLynnTheme,
@@ -925,6 +927,63 @@
       h(Alert, { variant: 'warning', icon: glyph }, rich(html));
 
     /* ---- the six steps -------------------------------------------------- */
+    /* Step 1's browser-specific half. The Chrome/Edge tab row replaces a
+       "Chrome: ... Edge: ..." pair on every line; it opens on the browser the
+       reader is in (Edge's user agent carries "Edg/"). Each panel numbers
+       from 3 so it slots between the shared steps 1-2 and step 7. */
+    function BrowserInstall() {
+      const [browser, setBrowser] = useState(() =>
+        /Edg\//.test(navigator.userAgent) ? 'edge' : 'chrome'
+      );
+      const panel = (id, address, devMode, loadUnpacked, img, alt, caption) =>
+        h(
+          TabPanel,
+          { id, key: id },
+          block(`<ol class="numbered-list" style="counter-reset: ol-counter 2;">
+              <li>Open the extensions page. Click the address bar at the top of your browser, paste <code>${address}</code>, and press <strong>Enter</strong></li>
+              <li>Turn on <strong>Developer mode</strong> - ${devMode}</li>
+              <li>Click <strong>Load unpacked</strong> - ${loadUnpacked}</li>
+              <li>Select the <strong>NiCE Designer Chrome</strong> folder you just unzipped, then click <strong>Select</strong> (Mac) or <strong>Select Folder</strong> (Windows)</li>
+            </ol>
+            <figure class="step-figure">
+              <img src="${img}" alt="${alt}" loading="lazy" width="1400" />
+              <figcaption>${caption}</figcaption>
+            </figure>`)
+        );
+      return h(
+        TabPanels,
+        {
+          tabs: [
+            { id: 'chrome', label: 'Chrome' },
+            { id: 'edge', label: 'Edge' },
+          ],
+          activeId: browser,
+          onChange: setBrowser,
+          ariaLabel: 'Choose your browser',
+          bar: false,
+          style: { margin: '16px 0 12px' },
+        },
+        panel(
+          'chrome',
+          'chrome://extensions',
+          'flip the switch in the <strong>top-right corner</strong> so it turns blue',
+          'the button at the <strong>top left</strong>, which only appears once Developer mode is on',
+          './images/install-chrome-extensions.png',
+          'The top of the chrome://extensions page. A red box highlights the Load unpacked button on the left of the toolbar, and another highlights the Developer mode toggle switched on at the far right.',
+          '<strong>Chrome</strong> - Developer mode is the toggle at the top right, and Load unpacked appears at the top left once it is on.'
+        ),
+        panel(
+          'edge',
+          'edge://extensions',
+          'flip the switch at the <strong>bottom of the left-hand sidebar</strong>',
+          'the button at the <strong>top of the installed extensions list</strong>',
+          './images/install-edge-extensions.png',
+          'The edge://extensions page in Microsoft Edge. The Load Unpacked button sits at the top of the Installed extensions list, and the Developer mode toggle is switched on in the bottom-left sidebar.',
+          '<strong>Edge</strong> - Developer mode is at the bottom of the left sidebar, and Load Unpacked is at the top of the installed list.'
+        )
+      );
+    }
+
     const STEPS = [
       {
         id: 'step-chrome',
@@ -941,33 +1000,14 @@
             block(`<ol class="numbered-list">
                 <li>Download the latest release: <a class="step-link" href="./downloads/NiCE-Designer-V11.6.zip" data-latest-download download>NiCE-Designer-V11.6.zip</a></li>
                 <li>Unzip it. On Mac, double-click the zip in your Downloads folder. On Windows, right-click it and choose <strong>Extract All</strong>. You now have a folder named <strong>NiCE Designer Chrome</strong>. Move it somewhere you will keep it, for example Documents</li>
-                <li>Open your extensions page. Click the address bar at the top of your browser (where you type web addresses), paste the address for your browser, and press <strong>Enter</strong>:
-                  <ul style="margin-top:8px;">
-                    <li><strong>Chrome:</strong> <code>chrome://extensions</code></li>
-                    <li><strong>Edge:</strong> <code>edge://extensions</code></li>
-                  </ul>
-                </li>
-                <li>Turn on <strong>Developer mode</strong>:
-                  <ul style="margin-top:8px;">
-                    <li><strong>Chrome:</strong> flip the <strong>Developer mode</strong> switch in the <strong>top-right corner</strong> of the page so it turns blue</li>
-                    <li><strong>Edge:</strong> flip the <strong>Developer mode</strong> switch at the <strong>bottom of the left-hand sidebar</strong> so it turns on</li>
-                  </ul></li>
-                <li>Click <strong>Load unpacked</strong>. In Chrome it is a button in the <strong>top-left</strong> of the page, under the "Extensions" title. In Edge it is a button at the top of the installed extensions list. It only appears after Developer mode is on</li>
-                <li>A file window opens. Find and select the <strong>NiCE Designer Chrome</strong> folder you just unzipped, then click <strong>Select</strong> (Mac) or <strong>Select Folder</strong> (Windows). </li>
+              </ol>`),
+            h(BrowserInstall),
+            block(`<ol class="numbered-list" style="counter-reset: ol-counter 6;">
                 <li><strong>NiCE Designer Suite</strong> now appears in your list of extensions. Click the puzzle-piece icon in the top-right of your browser and click the <strong>pin</strong> next to NiCE Designer so its icon stays in your toolbar</li>
               </ol>`),
             warn(ICON_WARN, '<strong>Don\'t delete or move the <code>NiCE Designer Chrome</code> folder after you load it.</strong> Chrome runs the extension straight from that folder, so if it goes missing the extension stops working. Put it somewhere permanent first.'),
             warn(ICON_WARN, '<strong>Don\'t click <code>chrome://extensions</code> or <code>edge://extensions</code> as a link.</strong> Browsers block those addresses from web pages, so copy the address and paste it into the address bar yourself.'),
             warn(ICON_WARN, '<strong>Don\'t open the folder or pick the zip file when Load unpacked asks.</strong> Select the <code>NiCE Designer Chrome</code> folder itself - the one you unzipped - not a file or folder inside it.'),
-            note(ICON_PIN, '<strong>Can\'t find a button?</strong> Both are marked up below. The two browsers put the same controls in different places.'),
-            block(`<figure class="step-figure">
-                <img src="./images/install-chrome-extensions.png" alt="The top of the chrome://extensions page. A red box highlights the Load unpacked button on the left of the toolbar, and another highlights the Developer mode toggle switched on at the far right." loading="lazy" width="1400" height="171" />
-                <figcaption><strong>Chrome</strong> - <strong>Developer mode</strong> is the toggle at the top right. Switch it on and the toolbar row appears, with <strong>Load unpacked</strong> at the top left.</figcaption>
-              </figure>
-              <figure class="step-figure">
-                <img src="./images/install-edge-extensions.png" alt="The edge://extensions page in Microsoft Edge. The Load Unpacked button sits at the top of the Installed extensions list, and the Developer mode toggle is switched on in the bottom-left sidebar." loading="lazy" width="1400" height="859" />
-                <figcaption><strong>Edge</strong> - same two controls, different places: <strong>Developer mode</strong> is at the bottom of the left sidebar, and <strong>Load Unpacked</strong> is at the top of the installed list.</figcaption>
-              </figure>`)
           ),
           section(
             'How to use it',
