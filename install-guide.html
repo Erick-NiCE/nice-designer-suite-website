@@ -927,10 +927,10 @@
       h(Alert, { variant: 'warning', icon: glyph }, rich(html));
 
     /* ---- the six steps -------------------------------------------------- */
-    /* Step 1's browser-specific half. The Chrome/Edge tab row replaces a
-       "Chrome: ... Edge: ..." pair on every line; it opens on the browser the
-       reader is in (Edge's user agent carries "Edg/"). Each panel numbers
-       from 3 so it slots between the shared steps 1-2 and step 7. */
+    /* Step 1's install walkthrough. A Chrome/Edge tab row sits at the top of
+       the section and each panel carries the whole numbered list, so the
+       steps never pair "Chrome: ... Edge: ..." on one line. It opens on the
+       browser the reader is in (Edge's user agent carries "Edg/"). */
     function BrowserInstall() {
       const [browser, setBrowser] = useState(() =>
         /Edg\//.test(navigator.userAgent) ? 'edge' : 'chrome'
@@ -939,11 +939,14 @@
         h(
           TabPanel,
           { id, key: id },
-          block(`<ol class="numbered-list" style="counter-reset: ol-counter 2;">
+          block(`<ol class="numbered-list">
+              <li>Download the latest release: <a class="step-link" href="./downloads/NiCE-Designer-V11.6.zip" data-latest-download download>NiCE-Designer-V11.6.zip</a></li>
+              <li>Unzip it. On Mac, double-click the zip in your Downloads folder. On Windows, right-click it and choose <strong>Extract All</strong>. You now have a folder named <strong>NiCE Designer Chrome</strong>. Move it somewhere you will keep it, for example Documents</li>
               <li>Open the extensions page. Click the address bar at the top of your browser, paste <code>${address}</code>, and press <strong>Enter</strong></li>
               <li>Turn on <strong>Developer mode</strong> - ${devMode}</li>
               <li>Click <strong>Load unpacked</strong> - ${loadUnpacked}</li>
               <li>Select the <strong>NiCE Designer Chrome</strong> folder you just unzipped, then click <strong>Select</strong> (Mac) or <strong>Select Folder</strong> (Windows)</li>
+              <li><strong>NiCE Designer Suite</strong> now appears in your list of extensions. Click the puzzle-piece icon in the top-right of your browser and click the <strong>pin</strong> next to NiCE Designer so its icon stays in your toolbar</li>
             </ol>
             <figure class="step-figure">
               <img src="${img}" alt="${alt}" loading="lazy" width="1400" />
@@ -961,7 +964,7 @@
           onChange: setBrowser,
           ariaLabel: 'Choose your browser',
           bar: false,
-          style: { margin: '16px 0 12px' },
+          stretch: true,
         },
         panel(
           'chrome',
@@ -997,14 +1000,7 @@
           ),
           section(
             'How to install',
-            block(`<ol class="numbered-list">
-                <li>Download the latest release: <a class="step-link" href="./downloads/NiCE-Designer-V11.6.zip" data-latest-download download>NiCE-Designer-V11.6.zip</a></li>
-                <li>Unzip it. On Mac, double-click the zip in your Downloads folder. On Windows, right-click it and choose <strong>Extract All</strong>. You now have a folder named <strong>NiCE Designer Chrome</strong>. Move it somewhere you will keep it, for example Documents</li>
-              </ol>`),
             h(BrowserInstall),
-            block(`<ol class="numbered-list" style="counter-reset: ol-counter 6;">
-                <li><strong>NiCE Designer Suite</strong> now appears in your list of extensions. Click the puzzle-piece icon in the top-right of your browser and click the <strong>pin</strong> next to NiCE Designer so its icon stays in your toolbar</li>
-              </ol>`),
             warn(ICON_WARN, '<strong>Don\'t delete or move the <code>NiCE Designer Chrome</code> folder after you load it.</strong> Chrome runs the extension straight from that folder, so if it goes missing the extension stops working. Put it somewhere permanent first.'),
             warn(ICON_WARN, '<strong>Don\'t click <code>chrome://extensions</code> or <code>edge://extensions</code> as a link.</strong> Browsers block those addresses from web pages, so copy the address and paste it into the address bar yourself.'),
             warn(ICON_WARN, '<strong>Don\'t open the folder or pick the zip file when Load unpacked asks.</strong> Select the <code>NiCE Designer Chrome</code> folder itself - the one you unzipped - not a file or folder inside it.'),
