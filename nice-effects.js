@@ -487,8 +487,7 @@
         ] },
         { label: 'Figma', items: [
           { id: 'step-figma', label: 'Install the Figma Plugin' },
-          { id: 'step-fig-export', label: 'Work without a plugin' },
-          { id: 'step-fig-claude-design', label: 'Read a design in Claude Design' }
+          { id: 'step-fig-export', label: 'Work without a plugin' }
         ] }
       ]
     },

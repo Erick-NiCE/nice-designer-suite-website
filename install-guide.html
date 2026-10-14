@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <script src="nice-effects.js?v=21" defer></script>
+  <script src="nice-effects.js?v=22" defer></script>
 
   <!--
     ===== lynn-ui: the site chrome, as React components =====
@@ -1334,27 +1334,6 @@ winget install OpenJS.NodeJS.LTS</div>
             'Notes',
             block(`<p>Claude Design is in beta, so availability may vary by account.</p>
               <p>Figma's REST API is not an alternative here. It rate limits file reads by seat type, and a view or collab seat gets roughly 20 file reads <em>per month</em> on every plan, including Enterprise. See <a href="https://developers.figma.com/docs/rest-api/rate-limits/" class="step-link" target="_blank" rel="noopener">Figma's rate limit documentation</a>.</p>`)
-          )
-        ),
-      },
-      {
-        id: 'step-fig-claude-design',
-        number: 'C',
-        title: 'Read a Figma design that is open in Claude Design',
-        children: h(
-          Fragment,
-          null,
-          section(
-            null,
-            block(`<p>Claude Design renders a real page, unlike figma.com, whose canvas is one WebGL element with no readable markup. That means the Chrome extension works there normally: click <strong>Pick</strong>, select any element, and Spec Mode reads it, with the same data available to Claude through the MCP tools. This is the shortest route from a Figma design to code, and it is available on a view-only Figma seat.</p>
-              <figure class="step-figure">
-                <img src="./images/claude-design-select-element.png" alt="A dashboard open in Claude Design with the NiCE Designer Suite side panel beside it. A div is selected and Spec Mode lists its layout, fills, strokes, typography and auto layout values, with Copy CSS at the bottom." loading="lazy" width="2000" height="1260" />
-                <figcaption><strong>Option 1 - select elements in place.</strong> Pick any element and Spec Mode gives you its measurements, colours, typography and CSS, exactly as it would on a live web page. Charts and gauges work too: an SVG reports every painted fill and stroke plus its markup. Use this when you want to work element by element, or drive it from Claude over MCP.</figcaption>
-              </figure>
-              <figure class="step-figure">
-                <img src="./images/claude-design-export-claude-code.png" alt="The Claude Design export menu, listing Claude Code with a Send action, PDF, Project HTML as a zip or standalone, PowerPoint, and More formats and apps." loading="lazy" width="836" height="608" />
-                <figcaption><strong>Option 2 - send the whole thing to Claude Code.</strong> Use <strong>Share &gt; Export &gt; Claude Code</strong> to hand the entire design over in one step. Best when you want all of the design files at once and do not need what Claude Design itself provides: a shareable link, comments, and a designer or PM editing the design in place.</figcaption>
-              </figure>`)
           )
         ),
       },
