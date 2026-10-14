@@ -579,7 +579,7 @@
             <li><strong>Drag the files out of that new folder and into your existing, already-installed folder</strong> - the same one you originally pointed <strong>Load unpacked</strong> at - overwriting everything when your file manager asks</li>
             <li>Go to <code>chrome://extensions</code> and click <strong>Reload</strong> on NiCE Designer Suite</li>
           </ol>
-          <!-- lynn-ui <Alert variant="info"> -->
+          <!-- lynn-ui <Alert variant="warning"> -->
           <div id="lynn-update-note-folder" class="lynn-mount"></div>
         </div>
 
@@ -618,13 +618,16 @@
 
       <div class="update-card" id="update-connector" style="margin-top:24px;">
         <div class="update-card-title">Updating the Claude connector</div>
-        <p class="update-best"><strong>Do this too</strong> whenever a new version ships, so the connector matches your extension. There is no in-place upgrade - uninstall the old one first.</p>
+        <p class="update-best"><strong>Do this too</strong> whenever a new version ships, so the connector matches your extension. </p>
         <ol class="numbered-list">
           <li>In Claude Desktop, open <strong>Settings &gt; Extensions</strong>, click the <strong>...</strong> (three dots) next to <strong>nice-designer-mcp</strong>, and choose <strong>Uninstall</strong></li>
           <li>Double-click the new <strong>"Click to install Claude Connector.mcpb"</strong> from the updated <code>NiCE Designer Chrome</code> folder, then confirm the two prompts</li>
-          <li><strong>Force quit Claude Desktop</strong> and reopen it. On Mac: right-click the Claude icon in the Dock, hold <strong>Option</strong>, choose <strong>Force Quit</strong>. Closing the window or <strong>Cmd + Q</strong> often leaves it running, and the new connector only loads on a fresh start</li>
+          <li><strong>Force quit Claude Desktop</strong> and reopen it. On Mac: right-click the Claude icon in the Dock, hold <strong>Option</strong>, choose <strong>Force Quit</strong></li>
           <li>Still missing a tool or skill? Use the <strong>"Not seeing a new tool or skill?"</strong> link in the extension's Supercharge panel - it points you back at the <code>.mcpb</code> file</li>
         </ol>
+        <!-- lynn-ui <Alert variant="warning"> x2 -->
+        <div id="lynn-update-warn-uninstall" class="lynn-mount"></div>
+        <div id="lynn-update-warn-quit" class="lynn-mount"></div>
       </div>
 
       <!-- lynn-ui <Alert variant="warning"> -->
@@ -1178,7 +1181,7 @@
            already visible; every other `.reveal` on the page (hero,
            dividers, the two sections below) still animates. */
         portal(
-          note(ICON_TOOL, '<strong>Why the same folder matters.</strong> Chrome generates the extension\'s storage identity from the folder\'s path, since a <strong>Load unpacked</strong> install has no fixed ID of its own. Overwrite files <em>inside</em> the folder you already loaded and everything tied to that identity survives untouched - your settings, theme, Supercharge toggle and connection, welcome-tour progress, all of it. Unzip to a <em>new</em> folder and load that instead, and Chrome treats it as a completely different extension: fresh storage, every setting back to default, and you would need to remove the old entry in <code>chrome://extensions</code> yourself to avoid running two copies side by side.'),
+          warn(ICON_WARN, '<strong>Don\'t unzip to a new folder and load that instead.</strong> Chrome generates the extension\'s storage identity from the folder\'s path, since a <strong>Load unpacked</strong> install has no fixed ID of its own. Overwrite files <em>inside</em> the folder you already loaded and everything tied to that identity survives untouched - your settings, theme, Supercharge toggle and connection, welcome-tour progress, all of it. Unzip to a <em>new</em> folder and load that instead, and Chrome treats it as a completely different extension: fresh storage, every setting back to default, and you would need to remove the old entry in <code>chrome://extensions</code> yourself to avoid running two copies side by side.'),
           'lynn-update-note-folder'
         ),
         portal(
@@ -1189,6 +1192,14 @@
         portal(
           warn(ICON_WARN, 'This needs a Claude that can run shell commands, which means <strong>Claude Code</strong>. Supercharge on its own is not enough: the MCP server\'s <code>install_update</code> tool is a separate thing that updates <em>the MCP server</em> from a git clone, not the Chrome extension.'),
           'lynn-update-warn-claude'
+        ),
+        portal(
+          warn(ICON_WARN, '<strong>Don\'t install the new connector over the old one.</strong> There is no in-place upgrade, so uninstall the old version first, then install the new one.'),
+          'lynn-update-warn-uninstall'
+        ),
+        portal(
+          warn(ICON_WARN, '<strong>Don\'t just close the window or press Cmd + Q.</strong> That often leaves Claude Desktop running in the background, and the new connector only loads on a completely fresh start. Force quit it, then reopen.'),
+          'lynn-update-warn-quit'
         ),
         portal(
           warn(ICON_LOCK, '<strong>Why there is no one-click update.</strong> Chrome deliberately blocks a sideloaded extension from replacing its own files or reloading itself, and extensions get no shell access and no write access to their own install folder. So no button inside the app can ever install a build for you. <code>self-update.sh</code> collapses download, unzip and copy into a single command, but the final <strong>Reload</strong> in <code>chrome://extensions</code> is always a manual click.'),
