@@ -1039,7 +1039,7 @@
           TabPanel,
           { id, key: id },
           block(`<ol class="numbered-list">
-              <li>Download the latest release: <a class="step-link" href="./downloads/NiCE-Designer-V11.6.zip" data-latest-download download>NiCE-Designer-V11.6.zip</a></li>
+              <li>Download the latest release: <a class="step-link" href="./downloads/NiCE-Designer-V11.7.zip" data-latest-download download>NiCE-Designer-V11.7.zip</a></li>
               <li>Unzip it: ${unzip}. You now have a folder named <strong>NiCE Designer Chrome</strong>. Move it somewhere you will keep it, for example Documents</li>
               <li>Open the extensions page. Click the address bar at the top of your browser, paste <code>${address}</code>, and press <strong>Enter</strong></li>
               <li>Turn on <strong>Developer mode</strong> - ${devMode}</li>
@@ -1349,7 +1349,7 @@ winget install OpenJS.NodeJS.LTS</div>
     const downloadPill = (key) =>
       h(
         'a',
-        { key, className: 'nav-download', href: './downloads/NiCE-Designer-V11.6.zip', 'data-latest-link': '', download: '' },
+        { key, className: 'nav-download', href: './downloads/NiCE-Designer-V11.7.zip', 'data-latest-link': '', download: '' },
         'Download'
       );
 

@@ -361,10 +361,35 @@
        group on the page. */
     const RELEASES = [
       {
+        id: 'release-v11-7',
+        version: 'v11.7',
+        date: 'October 2026',
+        isLatest: true,
+        groups: [
+          {
+            label: 'New features',
+            tone: 'blue',
+            items: [
+              rich('New tool and skill - <strong>ADQR design review</strong> (by Prafull Mane): Claude judges 33 rubric dimensions, then <code>score_design_review</code> applies ADQR\'s rules in code for four separate pillar scores, a confidence level, and a ship verdict. A review only, it never fixes. Reinstall the Claude connector to get the new tool'),
+              `New marketplace skill: Copilot demo generator, by Janet Gonzales`,
+              `Lyra prototyping is now the official coded-prototype skill and the default for any "build me a working prototype" ask, starred for you on first install`,
+            ],
+          },
+          {
+            label: 'Improvements',
+            tone: 'emerald',
+            items: [
+              `Supercharge: Favorites shows every favorite, Skills is the default tab, and your last tab is remembered`,
+              `Home: UX Hub replaces Link Repo (beta only), plus refreshed card colors`,
+              `Obsidian power user moved to the marketplace, credited to Steph Ango`,
+            ],
+          },
+        ],
+      },
+      {
         id: 'release-v11-6',
         version: 'v11.6',
         date: 'October 2026',
-        isLatest: true,
         groups: [
           {
             label: 'New features',
@@ -632,7 +657,7 @@
     const downloadPill = (key) =>
       h(
         'a',
-        { key, className: 'nav-download', href: './downloads/NiCE-Designer-V11.6.zip', 'data-latest-link': '', download: '' },
+        { key, className: 'nav-download', href: './downloads/NiCE-Designer-V11.7.zip', 'data-latest-link': '', download: '' },
         'Download'
       );
 
