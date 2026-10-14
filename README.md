@@ -1,8 +1,9 @@
 # NiCE Designer Suite - Website
 
-Marketing and documentation site for **NiCE Designer**, a suite of design-system
-compliance tools (a Figma plugin, a Chrome extension, and a local MCP server that
-connects them to Claude). Built as a static, dependency-light site and served via
+Marketing and documentation site for **NiCE Designer Suite**, a browser plugin that
+communicates with Claude to enable real agentic design work, with a full range of
+power tools from the internal creators at NiCE (plus an optional Figma plugin and a
+local MCP server that connects everything to Claude). Built as a static, dependency-light site and served via
 GitHub Pages.
 
 **Live site:** https://erick-nice.github.io/nice-token-audit-dashboard/

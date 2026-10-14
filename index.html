@@ -122,6 +122,19 @@
       box-shadow: none;
     }
 
+    .hero-update-link {
+      margin: 0 0 20px;
+      font-size: 13px;
+      text-align: center;
+      color: var(--lynn-color-text-muted, rgba(255,255,255,0.6));
+    }
+    .hero-update-link a {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .hero-update-link a:hover { color: var(--lynn-color-text, #fff); }
+
     .hero-badge {
       display: inline-block;
       color: var(--emerald);
@@ -277,7 +290,7 @@
   <div class="page-section reveal">
     <div class="section-label">What can it do</div>
     <h2 class="section-title">Built around what you need to get done</h2>
-    <p class="section-subtitle">Whatever seat you're in, NiCE Designer takes a specific job off your plate.</p>
+    <p class="section-subtitle">Whatever seat you're in, NiCE Designer Suite hands Claude a specific job off your plate.</p>
     <div class="pillars-grid" id="lynn-pillars-root"></div>
   </div>
 
@@ -494,7 +507,10 @@
     import { createRoot } from 'react-dom/client';
     import {
       AccessGate,
+      Button,
       Carousel,
+      IconCheck,
+      IconClipboard,
       FeatureCard,
       Footer,
       Hero,
@@ -505,6 +521,43 @@
       ThemeToggle,
       useLynnTheme,
     } from './lynn-ui/dist/index.js?v=2';
+
+    const UPDATE_PROMPT =
+      'Update my NiCE Designer Suite Chrome extension to the latest version. It is the unpacked "NiCE Designer Chrome" folder I loaded in chrome://extensions - if you do not know where it is, ask me for the path. Run self-update.sh from inside that folder, then tell me to click Reload on NiCE Designer Suite in chrome://extensions.';
+
+    /* The hero's second action: copies a ready-made prompt for people who
+       already have the extension installed. There is no ToastViewport on this
+       page, so CopyButton would copy silently - this swaps its own label for a
+       second instead. */
+    function CopyUpdateButton() {
+      const [copied, setCopied] = useState(false);
+      const copy = async () => {
+        try {
+          await navigator.clipboard.writeText(UPDATE_PROMPT);
+        } catch (e) {
+          const ta = document.createElement('textarea');
+          ta.value = UPDATE_PROMPT;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand('copy'); } catch (err) { /* nothing more to try */ }
+          document.body.removeChild(ta);
+        }
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2200);
+      };
+      return h(
+        Button,
+        {
+          variant: 'secondary',
+          icon: h(copied ? IconCheck : IconClipboard, { 'aria-hidden': 'true' }),
+          onClick: copy,
+          title: 'Copy a prompt to paste into Claude Code',
+        },
+        copied ? 'Copied - paste it into Claude' : 'Copy update prompt for Claude'
+      );
+    }
 
     const PAGE = 'index.html';
 
@@ -625,7 +678,7 @@
       {
         icon: IconRobot,
         title: 'Developer',
-        description: "Ask Claude to audit, convert, or export CSS for a page in plain language - it drives the Figma plugin and Chrome extension for you over MCP.",
+        description: "Ask Claude to audit, convert, or export CSS for a page in plain language - it drives the plugin's power tools for you over MCP.",
       },
     ];
 
@@ -642,7 +695,7 @@
         icon: IconPlug,
         category: 'Getting started',
         title: 'Install Guide',
-        description: 'Step-by-step setup for the Figma plugin, Chrome extension, and local MCP server.',
+        description: 'Step-by-step setup for the browser plugin, the Claude connection, and the optional Figma plugin.',
         arrow: 'Read guide',
       },
       {
@@ -697,7 +750,7 @@
         icon: IconTool,
         category: 'What it is',
         title: 'The Suite',
-        description: 'Tool-by-tool breakdown of the Figma plugin, Chrome extension, and MCP server that make up NiCE Designer.',
+        description: 'Tool-by-tool breakdown of the power tools in the NiCE Designer Suite browser plugin and how Claude drives them.',
         arrow: 'See the tools',
       },
       {
@@ -820,12 +873,15 @@
           h(
             Hero,
             {
-              heading: h(Fragment, null, h(ShimmerText, { as: 'span' }, 'NiCE'), ' Designer'),
+              heading: h(Fragment, null, h(ShimmerText, { as: 'span' }, 'NiCE'), ' Designer Suite'),
               subtitle:
-                'A Figma plugin and Chrome extension that audits design system compliance, applies token fixes, and connects to Claude via MCP for AI-assisted design work. Built for SOL and Lyra.',
+                'A browser plugin that communicates with Claude to enable real agentic design work. Complete with a full range of power tools from the internal creators at NiCE.',
               actions: h(
                 'div',
                 { className: 'hero-ctas' },
+                Fragment,
+                null,
+                h(
                 h(
                   'a',
                   { className: 'btn-primary', href: './downloads/NiCE-Designer-V11.6.zip', 'data-latest-link': '', download: '' },
