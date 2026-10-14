@@ -622,7 +622,7 @@
         <ol class="numbered-list">
           <li>In Claude Desktop, open <strong>Settings &gt; Extensions</strong>, click the <strong>...</strong> (three dots) next to <strong>nice-designer-mcp</strong>, and choose <strong>Uninstall</strong></li>
           <li>Double-click the new <strong>"Click to install Claude Connector.mcpb"</strong> from the updated <code>NiCE Designer Chrome</code> folder, then confirm the two prompts</li>
-          <li><strong>Force quit Claude Desktop</strong> and reopen it. On Mac: right-click the Claude icon in the Dock, hold <strong>Option</strong>, choose <strong>Force Quit</strong></li>
+          <li><strong>Force quit Claude Desktop</strong> and reopen it - see the warning below</li>
           <li>Still missing a tool or skill? Use the <strong>"Not seeing a new tool or skill?"</strong> link in the extension's Supercharge panel - it points you back at the <code>.mcpb</code> file</li>
         </ol>
         <!-- lynn-ui <Alert variant="warning"> x2 -->
@@ -853,6 +853,7 @@
       AccessGate,
       Alert,
       Button,
+      Tabs,
       IconCheck,
       IconClipboard,
       DocRail,
@@ -1017,6 +1018,57 @@
       h(Alert, { variant: 'warning', icon: glyph }, rich(html));
 
     /* ---- the six steps -------------------------------------------------- */
+    /* The Mac/Windows choice, shared by every OS row on the page so picking
+       one in step 1 carries to the force-quit warning. It opens on the
+       reader's system. */
+    const osListeners = new Set();
+    let osValue = /Win/.test(navigator.userAgent) ? 'windows' : 'mac';
+    function useOs() {
+      const [os, setLocal] = useState(osValue);
+      useEffect(() => {
+        osListeners.add(setLocal);
+        return () => osListeners.delete(setLocal);
+      }, []);
+      const setOs = (value) => {
+        osValue = value;
+        osListeners.forEach((fn) => fn(value));
+      };
+      return [os, setOs];
+    }
+    const osTabs = (os, setOs, style) =>
+      h(Tabs, {
+        options: [
+          { value: 'mac', label: 'Mac' },
+          { value: 'windows', label: 'Windows' },
+        ],
+        value: os,
+        onChange: setOs,
+        stretch: true,
+        ariaLabel: 'Choose your operating system',
+        style,
+      });
+
+    /* Force quit differs by OS, so the warning carries its own Mac/Windows
+       row. `lead` is the bold warning, `tail` an optional closing line. */
+    function ForceQuitWarning({ lead, tail }) {
+      const [os, setOs] = useOs();
+      const how =
+        os === 'mac'
+          ? 'Right-click the Claude icon in the Dock, hold <strong>Option</strong>, and choose <strong>Force Quit</strong>. Then reopen Claude.'
+          : 'Press <strong>Ctrl + Shift + Esc</strong> to open Task Manager, right-click <strong>Claude</strong> under Processes, and choose <strong>End task</strong>. End any other Claude entries too, then reopen Claude from the Start menu.';
+      return h(
+        Alert,
+        { variant: 'warning', icon: ICON_WARN },
+        h(
+          Fragment,
+          null,
+          rich(lead),
+          h('div', { style: { margin: '10px 0' } }, osTabs(os, setOs)),
+          rich(how + (tail || ''))
+        )
+      );
+    }
+
     /* The nav's single action slot, unchanged from the markup it replaces:
        the disabled Download pill plus its "Coming soon!" tag. `nav-download`
        / `coming-soon-tag` are theme.css classes, so it keeps its exact look.
@@ -1198,7 +1250,9 @@
           'lynn-update-warn-uninstall'
         ),
         portal(
-          warn(ICON_WARN, '<strong>Don\'t just close the window or press Cmd + Q.</strong> That often leaves Claude Desktop running in the background, and the new connector only loads on a completely fresh start. Force quit it, then reopen.'),
+          h(ForceQuitWarning, {
+            lead: '<strong>Don\'t just close the window or quit normally.</strong> That often leaves Claude Desktop running in the background, and the new connector only loads on a completely fresh start. Force quit it instead.',
+          }),
           'lynn-update-warn-quit'
         ),
         portal(

@@ -928,6 +928,57 @@
       h(Alert, { variant: 'warning', icon: glyph }, rich(html));
 
     /* ---- the six steps -------------------------------------------------- */
+    /* The Mac/Windows choice, shared by every OS row on the page so picking
+       one in step 1 carries to the force-quit warning. It opens on the
+       reader's system. */
+    const osListeners = new Set();
+    let osValue = /Win/.test(navigator.userAgent) ? 'windows' : 'mac';
+    function useOs() {
+      const [os, setLocal] = useState(osValue);
+      useEffect(() => {
+        osListeners.add(setLocal);
+        return () => osListeners.delete(setLocal);
+      }, []);
+      const setOs = (value) => {
+        osValue = value;
+        osListeners.forEach((fn) => fn(value));
+      };
+      return [os, setOs];
+    }
+    const osTabs = (os, setOs, style) =>
+      h(Tabs, {
+        options: [
+          { value: 'mac', label: 'Mac' },
+          { value: 'windows', label: 'Windows' },
+        ],
+        value: os,
+        onChange: setOs,
+        stretch: true,
+        ariaLabel: 'Choose your operating system',
+        style,
+      });
+
+    /* Force quit differs by OS, so the warning carries its own Mac/Windows
+       row. `lead` is the bold warning, `tail` an optional closing line. */
+    function ForceQuitWarning({ lead, tail }) {
+      const [os, setOs] = useOs();
+      const how =
+        os === 'mac'
+          ? 'Right-click the Claude icon in the Dock, hold <strong>Option</strong>, and choose <strong>Force Quit</strong>. Then reopen Claude.'
+          : 'Press <strong>Ctrl + Shift + Esc</strong> to open Task Manager, right-click <strong>Claude</strong> under Processes, and choose <strong>End task</strong>. End any other Claude entries too, then reopen Claude from the Start menu.';
+      return h(
+        Alert,
+        { variant: 'warning', icon: ICON_WARN },
+        h(
+          Fragment,
+          null,
+          rich(lead),
+          h('div', { style: { margin: '10px 0' } }, osTabs(os, setOs)),
+          rich(how + (tail || ''))
+        )
+      );
+    }
+
     /* Step 1's install walkthrough. A Chrome/Edge tab row sits at the top of
        the section and each panel carries the whole numbered list, so the
        steps never pair "Chrome: ... Edge: ..." on one line. It opens on the
@@ -936,9 +987,7 @@
       const [browser, setBrowser] = useState(() =>
         /Edg\//.test(navigator.userAgent) ? 'edge' : 'chrome'
       );
-      const [os, setOs] = useState(() =>
-        /Win/.test(navigator.userAgent) ? 'windows' : 'mac'
-      );
+      const [os, setOs] = useOs();
       const unzip =
         os === 'mac'
           ? 'double-click the zip in your Downloads folder'
@@ -965,17 +1014,7 @@
       return h(
         Fragment,
         null,
-        h(Tabs, {
-          options: [
-            { value: 'mac', label: 'Mac' },
-            { value: 'windows', label: 'Windows' },
-          ],
-          value: os,
-          onChange: setOs,
-          stretch: true,
-          ariaLabel: 'Choose your operating system',
-          style: { margin: '4px 0 8px' },
-        }),
+        osTabs(os, setOs, { margin: '4px 0 8px' }),
         h(
         TabPanels,
         {
@@ -1026,8 +1065,7 @@
             'How to install',
             h(BrowserInstall),
             warn(ICON_WARN, '<strong>Don\'t delete or move the <code>NiCE Designer Chrome</code> folder after you load it.</strong> Chrome runs the extension straight from that folder, so if it goes missing the extension stops working. Put it somewhere permanent first.'),
-            warn(ICON_WARN, '<strong>Don\'t click <code>chrome://extensions</code> or <code>edge://extensions</code> as a link.</strong> Browsers block those addresses from web pages, so copy the address and paste it into the address bar yourself.'),
-            warn(ICON_WARN, '<strong>Don\'t open the folder or pick the zip file when Load unpacked asks.</strong> Select the <code>NiCE Designer Chrome</code> folder itself - the one you unzipped - not a file or folder inside it.'),
+            warn(ICON_WARN, '<strong>Don\'t select the zip file when you click Load unpacked.</strong> Choose the <code>NiCE Designer Chrome</code> folder you unzipped, not the <code>.zip</code> itself - Chrome can only load an unzipped folder.'),
           ),
           section(
             'How to use it',
@@ -1090,7 +1128,10 @@ winget install OpenJS.NodeJS.LTS</div>
                 <figcaption><strong>4.</strong> Done. <strong>nice-designer-mcp</strong> now shows under <em>Installed on your computer</em> in <strong>Settings &gt; Extensions</strong>. The <strong>...</strong> (three dots) menu next to it opens Details, where you can re-check the version - and it's the same menu you click to <strong>Uninstall</strong> when a new version ships.</figcaption>
               </figure>`),
             note(ICON_TOOL, '<strong>Double-click not working?</strong> If the <code>.mcpb</code> file does nothing or opens in the wrong app, install it from inside Claude Desktop instead: open <strong>Settings &gt; Extensions</strong>, scroll to <strong>Extension developer</strong> (you may need to open <strong>Advanced settings</strong> first), click <strong>Install extension</strong>, and pick <strong>"Click to install Claude Connector.mcpb"</strong> from the <code>NiCE Designer Chrome</code> folder. You\'ll get the same preview and confirm prompts as steps 2-4 above.<figure class="step-figure"><img src="./images/install-connector-extensions-settings.png" alt="Claude Desktop Settings on the Extensions page. Under Extension developer, the Install extension button sits at the left of a row of buttons including Install unpacked extension and Open extensions folder." loading="lazy" width="800" height="745" /><figcaption>Settings &gt; Extensions &gt; Extension developer &gt; <strong>Install extension</strong>. Ignore the developer-tools warning - you are only installing the connector file.</figcaption></figure>'),
-            warn(ICON_WARN, '<strong>Now force quit Claude Desktop - this part is not optional.</strong> The connector only loads on a completely fresh start, and closing the window or pressing <strong>Cmd + Q</strong> often leaves it running in the background. On Mac: <strong>right-click the Claude icon in the Dock</strong>, hold <strong>Option</strong>, and choose <strong>Force Quit</strong>. Then reopen Claude. If the tools still aren\'t there, force quit once more - it\'s almost always this.')
+            h(ForceQuitWarning, {
+              lead: '<strong>Now force quit Claude Desktop - this part is not optional.</strong> The connector only loads on a completely fresh start, and closing the window often leaves it running in the background.',
+              tail: ' If the tools still aren\'t there, force quit once more - it\'s almost always this.',
+            }),
           ),
           section(
             'Turn on Supercharge',
