@@ -447,6 +447,30 @@
     { id: 'skill-north-star-fox', label: 'North Star Fox' },
     { id: 'skill-nice-product-knowledge', label: 'NiCE Product Knowledge' }
   ];
+  var NATIVE_SKILL_ITEMS = [
+    { id: 'skill-a11y-triage', label: "Accessibility triage" },
+    { id: 'skill-manual-fixes-checklist', label: "Manual-fixes checklist" },
+    { id: 'skill-lyra-visual-patterns', label: "Lyra visual patterns" },
+    { id: 'skill-figma-element-css', label: "Figma element \u2192 CSS" },
+    { id: 'skill-browser-element-specs', label: "Browser element \u2192 spec sheet" },
+    { id: 'skill-figma-chrome-parity', label: "Figma \u2194 Chrome parity" },
+    { id: 'skill-artboard-to-page', label: "Artboard \u2192 live page" },
+    { id: 'skill-dark-mode-parity', label: "Dark-mode parity" },
+    { id: 'skill-token-candidates', label: "Token candidates" },
+    { id: 'skill-nice-product-knowledge', label: "NiCE product knowledge" },
+    { id: 'skill-team-strengths', label: "Team strengths" },
+    { id: 'skill-prompt-guru', label: "Prompt guru" },
+    { id: 'skill-ui-bug-hunter', label: "UI bug hunter" },
+    { id: 'skill-lyra-prototyping', label: "Lyra UI prototyping" },
+    { id: 'skill-sol-ui-prototyping', label: "SOL UI prototyping" },
+    { id: 'skill-lynn-ui-prototyping', label: "Lynn UI prototyping" },
+    { id: 'skill-claude-design-prompt', label: "Claude Design prompt from audit" },
+    { id: 'skill-design-system-agent', label: "Design system agent" },
+    { id: 'skill-persona-maya-chen', label: "Maya Chen \u2014 New agent" },
+    { id: 'skill-persona-jordan-reyes', label: "Jordan Reyes \u2014 Supervisor" },
+    { id: 'skill-persona-patricia-odom', label: "Patricia Odom \u2014 Executive" },
+    { id: 'skill-persona-sam-whitfield', label: "Sam Whitfield \u2014 Coach" }
+  ];
   var MCP_ITEMS = [
     { id: 'mcp-connect', label: 'Connect & Diagnose' },
     { id: 'mcp-scope', label: 'Choose What to Work On' },
@@ -505,10 +529,10 @@
       groups: []
     },
     {
-      href: 'claude-skills.html', label: 'Claude Skills',
+      href: 'claude-skills.html', label: 'Native Tools & Skills',
       groups: [
-        { label: 'Skills', items: [{ id: 'skills', label: 'All Skills' }].concat(SKILL_ITEMS) },
-        { label: 'MCP Server', items: [{ id: 'mcp', label: 'Full tool catalog →' }] },
+        { label: 'Native skills', items: [{ id: 'skills', label: 'All skills' }].concat(NATIVE_SKILL_ITEMS) },
+        { label: 'Native tools', items: [{ id: 'mcp', label: 'All tools' }] },
         { label: 'Tips', items: [{ id: 'tips', label: 'Before you run a skill' }] }
       ]
     },

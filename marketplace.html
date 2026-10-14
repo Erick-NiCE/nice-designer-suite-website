@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <script src="nice-effects.js?v=22" defer></script>
+  <script src="nice-effects.js?v=23" defer></script>
 
   <!--
     ===== lynn-ui: the site chrome, as React components =====
@@ -322,7 +322,7 @@
   <div class="section" id="current">
     <p class="section-label">In the Marketplace today</p>
     <h2 class="section-title">Available skills</h2>
-    <p class="section-body">30 community-built skills currently ship in the Marketplace, each credited to its author. ux-eval and North Star Fox also have full trigger phrases on the Claude Skills page.</p>
+    <p class="section-body">30 community-built skills currently ship in the Marketplace, each credited to its author. Each card has three phrases you can click to copy and paste into Claude. The skills and tools built into NiCE Designer itself are on the <a href="./claude-skills.html">Native Tools &amp; Skills</a> page.</p>
 
     <div class="mk-grid">
 
@@ -346,7 +346,6 @@
           <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
         <div id="lynn-copy-ux-eval" class="lynn-mount" style="display:block;margin:16px 0 14px;"></div>
-        <a class="mk-link" href="./claude-skills.html#skill-ux-eval">Full skill details <span>&#8594;</span></a>
       </div>
 
       <div class="mk-card reveal" id="mk-north-star-fox" style="--skill-color: var(--emerald);">
@@ -369,7 +368,6 @@
           <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
         <div id="lynn-copy-north-star-fox" class="lynn-mount" style="display:block;margin:16px 0 14px;"></div>
-        <a class="mk-link" href="./claude-skills.html#skill-north-star-fox">Full skill details <span>&#8594;</span></a>
       </div>
 
       <div class="mk-card reveal" id="mk-copilot-demo-generator" style="--skill-color: var(--emerald);">
@@ -392,7 +390,6 @@
           <div class="mk-tags"><span class="mk-tag">Figma or Chrome</span></div>
         </div>
         <div id="lynn-copy-copilot-demo-generator" class="lynn-mount" style="display:block;margin:16px 0 14px;"></div>
-        <a class="mk-link" href="./claude-skills.html#skill-copilot-demo-generator">Full skill details <span>&#8594;</span></a>
       </div>
 
       <div class="mk-card reveal" id="mk-eac-framework-guide" style="--skill-color: var(--emerald);">
@@ -1070,7 +1067,7 @@ call, what the output should look like, and what to watch for.</pre>
           <div class="step-title">Send it to Erick</div>
           <div class="step-text">
             <p>Message <strong>Erick Mathews on Teams</strong> with the skill folder and a sentence on the problem it solves. There's no PR process and no form to fill in.</p>
-            <p>Once accepted, it's added to the suite's <code>skills/</code> directory and registered in the catalog under your name, flagged as a third-party entry. From there it appears in the Supercharge Marketplace tab, on this page, and in the <a href="./claude-skills.html">Claude Skills</a> reference - and ships to every connected session with no reinstall.</p>
+            <p>Once accepted, it's added to the suite's <code>skills/</code> directory and registered in the catalog under your name, flagged as a third-party entry. From there it appears in the Supercharge Marketplace tab, on this page, and in the <a href="./claude-skills.html">Native Tools &amp; Skills</a> reference - and ships to every connected session with no reinstall.</p>
           </div>
         </div>
       </div>
@@ -1245,7 +1242,7 @@ call, what the output should look like, and what to watch for.</pre>
           { label: 'Overview', href: './index.html' },
           { label: 'Install Guide', href: './install-guide.html' },
           { label: 'Update Guide', href: './update-guide.html' },
-          { label: 'Claude Skills', href: './claude-skills.html' },
+          { label: 'Native Tools & Skills', href: './claude-skills.html' },
           { label: 'The Suite', href: './the-suite.html' },
         ],
       },

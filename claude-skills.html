@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Claude Skills - NiCE Designer Suite</title>
+  <title>Native Tools and Skills - NiCE Designer Suite</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="nice-effects.css" />
   <link rel="stylesheet" href="embed.css" />
   <script src="embed.js"></script>
-  <script src="nice-effects.js?v=22" defer></script>
+  <script src="nice-effects.js?v=23" defer></script>
 
   <!--
     ===== lynn-ui: the site chrome, as React components =====
@@ -225,6 +225,33 @@
        token is rgba(255,255,255,.30) against the source's .35, which is the
        one deliberate difference; page tokens would leave these grey on white
        in light mode. */
+    /* Native tools: one accordion per group, tool rows inside */
+    .nt-groups { display: flex; flex-direction: column; gap: 12px; margin: 32px 0; }
+    .nt-blurb { color: var(--lynn-color-text-muted); font-size: 0.9rem; margin: 0 0 16px; }
+    .nt-row { padding: 16px 0; border-top: 1px solid var(--lynn-color-border); }
+    .nt-row:first-of-type { border-top: 0; padding-top: 4px; }
+    .nt-row-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .nt-row-title { font-weight: 700; color: var(--lynn-color-text); }
+    .nt-row-name { font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace; font-size: 0.75rem; color: var(--lynn-color-text-muted); }
+    .nt-row-text { color: var(--lynn-color-text-muted); font-size: 0.9rem; line-height: 1.6; margin: 0 0 6px; }
+    .nt-row-text strong { color: var(--lynn-color-text); }
+    .nt-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin-top: 10px; }
+    .nt-copy-examples { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+    .nt-copy .skill-tools-label { margin: 0; }
+    .nt-example {
+      width: 100%;
+      justify-content: flex-start;
+      text-align: left;
+      white-space: normal;
+      height: auto;
+      min-height: 0;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+    .skill-question { font-style: italic; color: var(--lynn-color-text-muted); margin: 0 0 10px; font-size: 0.9rem; }
+
     .skill-tools {
       border-top: 1px solid var(--lynn-color-border);
       padding-top: 16px;
@@ -530,19 +557,19 @@
 
   <!-- HERO -->
   <section class="hero">
-    <p class="hero-eyebrow">AI SKILLS</p>
-    <h1 class="hero-title">Claude Skills</h1>
-    <p class="hero-subtitle">Twelve skills ship with NiCE Designer, including community-built ones from the Supercharge Marketplace. Each one loads specialized context into Claude for a specific workflow - from triaging accessibility issues to converting a full Figma frame to Lyra tokens.</p>
+    <p class="hero-eyebrow">BUILT IN</p>
+    <h1 class="hero-title">Native tools and skills</h1>
+    <p class="hero-subtitle">Everything that ships inside NiCE Designer itself: <span id="native-skill-count">22</span> skills and <span id="native-tool-count">59</span> tools that Claude can run for you. Each skill loads a playbook for one job, and each tool is one thing Claude can do in Figma or Chrome. Community-built extras live in the <a href="./marketplace.html" style="color:inherit;text-decoration:underline;">Marketplace</a>.</p>
   </section>
 
   <!-- INTRO -->
   <div class="section reveal">
     <p class="section-label">What is a skill?</p>
     <h2 class="section-title">Skills make Claude an expert tool operator</h2>
-    <p class="section-body">NiCE Designer ships 12 Claude skills. A skill is a context file (SKILL.md) that tells Claude exactly how to use the MCP tools for a specific job. You run a skill just by naming it - "run the [skill-name] skill", or even just "run North Star Fox" - Claude looks it up with <code>list_skills</code> and loads it with <code>get_skill</code> automatically, then uses the right MCP tools in the right order.</p>
+    <p class="section-body">NiCE Designer ships with native Claude skills and tools. A skill is a context file (SKILL.md) that tells Claude exactly how to use the MCP tools for a specific job. You run a skill just by naming it - "run the [skill-name] skill", or just paste one of the example phrases below - Claude looks it up with <code>list_skills</code> and loads it with <code>get_skill</code> automatically, then uses the right MCP tools in the right order.</p>
     <div class="intro-card">
       <p>Each skill pre-loads Claude with the correct tool sequence, common pitfalls, expected outputs, and quality checks for a particular workflow. Without a skill, Claude knows the tools exist but has to figure out the right approach on its own. With a skill loaded, it already has a playbook.</p>
-      <p>Skills are stored in the <code>skills/</code> directory of the plugin, and published here so every connected Claude session gets the latest content with no reinstall. Each skill has a <code>SKILL.md</code> file; the same set is bundled into the packaged Chrome build at <code>builds/chrome/skills/</code> as an offline fallback. <code>ux-eval</code> and <code>north-star-fox</code> are grouped as Decide &amp; review; <code>nice-product-knowledge</code> as NICE product knowledge - see the groups below.</p>
+      <p>Skills are stored in the <code>skills/</code> directory of the plugin, and published here so every connected Claude session gets the latest content with no reinstall. Each skill has a <code>SKILL.md</code> file; the same set is bundled into the packaged Chrome build at <code>builds/chrome/skills/</code> as an offline fallback.</p>
       <!-- lynn-ui <Alert variant="purple"> -->
       <div id="lynn-intro-alert-root" class="lynn-mount"></div>
     </div>
@@ -552,11 +579,11 @@
 
   <!-- SKILLS GRID -->
   <div class="section" id="skills">
-    <p class="section-label">All 12 skills</p>
-    <h2 class="section-title">Skills reference</h2>
-    <p class="section-body">Each skill below shows the trigger phrases that load it, the target client(s) it works with, and the key MCP tools it orchestrates.</p>
+    <p class="section-label">All <span id="native-skill-count-2">22</span> native skills</p>
+    <h2 class="section-title">Native skills</h2>
+    <p class="section-body">Each skill shows the question it answers, the client(s) it works with, the tools it is built on, and three phrases you can click to copy and paste into Claude. Skills built by the community are on the <a href="./marketplace.html" class="mcp-full-link">Marketplace</a> instead.</p>
 
-    <!-- The eight group labels and the twelve skill cards: lynn-ui
+    <!-- The group labels and the skill cards, built from native-catalog.json: lynn-ui
          <FeatureCard density="compact"> (see the mount script at the end of
          <body>). The labels render inside the same portal so they stay
          interleaved with the cards in grid order. -->
@@ -569,10 +596,9 @@
   <div class="tools-section">
     <div class="section reveal" id="mcp">
       <p class="section-label">MCP server</p>
-      <h2 class="section-title">57 tools, 12 groups</h2>
-      <p class="section-body">NiCE Designer exposes 57 MCP tools via the local WebSocket server at <code style="font-family:'SF Mono','Fira Code',monospace;font-size:.82rem;background:color-mix(in srgb, var(--lynn-color-text) 7%, transparent);border: 1px solid var(--lynn-color-border);padding:2px 6px;border-radius:4px">127.0.0.1:7331</code>. Most accept <code style="font-family:'SF Mono','Fira Code',monospace;font-size:.82rem;background:color-mix(in srgb, var(--lynn-color-text) 7%, transparent);border: 1px solid var(--lynn-color-border);padding:2px 6px;border-radius:4px">target: "figma" | "chrome" | "auto"</code> (the skill-lookup tools are the exception - pure introspection, no target needed), organized into 12 groups - connect &amp; diagnose, run a skill, scope, score &amp; measure, bulk fixes, one-at-a-time fixes, undo &amp; history, live-page restyling, Spec Mode, decide &amp; review, keeping the server current, and an escape hatch for anything the typed tools don't cover yet.</p>
-      <p class="section-body">The full reference - every tool, its group, target client(s), and what it does - lives on the <a href="./tools.html#mcp" class="mcp-full-link">Tools page</a>, generated straight from the MCP server's own catalog so it never drifts out of sync.</p>
-      <a href="./tools.html#mcp" class="mcp-full-link-cta">Browse all 55 MCP tools &rarr;</a>
+      <h2 class="section-title"><span id="native-tool-count-2">59</span> native tools, <span id="native-tool-groups">11</span> groups</h2>
+      <p class="section-body">Tools are the individual actions Claude can take, served by the local MCP server at <code style="font-family:'SF Mono','Fira Code',monospace;font-size:.82rem;background:color-mix(in srgb, var(--lynn-color-text) 7%, transparent);border: 1px solid var(--lynn-color-border);padding:2px 6px;border-radius:4px">127.0.0.1:7331</code>. Most accept <code style="font-family:'SF Mono','Fira Code',monospace;font-size:.82rem;background:color-mix(in srgb, var(--lynn-color-text) 7%, transparent);border: 1px solid var(--lynn-color-border);padding:2px 6px;border-radius:4px">target: "figma" | "chrome" | "auto"</code>. Open a group to see every tool in it; click a phrase to copy it for Claude.</p>
+      <div class="nt-groups" id="lynn-tools-root"></div>
 
       <!-- lynn-ui <Alert variant="info"> -->
       <div id="lynn-tools-note-root" class="lynn-mount"></div>
@@ -844,12 +870,17 @@
     import { createPortal } from 'react-dom';
     import { createRoot } from 'react-dom/client';
     import {
+      Accordion,
       AccessGate,
+      AccordionItem,
       Alert,
       Badge,
+      Button,
       DocRail,
       FeatureCard,
       Footer,
+      IconCheck,
+      IconClipboard,
       Nav,
       ThemeProvider,
       ThemeToggle,
@@ -894,7 +925,7 @@
           { label: 'Overview', href: './index.html' },
           { label: 'Install Guide', href: './install-guide.html' },
           { label: 'Update Guide', href: './update-guide.html' },
-          { label: 'Claude Skills', href: './claude-skills.html', active: true },
+          { label: 'Native Tools & Skills', href: './claude-skills.html', active: true },
           { label: 'The Suite', href: './the-suite.html' },
         ],
       },
@@ -975,301 +1006,167 @@
         byline ? h('p', { className: 'skill-byline' }, byline) : null
       );
 
-    /* ---- the twelve skills --------------------------------------------- */
-    /* Grouped exactly as the source's eight `.skills-group-label`s grouped
-       them, each label carrying the same inline colour it had in the markup.
-       `triggersLabel` is per-card because one of them really is different:
-       lyra-visual-patterns says "Load BEFORE Lyra conversion". */
-    const SKILL_GROUPS = [
-      {
-        label: 'Score & triage',
-        color: 'var(--lyra)',
-        skills: [
-          {
-            id: 'skill-a11y-triage',
-            ...accent('lyra'),
-            icon: '\u{1F3AF}',
-            name: 'a11y-triage',
-            target: 'either',
-            triggers: [
-              '"triage accessibility issues"',
-              '"which a11y issues matter most"',
-              '"where do I start with a11y"',
-            ],
-            description:
-              'Ranks accessibility issues by severity × reach and returns a top-N action list. Converts an unreadable issue dump into three things to fix this afternoon.',
-            tools: ['audit_accessibility'],
-          },
-          {
-            id: 'skill-manual-fixes-checklist',
-            ...accent('lyra'),
-            icon: '\u{1F4CB}',
-            name: 'manual-fixes-checklist',
-            target: 'either',
-            triggers: [
-              `"what's left to fix manually"`,
-              `"what can't be auto-fixed"`,
-              '"show me the manual checklist"',
-            ],
-            description:
-              'Audits, dry-runs every fixer, then reports only what survives - grouped and prioritized. An honest to-do list for the last mile to 100%, so nobody promises a score the tools cannot reach.',
-            tools: ['run_full_audit', 'convert_page_to_lyra', 'migrate_to_lyra'],
-          },
-        ],
-      },
-      {
-        label: 'Convert to Lyra',
-        color: 'var(--emerald)',
-        skills: [
-          {
-            id: 'skill-lyra-visual-patterns',
-            ...accent('emerald'),
-            icon: '✨',
-            name: 'lyra-visual-patterns',
-            target: 'either',
-            triggersLabel: 'Load BEFORE Lyra conversion',
-            triggers: [
-              '"load lyra-visual-patterns skill"',
-              '"convert to Lyra"',
-              '"migrate to Lyra"',
-            ],
-            description:
-              'Reference for Lyra page chrome, surfaces, tables, panels, nav, chips and AI affordances in light and dark. Load it before any conversion and you know what you are going to get - no surprise redesigns.',
-            tools: ['convert_page_to_lyra', 'migrate_to_lyra', 'convert_mode'],
-          },
-        ],
-      },
-      {
-        label: 'Spec Mode',
-        color: 'var(--indigo)',
-        skills: [
-          {
-            id: 'skill-figma-element-css',
-            ...accent('indigo'),
-            icon: '\u{1F3A8}',
-            name: 'figma-element-css',
-            target: 'figma',
-            triggers: [
-              '"get CSS for this node"',
-              '"export CSS for the selected element"',
-              `"what's the CSS for this"`,
-            ],
-            description:
-              'Turns the selected Figma node into production CSS with Lyra tokens substituted where they match. Output that survives a theme change, instead of hard-coded hex and px.',
-            tools: ['get_selection_info', 'extract_dev_details', 'extract_token_css'],
-          },
-          {
-            id: 'skill-browser-element-specs',
-            ...accent('indigo'),
-            icon: '\u{1F50D}',
-            name: 'browser-element-specs',
-            target: 'chrome',
-            triggers: [
-              '"get specs for this element"',
-              '"what are the design specs on this component"',
-              '"design specs for the inspected element"',
-            ],
-            description:
-              'Pulls computed CSS for the inspected element and annotates every raw value with its nearest token. A spec a developer can act on, not just a description of what is there.',
-            tools: ['get_selection_info', 'extract_dev_details', 'audit_colors'],
-          },
-        ],
-      },
-      {
-        label: 'Design ↔ build parity',
-        color: 'var(--coral)',
-        skills: [
-          {
-            id: 'skill-figma-chrome-parity',
-            ...accent('coral'),
-            icon: '⚖️',
-            name: 'figma-chrome-parity',
-            target: 'both',
-            triggers: [
-              '"diff Figma against the live page"',
-              '"compare the design to the implementation"',
-              '"figma-chrome parity"',
-            ],
-            description:
-              'Aligns Figma layers to page elements by name and diffs colors, type, spacing, radius and shadows. Ends the "it looks off but I cannot say why" review with a per-property drift table.',
-            tools: ['extract_dev_details', 'get_selection_info'],
-          },
-          {
-            id: 'skill-artboard-to-page',
-            ...accent('coral'),
-            icon: '\u{1F5BC}️',
-            name: 'artboard-to-page',
-            target: 'both',
-            triggers: [
-              '"apply this artboard to the live page"',
-              '"push Figma styles to Chrome"',
-              '"can we make this real page look like this artboard"',
-            ],
-            description:
-              'Maps artboard styling onto page selectors and applies it as CSS overrides after you confirm the mapping. Demo a redesign on the real product in minutes, with no branch and no build.',
-            tools: ['extract_dev_details', 'apply_css_overrides', 'clear_css_overrides'],
-          },
-        ],
-      },
-      {
-        label: 'Live-page QA',
-        color: 'var(--teal)',
-        skills: [
-          {
-            id: 'skill-dark-mode-parity',
-            ...accent('teal'),
-            icon: '\u{1F319}',
-            name: 'dark-mode-parity',
-            target: 'chrome',
-            triggers: [
-              '"check dark mode"',
-              '"does this work in dark mode"',
-              '"dark mode parity"',
-            ],
-            description:
-              'Audits colors in light, simulates dark, audits again, and always restores the baseline. Only the delta - what breaks in dark and what breaks in light. No re-reading the full audit.',
-            tools: ['audit_colors', 'polish_page'],
-          },
-        ],
-      },
-      {
-        label: 'Design-system maintenance',
-        color: 'var(--blue)',
-        skills: [
-          {
-            id: 'skill-token-candidates',
-            ...accent('blue'),
-            icon: '\u{1F3F7}️',
-            name: 'token-candidates',
-            target: 'either',
-            triggers: [
-              '"which values should become tokens"',
-              '"what should be promoted to Lyra tokens"',
-              '"token candidates"',
-            ],
-            description:
-              'Groups recurring raw values across all four domains and ranks the ones worth promoting. Fixes the cause once upstream instead of the same symptom on thirty screens.',
-            tools: ['audit_colors', 'audit_text_styles', 'audit_spacing', 'audit_radius'],
-          },
-        ],
-      },
-      {
-        label: 'Decide & review',
-        color: 'var(--emerald)',
-        skills: [
-          {
-            id: 'skill-ux-eval',
-            ...accent('emerald'),
-            icon: '\u{1F4CA}',
-            name: 'ux-eval',
-            isNew: true,
-            target: 'either',
-            triggers: [
-              '"is this ready for dev"',
-              '"run a UX eval"',
-              '"ten-question UX eval"',
-            ],
-            description:
-              'Answers all ten prioritization questions against real evidence, then states pass / pass-with-conditions / not-yet. A defensible verdict with the reasoning attached - the thing you can actually take to a VP.',
-            tools: ['run_ux_eval', 'run_full_audit'],
-            byline: 'Community skill by Bill Bangs',
-          },
-          {
-            id: 'skill-north-star-fox',
-            ...accent('emerald'),
-            icon: '\u{1F98A}',
-            name: 'north-star-fox',
-            isNew: true,
-            target: 'either',
-            triggers: [
-              '"run North Star Fox"',
-              '"check this against our AI tenets"',
-              '"is this design on-tenet and on-brand"',
-            ],
-            description:
-              "Scores a CXone AI design, screen, or JIRA ticket against the twelve NiCE AI design tenets, plus Lyra Foundations and NiCE Brand adherence, and returns a fixed-shape pass/fail verdict per section. A critical look to keep designs and tickets aligned with NiCE's Core Values around AI architecture.",
-            toolsNote: 'None - pure design/tenet judgment',
-            byline: 'Community skill by Janet Gonzales',
-          },
-          {
-            id: 'skill-copilot-demo-generator',
-            ...accent('emerald'),
-            icon: '\u{1F3AC}',
-            name: 'copilot-demo-generator',
-            isNew: true,
-            target: 'either',
-            triggers: [
-              '"build a Copilot demo for this scenario"',
-              '"a happy customer gets angry when their claim is rejected"',
-              '"make a Demo Studio JSON for an Agent Copilot demo"',
-            ],
-            description:
-              'Turns a one-line scenario into a ready-to-import Copilot Demo Studio JSON file: it picks the arc, chooses 7 to 10 of the 14 Copilot tile types, writes a 15 to 20 step story with presenter notes, and validates the file. Then load it in the live Demo Studio to present it.',
-            toolsNote: 'None - pure generation, no MCP tools',
-            byline: 'Community skill by Janet Gonzales',
-          },
-        ],
-      },
-      {
-        label: 'NICE product knowledge',
-        color: 'var(--lyra)',
-        skills: [
-          {
-            id: 'skill-nice-product-knowledge',
-            ...accent('lyra'),
-            icon: '\u{1F4DA}',
-            name: 'nice-product-knowledge',
-            isNew: true,
-            target: 'either',
-            triggers: [
-              '"what does this NICE product do"',
-              '"who uses CXone Mpower"',
-              '"NiCE product knowledge"',
-            ],
-            description:
-              'Sourced reference on NICE the company and its product lines (CXone Mpower, Enlighten AI, Actimize, Evidencentral), compiled from public material with citations. Grounds design decisions in what the real product and its real users are, instead of generic SaaS assumptions.',
-            toolsNote: 'None - pure reference context',
-          },
-        ],
-      },
-    ];
+    /* ---- native tools and skills, from native-catalog.json -------------- */
+    /* Generated by scripts/gen-native-catalog.mjs from the plugin's own
+       catalog, minus Marketplace entries. `clients` maps onto the target
+       pills above. */
+    const CLIENT_TARGET = { both: 'either', 'both-required': 'both', figma: 'figma', chrome: 'chrome' };
+    const SKILL_ACCENTS = ['lyra', 'blue', 'emerald', 'teal'];
+    const KIND_LABEL = { read: 'Read-only', write: 'Changes things', toggle: 'Toggle', bridge: 'Bridge' };
 
-    /* One flat list of grid children: label, its cards, next label... which
-       is the order the static markup had them in. */
-    const skillGrid = SKILL_GROUPS.flatMap((group) => [
-      h(
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (e) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (err) { /* nothing more to try */ }
+        document.body.removeChild(ta);
+      }
+    }
+
+    /* The plugin's "Try saying" lines: each template copies on click, and the
+       last button copies the run-this prompt. No toast on this page, so the
+       clicked button swaps its label for a couple of seconds. */
+    function TrySaying({ examples, runText, runLabel }) {
+      const [copied, setCopied] = useState(null);
+      const flash = (key, text) => {
+        copyText(text);
+        setCopied(key);
+        setTimeout(() => setCopied((cur) => (cur === key ? null : cur)), 2200);
+      };
+      const icon = (key) => h(copied === key ? IconCheck : IconClipboard, { 'aria-hidden': 'true' });
+      return h(
         'div',
-        {
-          className: 'skills-group-label',
-          key: 'group-' + group.label,
-          style: { color: group.color },
-        },
-        group.label
-      ),
-      ...group.skills.map((skill) =>
-        h(FeatureCard, {
-          key: skill.id,
-          id: skill.id,
-          density: 'compact',
-          className: 'reveal',
-          accentColor: skill.accentColor,
-          iconGradient: skill.iconGradient,
-          icon: skill.icon,
-          name: skill.isNew
-            ? h(Fragment, null, skill.name, ' ', h(Badge, { status: 'new' }, 'New'))
-            : skill.name,
-          tagline: targetBadge(skill.target),
-          bulletsLabel: skill.triggersLabel || 'Say something like',
-          bullets: skill.triggers,
-          whyText: skill.description,
-          children: toolsBlock({
-            tools: skill.tools,
-            note: skill.toolsNote,
-            byline: skill.byline,
-          }),
+        { className: 'nt-copy' },
+        examples.length ? h('div', { className: 'skill-tools-label' }, 'Try saying') : null,
+        h(
+          'div',
+          { className: 'nt-copy-examples' },
+          examples.map((ex, i) =>
+            h(
+              Button,
+              {
+                key: ex,
+                variant: 'secondary',
+                className: 'nt-example',
+                icon: icon('ex' + i),
+                onClick: () => flash('ex' + i, ex),
+                title: 'Click to copy, then paste into Claude',
+              },
+              copied === 'ex' + i ? 'Copied, paste into Claude' : '\u201c' + ex + '\u201d'
+            )
+          )
+        ),
+        h(
+          Button,
+          {
+            variant: 'secondary',
+            icon: icon('run'),
+            onClick: () => flash('run', runText),
+            title: 'Copy a prompt that runs this ' + runLabel,
+          },
+          copied === 'run' ? 'Copied, paste into Claude' : 'Copy for Claude'
+        )
+      );
+    }
+
+    const skillCards = (catalog) =>
+      catalog.skillGroups.flatMap((group, gi) => {
+        const accent_ = SKILL_ACCENTS[gi % SKILL_ACCENTS.length];
+        return [
+          h(
+            'div',
+            { className: 'skills-group-label', key: 'group-' + group.id, style: { color: 'var(--' + accent_ + ')' } },
+            group.label
+          ),
+          ...catalog.skills
+            .filter((skill) => skill.group === group.id)
+            .map((skill) =>
+              h(FeatureCard, {
+                key: skill.id,
+                id: 'skill-' + skill.id,
+                density: 'compact',
+                className: 'reveal',
+                ...accent(accent_),
+                icon: '\u2726',
+                name: skill.id,
+                tagline: targetBadge(CLIENT_TARGET[skill.clients] || 'either'),
+                whyText: skill.what + ' ' + skill.benefit,
+                children: h(
+                  Fragment,
+                  null,
+                  h('p', { className: 'skill-question' }, '\u201c' + skill.question + '\u201d'),
+                  skill.tools.length
+                    ? h(
+                        'div',
+                        { className: 'skill-tools' },
+                        h('div', { className: 'skill-tools-label' }, 'Built on'),
+                        h(
+                          'div',
+                          { className: 'tools-list' },
+                          skill.tools.map((tool) => h(Badge, { tone: 'blue', bordered: true, key: tool }, tool))
+                        )
+                      )
+                    : null,
+                  h(TrySaying, {
+                    examples: skill.examples,
+                    runText: 'Use NiCE Designer Supercharge to run the "' + skill.title + '" skill (' + skill.id + ').',
+                    runLabel: 'skill',
+                  })
+                ),
+              })
+            ),
+        ];
+      });
+
+    const toolGroups = (catalog) =>
+      h(
+        Accordion,
+        null,
+        catalog.toolGroups.map((group) => {
+          const tools = catalog.tools.filter((tool) => tool.group === group.id);
+          return h(
+            AccordionItem,
+            {
+              key: group.id,
+              id: 'native-tools-' + group.id,
+              title: group.label + ' (' + tools.length + ')',
+              defaultOpen: false,
+              persist: false,
+            },
+            h('p', { className: 'nt-blurb' }, group.blurb),
+            tools.map((tool) =>
+              h(
+                'div',
+                { className: 'nt-row', key: tool.name },
+                h(
+                  'div',
+                  { className: 'nt-row-head' },
+                  h('span', { className: 'nt-row-title' }, tool.title),
+                  h('code', { className: 'nt-row-name' }, tool.name),
+                  targetBadge(CLIENT_TARGET[tool.clients] || 'either'),
+                  h(Badge, { tone: 'teal', bordered: true }, KIND_LABEL[tool.kind] || tool.kind),
+                  tool.scored ? h(Badge, { tone: 'lynn', bordered: true }, 'Scored') : null
+                ),
+                h('p', { className: 'nt-row-text' }, tool.what),
+                h('p', { className: 'nt-row-text' }, h('strong', null, 'What\u2019s in it for you: '), tool.benefit),
+                tool.ask ? h('p', { className: 'nt-row-text' }, h('strong', null, 'Claude asks you first: '), '\u201c' + tool.ask + '\u201d') : null,
+                tool.reversible ? h('p', { className: 'nt-row-text' }, h('strong', null, 'Reversible: '), 'one call puts it back the way it was.') : null,
+                h(TrySaying, {
+                  examples: tool.examples || [],
+                  runText: 'Use the NiCE Designer Supercharge tool "' + tool.name + '" (' + tool.title + ').',
+                  runLabel: 'tool',
+                })
+              )
+            )
+          );
         })
-      ),
-    ]);
+      );
 
     /* The nav's single action slot, unchanged from the markup it replaces:
        the disabled Download pill plus its "Coming soon!" tag. `nav-download`
@@ -1310,6 +1207,7 @@
         }
       });
       const [error, setError] = useState(undefined);
+      const [catalog, setCatalog] = useState(null);
       const [railCollapsed, setRailCollapsed] = useState(() => {
         try {
           return localStorage.getItem(RAIL_KEY) === '1';
@@ -1317,6 +1215,34 @@
           return false;
         }
       });
+
+      useEffect(() => {
+        fetch('./native-catalog.json')
+          .then((res) => res.json())
+          .then(setCatalog)
+          .catch(() => { /* the static headings still read fine without it */ });
+      }, []);
+
+      // Once the catalog is in, fill the counts in the headings, wire the
+      // card polish onto the new cards, and re-run any #skill-... deep link.
+      useEffect(() => {
+        if (!catalog) return;
+        const put = (ids, value) => ids.forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = String(value);
+        });
+        put(['native-skill-count', 'native-skill-count-2'], catalog.skills.length);
+        put(['native-tool-count', 'native-tool-count-2'], catalog.tools.length);
+        put(['native-tool-groups'], catalog.toolGroups.length);
+        const cards = [].slice.call(document.querySelectorAll('.lynn-feature-card'));
+        if (window.NicePolish) {
+          window.NicePolish.polish(cards);
+          window.NicePolish.observeReveal(cards.filter((card) => card.classList.contains('reveal')));
+        }
+        const hash = location.hash.slice(1);
+        const target = hash && document.getElementById(hash);
+        if (target) target.scrollIntoView();
+      }, [catalog]);
 
       useEffect(() => {
         // The chrome is up; let the page paint (see the gate-pending guard
@@ -1436,7 +1362,8 @@
           ),
           'lynn-intro-alert-root'
         ),
-        portal(h(Fragment, null, skillGrid), 'lynn-skills-root'),
+        catalog ? portal(h(Fragment, null, skillCards(catalog)), 'lynn-skills-root') : null,
+        catalog ? portal(toolGroups(catalog), 'lynn-tools-root') : null,
         portal(
           h(
             Alert,

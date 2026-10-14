@@ -1,0 +1,1382 @@
+{
+ "generated": "2026-10-14",
+ "toolGroups": [
+  {
+   "id": "connect",
+   "label": "Connect & diagnose",
+   "blurb": "Confirm Claude can actually see Figma and Chrome before anything else runs."
+  },
+  {
+   "id": "skills",
+   "label": "Find & run",
+   "blurb": "Find any tool or skill by keyword, then run it or load its full instructions, no separate install needed."
+  },
+  {
+   "id": "scope",
+   "label": "Choose what to work on",
+   "blurb": "Set the scope: a whole page, one artboard, or a single inspected element."
+  },
+  {
+   "id": "measure",
+   "label": "Score & measure",
+   "blurb": "Read your current state. The audits return a gauge plus the issue list behind it."
+  },
+  {
+   "id": "fix-bulk",
+   "label": "Fix everything at once",
+   "blurb": "Whole-page and whole-frame conversions. Dry-run by default, and they report the score they moved."
+  },
+  {
+   "id": "fix-one",
+   "label": "Fix one thing at a time",
+   "blurb": "Surgical, per-property edits with a clean one-click revert for each."
+  },
+  {
+   "id": "undo",
+   "label": "Undo & history",
+   "blurb": "Step back out of any bulk change without leaving the conversation."
+  },
+  {
+   "id": "restyle",
+   "label": "Restyle the live page",
+   "blurb": "Chrome only. Inject CSS, flip dark mode, and switch on accessibility overlays."
+  },
+  {
+   "id": "handoff",
+   "label": "Spec Mode",
+   "blurb": "Turn a design into CSS, tokens, and specs a developer can paste in."
+  },
+  {
+   "id": "maintain",
+   "label": "Keep the server current",
+   "blurb": "Check whether a newer MCP server build is available, and pull it in."
+  },
+  {
+   "id": "escape",
+   "label": "Escape hatch",
+   "blurb": "Raw access for anything the tools above do not cover yet."
+  }
+ ],
+ "skillGroups": [
+  {
+   "id": "prototype",
+   "label": "Coded prototypes",
+   "blurb": "Build a working demo out of a real component library, not styled boxes."
+  },
+  {
+   "id": "measure",
+   "label": "Score & triage",
+   "blurb": "Turn a pile of issues into a ranked list of what to do first."
+  },
+  {
+   "id": "convert",
+   "label": "Convert to Lyra",
+   "blurb": "Set expectations and scope before anything gets rewritten."
+  },
+  {
+   "id": "handoff",
+   "label": "Spec Mode",
+   "blurb": "Produce the spec or the CSS a developer can build from."
+  },
+  {
+   "id": "parity",
+   "label": "Design ↔ build parity",
+   "blurb": "Compare what was designed against what actually shipped."
+  },
+  {
+   "id": "qa",
+   "label": "Live-page QA",
+   "blurb": "Catch what only breaks in the real browser."
+  },
+  {
+   "id": "system",
+   "label": "Design-system maintenance",
+   "blurb": "Feed what you learn back into the system itself."
+  },
+  {
+   "id": "knowledge",
+   "label": "Context & knowledge",
+   "blurb": "Real context on NICE, its products, and the team, so design and staffing decisions are grounded instead of generic."
+  },
+  {
+   "id": "personas",
+   "label": "Customer personas",
+   "blurb": "Review and prioritize through a specific real customer, not a generic user."
+  },
+  {
+   "id": "utilities",
+   "label": "General utilities",
+   "blurb": "Small, standalone tools that are not specific to Figma, Chrome, or NICE."
+  }
+ ],
+ "tools": [
+  {
+   "name": "list_targets",
+   "title": "See what is connected",
+   "group": "connect",
+   "kind": "bridge",
+   "clients": "both",
+   "what": "Lists which clients (Figma, Chrome, or both) are live on the MCP hub right now.",
+   "benefit": "Stops you from waiting on a tool that was never going to reach anything. Always the cheapest first call.",
+   "examples": [
+    "Is Claude connected to my Figma file and Chrome right now?",
+    "Before we start, check which NiCE Designer clients are live.",
+    "Can you see my browser tab, or only Figma?"
+   ]
+  },
+  {
+   "name": "get_diagnostics",
+   "title": "Troubleshoot the connection",
+   "group": "connect",
+   "kind": "bridge",
+   "clients": "both",
+   "what": "Full health report on the bridge: this process, the hub, connected sessions, recent drop-outs, and a plain-English next step.",
+   "benefit": "Turns \"it just does not work\" into a specific thing to click. Run it the moment a tool says nothing is connected.",
+   "examples": [
+    "Nothing is connecting. Figure out why and tell me what to click.",
+    "Run diagnostics on the NiCE Designer bridge and explain the result in plain English.",
+    "The plugin says connected but your tools fail. Check the connection health."
+   ]
+  },
+  {
+   "name": "check_libraries",
+   "title": "Check the design library is linked",
+   "group": "connect",
+   "kind": "read",
+   "clients": "figma",
+   "what": "Verifies the SOL or Lyra library is actually linked to the open Figma file.",
+   "benefit": "A missing library silently makes every conversion fall back to bundled values. This catches that before you convert anything.",
+   "examples": [
+    "Is the Lyra library actually linked to this Figma file?",
+    "Before I convert anything, check that the design library is attached.",
+    "Why are my conversions using bundled values? Check the linked libraries."
+   ]
+  },
+  {
+   "name": "analytics_summary",
+   "title": "Show my usage",
+   "group": "connect",
+   "kind": "read",
+   "clients": "both",
+   "what": "Reads this install's local analytics store and reports total events, panel minutes, top tools, top skills, and whether uploading is configured.",
+   "benefit": "Answers \"what am I actually using?\" from your own machine, and tells you at a glance whether analytics is recording and reaching the dashboard.",
+   "examples": [
+    "Show me which NiCE Designer tools I use the most.",
+    "How many minutes have I spent in the plugin, and is analytics uploading?",
+    "What are my top skills this month?"
+   ]
+  },
+  {
+   "name": "list_skills",
+   "title": "Browse available skills",
+   "group": "skills",
+   "kind": "read",
+   "clients": "both",
+   "what": "Returns every skill in the catalog: id, title, the question it answers, and who built it.",
+   "benefit": "Say \"run North Star Fox\" or \"what skills do you have\" and Claude finds it by name or topic, no id-guessing.",
+   "examples": [
+    "What skills do you have available through NiCE Designer?",
+    "Show me every skill that helps with research.",
+    "Which skills were built by other people on the team?"
+   ]
+  },
+  {
+   "name": "get_skill",
+   "title": "Load a skill's instructions",
+   "group": "skills",
+   "kind": "read",
+   "clients": "both",
+   "what": "Fetches a skill's full instructions and reference files, from a live copy first or this server's bundled copy as fallback.",
+   "benefit": "Flip Supercharge on and every skill works immediately, nothing else to install, updates land with no reinstall.",
+   "examples": [
+    "Load the a11y-triage skill and follow it.",
+    "Read the full instructions for the lyra-visual-patterns skill before we convert this page.",
+    "Pull up the north-star-fox skill so I can see what it does."
+   ]
+  },
+  {
+   "name": "find_capability",
+   "title": "Find a tool or skill by keyword",
+   "group": "skills",
+   "kind": "read",
+   "clients": "both",
+   "what": "Keyword-searches every tool AND skill in the catalog at once, including marketplace skills, and returns ranked matches with exactly how to run each one.",
+   "benefit": "One search instead of guessing which of ~58 tools or 40+ skills covers a vague ask like \"something about contrast\" or \"help with dark mode\".",
+   "examples": [
+    "Is there anything in NiCE Designer that helps with color contrast?",
+    "Find me a tool or skill for dark mode problems.",
+    "I need to hand this to a developer. What could help?"
+   ]
+  },
+  {
+   "name": "get_selection_info",
+   "title": "What is selected right now",
+   "group": "scope",
+   "kind": "read",
+   "clients": "both",
+   "what": "Reports the selected Figma layer or the inspected Chrome element, so scope is explicit rather than assumed.",
+   "benefit": "Guarantees the audit or fix lands on the thing you meant. No silent whole-page conversions when you wanted one button.",
+   "examples": [
+    "What do I have selected right now?",
+    "Confirm which element you will audit before you start.",
+    "Tell me what the inspected element is on this page."
+   ]
+  },
+  {
+   "name": "select_page",
+   "title": "Reset scope to the whole page",
+   "group": "scope",
+   "kind": "toggle",
+   "clients": "chrome",
+   "what": "Clears the inspected element so audits and fixes cover the entire page again.",
+   "benefit": "One call to zoom back out after drilling into a component.",
+   "examples": [
+    "Zoom back out and audit the whole page again.",
+    "Clear the inspected element so the next audit covers everything.",
+    "Reset the scope to the full page."
+   ]
+  },
+  {
+   "name": "start_inspect",
+   "title": "Start element picking",
+   "group": "scope",
+   "kind": "toggle",
+   "clients": "chrome",
+   "what": "Turns on the extension's inspect mode so the next element you click becomes the scope.",
+   "benefit": "Point at the thing you care about instead of describing it in words.",
+   "examples": [
+    "Turn on inspect mode so I can click the element I mean.",
+    "Let me point at the button I want you to look at.",
+    "Start element picking in Chrome."
+   ]
+  },
+  {
+   "name": "stop_inspect",
+   "title": "Stop element picking",
+   "group": "scope",
+   "kind": "toggle",
+   "clients": "chrome",
+   "what": "Leaves inspect mode without changing the current selection.",
+   "benefit": "Gets the picking cursor out of your way so you can use the page normally.",
+   "examples": [
+    "Turn off inspect mode but keep what I picked.",
+    "I am done picking elements, stop inspecting.",
+    "Leave inspect mode without clearing my selection."
+   ]
+  },
+  {
+   "name": "focus_node",
+   "title": "Jump to a layer in Figma",
+   "group": "scope",
+   "kind": "toggle",
+   "clients": "figma",
+   "what": "Scrolls to and selects a specific node id on the Figma canvas.",
+   "benefit": "Every audit row becomes clickable: go straight from \"issue #14\" to the actual layer.",
+   "examples": [
+    "Jump to the layer with the contrast issue in Figma.",
+    "Select node 123:456 and scroll to it.",
+    "Take me to the first off-token fill you found."
+   ]
+  },
+  {
+   "name": "screenshot_page",
+   "title": "Screenshot what you are looking at",
+   "group": "scope",
+   "kind": "read",
+   "clients": "both",
+   "what": "Captures the current page or artboard as an image Claude can look at directly.",
+   "benefit": "Lets Claude judge things a token audit cannot see: visual hierarchy, crowding, whether it simply looks wrong.",
+   "examples": [
+    "Take a screenshot of this page and tell me what looks off.",
+    "Capture the selected artboard so you can compare it to the live site.",
+    "Grab an image of the current view before we change anything."
+   ]
+  },
+  {
+   "name": "run_full_audit",
+   "title": "Full compliance score",
+   "group": "measure",
+   "kind": "read",
+   "clients": "both",
+   "scored": true,
+   "what": "Audits colors, typography, spacing, radius, components and accessibility in one pass and returns an overall 0–100 score with per-domain issue counts.",
+   "benefit": "One number you can put in front of a stakeholder, plus the exact list of what is dragging it down.",
+   "ask": "Audit only the current selection, or the whole page/artboard? And which system: Lyra (default) or SOL?",
+   "examples": [
+    "Audit this page against Lyra and give me the compliance score.",
+    "Run a full audit on my selected frame and show the issues by category.",
+    "How compliant is this screen with SOL?"
+   ]
+  },
+  {
+   "name": "lyra_compliance_report",
+   "title": "Lyra readiness report",
+   "group": "measure",
+   "kind": "read",
+   "clients": "both",
+   "scored": true,
+   "what": "A full audit plus the accessibility pass, pinned to Lyra, formatted as a report rather than a raw issue dump.",
+   "benefit": "The artifact to paste into a design review or a ticket: score, gauge, and the top offenders, already prose.",
+   "examples": [
+    "Write me a Lyra compliance report for this page.",
+    "Give me something I can share with my team about how Lyra-ready this screen is.",
+    "Produce a compliance report, not a raw issue dump."
+   ]
+  },
+  {
+   "name": "audit_colors",
+   "title": "Score the colors",
+   "group": "measure",
+   "kind": "read",
+   "clients": "both",
+   "scored": true,
+   "what": "Classifies every fill and stroke as on-token, bound to the wrong design system, or a raw value with no binding.",
+   "benefit": "Tells you not just how many colors are off but how many are one click from being right, so you know whether this is ten minutes of work or a week.",
+   "examples": [
+    "Which colors on this page are not Lyra tokens?",
+    "Check my fills and strokes for wrong-system or unbound colors.",
+    "How many of the color issues here can be fixed with one click?"
+   ]
+  },
+  {
+   "name": "audit_text_styles",
+   "title": "Score the typography",
+   "group": "measure",
+   "kind": "read",
+   "clients": "both",
+   "scored": true,
+   "what": "Matches every text node on family, size and weight together, and names the role-equivalent token it should be using.",
+   "benefit": "Catches the sneaky case (right size, wrong family) that eyeballing a design never finds.",
+   "examples": [
+    "Do all the text nodes here match Lyra type tokens?",
+    "Which headings are using the wrong size or weight?",
+    "Find text that is close to a token but not quite on it."
+   ]
+  },
+  {
+   "name": "audit_spacing",
+   "title": "Score the spacing",
+   "group": "measure",
+   "kind": "read",
+   "clients": "both",
+   "scored": true,
+   "what": "Finds padding, gap and margin values that are off-scale, or on-scale but not bound to a variable.",
+   "benefit": "Surfaces the \"looks fine, breaks on theme change\" class of problem, which is most of what fails in handoff.",
+   "examples": [
+    "Find spacing that is off the Lyra scale.",
+    "Which paddings and gaps are on-scale but not bound to a variable?",
+    "Check the spacing in the selected frame."
+   ]
+  },
+  {
+   "name": "audit_radius",
+   "title": "Score the corner radii",
+   "group": "measure",
+   "kind": "read",
+   "clients": "both",
+   "scored": true,
+   "what": "Finds corner radii that are off-scale or unbound, reading the real per-corner binding slots.",
+   "benefit": "Radius drift is the fastest way a page stops looking like the system. This is the cheapest audit to act on.",
+   "examples": [
+    "Are my corner radii on the Lyra scale?",
+    "Find rounded corners that are not bound to a radius token.",
+    "Audit the border radius on this page."
+   ]
+  },
+  {
+   "name": "audit_components",
+   "title": "Score the components",
+   "group": "measure",
+   "kind": "read",
+   "clients": "figma",
+   "scored": true,
+   "what": "Finds instances from the wrong library or from no library, and names a 1:1 replacement where one exists.",
+   "benefit": "Detached and off-system components are what make a file un-maintainable. This is the list to fix first.",
+   "examples": [
+    "Which instances in this file come from the wrong library?",
+    "Find components I should swap for the Lyra equivalent.",
+    "Audit the components in my selected frame."
+   ]
+  },
+  {
+   "name": "audit_accessibility",
+   "title": "Score accessibility",
+   "group": "measure",
+   "kind": "read",
+   "clients": "both",
+   "scored": true,
+   "what": "WCAG-oriented scan: contrast, tap targets, small text, ARIA, alt text, labels, focus outlines, heading order, landmarks.",
+   "benefit": "Errors and warnings split out separately, so you can see what is a genuine blocker versus what is polish.",
+   "ask": "Want the fixable issues applied afterwards, or just the report?",
+   "examples": [
+    "Check this page for accessibility problems.",
+    "Scan for contrast failures and tap targets that are too small.",
+    "Audit headings, landmarks, alt text and focus outlines on this screen."
+   ]
+  },
+  {
+   "name": "scan_variables",
+   "title": "List the variables in use",
+   "group": "measure",
+   "kind": "read",
+   "clients": "both",
+   "what": "Enumerates every variable currently bound in the scope, and every property that should be bound but is not.",
+   "benefit": "The raw data behind the spacing and radius scores, if you want to reason about bindings yourself.",
+   "examples": [
+    "Which variables are bound in this frame, and what should be but is not?",
+    "List every property here that is missing a variable binding.",
+    "Show me the variable coverage for my selection."
+   ]
+  },
+  {
+   "name": "get_audit_filters",
+   "title": "See what the score ignores",
+   "group": "measure",
+   "kind": "read",
+   "clients": "both",
+   "what": "Returns the user's active audit filters: which issue classes are currently excluded from the score.",
+   "benefit": "Keeps the score honest. A 96 with contrast checks switched off is not a 96, and this is how you find out.",
+   "examples": [
+    "Which issue types are currently excluded from my score?",
+    "Show me my active audit filters.",
+    "Why does my score look higher than I expected? Check the filters."
+   ]
+  },
+  {
+   "name": "set_audit_filters",
+   "title": "Change what the score ignores",
+   "group": "measure",
+   "kind": "toggle",
+   "clients": "both",
+   "what": "Turns individual issue classes in or out of scope for the score.",
+   "benefit": "Lets you park issues that are genuinely out of scope for this project without them nagging in every audit.",
+   "ask": "Which checks should be excluded, and should that stick for later audits too?",
+   "examples": [
+    "Exclude spacing issues from my audit score.",
+    "Turn the radius checks back on.",
+    "Ignore component issues for now and keep that setting for next time."
+   ]
+  },
+  {
+   "name": "convert_page_to_lyra",
+   "title": "Convert the whole page to Lyra",
+   "group": "fix-bulk",
+   "kind": "write",
+   "clients": "chrome",
+   "scored": true,
+   "reversible": true,
+   "what": "Runs every applicable fixer across a live page and returns a before/after score delta.",
+   "benefit": "The single biggest jump in score you can get in one call, and you see exactly how many points it bought.",
+   "ask": "Tokens-only (precise, keeps the layout, best for demos and finished work) or a full conversion (also normalises layout, components and a11y, best for early mockups)?",
+   "examples": [
+    "Convert this page to Lyra, tokens only, and show me a dry run first.",
+    "Do a full Lyra conversion on this page and tell me how much the score moves.",
+    "What would converting this page to Lyra change? Do not apply anything yet."
+   ]
+  },
+  {
+   "name": "migrate_to_lyra",
+   "title": "Convert the whole frame to Lyra",
+   "group": "fix-bulk",
+   "kind": "write",
+   "clients": "figma",
+   "scored": true,
+   "reversible": true,
+   "what": "The Figma equivalent: applies the selected fixer families across a frame and reports the score delta.",
+   "benefit": "Migrates a whole artboard without hand-picking rows, with a before/after gauge to show your team.",
+   "ask": "Which families should run: colors, typography, spacing, radius, accessibility? And tokens-only or a full conversion?",
+   "examples": [
+    "Migrate my selected frame to Lyra, colors and type only.",
+    "Run a dry-run Lyra migration on this artboard and show the score change.",
+    "Convert this frame to Lyra and keep the layout as it is."
+   ]
+  },
+  {
+   "name": "convert_colors",
+   "title": "Apply color tokens",
+   "group": "fix-bulk",
+   "kind": "write",
+   "clients": "both",
+   "scored": true,
+   "reversible": true,
+   "what": "Binds the chosen color tokens to the listed fills and strokes.",
+   "benefit": "Reports how many of the original color issues it actually resolved, so a partial fix never gets reported as a win.",
+   "ask": "Apply every suggested color, or only the exact matches and leave the judgement calls to you?",
+   "examples": [
+    "Bind every exact-match color to its Lyra token and leave the rest for me.",
+    "Convert the colors in this frame to Lyra, dry run first.",
+    "Apply all the suggested color tokens."
+   ]
+  },
+  {
+   "name": "convert_text_styles",
+   "title": "Apply typography tokens",
+   "group": "fix-bulk",
+   "kind": "write",
+   "clients": "both",
+   "scored": true,
+   "reversible": true,
+   "what": "Applies the matching type token to the given text nodes, or to every eligible one.",
+   "benefit": "Type is the most visible domain: this is the change people notice, and it comes with a resolved-count.",
+   "ask": "All text nodes, or should any be skipped (logos and custom display type usually should)?",
+   "examples": [
+    "Apply Lyra type tokens to all the text here except the logo.",
+    "Convert the text styles on this page, dry run first.",
+    "Which text nodes would change if you converted to Lyra type?"
+   ]
+  },
+  {
+   "name": "fix_spacing",
+   "title": "Bind spacing tokens",
+   "group": "fix-bulk",
+   "kind": "write",
+   "clients": "both",
+   "scored": true,
+   "reversible": true,
+   "what": "Binds spacing variables to off-scale or unbound padding, gap and margin values.",
+   "benefit": "Usually the highest-yield, lowest-risk fix in the set: values barely move, but the score does.",
+   "examples": [
+    "Snap the off-scale spacing here to the nearest Lyra token.",
+    "Bind spacing variables to every unbound padding and gap in this frame.",
+    "Fix the spacing and tell me the before and after."
+   ]
+  },
+  {
+   "name": "fix_radius",
+   "title": "Bind radius tokens",
+   "group": "fix-bulk",
+   "kind": "write",
+   "clients": "both",
+   "scored": true,
+   "reversible": true,
+   "what": "Binds radius variables to off-scale or unbound corner radii.",
+   "benefit": "Small visual change, large consistency gain, and it takes one call.",
+   "examples": [
+    "Bind radius tokens to every corner that is off the scale.",
+    "Fix the border radius on this page and show me what changed.",
+    "Dry-run a radius fix on my selection."
+   ]
+  },
+  {
+   "name": "fix_accessibility",
+   "title": "Apply accessibility fixes",
+   "group": "fix-bulk",
+   "kind": "write",
+   "clients": "both",
+   "scored": true,
+   "reversible": true,
+   "what": "Applies the automated remediation for a specific accessibility issue type on a node.",
+   "benefit": "Clears the mechanical a11y failures (labels, alt text, tap targets) so human attention goes to the judgement calls.",
+   "ask": "Auto-fixable issues only, or should we also attempt the ones that need judgement (contrast trade-offs, copy rewrites)?",
+   "examples": [
+    "Fix the accessibility issues that can be fixed automatically.",
+    "Apply the contrast fix to this element.",
+    "Which a11y issues would you fix, and which need my judgement?"
+   ]
+  },
+  {
+   "name": "convert_component",
+   "title": "Swap a component for its system twin",
+   "group": "fix-bulk",
+   "kind": "write",
+   "clients": "figma",
+   "reversible": true,
+   "what": "Replaces one instance with the equivalent component from the target design system.",
+   "benefit": "Gets you a real library instance, inheriting future updates, instead of a look-alike that drifts.",
+   "ask": "Confirm the replacement component name before swapping, a wrong swap loses instance overrides.",
+   "examples": [
+    "Swap this button for the Lyra button, and tell me the name first.",
+    "Replace the selected instance with its Lyra equivalent.",
+    "Is there a Lyra version of this component I can swap in?"
+   ]
+  },
+  {
+   "name": "convert_mode",
+   "title": "Switch light / dark mode",
+   "group": "fix-bulk",
+   "kind": "write",
+   "clients": "both",
+   "reversible": true,
+   "what": "Re-binds the scope to the light or dark tokens of the given system.",
+   "benefit": "Produces a genuine dark variant built from tokens, not an inverted screenshot.",
+   "examples": [
+    "Switch this frame to dark mode tokens.",
+    "Re-bind the selection to Lyra light mode.",
+    "Show me this screen in dark mode using the real tokens."
+   ]
+  },
+  {
+   "name": "generate_multi_system",
+   "title": "Duplicate into the other system",
+   "group": "fix-bulk",
+   "kind": "write",
+   "clients": "figma",
+   "what": "Copies the selection and converts the copy to the other design system, leaving the original untouched.",
+   "benefit": "Side-by-side SOL and Lyra versions for a migration pitch, with zero risk to the original.",
+   "examples": [
+    "Make a Lyra copy of this SOL screen next to the original.",
+    "Duplicate my selection and convert the copy to SOL.",
+    "Give me both design system versions of this frame side by side."
+   ]
+  },
+  {
+   "name": "apply_single_color",
+   "title": "Set one color",
+   "group": "fix-one",
+   "kind": "write",
+   "clients": "both",
+   "reversible": true,
+   "what": "Applies one color token (or a raw hex via customHex) to a single fill or stroke.",
+   "benefit": "Try a value in one call and undo it in one call. This is the lane for \"just make this blue\".",
+   "examples": [
+    "Change just this fill to the Lyra primary color token.",
+    "Bind the selected stroke to the right border token.",
+    "Apply the hex #1A73E8 to this one fill."
+   ]
+  },
+  {
+   "name": "apply_single_text",
+   "title": "Set one text style",
+   "group": "fix-one",
+   "kind": "write",
+   "clients": "both",
+   "reversible": true,
+   "what": "Applies one type token (or a raw size via customFontSize) to a single text node.",
+   "benefit": "Iterate on one heading without touching the other forty.",
+   "examples": [
+    "Make only this heading use the Lyra title token.",
+    "Apply the body type token to the selected text.",
+    "Set this one label to 14px."
+   ]
+  },
+  {
+   "name": "apply_single_spacing",
+   "title": "Set one spacing value",
+   "group": "fix-one",
+   "kind": "write",
+   "clients": "both",
+   "reversible": true,
+   "what": "Applies one spacing token (or a raw number via customValue) to a single property.",
+   "benefit": "Nudge one gap by hand when the token scale genuinely does not have the right step.",
+   "examples": [
+    "Set this padding to the nearest Lyra spacing token.",
+    "Bind the gap on this frame to a spacing variable.",
+    "Change just this margin to 16."
+   ]
+  },
+  {
+   "name": "apply_single_radius",
+   "title": "Set one corner radius",
+   "group": "fix-one",
+   "kind": "write",
+   "clients": "both",
+   "reversible": true,
+   "what": "Applies one radius token (or a raw number via customValue) to a single corner or all four.",
+   "benefit": "Fix the one card whose corners are wrong, without a page-wide pass.",
+   "examples": [
+    "Give this card the Lyra medium radius token.",
+    "Set all four corners on the selection to the same radius token.",
+    "Change just the top-left corner radius."
+   ]
+  },
+  {
+   "name": "revert_single_color",
+   "title": "Undo that one color",
+   "group": "fix-one",
+   "kind": "write",
+   "clients": "both",
+   "what": "Restores the snapshot captured when that exact fill or stroke was changed.",
+   "benefit": "Per-row undo that survives other edits, no losing four good changes to walk back a fifth.",
+   "examples": [
+    "Undo the color change on that one fill.",
+    "Put the stroke back to what it was before.",
+    "Revert the last single color edit."
+   ]
+  },
+  {
+   "name": "revert_single_text",
+   "title": "Undo that one text style",
+   "group": "fix-one",
+   "kind": "write",
+   "clients": "both",
+   "what": "Restores the snapshot captured when that text node was changed.",
+   "benefit": "Try a type token, dislike it, put it back exactly as it was.",
+   "examples": [
+    "Undo the type change on that heading.",
+    "Restore the original text style on the node I just changed.",
+    "Revert that one text edit."
+   ]
+  },
+  {
+   "name": "revert_single_spacing",
+   "title": "Undo that one spacing value",
+   "group": "fix-one",
+   "kind": "write",
+   "clients": "both",
+   "what": "Restores the snapshot captured when that spacing property was changed.",
+   "benefit": "Reverses a single nudge without disturbing the rest of the layout.",
+   "examples": [
+    "Put that padding back the way it was.",
+    "Undo the spacing change on this frame.",
+    "Revert the last single spacing edit."
+   ]
+  },
+  {
+   "name": "revert_single_radius",
+   "title": "Undo that one corner radius",
+   "group": "fix-one",
+   "kind": "write",
+   "clients": "both",
+   "what": "Restores the snapshot captured when that radius was changed.",
+   "benefit": "Reverses a single radius edit cleanly.",
+   "examples": [
+    "Undo the radius change on that card.",
+    "Restore the original corner radius.",
+    "Revert the last single radius edit."
+   ]
+  },
+  {
+   "name": "undo_last_conversion",
+   "title": "Undo the last bulk change",
+   "group": "undo",
+   "kind": "write",
+   "clients": "both",
+   "what": "Rolls back the most recent bulk conversion in one call.",
+   "benefit": "Lets you run a big conversion to see what it does, knowing the exit is one sentence away.",
+   "examples": [
+    "Undo that last conversion.",
+    "That page conversion went wrong. Roll it back.",
+    "Take me back to before the bulk fix."
+   ]
+  },
+  {
+   "name": "get_conversion_history",
+   "title": "List every change made",
+   "group": "undo",
+   "kind": "read",
+   "clients": "both",
+   "what": "Returns the ordered history of applied changes with the current position in it.",
+   "benefit": "A written record of what this session actually touched, useful for a changelog or a handoff note.",
+   "examples": [
+    "Show me everything we have changed so far.",
+    "List the history of applied conversions.",
+    "Where am I in the change history?"
+   ]
+  },
+  {
+   "name": "revert_to_history_index",
+   "title": "Rewind to an earlier point",
+   "group": "undo",
+   "kind": "write",
+   "clients": "both",
+   "what": "Steps the design back to a chosen entry in the history.",
+   "benefit": "Explore aggressively, then land on whichever version was best, not just the last one.",
+   "ask": "Which history entry should we land on? Everything after it will be undone.",
+   "examples": [
+    "Go back to the state after the second change.",
+    "Step the design back to history entry 3.",
+    "Undo everything after the color conversion but keep the color conversion."
+   ]
+  },
+  {
+   "name": "apply_css_overrides",
+   "title": "Inject CSS rules",
+   "group": "restyle",
+   "kind": "write",
+   "clients": "chrome",
+   "reversible": true,
+   "what": "Injects selector-scoped CSS declarations into the live page.",
+   "benefit": "Restyle anything on a page you do not own, and see the result immediately. Pass clear:true so re-runs replace rather than stack.",
+   "ask": "Show the selector-to-declaration table and get a yes before injecting, a wrong selector can restyle the whole page.",
+   "examples": [
+    "Try making the primary buttons on this page use the Lyra blue.",
+    "Inject a CSS override so the header uses the dark surface color.",
+    "Show me the selectors you would change, then apply them."
+   ]
+  },
+  {
+   "name": "clear_css_overrides",
+   "title": "Remove injected CSS",
+   "group": "restyle",
+   "kind": "write",
+   "clients": "chrome",
+   "what": "Strips every override this session injected, returning the page to its shipped styling.",
+   "benefit": "A clean baseline in one call, so an experiment never contaminates the next audit.",
+   "examples": [
+    "Remove all the CSS you injected.",
+    "Put the page back to how it shipped.",
+    "Clear the overrides and reload the original look."
+   ]
+  },
+  {
+   "name": "polish_page",
+   "title": "Page view toggles",
+   "group": "restyle",
+   "kind": "toggle",
+   "clients": "chrome",
+   "what": "Toggles dark-mode simulation, token-styled scrollbars, and positional hover overlays.",
+   "benefit": "Dark mode without a build, on any page: the fastest way to find out what breaks.",
+   "examples": [
+    "Turn on dark mode simulation for this page.",
+    "Show hover overlays and token-styled scrollbars.",
+    "Polish this page so it looks right for a demo."
+   ]
+  },
+  {
+   "name": "a11y_overlay",
+   "title": "Accessibility overlays",
+   "group": "restyle",
+   "kind": "toggle",
+   "clients": "chrome",
+   "what": "Toggles small-tap-target highlighting, non-token color flagging, and colorblind simulation.",
+   "benefit": "Makes accessibility problems visible on screen, which is far more persuasive in a review than a list of counts.",
+   "examples": [
+    "Highlight every tap target that is too small.",
+    "Simulate what this page looks like with deuteranopia.",
+    "Flag the colors on this page that are not tokens."
+   ]
+  },
+  {
+   "name": "extract_dev_details",
+   "title": "Spec sheet for one element",
+   "group": "handoff",
+   "kind": "read",
+   "clients": "both",
+   "what": "Size, fills, strokes, typography, auto-layout and CSS for the current selection. On a figma.com tab, reads the real layer from Figma's API instead of the page.",
+   "benefit": "The handoff spec a developer asks for, without a screenshot-and-annotate round trip.",
+   "examples": [
+    "Give me the dev specs for the element I selected.",
+    "What are the size, fills, type and layout for this layer?",
+    "I need the CSS for this button. What is it?"
+   ]
+  },
+  {
+   "name": "extract_all_css",
+   "title": "Export the whole thing as CSS",
+   "group": "handoff",
+   "kind": "read",
+   "clients": "both",
+   "what": "Emits a CSS document covering every node in scope.",
+   "benefit": "A real starting point for implementation rather than a pile of values to retype.",
+   "examples": [
+    "Export the CSS for everything in this frame.",
+    "Give me one CSS document for the whole selection.",
+    "Generate CSS I can hand to a developer for this screen."
+   ]
+  },
+  {
+   "name": "extract_token_css",
+   "title": "Export CSS custom properties",
+   "group": "handoff",
+   "kind": "read",
+   "clients": "both",
+   "what": "Emits the design system's tokens as CSS custom properties.",
+   "benefit": "Drop it into a stylesheet and the rest of the exported CSS resolves against real tokens.",
+   "examples": [
+    "Give me the Lyra tokens as CSS custom properties.",
+    "Export the SOL design tokens as CSS variables.",
+    "I need the dark mode token CSS for Lyra."
+   ]
+  },
+  {
+   "name": "export_design_tokens",
+   "title": "Export the token palettes",
+   "group": "handoff",
+   "kind": "read",
+   "clients": "both",
+   "what": "Returns the color, type, spacing and radius palettes for SOL or Lyra in either mode.",
+   "benefit": "Lets Claude propose real token names instead of guessing at them from memory.",
+   "examples": [
+    "Export the full Lyra color and type palette.",
+    "Give me the SOL spacing and radius tokens as data.",
+    "Show me the Lyra dark mode colors."
+   ]
+  },
+  {
+   "name": "sync_storybook_components",
+   "title": "Sync components from Storybook",
+   "group": "handoff",
+   "kind": "write",
+   "clients": "both",
+   "what": "Pulls the live component inventory from a Storybook instance into the plugin.",
+   "benefit": "Component audits start matching what engineering actually shipped, not last quarter's library.",
+   "ask": "Which Storybook URL, and should this replace the current inventory or merge into it?",
+   "examples": [
+    "Sync the components from our Storybook.",
+    "Pull the latest Lyra component list from Storybook into the plugin.",
+    "Refresh the component inventory, replacing what is there."
+   ]
+  },
+  {
+   "name": "get_storybook_sync_status",
+   "title": "Storybook sync status",
+   "group": "handoff",
+   "kind": "read",
+   "clients": "both",
+   "what": "Reports when the last sync ran and how many components it brought in.",
+   "benefit": "Tells you whether a component audit is trustworthy or built on stale data.",
+   "examples": [
+    "When did Storybook last sync?",
+    "How many components did the last sync bring in?",
+    "Is my component inventory up to date?"
+   ]
+  },
+  {
+   "name": "check_for_updates",
+   "title": "Check for a newer server build",
+   "group": "maintain",
+   "kind": "read",
+   "clients": "both",
+   "what": "Fetches origin and reports whether the local MCP server checkout is behind, with the commit list and version numbers.",
+   "benefit": "Know there is an update before running it, instead of finding out a feature is missing after the fact.",
+   "examples": [
+    "Is my NiCE Designer connector up to date?",
+    "Check whether there are new commits for the MCP server.",
+    "What would I get if I updated the connector?"
+   ]
+  },
+  {
+   "name": "install_update",
+   "title": "Pull and install the latest build",
+   "group": "maintain",
+   "kind": "write",
+   "clients": "both",
+   "reversible": false,
+   "what": "Fast-forwards the local checkout to origin and runs npm install for whatever changed. Only works from a git checkout, and only when the working tree is clean.",
+   "benefit": "Gets new tools and fixes onto disk in one call, though the running process still needs a restart to actually load them, which the response always states.",
+   "ask": "Show the pending commits (from check_for_updates or a dry run) and confirm before running with dryRun:false.",
+   "examples": [
+    "Show me the pending updates, then install them.",
+    "Update the local MCP server to the latest version.",
+    "Pull in the newest changes and run npm install."
+   ]
+  },
+  {
+   "name": "reinstall_connector",
+   "title": "Reinstall the Claude Connector",
+   "group": "maintain",
+   "kind": "write",
+   "clients": "both",
+   "reversible": false,
+   "what": "Relaunches the \"Click to install Claude Connector.mcpb\" file via the OS's own handler, same as double-clicking it. Only works from a git checkout or the unpacked Chrome folder, not from a Desktop-managed install.",
+   "benefit": "No hunting for the file yourself when a tool/skill update needs a reinstall, though Desktop's own confirm dialog is still the last step.",
+   "ask": "Confirm the person wants to relaunch the installer before running with dryRun:false, since it hands off to Claude Desktop's own install flow.",
+   "examples": [
+    "My connector is out of date. Relaunch the installer.",
+    "Reinstall the NiCE Designer connector for me.",
+    "The Supercharge page says to reinstall. Do that."
+   ]
+  },
+  {
+   "name": "call_plugin",
+   "title": "Send a raw plugin message",
+   "group": "escape",
+   "kind": "write",
+   "clients": "both",
+   "what": "Forwards any raw UIMessage straight to the plugin, bypassing the typed tools.",
+   "benefit": "Reaches plugin capability that has no tool yet. Powerful, unvalidated: use it when nothing else fits.",
+   "ask": "Confirm the exact message payload first; this path has no dry-run and no schema validation.",
+   "examples": [
+    "Send this raw message to the plugin and show me what comes back.",
+    "None of the tools cover this. Call the plugin directly.",
+    "Forward a custom UIMessage to Figma."
+   ]
+  }
+ ],
+ "skills": [
+  {
+   "id": "a11y-triage",
+   "title": "Accessibility triage",
+   "group": "measure",
+   "clients": "both",
+   "question": "I have hundreds of a11y issues, where do I actually start?",
+   "what": "Ranks accessibility issues by severity × reach and returns a top-N action list.",
+   "benefit": "Converts an unreadable issue dump into three things to fix this afternoon.",
+   "tools": [
+    "audit_accessibility"
+   ],
+   "examples": [
+    "I have hundreds of accessibility issues on this page. Where do I start?",
+    "Triage the a11y issues here and give me the top 10 to fix first.",
+    "Which accessibility problems affect the most users?"
+   ]
+  },
+  {
+   "id": "manual-fixes-checklist",
+   "title": "Manual-fixes checklist",
+   "group": "measure",
+   "clients": "both",
+   "question": "What is left for a human after the auto-fixers have run?",
+   "what": "Audits, dry-runs every fixer, then reports only what survives, grouped and prioritised.",
+   "benefit": "An honest to-do list for the last mile to 100%, so nobody promises a score the tools cannot reach.",
+   "tools": [
+    "run_full_audit",
+    "convert_page_to_lyra",
+    "migrate_to_lyra"
+   ],
+   "examples": [
+    "What is left for me to fix by hand after the auto-fixers run?",
+    "Dry-run every fixer and list only what still needs a human.",
+    "Make me a manual fixes checklist for this page."
+   ]
+  },
+  {
+   "id": "lyra-visual-patterns",
+   "title": "Lyra visual patterns",
+   "group": "convert",
+   "clients": "both",
+   "question": "What is a correctly-converted Lyra page supposed to look like?",
+   "what": "Reference for Lyra page chrome, surfaces, tables, panels, nav, chips and AI affordances in light and dark.",
+   "benefit": "Load it before any conversion and you know what you are going to get, no surprise redesigns.",
+   "tools": [
+    "convert_page_to_lyra",
+    "migrate_to_lyra",
+    "convert_mode"
+   ],
+   "examples": [
+    "What should a correctly converted Lyra page look like?",
+    "Load the Lyra visual patterns before we convert this screen.",
+    "How should Lyra tables, panels and chips look in dark mode?"
+   ]
+  },
+  {
+   "id": "figma-element-css",
+   "title": "Figma element → CSS",
+   "group": "handoff",
+   "clients": "figma",
+   "question": "What is the CSS for this layer?",
+   "what": "Turns the selected Figma node into production CSS with Lyra tokens substituted where they match.",
+   "benefit": "Output that survives a theme change, instead of hard-coded hex and px.",
+   "tools": [
+    "get_selection_info",
+    "extract_dev_details",
+    "extract_token_css"
+   ],
+   "examples": [
+    "What is the CSS for this layer?",
+    "Turn the selected Figma node into production CSS with Lyra tokens.",
+    "Write CSS for this card using token variables wherever they match."
+   ]
+  },
+  {
+   "id": "browser-element-specs",
+   "title": "Browser element → spec sheet",
+   "group": "handoff",
+   "clients": "chrome",
+   "question": "What are the design specs of this element on the page?",
+   "what": "Pulls computed CSS for the inspected element and annotates every raw value with its nearest token.",
+   "benefit": "A spec a developer can act on, not just a description of what is there.",
+   "tools": [
+    "get_selection_info",
+    "extract_dev_details",
+    "audit_colors"
+   ],
+   "examples": [
+    "What are the design specs for the element I inspected?",
+    "Annotate every raw value on this element with its nearest token.",
+    "Give me a spec sheet for this button."
+   ]
+  },
+  {
+   "id": "figma-chrome-parity",
+   "title": "Figma ↔ Chrome parity",
+   "group": "parity",
+   "clients": "both-required",
+   "question": "Does the live site actually match the Figma?",
+   "what": "Aligns Figma layers to page elements by name and diffs colors, type, spacing, radius and shadows.",
+   "benefit": "Ends the \"it looks off but I cannot say why\" review with a per-property drift table.",
+   "tools": [
+    "extract_dev_details",
+    "get_selection_info"
+   ],
+   "examples": [
+    "Does the live site actually match the Figma?",
+    "Diff this artboard against the page that implements it.",
+    "Find every place the build drifted from the design in color, type and spacing."
+   ]
+  },
+  {
+   "id": "artboard-to-page",
+   "title": "Artboard → live page",
+   "group": "parity",
+   "clients": "both-required",
+   "question": "Can we make this real page look like this artboard?",
+   "what": "Maps artboard styling onto page selectors and applies it as CSS overrides after you confirm the mapping.",
+   "benefit": "Demo a redesign on the real product in minutes, with no branch and no build.",
+   "tools": [
+    "extract_dev_details",
+    "apply_css_overrides",
+    "clear_css_overrides"
+   ],
+   "examples": [
+    "Make this live page look like my selected artboard.",
+    "Show me the mapping from artboard layers to page selectors before applying.",
+    "Push the artboard styling onto the page as CSS overrides."
+   ]
+  },
+  {
+   "id": "dark-mode-parity",
+   "title": "Dark-mode parity",
+   "group": "qa",
+   "clients": "chrome",
+   "question": "Does this page work in dark mode, or only in light?",
+   "what": "Audits colors in light, simulates dark, audits again, and always restores the baseline.",
+   "benefit": "Only the delta: what breaks in dark and what breaks in light. No re-reading the full audit.",
+   "tools": [
+    "audit_colors",
+    "polish_page"
+   ],
+   "examples": [
+    "Does this page work in dark mode?",
+    "Audit the colors in light, then dark, and tell me what breaks.",
+    "Check dark mode parity and put the page back how it was."
+   ]
+  },
+  {
+   "id": "token-candidates",
+   "title": "Token candidates",
+   "group": "system",
+   "clients": "both",
+   "question": "Which of these custom values should just become Lyra tokens?",
+   "what": "Groups recurring raw values across all four domains and ranks the ones worth promoting.",
+   "benefit": "Fixes the cause once upstream instead of the same symptom on thirty screens.",
+   "tools": [
+    "audit_colors",
+    "audit_text_styles",
+    "audit_spacing",
+    "audit_radius"
+   ],
+   "examples": [
+    "Which of these custom values should become Lyra tokens?",
+    "Find recurring raw values on this page worth promoting.",
+    "Rank the custom colors and spacing we use most often."
+   ]
+  },
+  {
+   "id": "nice-product-knowledge",
+   "title": "NiCE product knowledge",
+   "group": "knowledge",
+   "clients": "both",
+   "question": "What does this NICE product actually do, and who uses it?",
+   "what": "Sourced reference on NICE the company and its product lines (CXone Mpower, Enlighten AI, Actimize, Evidencentral), compiled from public material with citations.",
+   "benefit": "Design decisions grounded in what the real product and its real users are, instead of generic SaaS assumptions.",
+   "tools": [],
+   "examples": [
+    "What does Enlighten AI actually do and who uses it?",
+    "Give me background on CXone Mpower before I design for it.",
+    "Which NICE product line does this feature belong to?"
+   ]
+  },
+  {
+   "id": "team-strengths",
+   "title": "Team strengths",
+   "group": "knowledge",
+   "clients": "both",
+   "question": "Who should I put on this, and what will this group get wrong?",
+   "what": "The design team's CliftonStrengths grid (45 people, top 10 themes each) plus the analysis: lookup, group composition, find-the-person matching, and 1:1 coaching prep.",
+   "benefit": "Staffing and 1:1 decisions grounded in how people actually work, instead of who was free.",
+   "tools": [],
+   "examples": [
+    "What are the top strengths for the people on my team?",
+    "Who should I staff on this project, and what will the group be missing?",
+    "Help me prep a strengths-based 1:1 with someone."
+   ]
+  },
+  {
+   "id": "prompt-guru",
+   "title": "Prompt guru",
+   "group": "utilities",
+   "clients": "both",
+   "question": "Is this prompt actually going to get me what I want?",
+   "what": "Reviews a vague or under-specified prompt, rewrites it, explains the improvement, and runs the better version.",
+   "benefit": "Catches ambiguity before it burns a turn on the wrong answer.",
+   "tools": [],
+   "examples": [
+    "Is this prompt going to get me what I want?",
+    "Rewrite this vague prompt so it works better and explain what you changed.",
+    "Improve my prompt and run the better version."
+   ]
+  },
+  {
+   "id": "ui-bug-hunter",
+   "title": "UI bug hunter",
+   "group": "utilities",
+   "clients": "both",
+   "question": "What is wrong with this screenshot?",
+   "what": "Runs a structured 9-layer visual QA pass over a screenshot, image, or recording and produces Jira-style tickets for every real issue.",
+   "benefit": "A bug list ready to file, not a paragraph of impressions.",
+   "tools": [],
+   "examples": [
+    "What is wrong with this screenshot?",
+    "Do a visual QA pass on this build and write Jira tickets for what you find.",
+    "Review this screen recording for UI bugs."
+   ]
+  },
+  {
+   "id": "lyra-prototyping",
+   "title": "Lyra UI prototyping",
+   "group": "prototype",
+   "clients": "both",
+   "question": "Can Claude build a working prototype from the real Lyra components, at 100% Lyra, and tell me what Lyra cannot do yet?",
+   "what": "The official skill for coded prototypes. Builds a real, clickable prototype (React first, Angular where React has no component) from the actual Lyra components in the Storybook the plugin syncs, holds it to 100% Lyra tokens and components, audits the live page in Chrome until it scores 100, and ships a GAPS.md listing everything Lyra does not have.",
+   "benefit": "A demo that is actually Lyra, proven by a live audit score, plus an honest list of what is missing instead of look-alikes standing in for it.",
+   "tools": [
+    "list_targets",
+    "select_page",
+    "run_full_audit",
+    "export_design_tokens",
+    "extract_token_css",
+    "get_storybook_sync_status"
+   ],
+   "defaultFavorite": true,
+   "examples": [
+    "Build a clickable prototype of this screen from the real Lyra components.",
+    "Prototype this flow in React at 100 percent Lyra and tell me what Lyra is missing.",
+    "Code up a working demo of this admin page and audit it until it scores 100."
+   ]
+  },
+  {
+   "id": "sol-ui-prototyping",
+   "title": "SOL UI prototyping",
+   "group": "prototype",
+   "clients": "both",
+   "question": "Can Claude build a working prototype from the real SOL components and tell me what SOL cannot do yet?",
+   "what": "Builds a real coded prototype (React first, Angular where React has no component) from the SOL component library, holds it to full SOL adherence, audits the live page in Chrome, and ships a GAPS.md listing everything SOL does not have.",
+   "benefit": "A demo that is actually SOL, plus an honest, rechecked list of what is missing instead of look-alikes standing in for it.",
+   "tools": [
+    "list_targets",
+    "select_page",
+    "run_full_audit",
+    "export_design_tokens"
+   ],
+   "examples": [
+    "Build a clickable prototype of this screen from real SOL components.",
+    "Prototype this flow in React with SOL and tell me what SOL is missing.",
+    "Make this demo 100 percent SOL and list the gaps."
+   ]
+  },
+  {
+   "id": "lynn-ui-prototyping",
+   "title": "Lynn UI prototyping",
+   "group": "prototype",
+   "clients": "both",
+   "question": "Can Claude build my project in Lynn, using the real components, and check it against the design system?",
+   "what": "Builds or edits a project from the real `lynn-ui` components (bundled with NiCE Designer, nothing to clone), follows the Lynn rules for tokens, motion and composition, then audits the live page against Lynn in Chrome until it is clean.",
+   "benefit": "A Lynn build that uses the real components instead of look-alikes, and a compliance number to prove it.",
+   "tools": [
+    "list_targets",
+    "select_page",
+    "run_full_audit"
+   ],
+   "examples": [
+    "Build this project in Lynn using the real components.",
+    "Make a dark, animated landing page with lynn-ui.",
+    "Audit my live page against Lynn and fix what is off."
+   ]
+  },
+  {
+   "id": "claude-design-prompt",
+   "title": "Claude Design prompt from audit",
+   "group": "handoff",
+   "clients": "both",
+   "question": "Can the audit results become a prompt I paste into Claude Design?",
+   "what": "Runs the audits, groups the issues into the changes a designer would make (token swaps, type, spacing, components, accessibility), and writes one ready-to-paste Claude Design prompt.",
+   "benefit": "Hand the audit to a generative design tool as a brief it can act on, with real token names and an accessibility floor, instead of fixing the page by hand.",
+   "tools": [
+    "run_full_audit",
+    "audit_colors",
+    "audit_text_styles",
+    "audit_spacing",
+    "audit_radius",
+    "audit_accessibility",
+    "export_design_tokens",
+    "screenshot_page"
+   ],
+   "examples": [
+    "Turn the audit results for this page into a Claude Design prompt.",
+    "Write me a prompt I can paste into Claude Design to fix this screen in Lyra.",
+    "Audit this frame and give me a design brief for Claude Design, accessibility first."
+   ]
+  },
+  {
+   "id": "design-system-agent",
+   "title": "Design system agent",
+   "group": "qa",
+   "clients": "chrome",
+   "question": "Can Claude keep fixing this page until it’s actually 100% SOL/Lyra compliant, not just close?",
+   "what": "Builds or edits a Claude Code project’s UI using only real SOL/Lyra Storybook components, then loops audit → fix-in-source → re-audit against the live page in Chrome until it hits your compliance target.",
+   "benefit": "A screen that’s provably on-system by the numbers, not eyeballed, and every fix lands in your source, not a throwaway DOM patch.",
+   "tools": [
+    "list_targets",
+    "select_page",
+    "run_full_audit",
+    "call_plugin"
+   ],
+   "examples": [
+    "Keep fixing this page until it hits 95 percent Lyra compliance.",
+    "Build this screen from real Lyra Storybook components and audit it live.",
+    "Loop audit, fix and re-audit on my dev server until the score holds."
+   ]
+  },
+  {
+   "id": "persona-maya-chen",
+   "title": "Maya Chen — New agent",
+   "group": "personas",
+   "clients": "both",
+   "question": "How would someone brand-new to CXone react to this?",
+   "what": "A three-weeks-in contact center agent, mid-call attention and no admin context — starter archetype, not yet sourced from a real study.",
+   "benefit": "Catches onboarding friction, jargon, and cognitive load a confident reviewer would miss.",
+   "tools": [],
+   "examples": [
+    "Interview Maya about this new onboarding flow.",
+    "How would a brand-new agent react to this screen mid-call?",
+    "Ask a first-week agent whether this is too much to figure out on the fly."
+   ]
+  },
+  {
+   "id": "persona-jordan-reyes",
+   "title": "Jordan Reyes — Supervisor",
+   "group": "personas",
+   "clients": "both",
+   "question": "Would this slow down real-time team monitoring?",
+   "what": "A frontline supervisor running 14 agents, triaging live dashboards between interruptions — starter archetype, not yet sourced from a real study.",
+   "benefit": "Grounds a review in real-time, SLA-driven operational reality instead of an assumed power user.",
+   "tools": [],
+   "examples": [
+    "Ask a supervisor whether this dashboard change helps during a live shift.",
+    "Interview Jordan about this real-time monitoring redesign.",
+    "Would this slow down a supervisor triaging SLA breaches?"
+   ]
+  },
+  {
+   "id": "persona-patricia-odom",
+   "title": "Patricia Odom — Executive",
+   "group": "personas",
+   "clients": "both",
+   "question": "What is the VP pitch for this, and would leadership actually fund it?",
+   "what": "A VP of Customer Experience who sponsors CXone but rarely opens it herself, judging everything by outcome and cost of inaction — starter archetype, not yet sourced from a real study.",
+   "benefit": "Pressure-tests a pitch against a non-technical executive sponsor before it reaches one for real.",
+   "tools": [],
+   "examples": [
+    "What is the VP pitch for this feature?",
+    "Interview an executive sponsor about whether this is worth funding.",
+    "Would leadership actually approve this, or does it need a different pitch?"
+   ]
+  },
+  {
+   "id": "persona-sam-whitfield",
+   "title": "Sam Whitfield — Coach",
+   "group": "personas",
+   "clients": "both",
+   "question": "Would this actually help someone coaching agents?",
+   "what": "A quality/performance coach who reviews calls and runs developmental 1:1s, judging tools by whether they give something actionable to tell an agent — starter archetype, not yet sourced from a real study.",
+   "benefit": "Checks a feature against a coaching/feedback-loop lens instead of a real-time-ops or executive one.",
+   "tools": [],
+   "examples": [
+    "Ask a coach whether this scorecard change actually helps them coach.",
+    "Interview Sam about this quality-monitoring feature.",
+    "Would this give a coach something concrete to tell an agent?"
+   ]
+  }
+ ]
+}

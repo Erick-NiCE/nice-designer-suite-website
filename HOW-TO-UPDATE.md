@@ -25,7 +25,7 @@ below.
 | `install-guide.html`   | Install Guide | Setup steps for the plugin, extension, and MCP server    |
 | `update-guide.html` | Update Guide | How to update the extension and Claude connector |
 | `troubleshooting.html` | Troubleshooting | Fixes for common install and connection problems |
-| `claude-skills.html`   | Claude Skills | The 11 Claude skills that ship with the suite            |
+| `claude-skills.html`   | Native Tools & Skills | Every non-Marketplace skill and tool, built from `native-catalog.json` |
 | `the-suite.html`       | The Suite     | The 4 product tools + the Supercharge panel              |
 | `use-cases.html`       | Use Cases     | Scenarios organized by job-to-be-done                    |
 | `scoring.html`         | Scoring       | How the compliance scores are calculated                 |
