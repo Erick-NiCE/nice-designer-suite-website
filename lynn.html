@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lynn - NiCE Designer Suite</title>
+  <title>Internal Design System - NiCE Designer Suite</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
@@ -158,12 +158,12 @@
   <!-- COMPARE -->
   <section class="lynn-section" id="lynn-compare">
     <p class="lynn-label">Compare</p>
-    <h2 class="lynn-title">SOL vs. Lyra vs. <span>Lynn</span></h2>
+    <h2 class="lynn-title">SOL vs. Lyra vs. <span>Internal</span></h2>
     <p class="lynn-desc">Same sample heading, body copy, button, badge, and card - re-skinned live with each system's real tokens. Toggle to see the difference.</p>
     <div class="compare-toggle" role="tablist" aria-label="Design system">
       <button type="button" class="compare-btn" data-system="sol" role="tab">SOL</button>
       <button type="button" class="compare-btn" data-system="lyra" role="tab">Lyra</button>
-      <button type="button" class="compare-btn active" data-system="lynn" role="tab" aria-selected="true">Lynn</button>
+      <button type="button" class="compare-btn active" data-system="lynn" role="tab" aria-selected="true">Internal</button>
     </div>
     <div class="compare-stage" data-system="lynn" id="compare-stage">
       <p class="compare-eyebrow">Sample panel</p>
@@ -188,7 +188,7 @@
     <p class="lynn-label">Live playground</p>
     <h2 class="lynn-title">Interactive <span>components</span></h2>
     <p class="lynn-desc">
-      Lynn ships as a real React package, <code>lynn-ui</code> - every token above is a
+      The internal system ships as a real React package, <code>lynn-ui</code> - every token above is a
       CSS custom property in it, and every component below is the built package running
       on this page, not a screenshot. Drive the pickers to change props, read the JSX
       each state generates, and use the theme switch in the nav to re-skin all of it live.
@@ -360,7 +360,7 @@
           { label: 'FAQ', href: './faq.html' },
           { label: 'Tools', href: './tools.html' },
           { label: 'Marketplace', href: './marketplace.html' },
-          { label: 'Lynn', href: './lynn.html', active: true },
+          { label: 'Internal', href: './lynn.html', active: true },
         ],
       },
     ];
@@ -476,9 +476,9 @@
         unlocked &&
           h(AccessGate, {
             key: 'gate-lynn',
-            title: 'Lynn Design System',
+            title: 'Internal Design System',
             subtitle:
-              "Lynn isn't linked from the homepage yet - it's still in progress. Enter the roadmap access code to preview it.",
+              "Internal use only. This is the design system for NiCE Designer's own internal sites. It is not for CXone and it is not a replacement for Lyra. Enter the roadmap access code to continue.",
             onSubmit: checkLynnCode,
             error: lynnError,
             unlocked: lynnUnlocked,
@@ -523,10 +523,10 @@
               h(
                 Hero,
                 {
-                  eyebrow: 'Design System Reference & Live Demo',
-                  heading: h(Fragment, null, 'Meet ', h(ShimmerText, { as: 'span' }, 'Lynn')),
+                  eyebrow: 'Internal use only · Design System Reference & Live Demo',
+                  heading: h(Fragment, null, 'Our ', h(ShimmerText, { as: 'span' }, 'Internal'), ' design system'),
                   subtitle:
-                    "Lynn is NiCE Designer Suite's own visual identity - the dark, gradient-driven, motion-rich language you're looking at right now. It isn't a system the Suite audits or converts other work against; SOL and Lyra still are. Lynn is the tool's own skin, documented here in the same token shape.",
+                    "This is an internal design system for our internal sites only. It is not for CXone and it is not a replacement for Lyra. It is NiCE Designer Suite's own visual identity - the dark, gradient-driven, motion-rich language you're looking at right now. It isn't a system the Suite audits or converts other work against; SOL and Lyra still are. It is the tool's own skin, documented here in the same token shape.",
                 },
               ),
               'lynn-hero-root'

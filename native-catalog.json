@@ -1256,25 +1256,6 @@
    ]
   },
   {
-   "id": "lynn-ui-prototyping",
-   "title": "Lynn UI prototyping",
-   "group": "prototype",
-   "clients": "both",
-   "question": "Can Claude build my project in Lynn, using the real components, and check it against the design system?",
-   "what": "Builds or edits a project from the real `lynn-ui` components (bundled with NiCE Designer, nothing to clone), follows the Lynn rules for tokens, motion and composition, then audits the live page against Lynn in Chrome until it is clean.",
-   "benefit": "A Lynn build that uses the real components instead of look-alikes, and a compliance number to prove it.",
-   "tools": [
-    "list_targets",
-    "select_page",
-    "run_full_audit"
-   ],
-   "examples": [
-    "Build this project in Lynn using the real components.",
-    "Make a dark, animated landing page with lynn-ui.",
-    "Audit my live page against Lynn and fix what is off."
-   ]
-  },
-  {
    "id": "claude-design-prompt",
    "title": "Claude Design prompt from audit",
    "group": "handoff",

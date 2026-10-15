@@ -463,7 +463,6 @@
     { id: 'skill-ui-bug-hunter', label: "UI bug hunter" },
     { id: 'skill-lyra-prototyping', label: "Lyra UI prototyping" },
     { id: 'skill-sol-ui-prototyping', label: "SOL UI prototyping" },
-    { id: 'skill-lynn-ui-prototyping', label: "Lynn UI prototyping" },
     { id: 'skill-claude-design-prompt', label: "Claude Design prompt from audit" },
     { id: 'skill-design-system-agent', label: "Design system agent" },
     { id: 'skill-persona-maya-chen', label: "Maya Chen \u2014 New agent" },
@@ -487,7 +486,7 @@
 
   var DOC_PAGES = [
     {
-      href: 'lynn.html', label: 'Lynn',
+      href: 'lynn.html', label: 'Internal',
       // Tokens and Magic Effects used to be their own static groups here,
       // duplicating (with the same values) what the lynn-ui playground below
       // now shows live and interactively. lynn.html is a real lynn-ui page
@@ -497,7 +496,7 @@
       // second group listed here - see lynn.html's own script for why.
       groups: [
         { label: 'Compare', items: [
-          { id: 'lynn-compare', label: 'SOL vs. Lyra vs. Lynn' }
+          { id: 'lynn-compare', label: 'SOL vs. Lyra vs. Internal' }
         ] }
       ]
     },

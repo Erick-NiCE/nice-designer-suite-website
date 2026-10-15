@@ -28,7 +28,9 @@ function grab(name) {
 const toolGroups = grab('TOOL_GROUPS');
 const skillGroups = grab('SKILL_GROUPS');
 const tools = grab('CATALOG_TOOLS').filter((t) => !t.thirdParty);
-const skills = grab('CATALOG_SKILLS').filter((s) => !s.thirdParty);
+// Internal-only skills stay off the public page.
+const HIDDEN_SKILLS = new Set(['lynn-ui-prototyping']);
+const skills = grab('CATALOG_SKILLS').filter((s) => !s.thirdParty && !HIDDEN_SKILLS.has(s.id));
 
 const out = {
   generated: new Date().toISOString().slice(0, 10),
