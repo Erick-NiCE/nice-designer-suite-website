@@ -270,6 +270,29 @@
     "files": []
   },
   {
+    "id": "edith",
+    "title": "EDITH: screens to Figma",
+    "question": "Can you turn this screenshot, prompt or live page into finished, linked Lyra screens in Figma?",
+    "what": "An end-to-end design agent. Splits the input into screens, breaks each one down, classifies every element as an existing Lyra component or a custom build, builds the custom parts with Lyra tokens, assembles each 1920 by 1080 screen, and wires the prototype links, confirming with you at each gate. Needs the Figma MCP and the Lyra Foundations (V1) library added to the file.",
+    "benefit": "A multi-screen, prototyped Figma product built from real Lyra components and bound tokens, instead of hand-drawn look-alikes.",
+    "clients": "figma",
+    "tools": [],
+    "author": "Sushant Civi",
+    "thirdParty": true,
+    "files": [
+      "references/assemble-screen.md",
+      "references/breakdown.md",
+      "references/build-custom.md",
+      "references/classify.md",
+      "references/split-screens.md",
+      "references/tokens-binding-recipes.md",
+      "references/tokens-components.md",
+      "references/tokens-styles.md",
+      "references/tokens-variables.md",
+      "references/tokens.md"
+    ]
+  },
+  {
     "id": "ux-research-readouts",
     "title": "Research readouts",
     "question": "How do I get this in front of stakeholders without it getting waved off?",
