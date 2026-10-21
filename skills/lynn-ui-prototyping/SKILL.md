@@ -29,11 +29,11 @@ Fetch them with `get_skill({ id: "lynn-ui-prototyping", file: "references/compon
 
 ## Step 1: Get the package
 
-The package is bundled with NiCE Designer, so there is nothing to clone or build. Look in this order and use the first that exists:
+The package is bundled with NiCE Designer, so there is nothing to clone or build. Use the first that works:
 
-1. `vendor/lynn-ui/` in the plugin repo.
-2. `lynn-ui/` next to the MCP server (`packages/mcp-server/lynn-ui` in a checkout, `mcp-server/lynn-ui` in the Chrome build folder).
-3. The published copy, if neither is on disk: `https://erick-nice.github.io/nice-designer-suite-website/lynn-ui/dist/` (same files).
+1. **The `get_lynn_ui` tool, always try this first.** `get_lynn_ui({ destination: "<project folder>" })` copies the bundled package to `<project folder>/lynn-ui` on the machine running the connector. It works in sandboxed sessions that cannot reach the web or the connector's disk. Use the project folder the session has connected. If there is no writable shared folder, call `get_lynn_ui()` for the file list, then fetch the files with `get_lynn_ui({ files: [...] })` in batches and write each to the same relative path under `./lynn-ui/`. Every `.js` file is needed; `.d.ts` files are optional.
+2. `vendor/lynn-ui/` in the plugin repo, or `lynn-ui/` next to the MCP server, if you are in a checkout and can read them.
+3. The published files at `https://erick-nice.github.io/nice-designer-suite-website/lynn-ui/` (for example `dist/index.js`), only if the tool is unavailable. Some networks refuse this domain with a 403. If that happens, stop and use option 1; never substitute look-alike components or the npm package of the same name.
 
 Install it into the project as a copied dependency. `--install-links` matters: without it npm symlinks the folder and installs `matter-js` into the vendored copy.
 

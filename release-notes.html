@@ -361,10 +361,33 @@
        group on the page. */
     const RELEASES = [
       {
+        id: 'release-v11-8',
+        version: 'v11.8',
+        date: 'October 2026',
+        isLatest: true,
+        groups: [
+          {
+            label: 'New features',
+            tone: 'blue',
+            items: [
+              rich('New tool - <strong>Get the Lynn package</strong>: Lynn prototypes no longer need to download anything. The connector copies the bundled <code>lynn-ui</code> package into your project, which fixes the 403 some sandboxed sessions hit. Reinstall the Claude connector to get the new tool'),
+              `New marketplace skill: EDITH, by Sushant Civi. Turns a screenshot, prompt or live page into finished, linked Lyra screens in Figma, built from real Lyra components and bound tokens`,
+              `New skill: Install or update NiCE Designer. Claude downloads the latest release, unzips it to a permanent folder, opens the extensions page and walks you through loading it`,
+            ],
+          },
+          {
+            label: 'Improvements',
+            tone: 'emerald',
+            items: [
+              `The copy button on Supercharge cards now says "Copied to clipboard"`,
+            ],
+          },
+        ],
+      },
+      {
         id: 'release-v11-7',
         version: 'v11.7',
         date: 'October 2026',
-        isLatest: true,
         groups: [
           {
             label: 'New features',
@@ -657,7 +680,7 @@
     const downloadPill = (key) =>
       h(
         'a',
-        { key, className: 'nav-download', href: './downloads/NiCE-Designer-V11.7.zip', 'data-latest-link': '', download: '' },
+        { key, className: 'nav-download', href: './downloads/NiCE-Designer-V11.8.zip', 'data-latest-link': '', download: '' },
         'Download'
       );
 

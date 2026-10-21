@@ -317,6 +317,22 @@
     "files": []
   },
   {
+    "id": "install-nice-designer",
+    "title": "Install or update NiCE Designer",
+    "question": "Can Claude install or update the NiCE Designer extension for me?",
+    "what": "Asks clean install or update, downloads the latest release, unzips it to a permanent folder, opens the extensions page and clicks through Load unpacked with computer use when allowed, otherwise guides each step.",
+    "benefit": "Gets a person from nothing to a verified working install without hunting for the zip, and hands them the site, install guide and password.",
+    "clients": "both",
+    "tools": [
+      "list_targets",
+      "get_diagnostics",
+      "reinstall_connector"
+    ],
+    "author": "NiCE Designer",
+    "thirdParty": false,
+    "files": []
+  },
+  {
     "id": "prompt-guru",
     "title": "Prompt guru",
     "question": "Is this prompt actually going to get me what I want?",

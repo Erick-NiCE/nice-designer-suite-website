@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-14",
+ "generated": "2026-10-21",
  "toolGroups": [
   {
    "id": "connect",
@@ -192,6 +192,21 @@
     "Load the a11y-triage skill and follow it.",
     "Read the full instructions for the lyra-visual-patterns skill before we convert this page.",
     "Pull up the north-star-fox skill so I can see what it does."
+   ]
+  },
+  {
+   "name": "get_lynn_ui",
+   "title": "Get the Lynn package",
+   "group": "skills",
+   "kind": "read",
+   "clients": "both",
+   "what": "Hands over the bundled lynn-ui React package: copies it into a project folder, or returns its files, so a Lynn prototype needs no download.",
+   "benefit": "Lynn prototypes work in sandboxed sessions that cannot reach the web or this connector's disk, with nothing to clone or build.",
+   "ask": "Which project folder should lynn-ui be copied into?",
+   "examples": [
+    "Copy the Lynn package into this project so I can build a prototype with it.",
+    "The Lynn download is blocked here. Get the package through the connector instead.",
+    "What version of lynn-ui is bundled with NiCE Designer?"
    ]
   },
   {
@@ -1180,6 +1195,25 @@
     "What are the top strengths for the people on my team?",
     "Who should I staff on this project, and what will the group be missing?",
     "Help me prep a strengths-based 1:1 with someone."
+   ]
+  },
+  {
+   "id": "install-nice-designer",
+   "title": "Install or update NiCE Designer",
+   "group": "utilities",
+   "clients": "both",
+   "question": "Can Claude install or update the NiCE Designer extension for me?",
+   "what": "Asks clean install or update, downloads the latest release, unzips it to a permanent folder, opens the extensions page and clicks through Load unpacked with computer use when allowed, otherwise guides each step.",
+   "benefit": "Gets a person from nothing to a verified working install without hunting for the zip, and hands them the site, install guide and password.",
+   "tools": [
+    "list_targets",
+    "get_diagnostics",
+    "reinstall_connector"
+   ],
+   "examples": [
+    "Install the NiCE Designer Suite for me.",
+    "Update my NiCE Designer extension to the latest version.",
+    "Do a clean reinstall of NiCE Designer."
    ]
   },
   {
