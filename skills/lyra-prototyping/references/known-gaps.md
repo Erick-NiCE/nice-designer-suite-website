@@ -19,7 +19,7 @@ Basis: the seed's component list compared with the inventory of David Bauer's `@
 | Divider / separator | No | none | Gap. Prefer spacing and `Card`/`Panel` grouping. |
 | Empty state | No | none | Gap. |
 | Page header / title bar | No | Breadcrumb | Gap for the header block; Breadcrumb covers the trail only. |
-| App header, left nav, nav rail (shell) | No | none | Gap unless the live Storybook has a shell pattern. `lyra-visual-patterns` describes what it should look like; that is not a license to hand-build it. |
+| App header, left nav, nav rail (shell) | No | NiCE Designer `app-shell` pattern | Provided by NiCE Designer, not Storybook: `get_component_kit({ patterns: ["app-shell"] })` is the Lyra suite shell (56px header, 232px rail, white panel). Every prototype starts with it. Labeled fallback in the ledger. |
 | Data table with column menus, sorting, toolbar | Partly | Grid (ag-Grid based) | Use Grid. Features beyond its documented props are gaps. |
 | Tree menu / tree view | No | Menu | Gap. |
 | Transfer box (dual list) | No | none | Gap. |

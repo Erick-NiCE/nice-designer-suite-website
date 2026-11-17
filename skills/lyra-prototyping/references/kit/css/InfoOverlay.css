@@ -1,0 +1,9 @@
+/* InfoOverlay: real stylesheet from the SOL/Lyra Storybook. Generated 2026-11-16. */
+.sol-info-overlay { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+.sol-info-overlay .sol-container-icon { align-items: center; justify-content: center; flex-direction: column; background-repeat: no-repeat; background-position: center center; background-size: contain; }
+.sol-info-overlay .sol-container-icon.medium { width: 7.25rem; height: 3.93rem; max-width: 17.5rem; }
+.sol-info-overlay .sol-container-icon.large { width: 15rem; height: 6.81rem; max-width: 25rem; }
+.sol-info-overlay .under-line-text { width: 100%; text-align: center; font-family: var(--sol-typography-body-md-font-family); font-weight: var(--sol-typography-body-md-font-weight); color: var(--sol-color-text-secondary); white-space: break-spaces; line-break: auto; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.sol-info-overlay .under-line-text.medium { margin-top: var(--sol-size-spacing-3xs); letter-spacing: var(--sol-typography-body-sm-letter-spacing); font-size: var(--sol-base-measure-30); line-height: 1.25rem; }
+.sol-info-overlay .under-line-text.large { margin-top: var(--sol-size-spacing-xs); font-size: var(--sol-typography-body-md-font-size); line-height: var(--sol-typography-body-md-line-height); letter-spacing: var(--sol-typography-body-md-letter-spacing); }
+.sol-info-overlay .under-line-text.config { margin: 0px; }

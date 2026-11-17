@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-21",
+ "generated": "2026-11-17",
  "toolGroups": [
   {
    "id": "connect",
@@ -139,6 +139,35 @@
    ]
   },
   {
+   "name": "restart_hub",
+   "title": "Restart the connection",
+   "group": "connect",
+   "kind": "bridge",
+   "clients": "both",
+   "what": "Resets the bridge so Figma and Chrome reconnect fresh, or relaunches the connector with the latest code.",
+   "benefit": "Clears stale or duplicate connections and out-of-date code without you digging through process lists.",
+   "ask": "Reset the connections (safe) or fully reload the connector (it drops out for a few seconds)?",
+   "examples": [
+    "Nothing is connecting, reset the connection.",
+    "You seem to be using old code, reload the connector.",
+    "Two copies of Chrome are connected, clear them out."
+   ]
+  },
+  {
+   "name": "report_problem",
+   "title": "Report a problem to Erick",
+   "group": "connect",
+   "kind": "bridge",
+   "clients": "both",
+   "what": "Bundles the versions, what is connected, the recent errors and your own note into one report for Erick Mathews, the owner of NiCE Designer.",
+   "benefit": "You do not have to explain what went wrong, and Erick gets everything needed to fix it.",
+   "examples": [
+    "Something is broken, report it to Erick.",
+    "This keeps failing, package up what is needed so it can be fixed.",
+    "Send Erick a report about what just went wrong."
+   ]
+  },
+  {
    "name": "check_libraries",
    "title": "Check the design library is linked",
    "group": "connect",
@@ -210,6 +239,48 @@
    ]
   },
   {
+   "name": "get_component_api",
+   "title": "Get the production code API",
+   "group": "skills",
+   "kind": "read",
+   "clients": "both",
+   "what": "Returns the real React component names, live props with types and defaults, the Angular selector and real usage examples for the components you name, so handoff code uses the production API.",
+   "benefit": "Developers get code written against the real components, not a guess, and a clear list of what to confirm.",
+   "examples": [
+    "What are the real props for Button and Tabs, so the code I hand over is right?",
+    "Give me the production API for Text Input, with usage examples.",
+    "Write the screen against the real component API, not a guess."
+   ]
+  },
+  {
+   "name": "check_acceptance",
+   "title": "Check against the handoff gates",
+   "group": "measure",
+   "kind": "read",
+   "clients": "chrome",
+   "what": "Runs the audit on a page and answers ACCEPTED or NOT ACCEPTED gate by gate: header present, elements labeled, real components used, score, accessibility errors, layout.",
+   "benefit": "A developer can verify an implementation in one call, and a PM can see exactly what is left before handoff.",
+   "examples": [
+    "Does this page pass the handoff gates?",
+    "Check my implementation against the acceptance gates.",
+    "Is this prototype ready to hand to a developer?"
+   ]
+  },
+  {
+   "name": "get_component_kit",
+   "title": "Get real Lyra components",
+   "group": "skills",
+   "kind": "read",
+   "clients": "both",
+   "what": "Hands over the real Lyra component markup, usage code and CSS, captured from the Storybook and shipped inside the connector, for the components you name.",
+   "benefit": "Prototypes, Claude Design files and artifacts are built from the real components with nothing to install, no VPN and no repo, and the audit can tell they are real.",
+   "examples": [
+    "Which real Lyra components can you build with?",
+    "Get me the real Button and Tabs markup and CSS in the Lyra theme.",
+    "Build this screen from the real components, not look-alikes."
+   ]
+  },
+  {
    "name": "find_capability",
    "title": "Find a tool or skill by keyword",
    "group": "skills",
@@ -235,6 +306,92 @@
     "What do I have selected right now?",
     "Confirm which element you will audit before you start.",
     "Tell me what the inspected element is on this page."
+   ]
+  },
+  {
+   "name": "list_tabs",
+   "title": "See which tabs are open",
+   "group": "scope",
+   "kind": "read",
+   "clients": "chrome",
+   "what": "Lists every open Chrome tab with its title and address, and marks the active one.",
+   "benefit": "Claude can find the right page itself instead of asking you to click to it.",
+   "examples": [
+    "Which tabs do I have open right now?",
+    "List my Chrome tabs so you can pick the one to audit.",
+    "Find the Storybook tab I had open."
+   ]
+  },
+  {
+   "name": "switch_tab",
+   "title": "Switch or open a tab",
+   "group": "scope",
+   "kind": "toggle",
+   "clients": "chrome",
+   "what": "Brings a tab to the front by id or address, or opens a link, so the next audit or fix lands on it. Claude design links are audited on the design itself, not the Claude interface around it.",
+   "benefit": "Hands-free multi-page runs: audit a page, move to the next, repeat, with no clicking.",
+   "examples": [
+    "Switch to my Storybook tab and audit it.",
+    "Open this Claude Design link and run the audit on the design itself.",
+    "Go to the next tab and run the same check there."
+   ]
+  },
+  {
+   "name": "reload_tab",
+   "title": "Reload a tab",
+   "group": "scope",
+   "kind": "toggle",
+   "clients": "chrome",
+   "what": "Reloads a tab with the cache bypassed and waits for it to load, so an edited prototype is really re-fetched.",
+   "benefit": "Fix-and-recheck loops audit the new version, not a stale cached one, and do not pile up extra tabs.",
+   "examples": [
+    "Reload the prototype tab and audit the new version.",
+    "Refresh that page without cache, I just changed the styles.",
+    "Reload the Claude Design tab and wait for it to finish."
+   ]
+  },
+  {
+   "name": "close_tab",
+   "title": "Close a tab",
+   "group": "scope",
+   "kind": "toggle",
+   "clients": "chrome",
+   "what": "Closes a tab by id or address, so tabs opened for an audit do not pile up.",
+   "benefit": "Claude cleans up after itself instead of leaving a trail of test tabs in your browser.",
+   "ask": "Which tab should be closed, and did Claude open it or did you?",
+   "examples": [
+    "Close the test tabs you opened.",
+    "Close the prototype tab when you are done.",
+    "Shut the localhost tab, I do not need it anymore."
+   ]
+  },
+  {
+   "name": "scroll_page",
+   "title": "Scroll the page",
+   "group": "scope",
+   "kind": "toggle",
+   "clients": "chrome",
+   "what": "Scrolls the page, or the dashboard or canvas inside it, up, down, to the top or bottom, or to a given element.",
+   "benefit": "Claude can reach the part of a long page it needs to look at or audit without you scrolling for it.",
+   "examples": [
+    "Scroll down so I can see the table at the bottom.",
+    "Go back to the top of the page.",
+    "Scroll the dashboard until the Tasks widget is in view."
+   ]
+  },
+  {
+   "name": "click_element",
+   "title": "Click an element",
+   "group": "scope",
+   "kind": "toggle",
+   "clients": "chrome",
+   "what": "Clicks a button, tab, link or control found by its visible text or a selector, after showing what it matched. Refuses anything that looks like send, delete or pay unless you approve it.",
+   "benefit": "Opens tabs, menus and panels so Claude can audit states you would otherwise have to set up by hand.",
+   "ask": "Which element should be clicked, and is it safe to click (nothing is sent, deleted or paid for)?",
+   "examples": [
+    "Click the Sent tab and audit that view.",
+    "Open the Tweaks panel so you can check it.",
+    "Show me what you would click for the Save button, without clicking."
    ]
   },
   {
@@ -482,7 +639,7 @@
    "reversible": true,
    "what": "Runs every applicable fixer across a live page and returns a before/after score delta.",
    "benefit": "The single biggest jump in score you can get in one call, and you see exactly how many points it bought.",
-   "ask": "Tokens-only (precise, keeps the layout, best for demos and finished work) or a full conversion (also normalises layout, components and a11y, best for early mockups)?",
+   "ask": "Did the user specifically ask to see a live preview? This only changes their browser and is gone on refresh, so it is never the deliverable. Otherwise use the page conversion skill, which rebuilds the page as a shareable Claude Design file with a developer handoff.",
    "examples": [
     "Convert this page to Lyra, tokens only, and show me a dry run first.",
     "Do a full Lyra conversion on this page and tell me how much the score moves.",
@@ -810,6 +967,21 @@
    ]
   },
   {
+   "name": "apply_lyra_theme",
+   "title": "Re-theme the page to Lyra",
+   "group": "fix-bulk",
+   "kind": "write",
+   "clients": "chrome",
+   "reversible": true,
+   "what": "Switches the live page to the Lyra theme by remapping the design system’s own color, radius and spacing variables, so every SOL-based component turns Lyra at once.",
+   "benefit": "The biggest single step of a page conversion, in one call, undoable, before any per-element fixing.",
+   "examples": [
+    "Re-theme this whole page to Lyra.",
+    "Switch this SOL page to the Lyra theme and show me the new score.",
+    "Try the Lyra theme on this page, I want to be able to undo it."
+   ]
+  },
+  {
    "name": "clear_css_overrides",
    "title": "Remove injected CSS",
    "group": "restyle",
@@ -1036,6 +1208,99 @@
    ]
   },
   {
+   "id": "lyra-page-conversion",
+   "title": "Convert a page to Lyra",
+   "group": "convert",
+   "clients": "chrome",
+   "question": "Can Claude convert this live page to Lyra for me, all the way, and give my developers something they can verify and merge?",
+   "what": "The automatic path for \"convert this page to Lyra\". Opens the page in your own browser through the extension, measures it, re-themes it to Lyra, converts what remains, measures again, and hands back a package: before and after scores, every change with its selector and token, the component swaps, what a person must still do, and how to verify it.",
+   "benefit": "One request, no questions and nothing to set up beyond the extension, and a handoff developers can check and merge instead of a screenshot and a promise.",
+   "tools": [
+    "list_targets",
+    "switch_tab",
+    "run_full_audit",
+    "apply_lyra_theme",
+    "convert_page_to_lyra",
+    "convert_colors",
+    "convert_text_styles",
+    "fix_spacing",
+    "fix_radius",
+    "fix_accessibility",
+    "undo_last_conversion",
+    "screenshot_page",
+    "get_component_kit",
+    "call_plugin"
+   ],
+   "defaultFavorite": true,
+   "examples": [
+    "Convert this page to Lyra.",
+    "Here is a link to one of our pages, make it Lyra and tell me what my developers need to do.",
+    "Lyra-ify this page and give me something I can hand to engineering."
+   ]
+  },
+  {
+   "id": "feature-handoff",
+   "title": "Developer handoff package",
+   "group": "handoff",
+   "clients": "both",
+   "question": "Can Claude turn this feature into something my developer’s Claude can build, check and merge, not just a picture?",
+   "what": "Builds the handoff for a new feature or a page rebuild: production-API React code on the real Lyra components, a component manifest, integration points for AG Grid and charts, acceptance gates a developer runs in one call, a gap log, a ready Jira ticket, a task file for the developer’s Claude, and a shareable Claude Design link for comments.",
+   "benefit": "Product gets a link to share and comment on, and developers get code and checks they can merge, instead of redoing the design from a screenshot.",
+   "tools": [
+    "get_component_kit",
+    "get_component_api",
+    "check_acceptance",
+    "run_full_audit",
+    "screenshot_page",
+    "switch_tab"
+   ],
+   "defaultFavorite": true,
+   "examples": [
+    "Package this feature so my developer can build it.",
+    "Make the handoff for this screen, with the code and a Jira ticket.",
+    "What does my developer need to merge this, and can you generate it?"
+   ]
+  },
+  {
+   "id": "jira-intake",
+   "title": "Build from a Jira ticket",
+   "group": "handoff",
+   "clients": "both",
+   "question": "Can Claude read my Jira ticket, build the feature, and put the link and results back on the ticket?",
+   "what": "Reads a ticket through the Atlassian connector, confirms the understanding in one line, builds the Lyra feature and its developer handoff, then comments on the ticket with the review link, acceptance results and gaps. Never creates or moves tickets.",
+   "benefit": "The ticket is the brief, so nobody retypes it, and the result lands where the team already looks.",
+   "tools": [
+    "get_component_kit",
+    "get_component_api",
+    "check_acceptance"
+   ],
+   "examples": [
+    "Build CXUX-1234 in Lyra.",
+    "Here is the Jira ticket, make the feature and put the link back on it.",
+    "Read this ticket and tell me what you would build, then build it."
+   ]
+  },
+  {
+   "id": "design-review-comments",
+   "title": "Apply review comments",
+   "group": "handoff",
+   "clients": "both",
+   "question": "People commented on my Claude Design file: can Claude apply the feedback and reply on each thread?",
+   "what": "Reads the comments on a Claude Design file, groups them, applies each change with the real Lyra components, replies on every thread, re-checks the acceptance gates and updates the handoff.",
+   "benefit": "Review rounds finish without a person in the middle, and nothing slips past the design system gates.",
+   "tools": [
+    "get_component_kit",
+    "check_acceptance",
+    "switch_tab",
+    "screenshot_page"
+   ],
+   "examples": [
+    "People commented on the design, apply the feedback.",
+    "What did reviewers say on this Claude Design file, and can you fix it?",
+    "Address the comments and reply on each one."
+   ]
+  },
+  {
    "id": "lyra-visual-patterns",
    "title": "Lyra visual patterns",
    "group": "convert",
@@ -1127,6 +1392,30 @@
     "Make this live page look like my selected artboard.",
     "Show me the mapping from artboard layers to page selectors before applying.",
     "Push the artboard styling onto the page as CSS overrides."
+   ]
+  },
+  {
+   "id": "browser-control",
+   "title": "Browser control",
+   "group": "qa",
+   "clients": "chrome",
+   "question": "Can Claude move around the browser for me: switch tabs, open a link, scroll, click, and fix the connection if it breaks?",
+   "what": "Drives Chrome step by step with switch_tab, scroll_page and click_element so Claude can reach and audit any page or state, and recovers a broken bridge with restart_hub.",
+   "benefit": "Hands-free multi-page and multi-state audits, and a clear recovery path when the connection goes stale.",
+   "tools": [
+    "list_targets",
+    "get_diagnostics",
+    "restart_hub",
+    "list_tabs",
+    "switch_tab",
+    "scroll_page",
+    "click_element",
+    "screenshot_page"
+   ],
+   "examples": [
+    "Open this Claude Design link, scroll to the table and audit it.",
+    "Switch to my Storybook tab and click through the Tabs examples.",
+    "The connection looks stale, restart it and carry on."
    ]
   },
   {
@@ -1251,9 +1540,9 @@
    "title": "Lyra UI prototyping",
    "group": "prototype",
    "clients": "both",
-   "question": "Can Claude build a working prototype from the real Lyra components, at 100% Lyra, and tell me what Lyra cannot do yet?",
-   "what": "The official skill for coded prototypes. Builds a real, clickable prototype (React first, Angular where React has no component) from the actual Lyra components in the Storybook the plugin syncs, holds it to 100% Lyra tokens and components, audits the live page in Chrome until it scores 100, and ships a GAPS.md listing everything Lyra does not have.",
-   "benefit": "A demo that is actually Lyra, proven by a live audit score, plus an honest list of what is missing instead of look-alikes standing in for it.",
+   "question": "Can Claude just build me a Lyra prototype, with the real components, and check its own work?",
+   "what": "The default for any \"build me a Lyra prototype\", in any form (Claude Code project, changes to existing files, artifact, Claude Design file, hosted project). Automatic, no questions about tooling: builds from the real Lyra components that ship inside NiCE Designer, labels every element as real, fallback or hand-built, audits itself, fixes, and reports. Asks for a screenshot or link only when the kit lacks a variant.",
+   "benefit": "Product people say what they want and get a screen made of the real components, with the real-versus-fake ledger, a score and a layout check, and Erick Mathews named for issues. No repo, package or access needed.",
    "tools": [
     "list_targets",
     "select_page",
@@ -1267,6 +1556,30 @@
     "Build a clickable prototype of this screen from the real Lyra components.",
     "Prototype this flow in React at 100 percent Lyra and tell me what Lyra is missing.",
     "Code up a working demo of this admin page and audit it until it scores 100."
+   ]
+  },
+  {
+   "id": "claude-design-loop",
+   "title": "Claude Design loop",
+   "group": "prototype",
+   "clients": "chrome",
+   "question": "Can Claude build or open my Claude Design file or artifact, score it against Lyra, correct it, and keep going until it hits a target?",
+   "what": "The automated loop for Claude Design and claude.ai artifacts: builds or opens the file, audits the design itself (never Claude’s own interface), reports the score and a category table, corrects the file as a switchable Lyra tweak or in place, re-audits, and repeats. Offers options depending on what you give it: report only, auto-correct to a target, or a brief for Claude Design.",
+   "benefit": "Claude Design and artifact work gets a score, a fix and a proof in one conversation, with the false positives and regressions that real files throw up already known.",
+   "tools": [
+    "list_targets",
+    "switch_tab",
+    "run_full_audit",
+    "export_design_tokens",
+    "screenshot_page",
+    "scroll_page",
+    "click_element",
+    "get_audit_filters"
+   ],
+   "examples": [
+    "Build me a Lyra prototype in Claude Design and keep fixing it until it scores 90.",
+    "Here is my Claude Design link, audit it against Lyra and tell me what to fix.",
+    "Add a Lyra corrections switch to this artifact and show me the before and after score."
    ]
   },
   {

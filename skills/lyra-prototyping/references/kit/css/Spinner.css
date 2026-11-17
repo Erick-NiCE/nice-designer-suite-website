@@ -1,0 +1,26 @@
+/* Spinner: real stylesheet from the SOL/Lyra Storybook. Generated 2026-11-16. */
+.sol-spinner.dark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; height: 1.5rem; }
+.sol-spinner.dark span.sol-spinner-bar { height: 1.25rem; width: 0.25rem; margin-right: 0.125rem; background-color: var(--sol-base-color-white); border-radius: 0.25rem; animation: 0.6s linear 0s infinite normal none running bar-animation; }
+.sol-spinner.dark span.sol-spinner-bar:nth-child(1) { animation-delay: 0.1s; }
+.sol-spinner.dark span.sol-spinner-bar:nth-child(2) { animation-delay: 0.2s; }
+.sol-spinner.dark span.sol-spinner-bar:nth-child(3) { animation-delay: 0.3s; }
+.sol-spinner.dark .sol-spinner-circle { width: 1.5rem; height: 1.5rem; display: inline-block; position: relative; }
+.sol-spinner.dark .sol-spinner-circle::after, .sol-spinner.dark .sol-spinner-circle::before { content: ""; box-sizing: border-box; width: 1.5rem; height: 1.5rem; border-radius: 50%; position: absolute; left: 0px; top: 0px; animation: 1s linear 0s infinite normal none running circle-animation; background: var(--sol-base-color-white); }
+.sol-spinner.dark .sol-spinner-circle::after { opacity: 0; animation-delay: 0.5s; }
+.sol-spinner.light { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; height: 1.5rem; }
+.sol-spinner.light span.sol-spinner-bar { height: 1.25rem; width: 0.25rem; margin-right: 0.125rem; background-color: var(--sol-base-color-brand-60); border-radius: 0.25rem; animation: 0.6s linear 0s infinite normal none running bar-animation; }
+.sol-spinner.light span.sol-spinner-bar:nth-child(1) { animation-delay: 0.1s; }
+.sol-spinner.light span.sol-spinner-bar:nth-child(2) { animation-delay: 0.2s; }
+.sol-spinner.light span.sol-spinner-bar:nth-child(3) { animation-delay: 0.3s; }
+.sol-spinner.light .sol-spinner-circle { width: 1.5rem; height: 1.5rem; display: inline-block; position: relative; }
+.sol-spinner.light .sol-spinner-circle::after, .sol-spinner.light .sol-spinner-circle::before { content: ""; box-sizing: border-box; width: 1.5rem; height: 1.5rem; border-radius: 50%; position: absolute; left: 0px; top: 0px; animation: 1s linear 0s infinite normal none running circle-animation; background: var(--sol-base-color-gray-60); }
+.sol-spinner.light .sol-spinner-circle::after { opacity: 0; animation-delay: 0.5s; }
+@keyframes circle-animation { 
+  0% { transform: scale(0); opacity: 1; }
+  100% { transform: scale(1); opacity: 0; }
+}
+@keyframes bar-animation { 
+  0% { height: 0.125rem; opacity: 0.3; }
+  50% { height: 1.25rem; opacity: 1; }
+  100% { height: 0.125rem; opacity: 0.3; }
+}

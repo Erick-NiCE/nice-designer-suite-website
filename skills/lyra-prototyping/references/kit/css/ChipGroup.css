@@ -1,0 +1,32 @@
+/* ChipGroup: real stylesheet from the SOL/Lyra Storybook. Generated 2026-11-16. */
+.sol-chip-group { max-width: 100%; height: 100%; }
+.sol-chip-group .sol-tags-wrapper { display: flex; height: 100%; gap: var(--sol-size-spacing-xs); }
+.sol-chip-group .sol-tags-wrapper.chip-group-show-all { flex-wrap: wrap; }
+.sol-chip-group .sol-tags-wrapper > .sol-tag-list { display: contents; }
+.sol-chip-group .sol-tags-wrapper > .sol-tag-list > .sol-tag-horizontal { align-items: center; display: flex; line-height: 1; min-width: 0px; }
+.sol-chip-group .sol-tags-wrapper > .sol-tag-list > .sol-tag-horizontal .sol-chip { min-width: 0px; max-width: 100%; flex: 1 1 0%; width: 100%; }
+.sol-chip-group .sol-tags-wrapper > .sol-tag-list > .sol-tag-horizontal:last-child { margin-right: 0px; }
+.sol-chip-group .sol-chip-group-buttons-container { display: inline-flex; gap: var(--sol-size-spacing-xs); align-items: center; line-height: 1; flex-shrink: 0; }
+.sol-chip-group .sol-chip-group-buttons-container .show-more.sol-button { padding: 0px 0.3rem; min-width: unset; }
+.sol-chip-group .sol-chip-group-buttons-container .clear-all.sol-button { min-width: unset; }
+.sol-chip-group .focusable-chip { cursor: pointer; appearance: none; border-width: medium; border-style: none; border-color: currentcolor; border-image: none; background: none; padding: 0px; }
+.sol-chip-group .focusable-chip:focus-visible { outline: solid var(--sol-color-border-focus-default) var(--sol-size-border-default); }
+.sol-chip-group .focusable-chip.medium { height: calc(var(--sol-size-control-md)); border-radius: 0.25rem; }
+.sol-chip-group .focusable-chip.medium:focus-visible { outline-offset: 0.187rem; }
+.sol-chip-group .focusable-chip.small { height: calc(var(--sol-size-control-sm)); border-radius: 0.25rem; }
+.sol-chip-group .focusable-chip.small:focus-visible { outline-offset: 0.125rem; }
+.sol-chip-group .show-less { display: inline-block; }
+.sol-chip-group .sol-chip.medium .remove-icon button { width: var(--sol-size-control-md); min-width: var(--sol-size-control-md); }
+.sol-chip-group .sol-chip.small .remove-icon button { width: var(--sol-size-control-sm); min-width: var(--sol-size-control-sm); }
+.sol-chip-group .invisible { visibility: hidden; position: absolute; }
+.sol-chip-group-popover { box-sizing: border-box; position: relative; border-radius: var(--sol-size-radius-md); border: 1px solid var(--sol-color-border-standard); background: var(--sol-color-background-surface-overlay); box-shadow: var(--sol-effect-overlayshadow); font-family: var(--sol-typography-body-lg-font-family); font-size: 0.875rem; overflow: visible auto; display: flex; padding: var(--sol-size-spacing-xs) var(--sol-size-spacing-xs) 0; max-width: 12.5rem; max-height: 16.6rem; }
+.sol-chip-group-popover.medium { max-height: 20.6rem; }
+.sol-chip-group-popover > div { max-width: 100%; }
+.sol-chip-group-popover .tag-row { padding-bottom: var(--sol-size-spacing-xs); max-width: 100%; }
+.sol-chip-group-popover .tag-row:first-child { padding-top: 0px; }
+.sol-chip-group-popover .sol-chip.medium { display: block; max-width: 100%; }
+.sol-chip-group-popover .sol-chip.medium .remove-icon button { width: var(--sol-size-control-md); min-width: var(--sol-size-control-md); }
+.sol-chip-group-popover .sol-chip.small { display: block; max-width: 100%; }
+.sol-chip-group-popover .sol-chip.small .remove-icon button { width: var(--sol-size-control-sm); min-width: var(--sol-size-control-sm); }
+.sol-chip-group-popover .tippy-box[data-theme~="tooltip"] { max-width: min(20rem, -2rem + 100vw); }
+.sol-chip-group-popover .tippy-box[data-theme~="tooltip"] .tippy-content { max-width: min(20rem, -2rem + 100vw); white-space: normal; word-break: break-word; overflow-wrap: break-word; }

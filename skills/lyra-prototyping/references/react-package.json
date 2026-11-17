@@ -1,0 +1,10 @@
+{
+  "_comment": "Curated, never generated. Verified 2026-11-17 from the SOL React Storybook API docs (Button and RadioButton pages): components import from per-component subpaths of @niceltd/sol-react, names carry the SOL prefix, e.g. import { SOLButton } from '@niceltd/sol-react/button'; import { SOLRadioGroup, SOLRadioButton } from '@niceltd/sol-react/radio-button'. Types come from @niceltd/sol-shared. Angular imports from @niceltd/sol-angular/<component>.",
+  "name": "@niceltd/sol-react",
+  "verified": true,
+  "guess": "@niceltd/sol-react",
+  "angularPackage": "@niceltd/sol-angular",
+  "importStyle": "subpath",
+  "subpathExample": "import { SOLButton } from '@niceltd/sol-react/button';",
+  "typesPackage": "@niceltd/sol-shared"
+}

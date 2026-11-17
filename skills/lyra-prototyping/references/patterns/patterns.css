@@ -1,0 +1,101 @@
+/* NiCE Designer fallback patterns for things the SOL/Lyra Storybook has no component for.
+   Written by NiCE Designer from Lyra tokens only (no literal colors, sizes or fonts). They are NOT
+   Storybook components: mark every use data-nds-source="fallback". Replace one the day the
+   design system ships a real component. */
+.nds-top-bar{display:flex;align-items:center;gap:var(--sol-size-spacing-lg);min-height:var(--sol-size-control-xl);padding:0 var(--sol-size-spacing-lg);background:var(--sol-color-background-surface-suite-navigation);color:var(--sol-color-text-default);border-bottom:var(--sol-size-border-default) solid var(--sol-color-border-standard)}
+.nds-top-bar-brand{font:inherit;font-weight:600;white-space:nowrap}
+.nds-top-bar-nav{display:flex;gap:var(--sol-size-spacing-3xs);margin:0;padding:0;list-style:none;flex:1;min-width:0}
+.nds-top-bar-link{display:inline-flex;align-items:center;min-height:var(--sol-size-control-md);padding:0 var(--sol-size-spacing-sm);border-radius:var(--sol-size-radius-sm);color:inherit;text-decoration:none;white-space:nowrap}
+.nds-top-bar-link:hover{background:var(--sol-color-background-state-hover-neutral)}
+.nds-top-bar-link[aria-current="page"]{background:var(--sol-color-background-selected-subtle);font-weight:600}
+.nds-top-bar-link:focus-visible,.nds-side-nav-link:focus-visible{outline:2px solid var(--sol-color-border-focus-default,currentColor);outline-offset:2px}
+.nds-top-bar-actions{display:flex;align-items:center;gap:var(--sol-size-spacing-xs)}
+
+.nds-side-nav{display:flex;flex-direction:column;gap:var(--sol-size-spacing-3xs);width:14rem;padding:var(--sol-size-spacing-xs);background:var(--sol-color-background-surface-in-app-navigation);border-right:var(--sol-size-border-default) solid var(--sol-color-border-standard)}
+.nds-side-nav-link{display:flex;align-items:center;gap:var(--sol-size-spacing-xs);min-height:var(--sol-size-control-md);padding:0 var(--sol-size-spacing-sm);border-radius:var(--sol-size-radius-sm);color:var(--sol-color-text-default);text-decoration:none}
+.nds-side-nav-link:hover{background:var(--sol-color-background-state-hover-neutral)}
+.nds-side-nav-link[aria-current="page"]{background:var(--sol-color-background-selected-subtle);font-weight:600}
+
+.nds-page-header{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--sol-size-spacing-md);padding:var(--sol-size-spacing-md) 0}
+.nds-page-header-title{margin:0}
+.nds-page-header-meta{margin:var(--sol-size-spacing-3xs) 0 0;color:var(--sol-color-text-secondary,inherit)}
+.nds-page-header-actions{display:flex;gap:var(--sol-size-spacing-xs);flex-wrap:wrap}
+
+.nds-stat{display:flex;flex-direction:column;gap:var(--sol-size-spacing-3xs);min-width:128px;padding:var(--lyra-spacing-3) var(--lyra-spacing-4);border:1px solid var(--lyra-color-border-subtle);border-radius:var(--lyra-radius-md);background:var(--lyra-color-bg-surface-container)}
+.nds-stat-label{color:var(--sol-color-text-secondary,inherit)}
+.nds-stat-value{margin:0;font-variant-numeric:tabular-nums}
+.nds-stat-delta{font-variant-numeric:tabular-nums}
+.nds-stat-delta[data-trend="good"]{color:var(--sol-color-text-status-success,inherit)}
+.nds-stat-delta[data-trend="bad"]{color:var(--sol-color-text-status-critical,inherit)}
+
+.nds-pill{display:inline-flex;align-items:center;gap:var(--sol-size-spacing-3xs);padding:0 var(--sol-size-spacing-xs);min-height:var(--sol-size-control-xs);border-radius:var(--sol-size-radius-round);white-space:nowrap;background:var(--sol-color-background-control-subtle);color:var(--sol-color-text-default)}
+.nds-pill::before{content:"";width:var(--sol-size-spacing-xs);height:var(--sol-size-spacing-xs);border-radius:var(--sol-size-radius-round);background:currentColor}
+.nds-pill[data-status="success"]{background:var(--sol-color-background-status-success-subtle)}
+.nds-pill[data-status="success"]::before{background:var(--sol-color-background-status-success-strong)}
+.nds-pill[data-status="info"]{background:var(--sol-color-background-status-info-subtle)}
+.nds-pill[data-status="info"]::before{background:var(--sol-color-background-status-info-strong)}
+.nds-pill[data-status="warning"]{background:var(--sol-color-background-status-warning-subtle)}
+.nds-pill[data-status="warning"]::before{background:var(--sol-color-background-status-warning-strong)}
+.nds-pill[data-status="critical"]{background:var(--sol-color-background-status-critical-subtle)}
+.nds-pill[data-status="critical"]::before{background:var(--sol-color-background-status-critical-strong)}
+
+.nds-table-wrap{overflow:auto;border:var(--sol-size-border-default) solid var(--sol-color-border-standard);border-radius:var(--sol-size-radius-md);background:var(--sol-color-background-surface-grid)}
+.nds-table{width:100%;border-collapse:collapse;color:var(--sol-color-text-default)}
+.nds-table caption{text-align:left;padding:var(--sol-size-spacing-sm) var(--sol-size-spacing-md)}
+.nds-table th,.nds-table td{padding:0 var(--sol-size-spacing-md);height:var(--sol-size-gridrow-md);text-align:left;white-space:nowrap;border-bottom:var(--sol-size-border-default) solid var(--sol-color-border-standard)}
+.nds-table th{position:sticky;top:0;background:var(--sol-color-background-surface-toolbar,var(--sol-color-background-surface-grid));font-weight:600}
+.nds-table td[data-numeric],.nds-table th[data-numeric]{text-align:right;font-variant-numeric:tabular-nums}
+.nds-table tbody tr:hover{background:var(--sol-color-background-state-hover-neutral)}
+.nds-table tbody tr:last-child td{border-bottom:0}
+
+/* ===== Lyra suite shell (app-shell). Spec: CXone Lyra design system, Suite Shell. ===== */
+.nds-shell{display:grid;grid-template-rows:56px 1fr;grid-template-columns:232px 1fr;grid-template-areas:"top top" "nav main";min-height:100vh;background:var(--lyra-color-bg-surface-shell);color:var(--lyra-color-fg-default);font-family:"Lyra Sans",Inter,system-ui,sans-serif}
+.nds-shell--no-rail{grid-template-columns:1fr;grid-template-areas:"top" "main"}
+.nds-grow{flex:1}
+.nds-shell-top{grid-area:top;display:flex;align-items:center;gap:var(--lyra-spacing-1);padding:0 var(--lyra-spacing-4);background:var(--lyra-color-bg-surface-shell)}
+.nds-shell-brand{display:flex;align-items:center;min-width:var(--lyra-spacing-6);color:var(--lyra-color-fg-default);text-decoration:none}
+.nds-shell-mark{display:inline-flex;width:var(--lyra-spacing-6);height:var(--lyra-spacing-6)}
+.nds-shell-mark svg{width:100%;height:100%}
+.nds-shell-product{margin-left:var(--lyra-spacing-2)}
+.nds-badge-anchor{position:relative;display:inline-flex}
+.nds-dot-badge{position:absolute;top:0;right:0;display:flex;align-items:center;justify-content:center;min-width:var(--lyra-spacing-4);height:var(--lyra-spacing-4);padding:0 var(--lyra-spacing-1);box-sizing:border-box;border:2px solid var(--lyra-color-bg-surface-shell);border-radius:var(--lyra-radius-round);background:var(--lyra-color-bg-destructive);color:var(--lyra-color-fg-inverse);pointer-events:none}
+.nds-hdr-avatar{display:inline-flex;align-items:center;gap:var(--lyra-spacing-1);padding:var(--lyra-spacing-05) var(--lyra-spacing-1) var(--lyra-spacing-05) var(--lyra-spacing-05);margin-left:var(--lyra-spacing-1);border:0;border-radius:var(--lyra-radius-round);background:transparent;color:var(--lyra-color-fg-action);cursor:pointer}
+.nds-hdr-avatar:hover{background:var(--lyra-color-state-bg-hover-opacity)}
+.nds-hdr-avatar:focus-visible{outline:2px solid var(--lyra-color-border-focus-default);outline-offset:2px}
+.nds-ava{display:inline-flex;align-items:center;justify-content:center;width:var(--lyra-spacing-8);height:var(--lyra-spacing-8);border-radius:var(--lyra-radius-round);background:var(--lyra-color-bg-surface-inverse);color:var(--lyra-color-fg-inverse)}
+.nds-shell-nav{grid-area:nav;display:flex;flex-direction:column;gap:var(--lyra-spacing-05);padding:var(--lyra-spacing-1) var(--lyra-spacing-3) var(--lyra-spacing-4);overflow:auto;background:var(--lyra-color-bg-surface-shell)}
+.nds-nav-item{display:flex;align-items:center;gap:var(--lyra-spacing-2);padding:var(--lyra-spacing-2) var(--lyra-spacing-3);border-radius:var(--lyra-radius-sm);color:var(--lyra-color-fg-default);text-decoration:none}
+.nds-nav-item svg{width:var(--lyra-spacing-4);height:var(--lyra-spacing-4);flex:none;color:var(--lyra-color-fg-action)}
+.nds-nav-item:hover{background:var(--lyra-color-state-bg-hover-opacity)}
+.nds-nav-item[aria-current="page"]{background:var(--lyra-color-bg-active-subtle);color:var(--lyra-color-fg-active-strong)}
+.nds-nav-item[aria-current="page"] svg{color:var(--lyra-color-fg-active-strong)}
+.nds-nav-item:focus-visible{outline:2px solid var(--lyra-color-border-focus-default);outline-offset:2px}
+.nds-shell-main{grid-area:main;display:flex;flex-direction:column;gap:var(--lyra-spacing-2);min-height:0;padding:var(--lyra-spacing-2) var(--lyra-spacing-3) var(--lyra-spacing-3) 0}
+.nds-shell--no-rail .nds-shell-main{padding-left:var(--lyra-spacing-3)}
+.nds-pane{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden;background:var(--lyra-color-bg-surface-container);border:1px solid var(--lyra-color-border-subtle);border-radius:var(--lyra-radius-lg)}
+.nds-crumbs{padding:var(--lyra-spacing-4) var(--lyra-spacing-6) 0}
+.nds-pane-head{display:flex;align-items:center;gap:var(--lyra-spacing-3);padding:var(--lyra-spacing-4) var(--lyra-spacing-6)}
+.nds-pane-title{flex:1;margin:0;min-width:0}
+.nds-pane-actions{display:flex;align-items:center;gap:var(--lyra-spacing-2)}
+.nds-pane-body{flex:1;min-height:0;overflow:auto;padding:0 var(--lyra-spacing-6) var(--lyra-spacing-6)}
+.nds-ai-spark{display:inline-flex;align-items:center;justify-content:center;width:var(--lyra-spacing-8);height:var(--lyra-spacing-8);border:1px solid var(--lyra-color-border-subtle);border-radius:var(--lyra-radius-md);background:var(--lyra-color-bg-surface-container);color:var(--lyra-base-color-purple-500);cursor:pointer}
+.nds-ai-spark:hover{border-color:var(--lyra-base-color-purple-500)}
+
+/* ===== Filter toolbar, KPI strip, empty state, app switcher ===== */
+.nds-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:var(--lyra-spacing-2);padding:0 0 var(--lyra-spacing-4)}
+.nds-toolbar-search{flex:0 0 244px}
+.nds-add-filter{display:inline-flex;align-items:center;gap:var(--lyra-spacing-1);min-height:var(--sol-size-control-md);padding:0 var(--lyra-spacing-3);border:1px dashed var(--lyra-color-border-medium);border-radius:var(--lyra-radius-sm);background:transparent;color:var(--lyra-color-fg-action);cursor:pointer}
+.nds-add-filter:hover{background:var(--lyra-color-state-bg-hover-opacity);color:var(--lyra-color-fg-default)}
+.nds-clear-link{padding:0 var(--lyra-spacing-2);border:0;background:none;color:var(--lyra-color-fg-action);cursor:pointer;min-height:var(--sol-size-control-md)}
+.nds-clear-link:hover{color:var(--lyra-color-fg-default)}
+.nds-kpi-strip{display:flex;flex-wrap:wrap;gap:var(--lyra-spacing-3);padding:0 0 var(--lyra-spacing-4)}
+.nds-kpi-strip .nds-stat[aria-current="true"]{background:var(--lyra-color-bg-active-subtle);border-color:var(--lyra-color-border-active);box-shadow:0 0 0 1px var(--lyra-color-border-active)}
+.nds-empty{display:flex;flex-direction:column;align-items:center;gap:var(--lyra-spacing-3);padding:var(--lyra-spacing-9) var(--lyra-spacing-6);text-align:center;color:var(--lyra-color-fg-default)}
+.nds-empty-icon{display:inline-flex;align-items:center;justify-content:center;width:var(--lyra-spacing-9);height:var(--lyra-spacing-9);border-radius:var(--lyra-radius-round);background:var(--lyra-color-bg-surface-shell);color:var(--lyra-color-fg-action)}
+.nds-empty-title{margin:0}
+.nds-empty-body{margin:0;max-width:40ch;color:var(--lyra-color-fg-secondary)}
+.nds-switcher{width:240px;padding:var(--lyra-spacing-2);border:1px solid var(--lyra-color-border-subtle);border-radius:var(--lyra-radius-lg);background:var(--lyra-color-bg-surface-container);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.nds-switcher-section + .nds-switcher-section{margin-top:var(--lyra-spacing-2);padding-top:var(--lyra-spacing-2);border-top:1px solid var(--lyra-color-border-subtle)}
+.nds-switcher-item{display:flex;align-items:center;gap:var(--lyra-spacing-3);padding:var(--lyra-spacing-2) var(--lyra-spacing-3);border-radius:var(--lyra-radius-sm);color:var(--lyra-color-fg-default);text-decoration:none}
+.nds-switcher-item:hover{background:var(--lyra-color-state-bg-hover-opacity)}
+.nds-switcher-item[aria-current="true"]{background:var(--lyra-color-bg-active-subtle);color:var(--lyra-color-fg-active-strong)}

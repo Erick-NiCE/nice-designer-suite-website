@@ -1,0 +1,6 @@
+/* ErrorMessage: real stylesheet from the SOL/Lyra Storybook. Generated 2026-11-16. */
+.sol-error-message-container { min-height: var(--sol-size-control-xs); line-height: var(--sol-size-control-xs); margin-top: var(--sol-size-spacing-2xs); max-width: 100%; overflow-wrap: break-word; }
+.sol-error-message-container:has(> .sol-error-message) { color: var(--sol-color-text-status-critical); }
+.sol-error-message-container:has(> .sol-info-message) { color: var(--sol-color-text-secondary); }
+.sol-error-message-container .sol-error-icon { margin-right: var(--sol-size-spacing-2xs); }
+.sol-error-message-container .sol-error-icon .sol-icon { display: inline-block; }

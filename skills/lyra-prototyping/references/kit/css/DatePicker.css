@@ -1,0 +1,24 @@
+/* DatePicker: real stylesheet from the SOL/Lyra Storybook. Generated 2026-11-16. */
+.sol-date-picker { display: flex; flex-direction: column; width: 100%; box-sizing: border-box; }
+.sol-date-picker .sol-label { margin-bottom: var(--sol-size-spacing-2xs); }
+.sol-date-picker .sol-input-container-date-picker { display: flex; gap: var(--sol-size-spacing-2xs); width: 100%; }
+.sol-date-picker .sol-input-container-date-picker .input-text { width: 100%; display: flex; gap: var(--sol-size-spacing-2xs); }
+.sol-date-picker .sol-input-container-date-picker .input-text .input-wrapper { flex-grow: 1; max-width: 45rem; position: relative; }
+.sol-date-picker .sol-input-container-date-picker .input-text .input-wrapper .sol-input-container { padding-right: 0px; }
+.sol-date-picker .sol-input-container-date-picker .input-text .input-wrapper .sol-input-container:has(.sol-icon-button) { padding-right: var(--sol-size-spacing-xs); }
+.sol-date-picker .sol-input-container-date-picker .input-text .input-wrapper .sol-input-container sol-icon, .sol-date-picker .sol-input-container-date-picker .input-text .input-wrapper .sol-input-container .sol-icon-host { width: var(--sol-size-control-lg); height: var(--sol-size-control-lg); }
+.sol-date-picker .sol-input-container-date-picker .input-text .input-wrapper .sol-input-container sol-icon path, .sol-date-picker .sol-input-container-date-picker .input-text .input-wrapper .sol-input-container .sol-icon-host path { fill: var(--sol-color-icon-action); }
+.sol-date-picker .sol-input-container-date-picker .input-text .input-wrapper .sol-input-container.disabled sol-icon path, .sol-date-picker .sol-input-container-date-picker .input-text .input-wrapper .sol-input-container.disabled .sol-icon-host path { fill: var(--sol-color-icon-disabled); }
+.sol-date-picker .sol-input-container-date-picker .input-text .input-wrapper .sol-input-container.disabled input { color: var(--sol-color-text-disabled); }
+.sol-date-picker .button-container { display: flex; gap: var(--sol-size-spacing-2xs); margin-top: 0px; }
+.sol-date-picker .button-container svg { fill: var(--sol-color-icon-action); }
+.sol-date-picker-popup { pointer-events: none; }
+.sol-datepicker-wrapper { pointer-events: auto; background: var(--sol-color-background-surface-overlay); border: var(--sol-size-border-default) solid var(--sol-color-border-standard); box-shadow: var(--sol-effect-overlayshadow); border-radius: var(--sol-size-radius-md); overflow-x: auto; margin: 0.25rem 0px; box-sizing: content-box; }
+.sol-datepicker-wrapper .date-time-container { display: flex; position: relative; width: 30.5rem; }
+.sol-datepicker-wrapper .date-time-container.no-time { width: 20.5rem; }
+.sol-datepicker-wrapper .date-time-container .calendar-container { width: 20.5rem; position: relative; }
+.sol-datepicker-wrapper .date-time-container .calendar-container .sol-calendar { display: block; height: 23rem; overflow: hidden; }
+.sol-datepicker-wrapper .date-time-container .timepicker-container { box-sizing: border-box; position: absolute; top: 0px; bottom: 0px; right: 0px; border-left: var(--sol-size-border-default) solid var(--sol-color-border-standard); width: 10rem; padding: var(--sol-size-spacing-xs); }
+.sol-datepicker-wrapper .date-time-container .timepicker-container .timepicker { height: 100%; }
+.sol-datepicker-wrapper .footer { width: 100%; border-top: var(--sol-size-border-default) solid var(--sol-color-border-standard); display: flex; justify-content: center; box-sizing: border-box; padding: var(--sol-size-spacing-md) var(--sol-size-spacing-sm) var(--sol-size-spacing-sm); }
+.sol-datepicker-wrapper .footer .sol-button.btn-tertiary-medium:focus-visible { font-weight: var(--sol-typography-body-md-emphasized-font-weight); color: var(--sol-color-text-default); }

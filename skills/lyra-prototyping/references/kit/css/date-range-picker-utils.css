@@ -1,0 +1,66 @@
+/* date-range-picker-utils: real stylesheet from the SOL/Lyra Storybook. Generated 2026-11-16. */
+.sol-date-range-container .date-range-subcontainer { display: flex; gap: var(--sol-size-spacing-2xs); }
+.sol-date-range-container .sol-input-container .input-subcontainer { display: flex; flex: 1 1 0%; align-items: center; gap: var(--sol-size-spacing-xs); }
+.sol-date-range-container .sol-input-container .sol-input { flex: 1 1 0%; min-width: 0px; }
+.sol-date-range-container .sol-input-container .sol-input::selection { background-color: var(--sol-color-background-selected-strong); color: var(--sol-color-text-inverse); }
+.sol-date-range-container .sol-input-container .sol-input:read-only { cursor: default; }
+.sol-date-range-container .sol-input-container .date-separator { user-select: none; }
+.sol-date-range-container .sol-input-container .sol-calendar-icon.sol-input-trailing-button { cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.sol-date-range-container .sol-input-container .sol-calendar-icon.sol-input-trailing-button:focus-visible { outline: var(--sol-size-border-medium) solid var(--sol-color-border-focus-default); outline-offset: var(--sol-size-spacing-3xs); border-radius: var(--sol-size-radius-sm); }
+.sol-date-range-container .sol-input-container:not(.readonly):focus-within { border-color: var(--sol-color-border-selected); }
+.sol-date-range-container .sol-input-container.error-border:focus-within { border-color: var(--sol-color-border-status-critical); }
+.sol-date-range-container .sol-input-container.disabled .sol-input, .sol-date-range-container .sol-input-container.disabled .date-separator { color: var(--sol-color-text-disabled); }
+.sol-date-range-container .sol-input-container.disabled .sol-calendar-icon svg, .sol-date-range-container .sol-input-container.disabled .sol-calendar-icon path { fill: var(--sol-color-icon-disabled); }
+.sol-date-range-container .sol-input-container.readonly .sol-calendar-icon { cursor: default; }
+.sol-date-range-container .sol-input-container.readonly .sol-calendar-icon:hover { background-color: transparent; border-color: transparent; }
+.sol-date-range-container .sol-input-container.readonly .sol-calendar-icon svg, .sol-date-range-container .sol-input-container.readonly .sol-calendar-icon path { fill: var(--sol-color-icon-action); }
+.sol-date-range-container .sol-input-container.readonly .sol-calendar-icon.icon-clickable { cursor: pointer; }
+.sol-date-range-container .sol-input-container .sol-calendar-icon.sol-input-trailing-button.svg-disabled { pointer-events: none; cursor: default; }
+.sol-date-range-container .sol-input-container .sol-calendar-icon.sol-input-trailing-button.svg-disabled svg, .sol-date-range-container .sol-input-container .sol-calendar-icon.sol-input-trailing-button.svg-disabled path { fill: var(--sol-color-icon-disabled); }
+.sol-date-range-container .action-button-container { display: flex; gap: var(--sol-size-spacing-2xs); height: var(--sol-size-control-lg); }
+.date-range-picker-wrapper-popover { background: var(--sol-color-background-action-secondary); border: var(--sol-size-border-default) solid var(--sol-color-border-standard); box-shadow: 0 var(--sol-size-spacing-2xs) var(--sol-size-border-thick) var(--sol-color-elevation-overlay); border-radius: var(--sol-size-radius-sm); }
+.date-range-picker-wrapper { overflow-x: auto; margin: var(--sol-size-spacing-2xs) 0; }
+.date-range-picker-wrapper .time-options-container, .date-range-picker-wrapper .sol-label .sol-label-text { font-family: var(--sol-typography-body-md-font-family); font-size: var(--sol-typography-body-md-font-size); font-weight: var(--sol-typography-body-md-font-weight); line-height: var(--sol-typography-body-md-line-height); letter-spacing: var(--sol-typography-body-md-letter-spacing); color: var(--sol-color-text-default); }
+.date-range-picker-wrapper .date-range-time-container { box-sizing: border-box; width: 28.75rem; }
+.date-range-picker-wrapper .date-range-time-container .sol-tabs-tab:focus-visible { margin: var(--sol-size-spacing-2xs); }
+.date-range-picker-wrapper .date-range-time-container .sol-tabs-tab .sol-tabs-icon-text, .date-range-picker-wrapper .date-range-time-container .sol-tabs-tab .sol-tabs-icon-only { font-family: var(--sol-typography-heading-sm-font-family); font-size: var(--sol-typography-heading-sm-font-size); font-weight: var(--sol-typography-heading-sm-font-weight); line-height: var(--sol-typography-heading-sm-line-height); letter-spacing: var(--sol-typography-heading-sm-letter-spacing); }
+.date-range-picker-wrapper .date-range-time-container .date-time-container { display: flex; position: relative; height: 20.625rem; }
+.date-range-picker-wrapper .date-range-time-container .date-time-container .calendar-container { width: 17.5rem; }
+.date-range-picker-wrapper .date-range-time-container .date-time-container .calendar-container .sol-calendar { height: 20rem; }
+.date-range-picker-wrapper .date-range-time-container .date-time-container .timepicker-container { box-sizing: border-box; height: 100%; position: absolute; right: 0px; border-left: var(--sol-size-border-default) solid var(--sol-color-border-standard); width: 10rem; padding: 1.125rem; }
+.date-range-picker-wrapper .date-range-time-container .date-time-container .timepicker-container .timepicker { height: 100%; }
+.date-range-picker-wrapper .date-range-time-container .footer { box-sizing: border-box; width: 100%; padding: var(--sol-size-spacing-md) var(--sol-size-spacing-sm) var(--sol-size-spacing-sm); border-top: var(--sol-size-border-default) solid var(--sol-color-border-standard); display: flex; justify-content: space-between; gap: var(--sol-size-spacing-xs); }
+.date-range-picker-wrapper .date-range-time-container .footer .clear-button { display: flex; align-items: center; justify-content: center; flex: 1 1 0%; }
+.date-range-picker-wrapper .date-range-time-container .footer .clear-button sol-button { width: auto; }
+.date-range-picker-wrapper .date-range-time-container .footer .clear-button sol-button button { width: auto; justify-content: center; }
+.date-range-picker-wrapper .date-range-time-container .footer .clear-button sol-button button .projected-content { font-family: var(--sol-typography-body-md-font-family); font-size: var(--sol-typography-body-md-font-size); font-weight: var(--sol-typography-body-md-font-weight); line-height: var(--sol-typography-body-md-line-height); letter-spacing: var(--sol-typography-body-md-letter-spacing); }
+.date-range-picker-wrapper .date-range-time-container .footer .footer-buttons { display: flex; gap: var(--sol-size-spacing-xs); }
+.date-range-picker-wrapper .date-range-time-container .footer .footer-buttons sol-button button .projected-content { font-family: var(--sol-typography-body-md-emphasized-font-family); font-size: var(--sol-typography-body-md-emphasized-font-size); font-weight: var(--sol-typography-body-md-emphasized-font-weight); line-height: var(--sol-typography-body-md-emphasized-line-height); letter-spacing: var(--sol-typography-body-md-emphasized-letter-spacing); }
+.date-range-picker-wrapper .date-range-time-container .footer .footer-buttons .buttons-span { width: 7.125rem; }
+.date-range-picker-wrapper .date-range-container { display: flex; position: relative; }
+.date-range-picker-wrapper .date-range-container.no-leftpanel { width: 20.5rem; }
+.date-range-picker-wrapper .date-range-container.with-time { width: 29.75rem; }
+.date-range-picker-wrapper .date-range-container .list-container { display: flex; flex-direction: column; justify-content: space-between; width: 8.5rem; border-right: var(--sol-size-border-default) solid var(--sol-color-border-standard); }
+.date-range-picker-wrapper .date-range-container .list-container > div:first-child, .date-range-picker-wrapper .date-range-container .list-container .list-sub-container, .date-range-picker-wrapper .date-range-container .list-container .sol-select, .date-range-picker-wrapper .date-range-container .list-container .sol-options-list { display: flex; flex: 1 1 0%; flex-direction: column; min-height: 0px; max-height: none; }
+.date-range-picker-wrapper .date-range-container .list-container > div:first-child { contain: size; }
+.date-range-picker-wrapper .date-range-container .list-container .list-sub-container { margin-top: 0.3125rem; margin-bottom: 0.3125rem; }
+.date-range-picker-wrapper .date-range-container .list-container .list-sub-container .scroll-viewport { flex: 1 1 0%; height: 0px !important; }
+.date-range-picker-wrapper .date-range-container .list-container .list-sub-container .sol-select { border-width: medium; border-style: none; border-color: currentcolor; border-image: none; box-shadow: none; min-width: 0px; }
+.date-range-picker-wrapper .date-range-container .list-container .list-sub-container .sol-select .upper-container { flex-direction: unset; }
+.date-range-picker-wrapper .date-range-container .list-container hr { margin: 0px; border-style: solid; color: var(--sol-color-border-standard); }
+.date-range-picker-wrapper .date-range-container .list-container .last-x-days-container { box-sizing: border-box; width: 100%; padding: var(--sol-size-spacing-md) var(--sol-size-spacing-sm) var(--sol-size-spacing-sm); border-top: var(--sol-size-border-default) solid var(--sol-color-border-standard); display: flex; justify-content: center; align-items: center; }
+.date-range-picker-wrapper .date-range-container .list-container .last-x-days-container .last-x-days-button-container { display: flex; width: 100%; justify-content: center; }
+.date-range-picker-wrapper .date-range-container .list-container .last-x-days-container .last-x-days-button-container sol-button { width: 100%; }
+.date-range-picker-wrapper .date-range-container .list-container .last-x-days-container .last-x-days-button-container sol-button button { width: 100%; justify-content: center; }
+.date-range-picker-wrapper .date-range-container .sol-calendar-wrapper { width: 20.5rem; min-height: 26.8125rem; }
+.date-range-picker-wrapper .date-range-container .sol-calendar-wrapper .date-range-calendar-container { height: 23rem; }
+.date-range-picker-wrapper .date-range-container .sol-calendar-wrapper .footer-today { box-sizing: border-box; width: 100%; padding: var(--sol-size-spacing-md) var(--sol-size-spacing-sm) var(--sol-size-spacing-sm); border-top: var(--sol-size-border-default) solid var(--sol-color-border-standard); display: flex; justify-content: center; align-items: center; }
+.date-range-picker-wrapper .date-range-container .sol-calendar-wrapper .footer-today .footer-today-button-container { display: flex; width: 100%; justify-content: center; }
+.date-range-picker-wrapper .date-range-container .sol-calendar-wrapper .footer-today .footer-today-button-container sol-button { width: auto; }
+.date-range-picker-wrapper .date-range-container .sol-calendar-wrapper .footer-today .footer-today-button-container sol-button button { width: auto; justify-content: center; }
+.date-range-picker-wrapper .date-range-container .sol-calendar-wrapper .footer-today .footer-today-button-container sol-button button .projected-content { font-family: var(--sol-typography-body-md-font-family); font-size: var(--sol-typography-body-md-font-size); font-weight: var(--sol-typography-body-md-font-weight); line-height: var(--sol-typography-body-md-line-height); letter-spacing: var(--sol-typography-body-md-letter-spacing); }
+.date-range-picker-wrapper .date-range-container .sol-calendar-wrapper .numeric-selector-container { font-family: var(--sol-typography-body-md-emphasized-font-family); font-size: var(--sol-typography-body-md-emphasized-font-size); font-weight: var(--sol-typography-body-md-emphasized-font-weight); line-height: var(--sol-typography-body-md-emphasized-line-height); letter-spacing: var(--sol-typography-body-md-emphasized-letter-spacing); margin: var(--sol-size-spacing-xl); width: 17.5rem; }
+.date-range-picker-wrapper .date-range-container .sol-calendar-wrapper .numeric-selector-container h3 { font-family: var(--sol-typography-body-lg-font-family); font-size: var(--sol-typography-body-lg-font-size); font-weight: var(--sol-typography-body-lg-font-weight); line-height: var(--sol-typography-body-lg-line-height); letter-spacing: var(--sol-typography-body-lg-letter-spacing); margin-bottom: var(--sol-size-spacing-xs); }
+.date-range-picker-wrapper .date-range-container .sol-calendar-wrapper .buttons-container { display: flex; position: absolute; bottom: var(--sol-size-spacing-md); right: var(--sol-size-spacing-md); }
+.date-range-picker-wrapper .date-range-container .sol-calendar-wrapper .buttons-container .button-class { margin-left: var(--sol-size-spacing-sm); }
+.date-range-picker-wrapper .date-range-container .sol-calendar-wrapper .buttons-container .button-class .button-span-width { width: 7.75rem; }

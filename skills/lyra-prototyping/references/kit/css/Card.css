@@ -1,0 +1,7 @@
+/* Card: real stylesheet from the SOL/Lyra Storybook. Generated 2026-11-16. */
+.sol-card { padding: var(--sol-size-spacing-sm) var(--sol-size-spacing-md); border-radius: var(--sol-size-radius-md); border: var(--sol-size-border-default) solid var(--sol-color-border-standard); background-color: var(--sol-color-background-surface-card); box-shadow: var(--sol-effect-cardshadow); min-width: 9rem; }
+.sol-card.hoverable:hover { background-color: var(--sol-color-background-state-hover-neutral); }
+.sol-card .sol-card-footer { margin-top: var(--sol-size-spacing-2xs); padding-top: var(--sol-size-spacing-sm); }
+.sol-card.show-divider .sol-card-footer { margin-top: var(--sol-size-spacing-sm); border-top: var(--sol-size-border-default) solid var(--sol-color-border-subtle); }
+.sol-card--chat-user { background: var(--sol-color-background-chat-agent); border-width: medium; border-style: none; border-color: currentcolor; border-image: none; box-shadow: none; border-radius: var(--sol-size-radius-md); padding: var(--sol-size-spacing-xs) var(--sol-size-spacing-sm); box-sizing: border-box; max-width: 80%; margin-left: auto; min-width: unset; }
+.sol-card--chat-ai { background: transparent; border-width: medium; border-style: none; border-color: currentcolor; border-image: none; box-shadow: none; border-radius: var(--sol-size-radius-md); display: flex; flex-direction: column; padding: 0px; width: 100%; min-width: unset; }

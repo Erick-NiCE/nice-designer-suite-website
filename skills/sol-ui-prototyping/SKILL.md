@@ -101,6 +101,16 @@ Rules for it:
 
 Start every build from `references/not-available.md` (generated, provable) and `references/known-gaps.md` (curated) so a known gap is declared up front, not discovered late.
 
+## Fallback: the Claude design system library
+
+When Storybook has no component for a need (check `references/known-gaps.md`, then the live Storybook), do not draw a look-alike. Try the next source down, in this order, and record which one you used in `GAPS.md`:
+
+1. **The Claude design system library.** If the user has a design system in Claude (listed by the Artifact tool's quickstart, or a link they give you), look the component up there and read its README and component files. Use it only for the missing piece, restyled with the SOL tokens already in the build: its colors, type and spacing never replace the SOL tokens.
+2. **The plugin's fallback entry** in the Design System browser (for example Navigation), which names the real SOL parts to compose it from.
+3. **A gap row.** Name what is missing and stop.
+
+A component taken from the Claude library does **not** count toward SOL adherence and is a deliberate, listed exception, never a silent one.
+
 ## Library is read-only
 
 Do not edit SOL source or a vendored copy. If a component's real API cannot do what is asked, say so, add it to `GAPS.md`, and either compose around it with real SOL parts or tell the user it needs the SOL team.

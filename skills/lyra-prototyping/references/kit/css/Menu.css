@@ -1,0 +1,39 @@
+/* Menu: real stylesheet from the SOL/Lyra Storybook. Generated 2026-11-16. */
+#sol-menu-overlay-container { position: fixed; z-index: 1000; pointer-events: none; top: 0px; left: 0px; height: 100%; width: 100%; }
+.sol-menu-backdrop { position: fixed; inset: 0px; z-index: 0; pointer-events: auto; background: transparent; }
+.sol-menu { pointer-events: auto; min-width: 8rem; max-width: 20rem; min-height: unset; border-style: solid; border-width: var(--sol-size-border-default); border-color: var(--sol-color-border-standard); border-radius: var(--sol-size-radius-md); background: var(--sol-color-background-surface-overlay); box-shadow: var(--sol-effect-overlayshadow); padding: 0 var(--sol-size-spacing-xs); box-sizing: border-box; z-index: 999; max-height: var(--sol-menu-max-height, min(100vh - 48px, var(--available-height, 100vh))); overflow: visible auto; }
+.sol-menu::before, .sol-menu::after { content: ""; display: block; position: sticky; height: var(--sol-size-bar-sm); pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 1; }
+.sol-menu::before { top: 0px; margin-bottom: calc(-1 * var(--sol-size-bar-sm)); background: linear-gradient(to bottom,var(--sol-color-background-surface-overlay) 0%,transparent 100%); }
+.sol-menu::after { bottom: 0px; margin-top: calc(-1 * var(--sol-size-bar-sm)); background: linear-gradient(to top,var(--sol-color-background-surface-overlay) 0%,transparent 100%); }
+.sol-menu.has-scroll-top::before, .sol-menu.has-scroll-bottom::after { opacity: 1; }
+.sol-menu:focus-visible { outline: var(--sol-size-border-medium) solid var(--sol-color-border-focus-default); outline-offset: var(--sol-size-spacing-3xs); border-radius: var(--sol-size-radius-sm); }
+.sol-menu > span, .sol-menu > span > span { display: block; width: 100%; }
+.sol-menu > span:first-of-type { padding-top: var(--sol-size-spacing-xs); }
+.sol-menu > span:last-of-type { padding-bottom: var(--sol-size-spacing-xs); }
+.sol-menu .sol-menu-item { display: flex; width: 100%; height: 100%; min-height: var(--sol-size-listitem-md); color: var(--sol-color-text-default); background: var(--sol-color-background-transparent); padding: 0px; cursor: pointer; user-select: none; }
+.sol-menu .sol-menu-item:focus-visible { outline: var(--sol-size-border-medium) solid var(--sol-color-border-focus-default); }
+.sol-menu .sol-menu-item:focus { background: var(--sol-color-background-transparent); }
+.sol-menu .sol-menu-item:hover { background: var(--sol-color-background-state-hover-neutral) !important; }
+.sol-menu .sol-menu-item:active { background: var(--sol-color-background-state-pressed-neutral) !important; }
+.sol-menu .sol-menu-item[data-highlighted] { background: var(--sol-color-background-transparent); }
+.sol-menu .sol-menu-item .sol-menu-item-content { display: flex; align-items: center; width: 100%; height: var(--sol-size-listitem-md); min-width: 0px; justify-content: flex-start; gap: var(--sol-size-spacing-xs); }
+.sol-menu .sol-menu-item .sol-menu-left-content .sol-menu-icon { padding-right: var(--sol-size-spacing-xs); width: var(--sol-size-icon-sm); height: var(--sol-size-icon-sm); vertical-align: middle; fill: var(--sol-color-icon-default); box-sizing: content-box; }
+.sol-menu .sol-menu-item .sol-menu-left-content { flex: 1 1 70%; display: flex; align-items: center; min-width: 0px; gap: var(--sol-size-spacing-xs); padding-left: var(--sol-size-spacing-xs); padding-right: var(--sol-size-spacing-xs); }
+.sol-menu .sol-menu-item .sol-menu-left-content .label-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0px; flex: 1 1 auto; display: block; }
+.sol-menu .sol-menu-item .sol-menu-left-content span { vertical-align: middle; }
+.sol-menu .sol-menu-item .sol-menu-right-content { margin-left: auto; max-width: 30%; padding-right: var(--sol-size-spacing-xs); color: var(--sol-color-text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sol-menu .sol-menu-item .sol-menu-leaf-node { justify-content: flex-end; }
+.sol-menu .sol-menu-item .sol-menu-submenu-arrow { display: flex; align-items: center; margin-left: var(--sol-size-spacing-xs); flex-shrink: 0; color: var(--sol-color-icon-default); }
+.sol-menu .sol-menu-item .sol-menu-submenu-arrow svg { width: var(--sol-size-icon-sm); height: var(--sol-size-icon-sm); }
+.sol-menu .sol-menu-item[data-disabled], .sol-menu .sol-menu-item:disabled { color: var(--sol-color-text-disabled); cursor: default; pointer-events: none; background: transparent !important; }
+.sol-menu .sol-menu-item[data-disabled] .sol-menu-icon, .sol-menu .sol-menu-item:disabled .sol-menu-icon { fill: var(--sol-color-icon-disabled); }
+.sol-menu .sol-menu-item[data-disabled] .sol-menu-right-content, .sol-menu .sol-menu-item:disabled .sol-menu-right-content { color: var(--sol-color-text-disabled); }
+.sol-menu .sol-menu-item[data-disabled] .sol-menu-submenu-arrow, .sol-menu .sol-menu-item:disabled .sol-menu-submenu-arrow { color: var(--sol-color-icon-disabled); }
+.sol-menu .sol-menu-item.variant-critical:not([data-disabled]):not(:disabled) { color: var(--sol-color-text-status-critical); }
+.sol-menu .sol-menu-item.variant-critical:not([data-disabled]):not(:disabled) .sol-menu-left-content .sol-menu-icon { fill: var(--sol-color-icon-status-critical); }
+.sol-menu .sol-menu-item.variant-critical:not([data-disabled]):not(:disabled) .sol-menu-submenu-arrow { color: var(--sol-color-icon-status-critical); }
+.sol-menu .sol-menu-item.variant-critical:not([data-disabled]):not(:disabled):focus { background: var(--sol-color-background-transparent); }
+.sol-menu .sol-menu-item.variant-critical:not([data-disabled]):not(:disabled):hover { background: var(--sol-color-background-state-hover-critical-subtle) !important; }
+.sol-menu .sol-menu-item.variant-critical:not([data-disabled]):not(:disabled):active { background: var(--sol-color-background-state-pressed-critical-subtle) !important; }
+.sol-menu .sol-menu-item.variant-critical:not([data-disabled]):not(:disabled)[data-highlighted] { background: var(--sol-color-background-transparent); }
+.sol-menu .menu-divider { height: var(--sol-size-border-default); background-color: var(--sol-color-border-standard); border-width: medium; border-style: none; border-color: currentcolor; border-image: none; margin: var(--sol-size-spacing-xs) 0; padding: 0px; }

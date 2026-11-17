@@ -1,0 +1,18 @@
+/* AccordionItem: real stylesheet from the SOL/Lyra Storybook. Generated 2026-11-16. */
+.sol-accordion-group { min-width: 15rem; }
+.sol-accordion-group .sol-accordion-item { background: transparent; box-sizing: border-box; border-bottom: var(--sol-size-border-default) solid var(--sol-color-border-standard); }
+.sol-accordion-group .sol-accordion-item[data-disabled] { border-color: var(--sol-color-border-disabled); }
+.sol-accordion-group .sol-accordion-item:last-of-type { border-color: transparent; }
+.sol-accordion-group .sol-accordion-item-header { display: block; margin: 0px; }
+.sol-accordion-group .sol-accordion-item-trigger { display: flex; box-sizing: border-box; width: 100%; height: var(--sol-size-listitem-lg); padding: 0 var(--sol-size-spacing-md); border-width: medium; border-style: none; border-color: currentcolor; border-image: none; outline: none; background: none; text-align: start; cursor: pointer; user-select: none; font-family: var(--sol-typography-heading-sm-font-family); font-size: var(--sol-typography-heading-sm-font-size); font-weight: var(--sol-typography-heading-sm-font-weight); line-height: var(--sol-typography-heading-sm-line-height); letter-spacing: var(--sol-typography-heading-sm-letter-spacing); color: var(--sol-color-text-default); }
+.sol-accordion-group .sol-accordion-item-trigger .sol-accordion-item-trigger-content { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: var(--sol-size-spacing-sm); }
+.sol-accordion-group .sol-accordion-item-trigger .sol-accordion-item-trigger-content .sol-accordion-arrow-icon { width: var(--sol-size-icon-md); height: var(--sol-size-icon-md); color: var(--sol-color-icon-action); flex-shrink: 0; transition: transform 0.2s ease-out; }
+.sol-accordion-group .sol-accordion-item-trigger .sol-accordion-item-trigger-content .sol-accordion-header-content { width: 100%; }
+.sol-accordion-group .sol-accordion-item-trigger[aria-disabled="true"] { background: transparent; color: var(--sol-color-text-disabled); cursor: default; }
+.sol-accordion-group .sol-accordion-item-trigger[aria-disabled="true"] .sol-accordion-arrow-icon { color: var(--sol-color-icon-disabled); }
+.sol-accordion-group .sol-accordion-item-trigger:focus-visible:not([aria-disabled="true"]) { outline: var(--sol-size-border-medium) solid var(--sol-color-border-focus-default); outline-offset: var(--sol-size-spacing-3xs); border-radius: var(--sol-size-radius-sm); margin: calc(var(--sol-size-spacing-3xs) * 2); width: calc(100% - var(--sol-size-spacing-3xs) * 4); }
+.sol-accordion-group .sol-accordion-item-trigger[data-panel-open] { border-bottom-width: medium; border-bottom-style: none; border-bottom-color: currentcolor; }
+.sol-accordion-group .sol-accordion-item-trigger[data-panel-open] .sol-accordion-arrow-icon { transform: rotate(180deg); }
+.sol-accordion-group .sol-accordion-item-content { overflow: hidden; height: var(--accordion-panel-height); transition: height 0.3s ease-out; }
+.sol-accordion-group .sol-accordion-item-content[data-starting-style], .sol-accordion-group .sol-accordion-item-content[data-ending-style] { height: 0px; }
+.sol-accordion-group .sol-accordion-item-content .sol-accordion-item-body { font-family: var(--sol-typography-body-sm-font-family); font-size: var(--sol-typography-body-sm-font-size); font-weight: var(--sol-typography-body-sm-font-weight); line-height: var(--sol-typography-body-sm-line-height); letter-spacing: var(--sol-typography-body-sm-letter-spacing); color: var(--sol-color-text-default); padding: var(--sol-size-spacing-xs) var(--sol-size-spacing-md); }

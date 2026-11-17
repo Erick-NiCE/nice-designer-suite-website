@@ -361,10 +361,43 @@
        group on the page. */
     const RELEASES = [
       {
+        id: 'release-v11-9',
+        version: 'v11.9',
+        date: 'November 2026',
+        isLatest: true,
+        groups: [
+          {
+            label: 'New features',
+            tone: 'blue',
+            items: [
+              `Real Lyra components ship inside NiCE Designer. "Build me a Lyra prototype" starts from the Lyra app header, uses the real components, labels anything that is not real, audits itself, and says what Lyra does not have. Reinstall the Claude connector to get the new tools`,
+              `Convert this page to Lyra rebuilds the page as a shareable Claude Design file plus a developer handoff (React on the real SOL components, acceptance checks, a ready Jira ticket). It never edits your live page`,
+              `New tools for people with only the extension: switch, reload and close tabs, scroll, click, restart the hub, and report a problem straight to Erick`,
+              `New skills: Lyra page conversion, Feature handoff, Jira intake, Design review comments, Claude Design loop and Browser control`,
+            ],
+          },
+          {
+            label: 'Improvements',
+            tone: 'emerald',
+            items: [
+              `Audits work on Claude Design files and leave out Claude's own header and toolbar. The score also reports component evidence and layout health, not just tokens`,
+              `Every NiCE Designer reply is shorter and ends with who to contact`,
+            ],
+          },
+          {
+            label: 'Fixes',
+            tone: 'coral',
+            items: [
+              `Turning Accessibility or Contrast off in the Audit filters now removes it from the score and the totals too, not just the list`,
+            ],
+          },
+        ],
+      },
+      {
         id: 'release-v11-8',
         version: 'v11.8',
         date: 'October 2026',
-        isLatest: true,
+        isLatest: false,
         groups: [
           {
             label: 'New features',
@@ -680,7 +713,7 @@
     const downloadPill = (key) =>
       h(
         'a',
-        { key, className: 'nav-download', href: './downloads/NiCE-Designer-V11.8.zip', 'data-latest-link': '', download: '' },
+        { key, className: 'nav-download', href: './downloads/NiCE-Designer-V11.9.zip', 'data-latest-link': '', download: '' },
         'Download'
       );
 

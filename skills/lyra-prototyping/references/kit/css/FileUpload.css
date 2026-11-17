@@ -1,0 +1,13 @@
+/* FileUpload: real stylesheet from the SOL/Lyra Storybook. Generated 2026-11-16. */
+.sol-file-upload { display: flex; flex-direction: column; gap: var(--sol-size-spacing-lg); }
+.sol-file-upload .sol-file-upload-hint { margin: 0px; color: var(--sol-color-text-secondary); }
+.sol-file-upload .sol-file-upload-hint.error { color: var(--sol-color-text-status-critical); }
+.sol-file-upload .sol-file-upload-row { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--sol-size-spacing-xs); }
+.sol-file-upload .sol-file-upload-field { flex: 1 1 12rem; min-width: 0px; max-width: none; }
+.sol-file-upload .sol-file-upload-field .sol-input { width: 100%; min-width: 0px; text-overflow: ellipsis; }
+.sol-file-upload .sol-file-upload-field:has(> .sol-input[tabindex="-1"]:focus-visible) { border-color: var(--sol-color-border-disabled); }
+.sol-file-upload .sol-file-upload-field:has(> .sol-input[tabindex="-1"]:focus-visible).error-border { border-color: var(--sol-color-border-status-critical); }
+.sol-file-upload .sol-file-upload-field .sol-input:read-only:not(:disabled)::placeholder { color: var(--sol-color-text-placeholder); }
+.sol-file-upload .sol-button { flex: 0 0 auto; }
+.sol-file-upload .sol-file-upload-row.pointer-focus .sol-button:focus-visible { outline: none; }
+.sol-file-upload .sol-file-upload-native { display: none; }

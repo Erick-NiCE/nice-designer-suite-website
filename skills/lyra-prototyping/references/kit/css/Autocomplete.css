@@ -1,0 +1,28 @@
+/* Autocomplete: real stylesheet from the SOL/Lyra Storybook. Generated 2026-11-16. */
+.sol-auto-complete { position: relative; }
+.sol-autocomplete-panel { position: absolute; left: 0px; width: 100%; box-sizing: border-box; z-index: 1000; margin-top: var(--sol-size-spacing-2xs); overflow: hidden; background: var(--sol-color-background-surface-overlay); border: var(--sol-size-border-default) solid var(--sol-color-border-standard); border-radius: var(--sol-size-radius-md); box-shadow: var(--sol-effect-overlayshadow); font-family: var(--sol-typography-body-md-font-family); font-size: var(--sol-typography-body-md-font-size); }
+.sol-autocomplete-panel .sol-autocomplete-content { box-sizing: border-box; padding-right: var(--sol-size-spacing-xs); }
+.sol-autocomplete-panel .sol-autocomplete-list { box-sizing: content-box; margin: 0px; padding: var(--sol-size-spacing-xs) 0 var(--sol-size-spacing-xs) var(--sol-size-spacing-xs); position: relative; }
+.sol-autocomplete-panel .sol-autocomplete-list::before, .sol-autocomplete-panel .sol-autocomplete-list::after { content: ""; position: absolute; left: 0px; right: 0px; height: var(--sol-size-bar-sm); pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 1; }
+.sol-autocomplete-panel .sol-autocomplete-list::before { top: 0px; background: linear-gradient(to bottom,var(--sol-color-background-surface-overlay) 0%,transparent 100%); }
+.sol-autocomplete-panel .sol-autocomplete-list::after { bottom: 0px; background: linear-gradient(to top,var(--sol-color-background-surface-overlay) 0%,transparent 100%); }
+.sol-autocomplete-panel .sol-autocomplete-list.has-scroll-top::before { opacity: 1; }
+.sol-autocomplete-panel .sol-autocomplete-list.has-scroll-bottom::after { opacity: 1; }
+.sol-autocomplete-panel .sol-autocomplete-list:has(.item-not-found) { padding: 0px; }
+.sol-autocomplete-panel .sol-autocomplete-list:has(.item-not-found) .sol-autocomplete-content { padding-right: 0px; }
+.sol-autocomplete-panel .sol-autocomplete-viewport { max-height: calc(18rem - 2 * var(--sol-size-border-default)); overflow-y: auto; }
+.sol-autocomplete-panel.sol-autocomplete-panel-above { bottom: 100%; margin-top: 0px; margin-bottom: var(--sol-size-spacing-2xs); }
+.sol-autocomplete-panel .sol-autocomplete-option { display: flex; justify-content: flex-start; align-items: center; box-sizing: border-box; position: relative; cursor: pointer; overflow: hidden; height: auto; min-height: var(--sol-size-listitem-md); width: 100%; padding: 0 var(--sol-size-spacing-xs); border: var(--sol-size-border-default) solid transparent; border-radius: var(--sol-size-radius-sm); background: var(--sol-color-background-listitem-default); color: var(--sol-color-text-default); font-family: var(--sol-typography-body-md-font-family); font-size: var(--sol-typography-body-md-font-size); }
+.sol-autocomplete-panel .sol-autocomplete-option:hover:not(.sol-autocomplete-option-disabled) { background-color: var(--sol-color-background-state-hover-neutral); }
+.sol-autocomplete-panel .sol-autocomplete-option:active:not(.sol-autocomplete-option-disabled) { background-color: var(--sol-color-background-state-pressed-neutral); }
+.sol-autocomplete-panel .sol-autocomplete-option .sol-autocomplete-option-text { width: 100%; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--sol-color-text-default); }
+.sol-autocomplete-panel .sol-autocomplete-option.item-not-found { height: var(--sol-size-control-lg); color: var(--sol-color-text-secondary); cursor: default; }
+.sol-autocomplete-panel .sol-autocomplete-option.item-not-found .sol-autocomplete-option-text { font-family: var(--sol-typography-body-md-font-family); font-size: var(--sol-typography-body-md-font-size); font-weight: var(--sol-typography-body-md-font-weight); line-height: var(--sol-typography-body-md-line-height); color: var(--sol-color-text-secondary); opacity: 1; }
+.sol-autocomplete-panel .sol-autocomplete-option.sol-autocomplete-option-disabled:not(:has(.sol-spinner)) .sol-autocomplete-option-text { opacity: 0.38; }
+.sol-autocomplete-panel .sol-autocomplete-option.sol-autocomplete-option-active:not(.sol-autocomplete-option-disabled) { background-color: transparent; outline: var(--sol-size-border-medium) solid var(--sol-color-border-focus-default); outline-offset: calc(var(--sol-size-border-medium) * -1); }
+.sol-autocomplete-panel .sol-autocomplete-option.sol-autocomplete-option-active:not(.sol-autocomplete-option-disabled):hover { background-color: var(--sol-color-background-state-hover-neutral); }
+.sol-autocomplete-panel .sol-autocomplete-option.sol-autocomplete-option-active:not(.sol-autocomplete-option-disabled):active { background-color: var(--sol-color-background-state-pressed-neutral); }
+.search-item-wrapper { width: 100%; height: 100%; display: flex; justify-content: space-between; flex-direction: column; font-style: normal; }
+.search-item-wrapper .search-item-text { color: var(--sol-color-text-default); }
+.search-item-wrapper .search-item-path { color: var(--sol-color-text-secondary); }
+.search-item-wrapper .highlighter { font-family: var(--sol-typography-body-md-emphasized-font-family); font-size: var(--sol-typography-body-md-emphasized-font-size); font-weight: var(--sol-typography-body-md-emphasized-font-weight); line-height: var(--sol-typography-body-md-emphasized-line-height); letter-spacing: var(--sol-typography-body-md-emphasized-letter-spacing); color: var(--sol-color-text-default); }

@@ -1,0 +1,13 @@
+/* NumericSelector: real stylesheet from the SOL/Lyra Storybook. Generated 2026-11-16. */
+.sol-numeric-selector .numeric-buttons { width: var(--sol-size-control-md); min-width: var(--sol-size-control-md); height: var(--sol-size-control-lg); display: flex; flex-direction: column; border-inline-start: var(--sol-size-border-default) solid var(--sol-color-border-strong); }
+.sol-numeric-selector .numeric-buttons button { flex: 1 1 0px; width: 100%; background: var(--sol-color-background-field-default); display: flex; border: var(--sol-size-border-default) solid var(--sol-color-border-strong); justify-content: center; align-items: center; border-inline-start: 0px; }
+.sol-numeric-selector .numeric-buttons button:first-child { border-start-end-radius: var(--sol-size-radius-sm); border-bottom: 0px; }
+.sol-numeric-selector .numeric-buttons button:last-child { border-end-end-radius: var(--sol-size-radius-sm); }
+.sol-numeric-selector .numeric-buttons button svg { height: var(--sol-size-icon-xs) !important; width: var(--sol-size-icon-xs) !important; }
+.sol-numeric-selector input[type="number"]::-webkit-inner-spin-button, .sol-numeric-selector input[type="number"]::-webkit-outer-spin-button { appearance: none; margin: 0px; }
+.sol-numeric-selector .sol-input-container { width: 8rem; }
+.sol-numeric-selector .sol-input-container:has(> .sol-input-trailing-button-container) { border-inline-end: 0px; padding-inline: var(--sol-size-spacing-sm) 0; }
+.sol-numeric-selector .sol-input-container:has(> .sol-input-trailing-button-container):hover .numeric-buttons { border-inline-start-color: var(--sol-color-border-strong); }
+.sol-numeric-selector .sol-input-container:has(> .sol-input-trailing-button-container).error-border .numeric-buttons, .sol-numeric-selector .sol-input-container:has(> .sol-input-trailing-button-container)[aria-invalid="true"] .numeric-buttons { border-inline-start-color: var(--sol-color-border-status-critical); }
+.sol-numeric-selector .sol-input-container:has(> .sol-input-trailing-button-container).input-focused .numeric-buttons, .sol-numeric-selector .sol-input-container:has(> .sol-input-trailing-button-container):has(> .sol-input:focus-visible) .numeric-buttons { border-inline-start-color: var(--sol-color-border-selected); }
+.sol-numeric-selector .sol-input-container:has(> .sol-input-trailing-button-container).error-border.input-focused .numeric-buttons, .sol-numeric-selector .sol-input-container:has(> .sol-input-trailing-button-container)[aria-invalid="true"].input-focused .numeric-buttons { border-inline-start-color: var(--sol-color-border-status-critical); }

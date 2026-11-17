@@ -10,6 +10,10 @@ A closed loop for writing UI code that's *provably* on-system, not just eyeballe
 
 This is a code-editing skill, not a page-polishing one. `convert_page_to_lyra`/`apply_single_*` (the plugin's own Chrome mutation tools) patch the *live DOM* — perfect for a demo, gone on next reload. A Claude Code project's actual fix has to land in the source files that render that DOM. This skill uses the plugin's audit tools purely as **eyes** (read-only scoring) and does every actual fix as a normal source-code edit.
 
+**Claude Design or artifact files** are not Claude Code source, so this skill does not apply to them: use `claude-design-loop`, which runs the same audit, fix and re-audit cycle against a claude.ai file.
+
+**Moving between tabs.** `list_tabs` and `switch_tab` let you reach the dev-server tab, a Storybook page or a Claude Design link without asking the user to click. Switch first, then audit: every tool targets the active tab. On a Claude Design page the audit and screenshot cover the embedded design only, never the Claude interface around it.
+
 ## When to invoke
 
 - "Build this screen to spec" / "make this fully compliant with SOL/Lyra"

@@ -1,0 +1,32 @@
+/* RadioButton: real stylesheet from the SOL/Lyra Storybook. Generated 2026-11-16. */
+.sol-radio-container { display: flex; flex-direction: column; gap: var(--sol-size-spacing-xs); }
+.sol-radio-container .sol-radio-item { display: flex; align-items: flex-start; width: fit-content; padding: 0 var(--sol-size-spacing-2xs); gap: var(--sol-size-spacing-2xs); cursor: pointer; }
+.sol-radio-container .sol-radio-item:has(.sol-radio-control[data-disabled]) { cursor: default; }
+.sol-radio-container .sol-radio-item:has(:focus-visible) { outline: var(--sol-color-border-focus-default) solid var(--sol-size-border-medium); outline-offset: 0px; border-radius: var(--sol-size-radius-sm); }
+.sol-radio-container .sol-radio-item .sol-radio-control { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; box-sizing: border-box; height: 1rem; width: 1rem; margin-top: 0.125rem; padding: 0px; border-radius: 50%; border: var(--sol-size-border-default) solid var(--sol-color-border-strong); background: var(--sol-color-background-control-default); cursor: pointer; transition: none; outline: none; }
+.sol-radio-container .sol-radio-item .sol-radio-control .sol-radio-indicator { height: 0.375rem; width: 0.375rem; border-radius: 50%; background: var(--sol-color-icon-inverse); transform: scale(0); opacity: 0; transition: none; }
+.sol-radio-container .sol-radio-item .sol-radio-control[data-checked] .sol-radio-indicator { transform: scale(1); opacity: 1; }
+.sol-radio-container .sol-radio-item .sol-radio-control:not([data-disabled]):hover { background: var(--sol-color-background-state-hover-neutral); border-color: var(--sol-color-border-state-hover-neutral); }
+.sol-radio-container .sol-radio-item .sol-radio-control:not([data-disabled]):active { background: var(--sol-color-background-state-pressed-neutral); border-color: var(--sol-color-border-state-hover-neutral); }
+.sol-radio-container .sol-radio-item .sol-radio-control[data-checked] { background: var(--sol-color-background-selected-strong); border-color: var(--sol-color-background-selected-strong); }
+.sol-radio-container .sol-radio-item .sol-radio-control[data-checked]:not([data-disabled]):hover { background: var(--sol-color-background-state-hover-selected-strong); border-color: var(--sol-color-background-state-hover-selected-strong); }
+.sol-radio-container .sol-radio-item .sol-radio-control[data-checked]:not([data-disabled]):hover .sol-radio-indicator { background: var(--sol-color-icon-inverse); }
+.sol-radio-container .sol-radio-item .sol-radio-control[data-checked]:not([data-disabled]):active { background: var(--sol-color-background-state-pressed-selected-strong); border-color: var(--sol-color-background-state-pressed-selected-strong); }
+.sol-radio-container .sol-radio-item .sol-radio-control[data-checked]:not([data-disabled]):active .sol-radio-indicator { background: var(--sol-color-icon-inverse); }
+.sol-radio-container .sol-radio-item .sol-radio-control[data-disabled] { background: var(--sol-color-background-control-disabled); border-color: var(--sol-color-border-disabled); cursor: default; pointer-events: none; }
+.sol-radio-container .sol-radio-item .sol-radio-control[data-checked][data-disabled] { background: var(--sol-color-background-control-disabled); border-color: var(--sol-color-border-disabled); }
+.sol-radio-container .sol-radio-item .sol-radio-control[data-checked][data-disabled] .sol-radio-indicator { background: var(--sol-color-icon-disabled); }
+.sol-radio-container .sol-radio-item .sol-radio-label { display: block; color: var(--sol-color-text-default); margin: 0px; padding-left: 0px; cursor: pointer; white-space: normal; overflow-wrap: break-word; font-family: var(--sol-typography-body-md-font-family); font-size: var(--sol-typography-body-md-font-size); font-weight: var(--sol-typography-body-md-font-weight); line-height: var(--sol-typography-body-md-line-height); }
+.sol-radio-container .sol-radio-item .sol-radio-control[data-disabled] ~ .sol-radio-label { color: var(--sol-color-text-disabled); cursor: default; pointer-events: none; }
+.sol-radio-container .sol-radio-group { margin: 0px; gap: var(--sol-size-spacing-2xs); display: flex; }
+.sol-radio-container .sol-radio-group.horizontal { flex-flow: row; max-width: 45rem; }
+.sol-radio-container .sol-radio-group.horizontal .sol-radio-item { flex-shrink: 0; }
+.sol-radio-container .sol-radio-group.horizontal .sol-radio-item .sol-radio-label { max-width: 20rem; }
+.sol-radio-container .sol-radio-group.vertical { flex-direction: column; }
+.sol-radio-container .sol-radio-group.vertical .sol-radio-item { width: fit-content; }
+.sol-radio-container .sol-radio-group[data-readonly] .sol-radio-control:not([data-checked]) { background: var(--sol-color-background-control-disabled); border-color: var(--sol-color-border-disabled); pointer-events: none; }
+.sol-radio-container .sol-radio-group[data-readonly] .sol-radio-control[data-checked] { background: var(--sol-color-background-control-disabled); border-color: var(--sol-color-border-disabled); }
+.sol-radio-container .sol-radio-group[data-readonly] .sol-radio-control[data-checked] .sol-radio-indicator { background: var(--sol-color-icon-default); }
+.sol-radio-container .sol-radio-group[data-readonly] .sol-radio-label { pointer-events: none; cursor: default; }
+.sol-radio-container .sol-error-message-container { display: flex; gap: var(--sol-size-spacing-2xs); }
+.sol-radio-container .sol-error-message-container .sol-error-icon { margin-right: 0px !important; color: var(--sol-color-icon-status-critical); }

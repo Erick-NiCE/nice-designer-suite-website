@@ -1,0 +1,23 @@
+/* Breadcrumb: real stylesheet from the SOL/Lyra Storybook. Generated 2026-11-16. */
+.sol-breadcrumb { display: block; width: 100%; contain: layout style; }
+.sol-breadcrumb-list { display: flex; align-items: center; flex-wrap: nowrap; list-style: none; margin: 0px; padding: 0px; gap: var(--sol-size-spacing-xs); }
+.sol-breadcrumb-item { display: flex; align-items: center; gap: var(--sol-size-spacing-xs); flex-shrink: 0; min-width: 0px; }
+.sol-breadcrumb-item-menu { flex-shrink: 0; min-width: auto; gap: var(--sol-size-spacing-xs); }
+.sol-breadcrumb-item-menu button.sol-button:hover, .sol-breadcrumb-item-menu button.sol-button[aria-expanded="true"] { background-color: var(--sol-color-background-state-pressed-neutral); }
+.sol-breadcrumb-item-menu button.sol-button .sol-icon, .sol-breadcrumb-item-menu button.sol-button svg { color: var(--sol-color-text-default); fill: var(--sol-color-text-default); }
+.sol-breadcrumb-item-menu button.sol-button:focus { outline: none; box-shadow: none; }
+.sol-breadcrumb-item-menu button.sol-button:focus-visible { outline: var(--sol-size-border-medium, .125rem) solid var(--sol-color-border-focus-default); outline-offset: 0.125rem; }
+.sol-breadcrumb-item-menu button.sol-button:focus:not(:focus-visible) { outline: none; box-shadow: none; }
+.sol-breadcrumb-item-menu button.sol-button.btn-tertiary-small svg, .sol-breadcrumb-item-menu button.sol-button.btn-tertiary-small img { width: var(--sol-size-icon-sm); height: var(--sol-size-icon-sm); }
+.sol-breadcrumb-item-second-to-last { flex-shrink: 1; min-width: 0px; }
+.sol-breadcrumb-item-last { flex-shrink: 0; min-width: 0px; }
+.sol-breadcrumb-link { color: var(--sol-color-text-link); vertical-align: middle; text-decoration: none; cursor: pointer; white-space: nowrap; min-height: var(--sol-size-control-sm); display: inline-flex; align-items: center; transition: color 0.2s; border-radius: var(--sol-size-radius-xs); }
+.sol-breadcrumb-link:hover { text-decoration: underline; }
+.sol-breadcrumb-link:focus { outline: none; box-shadow: none; }
+.sol-breadcrumb-link:focus-visible { outline: var(--sol-size-border-medium, var(--sol-size-radius-xs)) solid var(--sol-color-border-focus-default); outline-offset: var(--sol-size-radius-xs); }
+.sol-breadcrumb-link:focus:not(:focus-visible) { outline: none; box-shadow: none; }
+.sol-breadcrumb-link-truncated { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; display: block; }
+.sol-breadcrumb-text { color: var(--sol-color-text-default); vertical-align: middle; white-space: nowrap; min-height: var(--size-icon-sm, 1.25rem); display: inline-flex; align-items: center; }
+.sol-breadcrumb-text-last { color: var(--sol-color-text-secondary); }
+.sol-breadcrumb-text-truncated { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; display: block; }
+.sol-breadcrumb-separator { color: var(--sol-color-text-default); user-select: none; margin: 0px; flex-shrink: 0; }

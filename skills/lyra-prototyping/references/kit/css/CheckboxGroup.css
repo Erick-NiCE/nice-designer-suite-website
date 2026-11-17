@@ -1,0 +1,4 @@
+/* CheckboxGroup: real stylesheet from the SOL/Lyra Storybook. Generated 2026-11-16. */
+.checkbox-group-options { display: flex; flex-direction: column; gap: var(--sol-size-spacing-2xs); }
+.sol-checkbox-group.sol-input-wrapper .sol-label { margin-bottom: var(--sol-size-spacing-xs); }
+.sol-checkbox-group.sol-input-wrapper .sol-error-message-container { margin-top: var(--sol-size-spacing-xs); }

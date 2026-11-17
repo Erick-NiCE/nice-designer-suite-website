@@ -1,0 +1,15 @@
+/* Label: real stylesheet from the SOL/Lyra Storybook. Generated 2026-11-16. */
+.readonly .sol-label-asterisk { color: var(--sol-color-text-disabled); }
+.sol-label-container { display: flex; align-items: flex-start; }
+.sol-label-container .sol-icon-host { margin-inline-start: var(--sol-size-spacing-2xs); }
+.sol-label-container .sol-label-help { height: var(--sol-typography-body-md-line-height); display: flex; align-items: center; }
+.sol-label-container .sol-label-help-button { background: none; border-width: medium; border-style: none; border-color: currentcolor; border-image: none; padding: 0px; }
+.sol-label-container .sol-label-help-button .sol-icon { color: var(--sol-color-icon-action); }
+.sol-label-container .sol-label-help-button .sol-icon:focus { outline: var(--sol-size-border-medium) solid var(--sol-color-border-focus-default); outline-offset: var(--sol-size-spacing-3xs); border-radius: var(--sol-size-radius-sm); }
+.sol-label { font-size: var(--sol-typography-body-md-font-size); font-style: normal; font-weight: var(--sol-typography-body-md-font-weight); font-family: var(--sol-typography-body-md-font-family); line-height: var(--sol-typography-body-md-line-height); color: var(--sol-color-text-default); display: block; white-space: nowrap; }
+.sol-label span { display: inline-flex; vertical-align: top; }
+.sol-label span.sol-label-text { white-space: normal; overflow-wrap: break-word; }
+.sol-label.required .sol-label-asterisk { color: var(--sol-color-text-status-critical); margin-left: var(--sol-size-spacing-2xs); height: var(--sol-typography-body-md-line-height); font-size: var(--sol-size-icon-xs); }
+.sol-label.disabled { color: var(--sol-color-text-disabled); }
+.sol-label.disabled .sol-label-help { color: var(--sol-color-icon-disabled); }
+.sol-label.disabled .sol-label-asterisk { color: var(--sol-color-text-disabled); }

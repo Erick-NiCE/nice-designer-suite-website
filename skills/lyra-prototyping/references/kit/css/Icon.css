@@ -1,0 +1,9 @@
+/* Icon: real stylesheet from the SOL/Lyra Storybook. Generated 2026-11-16. */
+.sol-icon-host { display: inline-flex; align-items: center; vertical-align: middle; }
+.sol-icon { display: inline-flex; align-items: center; }
+.sol-icon svg { width: var(--sol-size-icon-sm); height: var(--sol-size-icon-sm); }
+.sol-icon:focus-visible { outline: var(--sol-size-border-medium) solid var(--sol-color-border-focus-default); outline-offset: var(--sol-size-spacing-3xs); border-radius: var(--sol-size-radius-sm); }
+.sol-icon-button { display: flex; justify-content: center; width: 100%; height: 100%; padding: 0px; margin: 0px; background: none; border-width: medium; border-style: none; border-color: currentcolor; border-image: none; cursor: pointer; }
+.sol-icon-button:hover { background-color: var(--sol-color-background-state-hover-neutral); }
+.sol-icon-button:active { background-color: var(--sol-color-background-state-pressed-neutral); }
+.sol-icon-button:focus-visible { outline: var(--sol-size-border-medium) solid var(--sol-color-border-focus-default); outline-offset: var(--sol-size-spacing-3xs); border-radius: var(--sol-size-radius-xs); z-index: 1; position: relative; }

@@ -1,0 +1,98 @@
+/* AiAssistant: real stylesheet from the SOL/Lyra Storybook. Generated 2026-11-16. */
+.sol-ai-empty__pill { display: flex; align-items: center; width: 100%; border: 1px solid var(--sol-color-border-subtle); border-radius: var(--sol-size-radius-md); background: var(--sol-color-background-control-subtle); padding: var(--sol-size-spacing-xs) var(--sol-size-spacing-sm); color: var(--sol-color-text-default); cursor: pointer; text-align: left; }
+.sol-ai-empty__pill:hover { background: var(--sol-color-background-state-hover-neutral); }
+.sol-ai-empty__pill:active { background: var(--sol-color-background-state-pressed-neutral); }
+.sol-ai-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 100%; gap: var(--sol-size-spacing-2xl); }
+.sol-ai-empty__icon { display: flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: var(--sol-size-radius-round); overflow: hidden; box-shadow: rgba(25, 140, 255, 0.41) 0px 0px 18px; }
+.sol-ai-empty__icon .sol-icon { display: block; width: 64px; height: 64px; }
+.sol-ai-empty__icon .sol-icon svg { width: 64px; height: 64px; }
+.sol-ai-empty__greeting { display: flex; flex-direction: column; align-items: center; }
+.sol-ai-empty__pills { display: flex; flex-direction: column; gap: var(--sol-size-spacing-xs); width: 100%; max-width: 30rem; }
+.sol-ai-empty__greeting-line1, .sol-ai-empty__greeting-line2 { margin: 0px; color: var(--sol-color-text-default); }
+.sol-ai-fade-in { transition: opacity 0.15s; }
+@media (prefers-reduced-motion: reduce) {
+  .sol-ai-fade-in { transition: none; }
+}
+.sol-ai-reasoning { margin-bottom: var(--sol-size-spacing-2xs); }
+.sol-ai-reasoning--expanded { margin-bottom: 0px; }
+.sol-ai-reasoning__header { display: flex; align-items: center; gap: var(--sol-size-spacing-2xs); }
+.sol-ai-reasoning__dot { width: 5px; height: 5px; border-radius: 50%; background: var(--sol-color-text-secondary); animation: 1s ease-in-out 0s infinite normal none running sol-ai-dot-blink; }
+.sol-ai-reasoning__dot:nth-child(2) { animation-delay: 0.14s; }
+.sol-ai-reasoning__dot:nth-child(3) { animation-delay: 0.28s; }
+@media (prefers-reduced-motion: reduce) {
+  .sol-ai-reasoning__dot { animation: auto ease 0s 1 normal none running none; opacity: 1; }
+}
+.sol-ai-reasoning__label { margin-left: var(--sol-size-spacing-3xs); color: var(--sol-color-text-secondary); }
+.sol-ai-reasoning__text { margin: var(--sol-size-spacing-2xs) 0 0; color: var(--sol-color-text-secondary); line-height: 1.6; }
+.sol-ai-reasoning__toggle { display: flex; align-items: center; gap: var(--sol-size-spacing-2xs); background: none; border-width: medium; border-style: none; border-color: currentcolor; border-image: none; padding: 0px; cursor: pointer; color: var(--sol-color-text-secondary); }
+.sol-ai-reasoning__toggle:focus-visible { outline: var(--sol-size-border-medium) solid var(--sol-color-border-focus-default); outline-offset: var(--sol-size-spacing-3xs); border-radius: var(--sol-size-radius-sm); }
+.sol-ai-reasoning__chevron { display: inline-flex; flex-shrink: 0; vertical-align: middle; transition: transform 0.2s; }
+@media (prefers-reduced-motion: reduce) {
+  .sol-ai-reasoning__chevron { transition: none; }
+}
+.sol-ai-reasoning__toggle .sol-ai-reasoning__chevron svg { width: var(--sol-size-icon-xs); height: var(--sol-size-icon-xs); }
+.sol-ai-reasoning--expanded .sol-ai-reasoning__chevron { transform: rotate(90deg); }
+.sol-ai-reasoning__content { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.25s; }
+@media (prefers-reduced-motion: reduce) {
+  .sol-ai-reasoning__content { transition: none; }
+}
+.sol-ai-reasoning--expanded .sol-ai-reasoning__content { grid-template-rows: 1fr; }
+.sol-ai-reasoning__content-inner { overflow: hidden; }
+.sol-ai-reasoning__separator { border-top: 1px solid var(--sol-color-border-subtle); margin: var(--sol-size-spacing-md) 0; }
+@keyframes sol-ai-dot-blink { 
+  0%, 80%, 100% { opacity: 0.2; }
+  40% { opacity: 1; }
+}
+.sol-ai-fade-in, .sol-ai-action-bar { transition: opacity 0.15s; }
+@media (prefers-reduced-motion: reduce) {
+  .sol-ai-fade-in, .sol-ai-action-bar { transition: none; }
+}
+.sol-ai-action-bar { display: flex; align-items: center; gap: 0px; opacity: 0; }
+.sol-ai-action-bar.sol-ai-action-bar--visible { opacity: 1; }
+.sol-ai-action-bar.sol-ai-action-bar--right { justify-content: flex-end; }
+.sol-ai-action-bar.sol-ai-action-bar--left { justify-content: flex-start; }
+.sol-ai-formatter__text, .sol-ai-formatter__markdown, .sol-ai-formatter__html { margin: 0px; color: var(--sol-color-text-default); }
+.sol-ai-formatter__text p, .sol-ai-formatter__markdown p, .sol-ai-formatter__html p { margin: 0px; }
+.sol-ai-bubble { display: flex; flex-direction: column; margin-bottom: var(--sol-size-spacing-md); }
+.sol-ai-bubble__actions { display: flex; align-items: center; margin-top: var(--sol-size-spacing-2xs); }
+.sol-ai-bubble__thumbs { display: flex; align-items: center; opacity: 0; transition: opacity 0.15s; }
+.sol-ai-bubble__thumbs.sol-ai-action-bar--visible { opacity: 1; }
+.sol-ai-bubble--user { align-items: flex-end; }
+.sol-ai-bubble--user .sol-ai-bubble__actions { align-self: flex-end; }
+.sol-ai-bubble--user:hover .sol-ai-action-bar, .sol-ai-bubble--user:focus-within .sol-ai-action-bar { opacity: 1; }
+.sol-ai-bubble--ai:hover .sol-ai-bubble__thumbs, .sol-ai-bubble--ai:focus-within .sol-ai-bubble__thumbs, .sol-ai-bubble--ai:hover .sol-ai-action-bar, .sol-ai-bubble--ai:focus-within .sol-ai-action-bar { opacity: 1; }
+.sol-ai-bubble__thumb { flex-shrink: 0; }
+.sol-ai-bubble__thumb[aria-pressed="true"] { color: var(--sol-color-text-on-selected); }
+.sol-ai-bubble__stopped-note { color: var(--sol-color-text-secondary); }
+.sol-ai-prompt__suggestion-pill { display: flex; align-items: center; width: 100%; border: 1px solid var(--sol-color-border-subtle); border-radius: var(--sol-size-radius-md); background: var(--sol-color-background-control-subtle); padding: var(--sol-size-spacing-xs) var(--sol-size-spacing-sm); color: var(--sol-color-text-default); cursor: pointer; text-align: left; }
+.sol-ai-prompt__suggestion-pill:hover { background: var(--sol-color-background-state-hover-neutral); }
+.sol-ai-prompt__suggestion-pill:active { background: var(--sol-color-background-state-pressed-neutral); }
+.sol-ai-prompt { display: flex; flex-direction: column; width: 100%; }
+.sol-ai-prompt__container { display: flex; flex-direction: column; gap: var(--sol-size-spacing-sm); border-radius: var(--sol-size-radius-md); border: 1px solid var(--sol-color-border-strong); background: var(--sol-color-background-control-subtle); padding: var(--sol-size-spacing-sm); cursor: text; }
+.sol-ai-prompt__container.is-over-limit { border-color: var(--sol-color-border-status-critical); }
+.sol-ai-prompt__container.is-active-mouse { border-color: var(--sol-color-border-selected); box-shadow: 0 0 1px 3px color-mix(in srgb,var(--sol-color-border-selected) 25%,transparent); }
+.sol-ai-prompt__container.is-active-keyboard { border-color: var(--sol-color-border-selected); box-shadow: 0 0 1px 3px color-mix(in srgb,var(--sol-color-border-selected) 25%,transparent); outline: 2px solid var(--sol-color-border-focus-default); outline-offset: 2px; }
+.sol-ai-prompt__input-wrap { position: relative; }
+.sol-ai-prompt__toolbar { display: flex; align-items: center; justify-content: space-between; }
+.sol-ai-prompt__actions { display: flex; align-items: center; gap: var(--sol-size-spacing-xs); margin-left: auto; }
+.sol-ai-prompt__counter { display: block; text-align: right; color: var(--sol-color-text-secondary); }
+.sol-ai-prompt__counter.is-over-limit { color: var(--sol-color-text-status-critical); }
+.sol-ai-prompt__textarea { box-sizing: border-box; width: 100%; min-height: var(--sol-typography-body-md-line-height); max-height: 100px; overflow-y: auto; resize: none; border-width: medium; border-style: none; border-color: currentcolor; border-image: none; background: transparent; color: var(--sol-color-text-default); font-family: var(--sol-typography-body-md-font-family); font-size: var(--sol-typography-body-md-font-size); font-weight: var(--sol-typography-body-md-font-weight); line-height: var(--sol-typography-body-md-line-height); letter-spacing: var(--sol-typography-body-md-letter-spacing); }
+.sol-ai-prompt__textarea:focus { outline: none; }
+.sol-ai-prompt__textarea::placeholder { color: var(--sol-color-text-placeholder); }
+.sol-ai-prompt p.sol-ai-prompt__disclaimer { margin-top: var(--sol-size-spacing-xs); text-align: center; color: var(--sol-color-text-secondary); }
+.sol-ai-assistant { height: 100%; }
+.sol-ai-assistant.sol-side-panel--push, .sol-ai-assistant.sol-side-panel--floating .sol-side-panel__inner { border-radius: var(--lyra-radius-lg, .75rem); }
+.sol-ai-assistant .sol-side-panel__body { padding: 0px; overflow: hidden; }
+.sol-ai-assistant .sol-side-panel-footer { justify-content: stretch; padding: var(--sol-size-spacing-md) var(--sol-size-spacing-xl) var(--sol-size-spacing-xs); }
+.sol-ai-assistant.sol-side-panel--push.is-open, .sol-ai-assistant.sol-side-panel--push.is-open.sol-side-panel--edge-left { border: 1px solid var(--sol-color-border-subtle); }
+.sol-ai-assistant .sol-side-panel__title { display: flex; align-items: center; gap: var(--sol-size-spacing-xs); }
+.sol-ai-assistant .sol-side-panel__title .sol-icon { flex-shrink: 0; width: var(--sol-size-icon-md); height: var(--sol-size-icon-md); }
+.sol-ai-assistant .sol-side-panel__title .sol-icon svg { width: var(--sol-size-icon-md); height: var(--sol-size-icon-md); }
+.sol-ai-assistant .sol-side-panel__header { transition: box-shadow 0.2s; }
+.sol-ai-assistant:has(.sol-ai-assistant__thread.is-scrolled) .sol-side-panel__header { box-shadow: rgba(0, 0, 0, 0.06) 0px 4px 12px; }
+.sol-ai-assistant__thread-wrap { position: relative; height: 100%; }
+.sol-ai-assistant__thread { height: 100%; overflow-y: auto; padding: 0 var(--sol-size-spacing-xl); scrollbar-width: thin; scrollbar-color: var(--sol-color-border-subtle) transparent; }
+.sol-ai-assistant__fade { position: absolute; bottom: 0px; left: 0px; right: 0px; height: 32px; background: linear-gradient(rgba(255, 255, 255, 0), rgb(255, 255, 255) 77.4%); pointer-events: none; z-index: 2; opacity: 0; transition: opacity 0.25s; }
+.sol-ai-assistant__fade--visible { opacity: 1; }
+.sol-visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); }

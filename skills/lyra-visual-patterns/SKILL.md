@@ -12,35 +12,27 @@ This skill documents the canonical Lyra page look so the plugin + MCP can reason
 
 Invoke this skill whenever the user:
 
-- Asks "convert this page to Lyra", "make this Lyra-compliant", "fix the tokens", or "apply Lyra".
+- Asks "convert this page to Lyra", "make this Lyra-compliant", "fix the tokens", or "apply Lyra" (for a web page, use `lyra-page-conversion`; this skill is the visual reference for it).
 - Asks for a preview / before-after of a conversion.
 - Wants dark-mode parity for an already-Lyra'd light page (or vice versa) via `convert_mode`.
 - Asks why an audit is flagging something as non-compliant when the tokens look right.
 
-## The two conversion modes — how to present the choice
+## Converting a page: rebuild, never patch the live page
 
-When a user says "convert this to Lyra", **ask which mode they want**:
+For a **web page** (Chrome), "convert this to Lyra" means rebuilding it as a new React Lyra feature and handing that off: use the `lyra-page-conversion` skill, which reads the page without changing it, rebuilds it in a shareable Claude Design file and hands off through `feature-handoff`. Changing the live page in the browser (`convert_page_to_lyra`, `apply_lyra_theme`) is lost on the next refresh, so it is never the deliverable and never the default. Offer it only if the user specifically asks to see a live preview, and then always save a change file too.
 
-1. **Tokens-only pass** (precision, non-destructive)
-   - Runs color/text/spacing/radius token swaps via `convert_page_to_lyra` (Chrome) or `migrate_to_lyra` (Figma) with each apply* flag selectively set.
-   - Preserves existing layout, component structure, and custom styling.
-   - Best for: **demos, production pages, initial design reviews** where layout is already correct and only the design-system layer needs to be swapped.
-   - Lowest risk. Always offer this first.
+For **Figma** frames, `migrate_to_lyra` changes the file itself, which persists, so the two modes below still apply there. Ask which the user wants:
 
-2. **Full attempted conversion** (breadth, higher risk)
-   - Tokens + layout normalization + component swaps + accessibility fixes + (in Figma) `convert_page_to_lyra` plugin-side rewrite.
-   - Best for: **early-stage mockups, hand-coded prototypes, pages being rebuilt for Lyra from scratch**.
-   - Will restructure. User should expect to review and tweak after.
-
-Phrase the question roughly as: *"Do you want a **tokens-only pass** (precise — keeps layout, just swaps to Lyra tokens) or a **full conversion** (broader — also normalizes layout and components)? Tokens-only is safer for demos and finished designs."*
+1. **Tokens-only pass** (precision, non-destructive): color, text, spacing and radius token swaps with each apply flag set selectively. Preserves layout and structure. Lowest risk; offer it first.
+2. **Full attempted conversion** (breadth, higher risk): tokens plus layout normalization, component swaps and accessibility fixes. Will restructure; expect to review and tweak.
 
 ## Global page anatomy (common to every Lyra page observed)
 
 Every Lyra page has these stacked regions, top to bottom:
 
-1. **Top bar** (horizontal, full-width)
-   - Left: workspace / tenant switcher (e.g. "Cognigy AI ▾", "Workforce Management ▾", "New Analytics ▾"). Caret indicates popover.
-   - Right cluster (in this order): help `?` icon, notification bell with red count badge, circular user avatar with initials.
+1. **Top bar** (horizontal, full-width, 56px). This is the header, and the first thing anyone sees: get it exactly right. NiCE Designer ships it: `get_component_kit({ patterns: ["app-shell"] })`.
+   - Left: the NiCE smile mark, then the product / workspace menu (e.g. "Workforce Management ▾", "Cognigy AI ▾"); the caret opens the app switcher.
+   - Right cluster (in this order): Help, Apps, notification bell with a red count badge, then the circular user avatar with initials and a chevron (the account menu).
    - Background: matches page chrome (see surface rules below). No bottom border in dark; subtle in light.
 
 2. **Left rail navigation** (vertical, full-height, collapsible)

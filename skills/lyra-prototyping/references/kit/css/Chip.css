@@ -1,0 +1,48 @@
+/* Chip: real stylesheet from the SOL/Lyra Storybook. Generated 2026-11-16. */
+.sol-chip { box-sizing: border-box; display: inline-flex; width: fit-content; max-width: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: none; overflow: visible; position: relative; border-radius: var(--sol-size-radius-sm); }
+.sol-chip:focus-visible { outline: var(--sol-color-border-focus-default) solid var(--sol-size-border-medium); }
+.sol-chip .remove-icon { cursor: pointer; appearance: none; background: none; border-width: medium; border-style: none; border-color: currentcolor; border-image: none; padding: 0px; transition: background-color 0.2s; border-radius: 0 var(--sol-size-radius-sm) var(--sol-size-radius-sm) 0; overflow: hidden; }
+.sol-chip .remove-icon .projected-content { display: flex; }
+.sol-chip .icon, .sol-chip .remove-icon { display: flex; justify-content: center; align-items: center; overflow: hidden; }
+.sol-chip .icon:focus-visible, .sol-chip .remove-icon:focus-visible { outline-style: solid; outline-width: var(--sol-size-border-medium); }
+.sol-chip > div { box-sizing: border-box; border-width: var(--sol-size-border-default); border-style: solid; display: flex; justify-content: center; align-items: center; flex: 1 1 0%; min-width: 0px; width: 100%; overflow: visible; border-radius: var(--sol-size-radius-sm); position: relative; }
+.sol-chip > div .chip-text-content { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0px; }
+.sol-chip .main-label { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0px; max-width: 14rem; flex: 1 1 0%; }
+.sol-chip .error-icon-wrapper { position: absolute; top: -0.31rem; left: -0.31rem; z-index: 100; cursor: pointer; width: var(--sol-size-icon-xs); height: var(--sol-size-icon-xs); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.sol-chip .error-icon-wrapper:focus-visible { outline: var(--sol-size-border-medium) solid var(--sol-color-border-focus-default); outline-offset: var(--sol-size-spacing-3xs); border-radius: var(--sol-size-radius-xs); }
+.sol-chip .error-icon-wrapper .sol-icon { color: var(--sol-color-icon-status-critical); background-color: var(--sol-color-icon-inverse); border-radius: 50%; }
+.sol-chip.medium { outline-offset: 0.187rem; border-radius: var(--sol-size-radius-sm); }
+.sol-chip.medium > div { height: var(--sol-size-control-md); border-radius: var(--sol-size-radius-sm); outline-offset: 0.187rem; padding-left: var(--sol-size-spacing-xs); padding-right: 0px; gap: var(--sol-size-spacing-xs); background-color: var(--sol-color-background-control-subtle); border-color: var(--sol-color-border-standard); color: var(--sol-color-background-inverse); }
+.sol-chip.medium > div button.remove-icon { width: var(--sol-size-control-md); min-width: var(--sol-size-control-md); padding-left: 0px; padding-right: 0px; }
+.sol-chip.medium > div.readonly { background-color: var(--sol-color-background-control-subtle); cursor: default; padding-right: var(--sol-size-spacing-xs); }
+.sol-chip.medium > div.readonly:hover, .sol-chip.medium > div.readonly:active { background-color: var(--sol-color-background-control-subtle); }
+.sol-chip.medium > div.error { color: var(--sol-color-text-status-critical); background-color: var(--sol-color-background-status-critical-subtle); border-color: var(--sol-color-border-status-critical); }
+.sol-chip.medium > div.error:hover, .sol-chip.medium > div.error:active { background-color: var(--sol-color-background-status-critical-subtle); }
+.sol-chip.medium > div.error .icon { width: var(--sol-size-control-sm); height: var(--sol-size-control-sm); outline-offset: 0.187rem; outline-color: var(--sol-color-border-focus-default); }
+.sol-chip.medium > div.error .icon path { fill: var(--sol-color-icon-status-critical); }
+.sol-chip.medium > div.error .icon:active path { fill: var(--sol-color-icon-status-critical); }
+.sol-chip.medium > div.error .remove-icon { outline-offset: 0.187rem; outline-color: var(--sol-color-border-focus-default); }
+.sol-chip.medium > div.error .remove-icon:hover { background-color: var(--sol-color-background-state-hover-neutral); }
+.sol-chip.medium > div.error .remove-icon:hover path { fill: var(--sol-color-background-inverse); }
+.sol-chip.medium > div.error .remove-icon:active, .sol-chip.medium > div.error .remove-icon:focus:active { background-color: var(--sol-color-background-state-pressed-neutral); }
+.sol-chip.medium > div.error .remove-icon:active path, .sol-chip.medium > div.error .remove-icon:focus:active path { fill: var(--sol-color-background-inverse); }
+.sol-chip.medium > div.error .remove-icon path { fill: var(--sol-color-icon-status-critical); }
+.sol-chip.small { outline-offset: 0.125rem; border-radius: var(--sol-size-radius-sm); }
+.sol-chip.small > div { height: var(--sol-size-control-sm); border-radius: var(--sol-size-radius-sm); outline-offset: 0.125rem; padding-left: var(--sol-size-spacing-xs); padding-right: 0px; gap: var(--sol-size-spacing-xs); background-color: var(--sol-color-background-control-subtle); border-color: var(--sol-color-border-standard); color: var(--sol-color-background-inverse); }
+.sol-chip.small > div button.remove-icon { width: var(--sol-size-control-sm); min-width: var(--sol-size-control-sm); padding-left: 0px; padding-right: 0px; }
+.sol-chip.small > div.readonly { background-color: var(--sol-color-background-control-subtle); cursor: default; padding-right: var(--sol-size-spacing-xs); }
+.sol-chip.small > div.readonly:hover, .sol-chip.small > div.readonly:active { background-color: var(--sol-color-background-control-subtle); }
+.sol-chip.small > div.error { color: var(--sol-color-text-status-critical); background-color: var(--sol-color-background-status-critical-subtle); border-color: var(--sol-color-border-status-critical); }
+.sol-chip.small > div.error:hover, .sol-chip.small > div.error:active { background-color: var(--sol-color-background-status-critical-subtle); }
+.sol-chip.small > div.error .icon { width: var(--sol-size-control-xs); height: var(--sol-size-control-xs); outline-offset: 0.125rem; outline-color: var(--sol-color-border-focus-default); }
+.sol-chip.small > div.error .icon path { fill: var(--sol-color-icon-status-critical); }
+.sol-chip.small > div.error .icon:active path { fill: var(--sol-color-icon-status-critical); }
+.sol-chip.small > div.error .remove-icon { outline-offset: 0.125rem; outline-color: var(--sol-color-border-focus-default); }
+.sol-chip.small > div.error .remove-icon:hover { background-color: var(--sol-color-background-state-hover-neutral); }
+.sol-chip.small > div.error .remove-icon:hover path { fill: var(--sol-color-background-inverse); }
+.sol-chip.small > div.error .remove-icon:active, .sol-chip.small > div.error .remove-icon:focus:active { background-color: var(--sol-color-background-state-pressed-neutral); }
+.sol-chip.small > div.error .remove-icon:active path, .sol-chip.small > div.error .remove-icon:focus:active path { fill: var(--sol-color-background-inverse); }
+.sol-chip.small > div.error .remove-icon path { fill: var(--sol-color-icon-status-critical); }
+.sol-chip .medium .main-label { font-family: var(--sol-typography-body-md-font-family); font-size: var(--sol-typography-body-md-font-size); font-weight: var(--sol-typography-body-md-font-weight); line-height: var(--sol-typography-body-md-line-height); letter-spacing: var(--sol-typography-body-md-letter-spacing); padding: 0.5rem 0px; }
+.sol-chip .small .main-label { font-family: var(--sol-typography-body-md-font-family); font-size: var(--sol-typography-body-md-font-size); font-weight: var(--sol-typography-body-md-font-weight); line-height: var(--sol-typography-body-md-line-height); letter-spacing: var(--sol-typography-body-md-letter-spacing); padding: 0.2rem 0px; }
+.sol-chip .medium .main-label:focus-visible, .sol-chip .small .main-label:focus-visible { outline: var(--sol-color-border-focus-default) solid var(--sol-size-border-medium); outline-offset: var(--sol-size-spacing-3xs); border-radius: var(--sol-size-radius-xs); }

@@ -1,0 +1,36 @@
+/* Conversation: real stylesheet from the SOL/Lyra Storybook. Generated 2026-11-16. */
+.suggestions-with-scroll { overflow-y: auto; max-height: 17.75rem; padding-right: 0.625rem; padding-left: var(--sol-size-spacing-2xs); }
+.sol-suggestion-error { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; padding-top: 0.75rem; }
+.sol-suggestion-error .error-text { color: var(--sol-color-text-secondary); text-align: center; font-family: var(--sol-typography-body-md-font-family); font-size: 0.9375rem; font-style: normal; font-weight: var(--sol-base-typography-weight-semi-bold); line-height: 1.25rem; }
+.sol-suggestion-loading { min-height: 11rem; height: 11rem; }
+.sol-suggestion-menu-box, .sol-suggestion-menu-box * { box-sizing: border-box; }
+.sol-suggestion-menu-box { background-color: var(--sol-color-background-surface-overlay); border-radius: var(--sol-size-radius-sm); outline: none; width: 25rem; max-width: unset; min-height: unset; border-style: solid; border-width: var(--sol-size-border-default); border-color: var(--sol-color-border-subtle); box-shadow: var(--sol-effect-overlayshadow); padding: 0.5rem; }
+.sol-suggestion-menu-box .sol-menu-item { display: flex; align-items: center; justify-content: flex-start; width: 100%; min-height: 3rem; font-stretch: normal; padding: 0.5rem 1.25rem 0.5rem 0.5rem; color: var(--sol-base-color-brand-70); font-family: var(--sol-typography-body-md-font-family); font-size: var(--sol-typography-body-md-font-size); font-weight: var(--sol-typography-body-md-font-weight); line-height: var(--sol-typography-body-md-line-height); letter-spacing: 0px; text-transform: none; }
+.sol-suggestion-menu-box .sol-menu-item .sol-menu-item-text { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; padding: 0px; }
+.sol-suggestion-menu-box .suggestion-normal-height { height: 2.25rem; min-height: 2.25rem; }
+.sol-suggestion-menu-box .suggestion-box-style { border: var(--sol-size-border-default) solid var(--sol-color-border-standard); border-radius: var(--sol-size-radius-xs); background-color: var(--sol-color-background-tone2); color: var(--sol-base-color-gray-90); margin: var(--sol-size-spacing-xs) 0; padding: var(--sol-size-spacing-xs); }
+.sol-suggestion-menu-box .suggestion-box-style:hover { border-color: var(--sol-base-color-gray-90); background-image: linear-gradient(rgba(0, 0, 0, 0.035), rgba(0, 0, 0, 0.035)); }
+.sol-suggestion-menu-box .suggestion-box-style:active { border-color: var(--sol-base-color-gray-90); background-color: var(--sol-color-background-tone3); outline: var(--sol-color-border-focus-default); }
+.sol-suggestion-menu-box .suggestion-cls-header { display: flex; justify-content: space-between; padding: 0 var(--sol-size-spacing-2xs) var(--sol-size-spacing-2xs) var(--sol-size-spacing-2xs); }
+.sol-suggestion-menu-box .suggestion-cls-header .title-cls { display: flex; align-items: center; font-weight: 600; font-size: 0.9375rem; line-height: 1.25rem; vertical-align: middle; font-family: var(--sol-typography-body-sm-emphasized-font-family); padding-top: 0.5rem; letter-spacing: 0.5px; color: var(--sol-base-color-gray-90); }
+.sol-suggestion-menu-box .suggestion-cls-header .text-cls { vertical-align: middle; padding-right: var(--sol-size-spacing-2xs); }
+.sol-suggestion-menu-box .suggestion-cls-header .text-cls svg { fill: var(--sol-base-color-blue-50); }
+.suggestions-with-scroll .sol-menu-item:focus-visible:not([aria-disabled="true"]) { outline: var(--sol-size-border-default) solid var(--sol-color-border-focus-default); background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)); }
+.sol-conversation-prompt, .sol-conversation-prompt .sol-text-area { width: 100%; }
+.sol-conversation-prompt .sol-text-area .sol-input-container { border-width: medium; border-style: none; border-color: currentcolor; border-image: none; width: 100%; }
+.sol-conversation-prompt .sol-text-area .sol-input, .sol-conversation-prompt .sol-text-area textarea { width: 100%; min-width: 100%; max-width: 100%; word-break: break-word; overflow-wrap: anywhere; }
+.sol-conversation-prompt .prompt-container { display: flex; align-items: end; gap: 0.5rem; }
+.sol-conversation-prompt .prompt-container .prompt-wrapper { display: flex; flex: 1 1 0%; min-width: 0px; border: var(--sol-size-border-default) solid var(--sol-color-border-standard); border-radius: var(--sol-size-radius-sm); background-color: var(--sol-color-background-control-default); }
+.sol-conversation-prompt .prompt-container .prompt-wrapper:hover { border-color: var(--sol-base-color-blue-50); }
+.sol-conversation-prompt .prompt-container .prompt-wrapper:focus-within { border-color: var(--sol-color-border-strong); }
+.sol-conversation-prompt .prompt-container .prompt-wrapper .input-container { flex: 1 1 0%; min-width: 0px; }
+.sol-conversation-prompt .prompt-container .prompt-wrapper .input-container .sol-text-area .sol-input { line-height: var(--sol-base-typography-size-500); }
+.sol-conversation-prompt .prompt-container .prompt-wrapper .inner-actions-container { display: flex; flex-shrink: 0; align-items: end; gap: var(--sol-size-spacing-2xs); margin-bottom: 0.3rem; margin-left: 0.5rem; margin-right: 0.5rem; justify-content: flex-end; }
+.sol-conversation-prompt .prompt-container .prompt-wrapper .inner-actions-container .clear-icon svg { fill: var(--sol-color-icon-action); }
+.sol-conversation-prompt .prompt-container .prompt-wrapper .inner-actions-container .pixie-icon svg { fill: var(--sol-base-color-blue-50); }
+.sol-conversation-prompt .prompt-container .prompt-wrapper .inner-actions-container .clear-icon:hover svg { fill: var(--sol-base-color-blue-60); }
+.sol-conversation-prompt .prompt-container .prompt-wrapper .inner-actions-container .clear-icon:active svg { fill: var(--sol-base-color-blue-70); }
+.sol-conversation-prompt .prompt-container .prompt-wrapper .inner-actions-container .pixie-icon:hover svg { fill: var(--sol-base-color-blue-60); }
+.sol-conversation-prompt .prompt-container .prompt-wrapper .inner-actions-container .pixie-icon:active svg { fill: var(--sol-base-color-blue-70); }
+.sol-conversation-prompt .prompt-container .submit-btn-container { display: flex; flex-shrink: 0; padding-bottom: 0.5rem; }
+.sol-conversation-prompt .character-counter { text-align: right; padding-top: 0.25rem; font-family: var(--sol-typography-body-md-font-family); font-size: var(--sol-base-measure-30); color: rgba(0, 0, 0, 0.6); }

@@ -1,0 +1,24 @@
+/* ToggleGroup: real stylesheet from the SOL/Lyra Storybook. Generated 2026-11-16. */
+.sol-toggle-group .sol-toggle-group-inner { box-sizing: border-box; height: var(--sol-toggle-group-height, var(--sol-size-control-lg)); display: inline-flex; flex-direction: row; border: var(--sol-size-border-default) solid var(--sol-color-border-standard); border-radius: var(--sol-size-radius-sm); background-color: var(--sol-color-background-control-default); overflow: visible; }
+.sol-toggle-group .sol-toggle-group-inner .sol-toggle-group-cell { display: inline-flex; position: relative; border-left: var(--sol-size-border-default) solid; border-image: linear-gradient(to bottom,transparent 0%,transparent 22%,var(--sol-color-border-standard) 22%,var(--sol-color-border-standard) 78%,transparent 78%,transparent 100%) 1 100%; }
+.sol-toggle-group .sol-toggle-group-inner .sol-toggle-group-cell:first-child { border-left-width: medium; border-left-style: none; border-left-color: currentcolor; }
+.sol-toggle-group .sol-toggle-group-inner .sol-toggle-group-cell:has(.sol-toggle-group-item:focus-visible) { z-index: 10; }
+.sol-toggle-group .sol-toggle-group-inner .sol-toggle-group-item { position: relative; display: flex; align-items: center; justify-content: center; box-sizing: border-box; height: 100%; min-width: 5rem; max-width: 10rem; padding: 0 var(--sol-size-spacing-md); border-width: medium; border-style: none; border-color: currentcolor; border-image: none; border-radius: var(--sol-size-radius-sm); background-color: var(--sol-color-background-control-default); cursor: pointer; overflow: visible; z-index: 2; }
+.sol-toggle-group .sol-toggle-group-inner .sol-toggle-group-item.icon-only { min-width: 0px; }
+.sol-toggle-group .sol-toggle-group-inner .sol-toggle-group-item .icon-text { display: inline-flex; align-items: center; gap: var(--sol-size-spacing-xs); max-width: 100%; white-space: nowrap; overflow: hidden; color: var(--sol-color-text-default); }
+.sol-toggle-group .sol-toggle-group-inner .sol-toggle-group-item .icon-text .sol-toggle-group-item-title { min-width: 0px; overflow: hidden; text-overflow: ellipsis; }
+.sol-toggle-group .sol-toggle-group-inner .sol-toggle-group-item .icon-text svg { flex-shrink: 0; width: 1rem; height: 1rem; }
+.sol-toggle-group .sol-toggle-group-inner .sol-toggle-group-item .icon-text svg path { fill: var(--sol-color-icon-default); }
+.sol-toggle-group .sol-toggle-group-inner .sol-toggle-group-item:disabled { background-color: var(--sol-color-background-control-default); cursor: not-allowed; }
+.sol-toggle-group .sol-toggle-group-inner .sol-toggle-group-item:disabled .icon-text { color: var(--sol-color-text-disabled); }
+.sol-toggle-group .sol-toggle-group-inner .sol-toggle-group-item:disabled .icon-text svg path { fill: var(--sol-color-icon-disabled); }
+.sol-toggle-group .sol-toggle-group-inner .sol-toggle-group-item:focus-visible { outline: var(--sol-size-border-medium) solid var(--sol-color-border-focus-default); outline-offset: var(--sol-size-spacing-3xs); z-index: 10; }
+.sol-toggle-group .sol-toggle-group-inner .sol-toggle-group-item:hover:not(:disabled, [data-pressed]) { box-shadow: 0 0 0 var(--sol-size-border-default) var(--sol-color-border-strong); background-color: var(--sol-color-background-state-hover-neutral); }
+.sol-toggle-group .sol-toggle-group-inner .sol-toggle-group-item:active:not(:disabled, [data-pressed]) { box-shadow: 0 0 0 var(--sol-size-border-default) var(--sol-color-border-strong); background-color: var(--sol-color-background-state-pressed-neutral); }
+.sol-toggle-group .sol-toggle-group-inner .sol-toggle-group-item[data-pressed] { background-color: var(--sol-color-background-selected-subtle); box-shadow: 0 0 0 var(--sol-size-border-default) var(--sol-color-border-selected); color: var(--sol-color-text-on-selected); z-index: 5; }
+.sol-toggle-group .sol-toggle-group-inner .sol-toggle-group-item[data-pressed] .icon-text { color: var(--sol-color-text-on-selected); }
+.sol-toggle-group .sol-toggle-group-inner .sol-toggle-group-item[data-pressed] .icon-text svg path { fill: var(--sol-color-icon-on-selected); }
+.sol-toggle-group .sol-toggle-group-inner .sol-toggle-group-cell:first-child .sol-toggle-group-item { border-top-left-radius: calc(var(--sol-size-radius-sm) - var(--sol-size-border-default)); border-bottom-left-radius: calc(var(--sol-size-radius-sm) - var(--sol-size-border-default)); }
+.sol-toggle-group .sol-toggle-group-inner .sol-toggle-group-cell:last-child .sol-toggle-group-item { border-top-right-radius: calc(var(--sol-size-radius-sm) - var(--sol-size-border-default)); border-bottom-right-radius: calc(var(--sol-size-radius-sm) - var(--sol-size-border-default)); }
+.sol-toggle-group.sol-toggle-group--large { --sol-toggle-group-height: var(--sol-size-control-lg); }
+.sol-toggle-group.sol-toggle-group--medium { --sol-toggle-group-height: var(--sol-size-control-md); }

@@ -10,6 +10,8 @@ Answer: *"The audit found a pile of problems. Give me a prompt I can paste into 
 
 The output is **one prompt**, written for someone who cannot see the audit. Claude Design has no access to this plugin, the page, or the node ids, so everything it needs has to be in the prompt text, in terms a designer would use.
 
+> Want the file fixed rather than a brief? `claude-design-loop` audits the Claude Design file, applies the corrections (as a switchable tweak or in place), re-audits and reports the score. This skill is the brief-only option inside it.
+
 ## When to invoke
 
 - "Build a Claude Design prompt from the audit"
@@ -18,6 +20,12 @@ The output is **one prompt**, written for someone who cannot see the audit. Clau
 - "Hand the audit to Claude Design"
 
 Works with `figma` or `chrome`. If both are connected, ask which. If the user wants the page fixed in place instead, this is the wrong skill: point them at `convert_page_to_lyra` / `migrate_to_lyra`.
+
+## Where the screen comes from
+
+- **A Claude Design link.** Always ask the user for the file link and wait for it, even if a Claude tab is already open; never guess which file or artboard. Pass the full link, including any `#artboard-…` fragment, to `switch_tab({ url })`; the fragment makes Claude Design show that artboard, and the audit covers the embedded design frame, which holds only that artboard. Then, call `switch_tab({ url })` (or `list_tabs` then `switch_tab({ tabId })`). When it reports `claudeDesignPage: true`, every audit already targets the embedded design and leaves out the Claude interface around it (sidebar, file tabs, toolbar). Do not audit by screenshot of the whole tab, and never report issues from the Claude interface.
+- **Why this skill and not `convert_page_to_lyra` here.** Conversions on a Claude Design page patch the embedded design's live DOM: a preview that is gone on reload and never saved to the Claude Design file. A brief that Claude Design applies itself is the route that produces a file others can open. This is what the convert flow's third option, "A Claude Design file for sharing", hands you.
+- **A Figma frame or an ordinary web page.** Same flow, no tab switch.
 
 ## Preflight
 

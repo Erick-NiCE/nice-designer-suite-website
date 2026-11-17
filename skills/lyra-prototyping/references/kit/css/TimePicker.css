@@ -1,0 +1,28 @@
+/* TimePicker: real stylesheet from the SOL/Lyra Storybook. Generated 2026-11-16. */
+.sol-time-picker { display: flex; flex-direction: column; height: 100%; width: 100%; box-sizing: border-box; }
+.sol-time-picker .sol-icon-disabled { opacity: 0.4; pointer-events: none; cursor: not-allowed; }
+.sol-time-picker .sol-error-message-container { position: relative; z-index: 1; }
+.sol-time-picker .time-options-container { width: 100%; max-width: 45rem; box-sizing: border-box; cursor: pointer; background-color: var(--sol-color-background-action-secondary); overflow-y: auto; }
+.sol-time-picker .time-options-container .time-option { font-weight: 400; padding: .625rem var(--sol-size-spacing-sm); margin: var(--sol-size-spacing-2xs); border-radius: var(--sol-size-radius-sm); }
+.sol-time-picker .time-options-container .time-option:hover { background-color: var(--sol-color-background-state-hover-neutral); color: var(--sol-base-color-gray-90); }
+.sol-time-picker .time-options-container .time-option:active { background-color: var(--sol-color-background-state-pressed-neutral); color: var(--sol-base-color-gray-90); }
+.sol-time-picker .time-options-container .time-option:focus-visible, .sol-time-picker .time-options-container .time-option.active-item { color: var(--sol-base-color-gray-90); outline: var(--sol-size-border-medium) solid var(--sol-color-border-focus-default); }
+.sol-time-picker .time-options-container .time-option.selected-item { background-color: var(--sol-color-background-listitem-selected); color: var(--sol-base-color-gray-90); }
+.sol-time-picker .time-options-container .time-option.selected-item:hover { background-color: var(--sol-color-background-state-hover-selected-subtle); color: var(--sol-base-color-gray-90); }
+.sol-time-picker .time-options-container .time-option.selected-item:active { background-color: var(--sol-color-background-state-pressed-selected-subtle); color: var(--sol-base-color-gray-90); }
+.sol-time-picker .sol-text-input .readonly { background-color: var(--sol-color-background-control-default); }
+.sol-time-picker .sol-text-input .readonly .sol-input { background-color: transparent; }
+.sol-time-picker .sol-text-input .sol-input-container > .sol-icon-host:last-child { height: var(--sol-size-control-lg); width: var(--sol-size-control-lg); justify-content: center; flex-shrink: 0; }
+.sol-time-picker .sol-text-input .sol-input-container:hover:not(:focus-within) { border-color: var(--sol-color-border-state-hover-neutral); }
+.sol-time-picker .sol-text-input .sol-input-container:has(> .sol-icon-host:last-child) { padding-right: var(--sol-size-spacing-xs); }
+.sol-time-picker .sol-text-input .sol-input-container .sol-input-trailing-button:hover, .sol-time-picker .sol-text-input .sol-input-container .sol-input-trailing-button:active, .sol-time-picker .sol-text-input .sol-input-container .sol-input-trailing-button-container button:hover, .sol-time-picker .sol-text-input .sol-input-container .sol-input-trailing-button-container button:active { background-color: transparent; }
+.sol-time-picker-popup { pointer-events: none; }
+.overlay-time-options-container { pointer-events: auto; border-color: var(--sol-color-border-standard); border-width: var(--sol-size-border-default); border-style: solid; box-sizing: border-box; max-height: calc(12.25rem + 2 * var(--sol-size-spacing-xs) + 2 * var(--sol-size-border-default)); padding: var(--sol-size-spacing-xs); font-weight: 400; cursor: pointer; background-color: var(--sol-color-background-action-secondary); border-radius: var(--sol-size-radius-sm); width: 100%; overflow-y: auto; box-shadow: var(--sol-effect-overlayshadow); margin-top: var(--sol-size-spacing-2xs); }
+.overlay-time-options-container .overlay-time-option { color: var(--sol-base-color-gray-90); padding: 0.6875rem 1rem; border-radius: var(--sol-size-radius-sm); margin-bottom: 0.25rem; }
+.overlay-time-options-container .overlay-time-option:last-child { margin-bottom: 0px; }
+.overlay-time-options-container .overlay-time-option:hover { background-color: var(--sol-color-background-state-hover-neutral); color: var(--sol-base-color-gray-90); }
+.overlay-time-options-container .overlay-time-option:active { background-color: var(--sol-color-background-state-pressed-neutral); color: var(--sol-base-color-gray-90); }
+.overlay-time-options-container .overlay-time-option:focus-visible, .overlay-time-options-container .overlay-time-option.active-list-item { color: var(--sol-base-color-gray-90); outline: var(--sol-size-border-medium) solid var(--sol-color-border-focus-default); outline-offset: var(--sol-size-spacing-3xs); }
+.overlay-time-options-container .overlay-time-option.selected-list-item { background-color: var(--sol-color-background-listitem-selected); color: var(--sol-base-color-gray-90); }
+.overlay-time-options-container .overlay-time-option.selected-list-item:hover { background-color: var(--sol-color-background-state-hover-selected-subtle); color: var(--sol-base-color-gray-90); }
+.overlay-time-options-container .overlay-time-option.selected-list-item:active { background-color: var(--sol-color-background-state-pressed-selected-subtle); color: var(--sol-base-color-gray-90); }
